@@ -30,7 +30,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  5 , NUMBER_OF_CATEGORIES = 10
+	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 10
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -40,12 +40,12 @@ class IndexInfo {
 	static String pathToIndex =
 	 //  'indexes/R10'
 	//     'indexes/NG20'
-	//	 'indexes/crisis3FireBombFloodL6'
+		 'indexes/crisis3FireBombFloodL6'
 		// 'indexes/crisis3FireBombFloodL6.6Classic'
 	//	 'indexes/crisis3FireBombFloodL6.6'
 	// 'indexes/classic4_500L6'
-		 'indexes/20NG5WindowsmiscForsaleHockeySpaceChristianL6'
-	//'indexes/20NG3SpaceHockeyChristianL6'
+	//	 'indexes/20NG5WindowsmiscForsaleHockeySpaceChristianL6'
+//	'indexes/20NG3SpaceHockeyChristianL6'
 	
 	// set the index
 	static {	

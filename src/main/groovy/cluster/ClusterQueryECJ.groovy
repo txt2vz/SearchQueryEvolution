@@ -24,7 +24,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 	private IndexSearcher searcher = IndexInfo.indexSearcher;
 	//private final int coreClusterSize=20
 	private QueryListFromChromosome queryListFromChromosome
-	private EvalQueryList evalQueryList
+	//private EvalQueryList evalQueryList
 	private TermQuery[] termQueryArray
 
 	enum QueryType {
@@ -37,8 +37,8 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 		super.setup(state, base);
 		println "Total docs for ClusterQueryECJ.groovy   " + IndexInfo.indexReader.maxDoc()
 		queryListFromChromosome = new QueryListFromChromosome()
-		evalQueryList = new EvalQueryList();
-		termQueryArray = new ImportantTerms().getTFIDFTermQueryList();
+	//	evalQueryList = new EvalQueryList();
+		termQueryArray = new ImportantTerms().getTFIDFTermQueryList()
 	}
 
 	//@TypeChecked(TypeCheckingMode.SKIP)
@@ -80,18 +80,19 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 		final int hitsPerPage = IndexInfo.indexReader.maxDoc()
 		
 		//set fitness based on set of boolean queries
-		evalQueryList.setClusterFitness(fitness, bqbList, false)
+	//	evalQueryList.setClusterFitness(fitness, bqbList, false)
+		fitness.setClusterFitness(bqbList)
 
 	
 		//fitness must be positive for ECJ - most runs start with large negative score
-		int minScore = 1000
-		fitness.scorePlus1000 = (fitness.scoreOnly < -minScore) ? 0 : fitness.scoreOnly + minScore
+	//	int minScore = 1000
+	//	fitness.scorePlus1000 = (fitness.scoreOnly < -minScore) ? 0 : fitness.scoreOnly + minScore
 
-		def negIndicators =
-				//major penalty for query returning nothing or empty query
-				(fitness.zeroHitsCount * 100) + fitness.coreClusterPenalty + fitness.duplicateCount + fitness.lowSubqHits + 1;
+	//	def negIndicators =
+	//			//major penalty for query returning nothing or empty query
+	//			(fitness.zeroHitsCount * 100) + fitness.coreClusterPenalty + fitness.duplicateCount + fitness.lowSubqHits + 1;
 
-				fitness.baseFitness = (fitness.scorePlus1000 / negIndicators) * fitness.fraction * fitness.fraction
+//				fitness.baseFitness = (fitness.scorePlus1000 / negIndicators) * fitness.fraction * fitness.fraction
 		//fitness.baseFitness = (fitness.scorePlus1000 / negIndicators) 
 		//fitness.baseFitness =  fitness.scoreOnly  //(fitness.scoreOnly / negIndicators)// - fitness.missedDocs
 		//force positive
