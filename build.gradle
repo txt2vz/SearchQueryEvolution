@@ -1,0 +1,24 @@
+group 'laurie'
+version '0.8'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories { jcenter() }
+
+dependencies {
+
+    compile group: 'io.jenetics', name: 'jenetics', version: '3.8.0'
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+
+    compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
+    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.6.0'
+
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+
+    //for some reason ecj24 not on maven: compile 'edu.gmu.cs:ecj:22'
+    //pick up ecj24 jar file
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+}
