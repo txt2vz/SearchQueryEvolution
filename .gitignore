@@ -41,13 +41,8 @@ local.properties
 build/
 bin/
 
-/bin/
-/build/
-.classpath
-.project
+#from old projects
 .settings
-gradle.prefs
-.gradle
 /src/cfg/statDump
 /results
 

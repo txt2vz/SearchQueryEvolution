@@ -1,0 +1,55 @@
+parent.0		= simple.params
+
+seed=time
+seed.0=time
+seed.1=time
+seed.2=time
+seed.3=time
+seed.4=time
+seed.5=time
+seed.6=time
+seed.7=time
+
+#seed.0=4357  
+
+evalthreads = 				4
+breedthreads = 				4
+generations =  10
+
+eval.problem = cluster.ClusterQuery
+stat = cluster.ClusterGAStatistics
+stat.file = statDump/out.stat
+
+select.tournament.size = 3
+#breed.elite.0 = 2
+
+pop.subpops = 1
+pop.default-subpop =0
+
+pop.subpop.0 = ec.Subpopulation
+pop.subpop.0.size = 512 
+pop.subpop.0.species = ec.vector.IntegerVectorSpecies
+pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
+pop.subpop.0.species.fitness = cluster.ClusterFit
+
+pop.subpop.0.species.min-gene = -1
+pop.subpop.0.species.max-gene = 300
+pop.subpop.0.species.genome-size = 30
+pop.subpop.0.species.crossover-type	= two
+
+pop.subpop.0.species.crossover-likelihood	= 0.7
+pop.subpop.0.species.mutation-prob	= 0.2
+
+pop.subpop.0.species.mutation-type = reset
+#pop.subpop.0.species.mutation-type = random-walk
+# This is the probability that we will continue the random walk;
+# hence larger probabilities yield longer walks.
+#pop.subpop.0.species.random-walk-probability = 0.8
+#pop.subpop.0.species.mutation-bounded = true
+#pop.subpop.0.species.chunk-size = 2
+
+pop.subpop.0.species.pipe = ec.vector.breed.VectorMutationPipeline
+pop.subpop.0.species.pipe.source.0 = ec.vector.breed.VectorCrossoverPipeline
+pop.subpop.0.species.pipe.source.0.source.0	= ec.select.TournamentSelection
+pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
+
