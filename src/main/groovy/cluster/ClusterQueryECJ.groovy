@@ -7,8 +7,11 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
+import index.ImportantTerms
 import index.IndexInfo
+import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.TermQuery
 
 /**
  * To generate sets of queries for clustering
@@ -16,12 +19,13 @@ import org.apache.lucene.search.IndexSearcher
 
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
-public class ClusterQueryGA extends Problem implements SimpleProblemForm {
+public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
 	private IndexSearcher searcher = IndexInfo.indexSearcher;
 	//private final int coreClusterSize=20
 	private QueryListFromChromosome queryListFromChromosome
 	private EvalQueryList evalQueryList
+	private TermQuery[] termQueryArray
 
 	enum QueryType {
 		OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP
@@ -31,9 +35,10 @@ public class ClusterQueryGA extends Problem implements SimpleProblemForm {
 	public void setup(final EvolutionState state, final Parameter base) {
 
 		super.setup(state, base);
-		println "Total docs for ClusterQueryGA.groovy   " + IndexInfo.indexReader.maxDoc()
+		println "Total docs for ClusterQueryECJ.groovy   " + IndexInfo.indexReader.maxDoc()
 		queryListFromChromosome = new QueryListFromChromosome()
 		evalQueryList = new EvalQueryList();
+		termQueryArray = new ImportantTerms().getTFIDFTermQueryList();
 	}
 
 	//@TypeChecked(TypeCheckingMode.SKIP)
@@ -43,16 +48,16 @@ public class ClusterQueryGA extends Problem implements SimpleProblemForm {
 		if (ind.evaluated)
 			return;
 
-		ClusterFit fitness = (ClusterFit) ind.fitness;
+		ClusterFitECJ fitness = (ClusterFitECJ) ind.fitness;
 		IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
 
 		//list of lucene Boolean Query Builders
-		List bqbList
+		List <BooleanQuery.Builder> bqbList
 		int duplicateCount = 0, lowSubqHits=0
 
 		switch (queryType) {
 			case QueryType.OR :
-				bqbList = queryListFromChromosome.getORQueryList(intVectorIndividual)
+				bqbList = queryListFromChromosome.getORQueryList((int[])intVectorIndividual.genome, termQueryArray)
 				break;
 				//@TypeChecked(TypeCheckingMode.SKIP)
 //			case QueryType.AND :

@@ -7,7 +7,7 @@ import org.apache.lucene.search.*
 @groovy.transform.TypeChecked
 class EvalQueryList {
 
-	public static void setClusterFitness (ClusterFit fitness, List <BooleanQuery.Builder> bqbArray, boolean gp){
+	public static void setClusterFitness (ClusterFitECJ fitness, List <BooleanQuery.Builder> bqbArray, boolean gp){
 
 		final int hitsPerPage = IndexInfo.indexReader.maxDoc()
 		final int coreClusterSize = 20

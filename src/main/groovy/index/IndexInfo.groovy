@@ -70,7 +70,7 @@ class IndexInfo {
 	static TermQuery catQ;
 
 	//get hits for a particular query using filter (e.g. a particular category)
-	public static int getQueryHitsWithFilter(IndexSearcher searcher, Query filter, Query q ) {
+	static int getQueryHitsWithFilter(IndexSearcher searcher, Query filter, Query q ) {
 		TotalHitCountCollector collector = new TotalHitCountCollector();
 		BooleanQuery.Builder  bqb = new BooleanQuery.Builder();
 		bqb.add(q, BooleanClause.Occur.MUST)

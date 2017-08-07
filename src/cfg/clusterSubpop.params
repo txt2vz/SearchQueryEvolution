@@ -28,7 +28,7 @@ pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.size = 512 
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
-pop.subpop.0.species.fitness = cluster.ClusterFit
+pop.subpop.0.species.fitness = cluster.ClusterFitECJ
 
 pop.subpop.0.species.min-gene = -1
 pop.subpop.0.species.max-gene = 100
@@ -57,7 +57,7 @@ pop.subpop.1.duplicate-retries = 5
 
 pop.subpop.1.species = ec.vector.IntegerVectorSpecies
 pop.subpop.1.species.ind = ec.vector.IntegerVectorIndividual 
-pop.subpop.1.species.fitness = cluster.ClusterFit
+pop.subpop.1.species.fitness = cluster.ClusterFitECJ
 
 pop.subpop.1.species.min-gene = -1
 pop.subpop.1.species.max-gene = 300
@@ -79,7 +79,7 @@ pop.subpop.2.duplicate-retries = 5
 
 pop.subpop.2.species = ec.vector.IntegerVectorSpecies
 pop.subpop.2.species.ind = ec.vector.IntegerVectorIndividual 
-pop.subpop.2.species.fitness = cluster.ClusterFit
+pop.subpop.2.species.fitness = cluster.ClusterFitECJ
 
 pop.subpop.2.species.min-gene = -1
 pop.subpop.2.species.max-gene = 300

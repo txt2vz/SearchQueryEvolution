@@ -3,7 +3,7 @@ parent.0 = clusterSubpop.params
 #parent.0 = clusterSinglePop.params
 #parent.0		= simple.params
 
-eval.problem = cluster.ClusterQueryGA
+eval.problem = cluster.ClusterQueryECJ
 stat = cluster.ClusterStatistics
 
 evalthreads = 4 

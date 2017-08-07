@@ -17,7 +17,7 @@ import org.apache.lucene.search.*
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
 
-public class ClusterFit extends SimpleFitness {
+public class ClusterFitECJ extends SimpleFitness {
 
 	Map <Query, Integer> queryMap  = [:]
 	double positiveScoreTotal = 0.0 

@@ -14,7 +14,7 @@ public class ClusterStatistics extends SimpleStatistics {
 	public void postEvaluationStatistics(EvolutionState state) {
 		super.postEvaluationStatistics(state);
 		
-		ClusterFit cf = (ClusterFit) state.population.subpops.collect { sbp ->
+		ClusterFitECJ cf = (ClusterFitECJ) state.population.subpops.collect { sbp ->
 			sbp.individuals.max() {ind ->
 				ind.fitness.fitness()}.fitness
 		}.max  {it.fitness()}

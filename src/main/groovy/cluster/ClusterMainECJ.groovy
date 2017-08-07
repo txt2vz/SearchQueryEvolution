@@ -6,16 +6,16 @@ import ec.util.ParameterDatabase
 import index.IndexInfo
 
 //@groovy.transform.TypeChecked
-class ClusterMain extends Evolve {
+class ClusterMainECJ extends Evolve {
 
 	private final String parameterFilePath = 
 	
 	// 'src/cfg/clusterGP.params'
 	 'src/cfg/clusterGA.params'
 
-	private final int NUMBER_OF_JOBS = 3
+	private final int NUMBER_OF_JOBS = 2
 
-	public ClusterMain(){  
+	public ClusterMainECJ(){
 		EvolutionState state;	
 		IndexInfo.instance.setIndexFieldsAndTotals() 
 		ParameterDatabase parameters  = null;
@@ -38,7 +38,7 @@ class ClusterMain extends Evolve {
 			state.run(EvolutionState.C_STARTED_FRESH);
 			
 			def popSize=0;
-			ClusterFit cfit = (ClusterFit) state.population.subpops.collect { sbp ->
+			ClusterFitECJ cfit = (ClusterFitECJ) state.population.subpops.collect { sbp ->
 				popSize= popSize + sbp.individuals.size()
 				sbp.individuals.max() {ind ->
 					ind.fitness.fitness()
@@ -57,6 +57,6 @@ class ClusterMain extends Evolve {
 	}
 
 	static main (args){
-		new ClusterMain()
+		new ClusterMainECJ()
 	}
 }
