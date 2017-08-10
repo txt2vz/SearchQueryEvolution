@@ -25,7 +25,7 @@ class ClusterMainECJ extends Evolve {
         NUMBER_OF_JOBS.times { job ->
             parameters = new ParameterDatabase(new File(parameterFilePath));
 
-            state = initialize(parameters, job);
+            state = initialize(parameters, job)
             state.output.systemMessage("Job: " + job);
             state.job = new Object[1];
             state.job[0] = new Integer(job);
