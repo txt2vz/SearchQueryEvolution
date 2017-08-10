@@ -17,37 +17,28 @@ import org.apache.lucene.search.*
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
 
-public class ClusterFitECJ extends SimpleFitness {
+public class ClusterFitness extends SimpleFitness {
 
-    Map<Query, Integer> queryMap = [:]
-    double positiveScoreTotal = 0.0
-    double negativeScoreTotal = 0.0
-    double fraction = 0.0
-    double baseFitness = 0.0
-    double scorePlus1000 = 0.0
-    double scoreOnly = 0.0
-
-    int positiveHits = 0
-    int negativeHits = 0
-    int duplicateCount = 0
-    int lowSubqHits = 0
-    int coreClusterPenalty = 0
-    int totalHits = 0
-    int missedDocs = 0
-    int zeroHitsCount = 0
-    boolean isDummy = false
-    boolean emptyQueries = false
+    private Map<Query, Integer> queryMap = [:]
+    private double positiveScoreTotal = 0.0
+    private double negativeScoreTotal = 0.0
+    private double fraction = 0.0
+    private double baseFitness = 0.0
+    private double scorePlus1000 = 0.0
+    private double scoreOnly = 0.0
     private double posScrMinusNegScrTimes2 = 0.0
 
-    int treePenalty = 0;
-    int graphPenalty = 0
+    private int positiveHits = 0
+    private int negativeHits = 0
+    private int coreClusterPenalty = 0
+    private int totalHits = 0
+    private int missedDocs = 0
+    private int zeroHitsCount = 0
+    // boolean isDummy = false     //  boolean emptyQueries = false     //    int duplicateCount = 0     //   int lowSubqHits = 0
 
     private final int hitsPerPage = IndexInfo.indexReader.maxDoc()
     private final int coreClusterSize = 20
-
-    Formatter bestResultsOut
-    IndexSearcher searcher = IndexInfo.indexSearcher;
-    //final int hitsPerPage=IndexInfo.indexReader.maxDoc()
+    private IndexSearcher searcher = IndexInfo.indexSearcher;
 
     String queryShort() {
         def s = "queryMap.size ${queryMap.size()} \n"
@@ -58,8 +49,14 @@ public class ClusterFitECJ extends SimpleFitness {
         return s
     }
 
-    public double getF() {
+    public double getFitness() {
         return baseFitness;
+    }
+
+    public void generationStats(long generation) {
+        println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
+        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} PosScr-(NegScr*2): ${posScrMinusNegScrTimes2.round(2)} CoreClstPen: $coreClusterPenalty"
+        println "TotalHits: $totalHits TotalDocs: ${IndexInfo.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount"
     }
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
@@ -71,16 +68,17 @@ public class ClusterFitECJ extends SimpleFitness {
         baseFitness = 0.0
         scorePlus1000 = 0.0
         scoreOnly = 0.0
+        posScrMinusNegScrTimes2 = 0.0
+
         positiveHits = 0
         negativeHits = 0
-        duplicateCount = 0
-        lowSubqHits = 0
         coreClusterPenalty = 0
         totalHits = 0
         missedDocs = 0
         zeroHitsCount = 0
-        emptyQueries = false
-        posScrMinusNegScrTimes2 = 0.0
+        //     duplicateCount = 0
+        //    lowSubqHits = 0
+        //   emptyQueries = false
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set allHits = [] as Set
@@ -156,6 +154,8 @@ public class ClusterFitECJ extends SimpleFitness {
         baseFitness = (scorePlus1000 / negIndicators) * fraction * fraction
         //baseFitness =  (scorePlus1000 / negIndicators)
         //baseFitness =  scorePlus1000 / (coreClusterPenalty + 1 )
+        //baseFitness * (1/(Math.log(missedDocs)))
+        //baseFitness * (1/(Math.pow(1.01,missedDocs)))
         //posScrMinusNegScrTimes2;
 
         //if (gp && fitness.queryMap.size() != IndexInfo.NUMBER_OF_CLUSTERS) {
@@ -164,18 +164,18 @@ public class ClusterFitECJ extends SimpleFitness {
     }
 
     @TypeChecked(TypeCheckingMode.SKIP)
-    public void queryStats(int job, int gen, int popSize) {
+    public void finalQueryStats(int job, int gen, int popSize) {
         String messageOut = ""
         FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)
-        resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Noclusters: ${IndexInfo.NUMBER_OF_CLUSTERS}  pathToIndex: ${IndexInfo.pathToIndex}  *********** ${new Date()} ***************************************************** \n"
+        resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Noclusters: ${IndexInfo.NUMBER_OF_CLUSTERS}  pathToIndex: ${IndexInfo.pathToIndex}  ************************************************************* \n"
 
-        def f1list = [], precisionList = [], recallList = []
+        List<Double> f1list = [], precisionList = [], recallList = []
         queryMap.keySet().eachWithIndex { q, index ->
 
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
             searcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            def qString = q.toString(IndexInfo.FIELD_CONTENTS)
+            String qString = q.toString(IndexInfo.FIELD_CONTENTS)
 
             println "***********************************************************************************"
             messageOut = "ClusterQuery: $index hits: ${hits.length} Query:  $qString \n"
@@ -183,21 +183,13 @@ public class ClusterFitECJ extends SimpleFitness {
             resultsOut << messageOut
 
             //map of categories (ground truth) and their frequencies
-            def catsFreq = [:]
+            Map<String, Integer> catsFreq = new HashMap<String, Integer>() //[:]
             hits.eachWithIndex { ScoreDoc h, int i ->
                 int docId = h.doc;
-                def scr = h.score
                 Document d = searcher.doc(docId);
                 String catName = d.get(IndexInfo.FIELD_CATEGORY_NAME)
                 int n = catsFreq.get((catName)) ?: 0
                 catsFreq.put((catName), n + 1)
-
-//view top 5 results
-//				if (i <5){
-//					messageOut = "$i path ${d.get(IndexInfo.FIELD_PATH)} cat name: $catName "
-//					println messageOut
-//					resultsOut << messageOut + '\n'
-//				}
             }
             println "Gen: $gen ClusterQuery: $index catsFreq: $catsFreq for query: $qString "
 
@@ -205,10 +197,6 @@ public class ClusterFitECJ extends SimpleFitness {
             def catMax = catsFreq?.max { it?.value } ?: 0
 
             println "catsFreq: $catsFreq cats max: $catMax "
-
-            //purity measure - check this is correct?
-            //def purity = (hits.size()==0) ? 0 : (1 / hits.size())  * catMax.value
-            //println "purity:  $purity"
 
             if (catMax != 0) {
                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
@@ -230,13 +218,12 @@ public class ClusterFitECJ extends SimpleFitness {
                 messageOut = "f1: $f1 recall: $recall precision: $precision"
                 println messageOut
                 resultsOut << messageOut + "\n"
-                //resultsOut << "Purity: $purity Job: $job \n"
             }
         }
 
-        double averageF1 = (f1list) ? f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
-        double averageRecall = (recallList) ? recallList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
-        double averagePrecision = (precisionList) ? precisionList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+        final double averageF1 = (f1list) ? f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+        final double averageRecall = (recallList) ? recallList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+        final double averagePrecision = (precisionList) ? precisionList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
         messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
@@ -248,28 +235,15 @@ public class ClusterFitECJ extends SimpleFitness {
         resultsOut.flush()
         resultsOut.close()
 
-        boolean appnd = job > 1
+        boolean appnd = job > 0
         FileWriter fcsv = new FileWriter("results/resultsCluster.csv", appnd)
-        Formatter csvOut = new Formatter(fcsv);
         if (!appnd) {
-            final String fileHead = "gen, job, popSize, fitness, averageF1, averagePrecision, averageRecall, query" + '\n';
-            csvOut.format("%s", fileHead)
+            final String fileHead = "gen, job, popSize, baseFitness, averageF1, averagePrecision, averageRecall, query, date, indexPath" + '\n';
+            fcsv << fileHead
         }
-        csvOut.format(
-                "%s, %s, %s, %.3f, %.3f, %.3f, %.3f, %s, %s, %s \n",
-                gen,
-                job,
-                popSize,
-                fitness(),
-                averageF1,
-                averagePrecision,
-                averageRecall,//)//,
-                queryForCSV(job),
-                new Date(),
-                IndexInfo.pathToIndex);
-
-        csvOut.flush();
-        csvOut.close()
+        fcsv << "$gen , $job , $popSize , $baseFitness , ${averageF1.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${queryForCSV(job)}, ${new Date()}, ${IndexInfo.pathToIndex} \n"
+        fcsv.flush()
+        fcsv.close()
     }
 
     private String queryForCSV(int job) {

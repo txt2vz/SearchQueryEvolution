@@ -18,23 +18,25 @@ public class ClusterMainJenetics {
 
 	private static double evaluate(final Genotype<IntegerGene> gt) {
 
-		ClusterFitnessJenetics cfit = cf(gt);
+		ClusterFitness cfit = cf(gt);
 		return cfit.getFitness();
 	}
 
-	private static ClusterFitnessJenetics cf(final Genotype<IntegerGene> gt) {
+	//private static ClusterFitnessJenetics cf(final Genotype<IntegerGene> gt) {
+		private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
 		List<BooleanQuery.Builder> bqbList = QueryListFromChromosome
 				.getORQueryList( ((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray);
 			//.getORQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray());
 
-		ClusterFitnessJenetics clusterFitness = new ClusterFitnessJenetics();
-		clusterFitness.setClusterFitness(bqbList);
+		//ClusterFitnessJenetics clusterFitness = new ClusterFitnessJenetics();
+	ClusterFitness clusterFitness = new ClusterFitness();
+			clusterFitness.setClusterFitness(bqbList);
 
 		return clusterFitness;
 	}
 
 	public static void main(String[] args) throws Exception {
-		final int numberOfJobs=3;
+		final int numberOfJobs=2;
 		IntStream.range(0, numberOfJobs).forEach(job ->
 				new ClusterMainJenetics(job)
 			);
@@ -65,9 +67,9 @@ public class ClusterMainJenetics {
 
 		System.out.println("Final result job " + job + " " + result);
 		Genotype<IntegerGene> g = result.getGenotype();
-		ClusterFitnessJenetics cfResult = cf(g);
+		ClusterFitness cfResult = cf(g);
 		System.out.println("cluster fit result " + cfResult.queryShort());
-		cfResult.queryStats(job, result.getGeneration(), popSize);
+		cfResult.finalQueryStats(job, (int)result.getGeneration(), popSize);
 		System.out.println();
 	}
 }

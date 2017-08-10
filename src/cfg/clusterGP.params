@@ -9,7 +9,7 @@ seed.3=time
 evalthreads = 				4
 breedthreads = 				4
 
-stat = cluster.ClusterStatistics
+stat = cluster.ClusterStatisticsECJ
 stat.file = statDump/out.stat
 generations =  478
 
