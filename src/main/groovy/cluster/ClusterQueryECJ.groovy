@@ -21,10 +21,7 @@ import org.apache.lucene.search.TermQuery
 @groovy.transform.TypeChecked
 public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
-    private IndexSearcher searcher = IndexInfo.indexSearcher;
-    //private final int coreClusterSize=20
-    private QueryListFromChromosome queryListFromChromosome
-    //private EvalQueryList evalQueryList
+    private IndexSearcher searcher = IndexInfo.indexSearcher
     private TermQuery[] termQueryArray
 
     enum QueryType {
@@ -36,8 +33,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + IndexInfo.indexReader.maxDoc()
-        queryListFromChromosome = new QueryListFromChromosome()
-        //	evalQueryList = new EvalQueryList();
         termQueryArray = new ImportantTerms().getTFIDFTermQueryList()
     }
 
@@ -56,7 +51,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = queryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray)
+                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray)
                 break;
         //@TypeChecked(TypeCheckingMode.SKIP)
 //			case QueryType.AND :
