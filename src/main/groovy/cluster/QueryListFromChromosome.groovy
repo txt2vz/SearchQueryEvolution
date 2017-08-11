@@ -13,23 +13,14 @@ import org.apache.lucene.search.spans.SpanTermQuery
 @groovy.transform.TypeChecked
 class QueryListFromChromosome {
 
-    private IndexSearcher searcher = IndexInfo.indexSearcher
-    //private final ImportantTerms iw = new ImportantTerms();
-    //private final TermQuery[] termQueryArray = iw.getTFIDFTermQueryList()
-    //terms from previous run  classic4
-    private
-    final String[] notWords = ["pressure", "layer", "heat", "boundary", "computer", "library", "retrieval", "information", "cells", "patients", "blood", "algorithm"] as String[]
-    private
-    final String[] notWords20NG5 = ["jesus", "christ", "god", "windows", "high", "nasa", "orbit", "hockey", "nhl", "players", "sale"] as String[]
+//    private IndexSearcher searcher = IndexInfo.indexSearcher
 
-    //public List <BooleanQuery.Builder> getORQueryList(IntegerVectorIndividual intVectorIndividual) {
-    //static List <BooleanQuery.Builder> getORQueryList(int[] intArray) {
     static List<BooleanQuery.Builder> getORQueryList(int[] intArray, TermQuery[] termQueryArray) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
-        Set genes = [] as Set
+        Set <Integer> genes = [] as Set
 
         intArray.eachWithIndex { int gene, int index ->
             int clusterNumber = index % IndexInfo.NUMBER_OF_CLUSTERS

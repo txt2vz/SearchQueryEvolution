@@ -44,12 +44,12 @@ public class ClusterMainJenetics {
 
 	public ClusterMainJenetics(int job) {
 
-		final int popSize = 150;
-		final long maxGen = 300;
+		final int popSize = 512;
+		final long maxGen = 210;
 
 		final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
-				new IntegerChromosome(-1, 100, 15));
+				new IntegerChromosome(-1, 100, 12));
 
 		final Engine<IntegerGene, Double> engine = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
 				// .survivorsSelector(new

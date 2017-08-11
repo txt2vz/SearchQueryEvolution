@@ -77,7 +77,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         fitness.setClusterFitness(bqbList)
 
 //rawfitness used by ECJ for evaluation
-        def rawfitness = fitness.baseFitness
+        def rawfitness = fitness.getFitness()
 
         ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, rawfitness, false)
         ind.evaluated = true

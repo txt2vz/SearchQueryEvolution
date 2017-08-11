@@ -8,12 +8,6 @@ import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.*
 
-/**
- * Store cluster fitness information
- *
- * @author Laurie
- */
-
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
 
@@ -40,23 +34,8 @@ public class ClusterFitness extends SimpleFitness {
     private final int coreClusterSize = 20
     private IndexSearcher searcher = IndexInfo.indexSearcher;
 
-    String queryShort() {
-        def s = "queryMap.size ${queryMap.size()} \n"
-        queryMap.keySet().eachWithIndex { Query q, int index ->
-            if (index > 0) s += '\n';
-            s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(IndexInfo.FIELD_CONTENTS)}"
-        }
-        return s
-    }
-
-    public double getFitness() {
+    double getFitness() {
         return baseFitness;
-    }
-
-    public void generationStats(long generation) {
-        println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
-        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} PosScr-(NegScr*2): ${posScrMinusNegScrTimes2.round(2)} CoreClstPen: $coreClusterPenalty"
-        println "TotalHits: $totalHits TotalDocs: ${IndexInfo.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount"
     }
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
@@ -69,7 +48,6 @@ public class ClusterFitness extends SimpleFitness {
         scorePlus1000 = 0.0
         scoreOnly = 0.0
         posScrMinusNegScrTimes2 = 0.0
-
         positiveHits = 0
         negativeHits = 0
         coreClusterPenalty = 0
@@ -81,7 +59,7 @@ public class ClusterFitness extends SimpleFitness {
         //   emptyQueries = false
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
-        Set allHits = [] as Set
+        Set <Integer> allHits = [] as Set
 
         bqbArray.eachWithIndex { BooleanQuery.Builder bqb, index ->
 
@@ -94,8 +72,8 @@ public class ClusterFitness extends SimpleFitness {
             //			}
             //		}
 
-            def otherdocIdSet = [] as Set
-            def otherQueries = bqbArray - bqb
+            Set <Integer> otherdocIdSet = [] as Set <Integer>
+            List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
             otherQueries.each { obqb ->
@@ -163,8 +141,14 @@ public class ClusterFitness extends SimpleFitness {
         //	}
     }
 
+    void generationStats(long generation) {
+        println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
+        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} PosScr-(NegScr*2): ${posScrMinusNegScrTimes2.round(2)} CoreClstPen: $coreClusterPenalty"
+        println "TotalHits: $totalHits TotalDocs: ${IndexInfo.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount"
+    }
+
     @TypeChecked(TypeCheckingMode.SKIP)
-    public void finalQueryStats(int job, int gen, int popSize) {
+    void finalQueryStats(int job, int gen, int popSize) {
         String messageOut = ""
         FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)
         resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Noclusters: ${IndexInfo.NUMBER_OF_CLUSTERS}  pathToIndex: ${IndexInfo.pathToIndex}  ************************************************************* \n"
@@ -244,6 +228,15 @@ public class ClusterFitness extends SimpleFitness {
         fcsv << "$gen , $job , $popSize , $baseFitness , ${averageF1.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${queryForCSV(job)}, ${new Date()}, ${IndexInfo.pathToIndex} \n"
         fcsv.flush()
         fcsv.close()
+    }
+
+    String queryShort() {
+        def s = "queryMap.size ${queryMap.size()} \n"
+        queryMap.keySet().eachWithIndex { Query q, int index ->
+            if (index > 0) s += '\n';
+            s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(IndexInfo.FIELD_CONTENTS)}"
+        }
+        return s
     }
 
     private String queryForCSV(int job) {
