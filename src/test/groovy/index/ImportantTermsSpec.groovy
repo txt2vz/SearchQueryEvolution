@@ -36,7 +36,7 @@ class ImportantTermsSpec extends spock.lang.Specification {
 
 	def "ImportantTerms 20News3 tfidf"(){
 		setup:
-		IndexInfo.pathToIndex = 'indexes/20NG3SpaceHockeyChristianL6'
+		IndexInfo.pathToIndex = 'indexes/NG20SpaceHockeyChristian'
 		IndexInfo.setIndex()
 		//IndexInfo.instance.setPathToIndex('indexes/20NG3SpaceHockeyChristianL6')
 		IndexInfo.instance.setIndexFieldsAndTotals()
@@ -47,7 +47,7 @@ class ImportantTermsSpec extends spock.lang.Specification {
 
 		then:
 		tfidfList[0].getTerm().text() == 'space'
-		tfidfList[2].getTerm().text() == 'god'
-		tfidfList[4].getTerm().text() == 'jesus'
+		tfidfList[1].getTerm().text() == 'god'
+		tfidfList[3].getTerm().text() == 'game'
 	}
 }
