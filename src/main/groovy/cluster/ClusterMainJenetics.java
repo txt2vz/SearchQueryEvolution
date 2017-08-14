@@ -15,62 +15,59 @@ import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class ClusterMainJenetics {
 
-	private final static TermQuery[] termQueryArray = new ImportantTerms().getTFIDFTermQueryList();
+    private final static TermQuery[] termQueryArray = new ImportantTerms().getTFIDFTermQueryList();
 
-	private static double evaluate(final Genotype<IntegerGene> gt) {
+    private static double evaluate(final Genotype<IntegerGene> gt) {
 
-		ClusterFitness cfit = cf(gt);
-		return cfit.getFitness();
-	}
+        ClusterFitness cfit = cf(gt);
+        return cfit.getFitness();
+    }
 
-	//private static ClusterFitnessJenetics cf(final Genotype<IntegerGene> gt) {
-		private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
-		List<BooleanQuery.Builder> bqbList = QueryListFromChromosome
-				.getORQueryList( ((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, IndexInfo.getNUMBER_OF_CLUSTERS());
-			//.getORQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray());
+    private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
+        List<BooleanQuery.Builder> bqbList = QueryListFromChromosome
+                .getORQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, IndexInfo.getNUMBER_OF_CLUSTERS());
 
-		//ClusterFitnessJenetics clusterFitness = new ClusterFitnessJenetics();
-	ClusterFitness clusterFitness = new ClusterFitness();
-			clusterFitness.setClusterFitness(bqbList);
+        ClusterFitness clusterFitness = new ClusterFitness();
+        clusterFitness.setClusterFitness(bqbList);
 
-		return clusterFitness;
-	}
+        return clusterFitness;
+    }
 
-	public static void main(String[] args) throws Exception {
-		final int numberOfJobs=2;
-		IntStream.range(0, numberOfJobs).forEach(job ->
-				new ClusterMainJenetics(job)
-			);
-	}
+    public static void main(String[] args) throws Exception {
+        final int numberOfJobs = 2;
+        IntStream.range(0, numberOfJobs).forEach(job ->
+                new ClusterMainJenetics(job)
+        );
+    }
 
-	public ClusterMainJenetics(int job) {
+    public ClusterMainJenetics(int job) {
 
-		final int popSize = 200;
-		final long maxGen = 110;
+        final int popSize = 200;
+        final long maxGen = 110;
 
-		final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
+        final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
-				new IntegerChromosome(-1, 100, 12));
+                new IntegerChromosome(-1, 100, 12));
 
-		final Engine<IntegerGene, Double> engine = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
-				// .survivorsSelector(new
-				// StochasticUniversalSelector<>()).offspringSelector(new
-				// TournamentSelector<>(5))
-				.survivorsSelector(new TournamentSelector<>(3)).offspringSelector(new TournamentSelector<>(3))
-				.alterers(new Mutator<>(0.2), new SinglePointCrossover<>(0.7)).build();
+        final Engine<IntegerGene, Double> engine = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
+                // .survivorsSelector(new
+                // StochasticUniversalSelector<>()).offspringSelector(new
+                // TournamentSelector<>(5))
+                .survivorsSelector(new TournamentSelector<>(3)).offspringSelector(new TournamentSelector<>(3))
+                .alterers(new Mutator<>(0.2), new SinglePointCrossover<>(0.7)).build();
 
-		final Phenotype<IntegerGene, Double> result = engine.stream().limit(maxGen).peek(ind -> {
-	
-			Genotype<IntegerGene> g = ind.getBestPhenotype().getGenotype();		
-			cf(g).generationStats(ind.getGeneration()); 
-			System.out.println();
-		}).collect(toBestPhenotype());
+        final Phenotype<IntegerGene, Double> result = engine.stream().limit(maxGen).peek(ind -> {
 
-		System.out.println("Final result job " + job + " " + result);
-		Genotype<IntegerGene> g = result.getGenotype();
-		ClusterFitness cfResult = cf(g);
-		System.out.println("cluster fit result " + cfResult.queryShort());
-		cfResult.finalQueryStats(job, (int)result.getGeneration(), popSize);
-		System.out.println();
-	}
+            Genotype<IntegerGene> g = ind.getBestPhenotype().getGenotype();
+            cf(g).generationStats(ind.getGeneration());
+            System.out.println();
+        }).collect(toBestPhenotype());
+
+        System.out.println("Final result job " + job + " " + result);
+        Genotype<IntegerGene> g = result.getGenotype();
+        ClusterFitness cfResult = cf(g);
+        System.out.println("cluster fit result " + cfResult.queryShort());
+        cfResult.finalQueryStats(job, (int) result.getGeneration(), popSize);
+        System.out.println();
+    }
 }

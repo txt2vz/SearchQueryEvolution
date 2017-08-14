@@ -59,7 +59,7 @@ public class ClusterFitness extends SimpleFitness {
         //   emptyQueries = false
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
-        Set <Integer> allHits = [] as Set
+        Set<Integer> allHits = [] as Set
 
         bqbArray.eachWithIndex { BooleanQuery.Builder bqb, index ->
 
@@ -72,7 +72,7 @@ public class ClusterFitness extends SimpleFitness {
             //			}
             //		}
 
-            Set <Integer> otherdocIdSet = [] as Set <Integer>
+            Set<Integer> otherdocIdSet = [] as Set<Integer>
             List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
@@ -81,11 +81,11 @@ public class ClusterFitness extends SimpleFitness {
             }
             Query otherBQ = bqbOthers.build()
 
-            TopDocs otherTopDocs = IndexInfo.indexSearcher.search(otherBQ, hitsPerPage)
+            TopDocs otherTopDocs = searcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
             hitsOthers.each { ScoreDoc otherHit -> otherdocIdSet << otherHit.doc }
 
-            TopDocs docs = IndexInfo.indexSearcher.search(q, hitsPerPage)
+            TopDocs docs = searcher.search(q, hitsPerPage)
             ScoreDoc[] hits = docs.scoreDocs;
             qMap.put(q, hits.size())
 
