@@ -1,0 +1,30 @@
+Mon Aug 14 14:26:38 BST 2017  ***** Job: 0 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 443 Query:  orbit moon space henry 
+categoryTotal: 593 for category: category:space 
+f1: 0.8146718146596518 recall: 0.7116357504 precision: 0.9525959368
+ClusterQuery: 1 hits: 460 Query:  faith truth church god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.7988668555256515 recall: 0.7061769616 precision: 0.9195652174
+ClusterQuery: 2 hits: 465 Query:  game players nhl hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+TotalHits: 1312 Total Docs:  1792 
+PosHits: 1257 NegHits: 111 PosScore: 5669.525499090552 NegScore: 324.96573972702026 Fitness: 3226.702023540919 
+***  TOTALS:   *****   f1list: [0.8146718146596518, 0.7988668555256515, 0.8375586854072207] averagef1: :0.8170324518641747  ** average precision: 0.9437669797 average recall: 0.7203820150999999
+************************************************ 
+ 
+Mon Aug 14 14:28:18 BST 2017  ***** Job: 1 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 472 Query:  church christianity christ god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8384687207873743 recall: 0.7495826377 precision: 0.9512711864
+ClusterQuery: 1 hits: 301 Query:  orbit moon nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.6554809843754013 recall: 0.4940978078 precision: 0.9734219269
+ClusterQuery: 2 hits: 502 Query:  nhl team teams game 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.825771324847428 recall: 0.7583333333 precision: 0.906374502
+TotalHits: 1214 Total Docs:  1792 
+PosHits: 1154 NegHits: 121 PosScore: 5040.4504516124725 NegScore: 333.4544528722763 Fitness: 2466.164113299919 
+***  TOTALS:   *****   f1list: [0.8384687207873743, 0.6554809843754013, 0.825771324847428] averagef1: :0.7732403433367345  ** average precision: 0.9436892051000001 average recall: 0.6673379262666667
+************************************************ 
+ 

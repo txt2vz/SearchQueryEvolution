@@ -43,8 +43,7 @@ bin/
 
 #from old projects
 .settings
-/src/cfg/statDump
-/results
+
 
 
 
