@@ -15,7 +15,7 @@ class QueryListFromChromosome {
 
 //    private IndexSearcher searcher = IndexInfo.indexSearcher
 
-    static List<BooleanQuery.Builder> getORQueryList(int[] intArray, TermQuery[] termQueryArray) {
+    static List<BooleanQuery.Builder> getORQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
@@ -23,7 +23,7 @@ class QueryListFromChromosome {
         Set <Integer> genes = [] as Set
 
         intArray.eachWithIndex { int gene, int index ->
-            int clusterNumber = index % IndexInfo.NUMBER_OF_CLUSTERS
+            int clusterNumber = index % numberOfClusters
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
             if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {

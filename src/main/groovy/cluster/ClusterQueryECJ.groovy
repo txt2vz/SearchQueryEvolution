@@ -51,7 +51,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray)
+                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, IndexInfo.NUMBER_OF_CLUSTERS)
                 break;
         //@TypeChecked(TypeCheckingMode.SKIP)
 //			case QueryType.AND :
