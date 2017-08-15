@@ -10,7 +10,6 @@ import org.apache.lucene.search.*
 
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
-
 public class ClusterFitness extends SimpleFitness {
 
     private Map<Query, Integer> queryMap = [:]
@@ -28,11 +27,12 @@ public class ClusterFitness extends SimpleFitness {
     private int totalHits = 0
     private int missedDocs = 0
     private int zeroHitsCount = 0
+    private boolean gpDummy = false
     // boolean isDummy = false     //  boolean emptyQueries = false     //    int duplicateCount = 0     //   int lowSubqHits = 0
 
-    private final int hitsPerPage = IndexInfo.indexReader.maxDoc()
-    private final int coreClusterSize = 20
-    private IndexSearcher searcher = IndexInfo.indexSearcher;
+    private final static int hitsPerPage = IndexInfo.indexReader.maxDoc()
+    private final static int coreClusterSize = 20
+    private final static IndexSearcher searcher = IndexInfo.indexSearcher;
 
     double getFitness() {
         return baseFitness;
@@ -40,6 +40,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
         assert bqbArray.size() == IndexInfo.NUMBER_OF_CLUSTERS
+        boolean gp = false
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -66,11 +67,7 @@ public class ClusterFitness extends SimpleFitness {
             Query q = bqb.build()
 
             //requires gp parameter to fitness
-            //	if (gp){
-            //			if ( q.toString(IndexInfo.FIELD_CONTENTS).contains("DummyXX") || q==null || q.toString(IndexInfo.FIELD_CONTENTS) == '' ){
-            //				fitness.isDummy = true;
-            //			}
-            //		}
+         //  gpDummy =  gp && (q.toString(IndexInfo.FIELD_CONTENTS).contains("DummyXX") || q==null || q.toString(IndexInfo.FIELD_CONTENTS) == '' )
 
             Set<Integer> otherdocIdSet = [] as Set<Integer>
             List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
