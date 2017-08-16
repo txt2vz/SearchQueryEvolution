@@ -5,7 +5,8 @@ import ec.Evolve
 import ec.util.ParameterDatabase
 import index.IndexInfo
 
-//@groovy.transform.TypeChecked
+@groovy.transform.CompileStatic
+@groovy.transform.TypeChecked
 class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
@@ -16,10 +17,8 @@ class ClusterMainECJ extends Evolve {
     private final int NUMBER_OF_JOBS = 2
 
     public ClusterMainECJ() {
-        EvolutionState state;
-        IndexInfo.instance.setIndexFieldsAndTotals()
+        EvolutionState state;    
         ParameterDatabase parameters = null;
-
         final Date startRun = new Date();
 
         NUMBER_OF_JOBS.times { job ->

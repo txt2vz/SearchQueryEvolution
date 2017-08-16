@@ -3,6 +3,8 @@ package cluster
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
 
+@groovy.transform.CompileStatic
+@groovy.transform.TypeChecked
 public class ClusterStatisticsECJ extends SimpleStatistics {
 
     public void finalStatistics(final EvolutionState state, final int result) {
