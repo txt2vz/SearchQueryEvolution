@@ -36,7 +36,7 @@ class ClusterMainECJ extends Evolve {
             }
             state.run(EvolutionState.C_STARTED_FRESH);
 
-            def popSize = 0;
+            int popSize = 0;
             ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
                 popSize = popSize + sbp.individuals.size()
                 sbp.individuals.max() { ind ->

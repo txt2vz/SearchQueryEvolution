@@ -178,7 +178,6 @@ public class ClusterFitness extends SimpleFitness {
 			Map.Entry<String,Integer> catMax = catsFreq?.max { it?.value }
 
 			println "catsFreq: $catsFreq cats max: $catMax "
-			println "%%%%%%%%%%%%%%%%%%% catsFreqClass " + catMax.getClass();
 
 			// if (catMax != 0) {
 			TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
