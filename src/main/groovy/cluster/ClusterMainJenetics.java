@@ -42,8 +42,8 @@ public class ClusterMainJenetics {
 
     public ClusterMainJenetics(int job) {
 
-        final int popSize = 200;
-        final long maxGen = 110;
+        final int popSize = 512;
+        final long maxGen = 210;
 
         final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
