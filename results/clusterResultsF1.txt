@@ -358,3 +358,273 @@ PosHits: 1118 NegHits: 84 PosScore: 4647.049473464489 NegScore: 245.571034803986
 ***  TOTALS:   *****   f1list: [0.8492136910070134, 0.7829534192237881, 0.6371681416036338] averagef1: :0.7564450839448118  ** average precision: 0.9497232698666668 average recall: 0.6374605605333333
 ************************************************ 
  
+Wed Aug 16 17:20:40 BST 2017  ***** Job: 0 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 469 Query:  christ truth christians god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8258426966592542 recall: 0.7362270451 precision: 0.9402985075
+ClusterQuery: 1 hits: 480 Query:  play game hockey pittsburgh 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.7999999999999999 recall: 0.72 precision: 0.9
+ClusterQuery: 2 hits: 419 Query:  henry space moon launch 
+categoryTotal: 593 for category: category:space 
+f1: 0.7845849802318092 recall: 0.6694772344 precision: 0.9474940334
+TotalHits: 1292 Total Docs:  1792 
+PosHits: 1219 NegHits: 149 PosScore: 5533.188483595848 NegScore: 481.18893037736416 Fitness: 2895.792318735486 
+***  TOTALS:   *****   f1list: [0.8258426966592542, 0.7999999999999999, 0.7845849802318092] averagef1: :0.8034758922970212  ** average precision: 0.9292641803 average recall: 0.7085680931666666
+************************************************ 
+ 
+Wed Aug 16 17:22:28 BST 2017  ***** Job: 1 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 443 Query:  moon orbit space henry 
+categoryTotal: 593 for category: category:space 
+f1: 0.8146718146596518 recall: 0.7116357504 precision: 0.9525959368
+ClusterQuery: 1 hits: 439 Query:  season win game pittsburgh 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.74687199233285 recall: 0.6466666667 precision: 0.8838268793
+ClusterQuery: 2 hits: 460 Query:  christians bible christianity god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8366383380447519 recall: 0.7395659432 precision: 0.9630434783
+TotalHits: 1268 Total Docs:  1792 
+PosHits: 1196 NegHits: 146 PosScore: 5398.552043259144 NegScore: 470.50132405757904 Fitness: 2732.50000571229 
+***  TOTALS:   *****   f1list: [0.8146718146596518, 0.74687199233285, 0.8366383380447519] averagef1: :0.7993940483457512  ** average precision: 0.9331554314666667 average recall: 0.6992894534333334
+************************************************ 
+ 
+Wed Aug 16 17:38:52 BST 2017  ***** Job: 0 Gen: 161 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 413 Query:  nasa orbit space 
+categoryTotal: 593 for category: category:space 
+f1: 0.7773359841368439 recall: 0.6593591906 precision: 0.9467312349
+ClusterQuery: 1 hits: 423 Query:  play players cup hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.772238514160604 recall: 0.6583333333 precision: 0.9338061466
+ClusterQuery: 2 hits: 481 Query:  christians christ bible god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+TotalHits: 1268 Total Docs:  1792 
+PosHits: 1220 NegHits: 97 PosScore: 5397.1683359742165 NegScore: 300.6879385858774 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.7773359841368439, 0.772238514160604, 0.8518518518175271] averagef1: :0.800475450038325  ** average precision: 0.9456261126 average recall: 0.6952130338333333
+************************************************ 
+ 
+Wed Aug 16 17:39:57 BST 2017  ***** Job: 1 Gen: 149 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 487 Query:  church jesus god christ 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8526703499105391 recall: 0.7729549249 precision: 0.9507186858
+ClusterQuery: 1 hits: 449 Query:  hockey play team 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.7664442326148011 recall: 0.67 precision: 0.8953229399
+ClusterQuery: 2 hits: 431 Query:  space moon henry nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.792968750010844 recall: 0.6846543002 precision: 0.9419953596
+TotalHits: 1290 Total Docs:  1792 
+PosHits: 1215 NegHits: 152 PosScore: 5430.9301244318485 NegScore: 462.8624823987484 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.8526703499105391, 0.7664442326148011, 0.792968750010844] averagef1: :0.8040277775120614  ** average precision: 0.9293456617666666 average recall: 0.7092030750333334
+************************************************ 
+ 
+Thu Aug 17 09:55:16 BST 2017  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 474 Query:  truth life without different 
+categoryTotal: 599 for category: category:christian 
+f1: 0.5405405405295788 recall: 0.4841402337 precision: 0.611814346
+ClusterQuery: 1 hits: 561 Query:  day space research nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.6429809358615987 recall: 0.6256323777 precision: 0.6613190731
+ClusterQuery: 2 hits: 406 Query:  cup games players play 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.737574552644456 recall: 0.6183333333 precision: 0.9137931034
+TotalHits: 1172 Total Docs:  1792 
+PosHits: 919 NegHits: 522 PosScore: 3659.262922644615 NegScore: 1646.1904895454645 Fitness: 38.97794694567169 
+***  TOTALS:   *****   f1list: [0.5405405405295788, 0.6429809358615987, 0.737574552644456] averagef1: :0.6403653430118778  ** average precision: 0.7289755075000001 average recall: 0.5760353148999999
+************************************************ 
+ 
+Thu Aug 17 09:55:27 BST 2017  ***** Job: 1 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 673 Query:  reason christians however two 
+categoryTotal: 599 for category: category:christian 
+f1: 0.5487421383636516 recall: 0.5826377295 precision: 0.5185735513
+ClusterQuery: 1 hits: 514 Query:  henry toronto nasa game 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.5439856373326366 recall: 0.505 precision: 0.5894941634
+ClusterQuery: 2 hits: 174 Query:  earth 
+categoryTotal: 593 for category: category:space 
+f1: 0.32333767932128155 recall: 0.2091062395 precision: 0.7126436782
+TotalHits: 1072 Total Docs:  1792 
+PosHits: 812 NegHits: 549 PosScore: 2691.496815800667 NegScore: 1489.1660552620888 Fitness: 10.633889913614935 
+***  TOTALS:   *****   f1list: [0.5487421383636516, 0.5439856373326366, 0.32333767932128155] averagef1: :0.4720218183391898  ** average precision: 0.6069037976333335 average recall: 0.43224798966666667
+************************************************ 
+ 
+Thu Aug 17 10:09:22 BST 2017  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 365 Query:  faith again henry 
+categoryTotal: 599 for category: category:christian 
+f1: 0.3838174273690139 recall: 0.3088480801 precision: 0.5068493151
+ClusterQuery: 1 hits: 341 Query:  pittsburgh system cup 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.4357066950251005 recall: 0.3416666667 precision: 0.6011730205
+ClusterQuery: 2 hits: 288 Query:  center power period 
+categoryTotal: 593 for category: category:space 
+f1: 0.27241770716068675 recall: 0.2023608769 precision: 0.4166666667
+TotalHits: 798 Total Docs:  1792 
+PosHits: 624 NegHits: 370 PosScore: 2174.6486463546753 NegScore: 1061.2668555378914 Fitness: 10.980935908977699 
+***  TOTALS:   *****   f1list: [0.3838174273690139, 0.4357066950251005, 0.27241770716068675] averagef1: :0.36398060985160036  ** average precision: 0.5082296674333333 average recall: 0.28429187456666666
+************************************************ 
+ 
+Thu Aug 17 10:09:32 BST 2017  ***** Job: 1 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 575 Query:  high give science moon 
+categoryTotal: 593 for category: category:space 
+f1: 0.47773972603259246 recall: 0.4704890388 precision: 0.4852173913
+ClusterQuery: 1 hits: 533 Query:  christian real read bible 
+categoryTotal: 599 for category: category:christian 
+f1: 0.6166077738461389 recall: 0.5826377295 precision: 0.6547842402
+ClusterQuery: 2 hits: 149 Query:  games 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.3791722296800691 recall: 0.2366666667 precision: 0.9530201342
+TotalHits: 1039 Total Docs:  1792 
+PosHits: 833 NegHits: 424 PosScore: 2762.334140896797 NegScore: 1156.3349563032389 Fitness: 20.305386720473642 
+***  TOTALS:   *****   f1list: [0.47773972603259246, 0.6166077738461389, 0.3791722296800691] averagef1: :0.49117324318626676  ** average precision: 0.6976739219 average recall: 0.429931145
+************************************************ 
+ 
+Thu Aug 17 10:23:26 BST 2017  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 749 Query:  around things toronto us 
+categoryTotal: 599 for category: category:christian 
+f1: 0.3976261127596305 recall: 0.4474123539 precision: 0.3578104139
+ClusterQuery: 1 hits: 192 Query:  enough 
+categoryTotal: 599 for category: category:christian 
+f1: 0.19216182045694657 recall: 0.1268781302 precision: 0.3958333333
+ClusterQuery: 2 hits: 352 Query:  cup christianity center 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.3151260504102253 recall: 0.25 precision: 0.4261363636
+TotalHits: 985 Total Docs:  1792 
+PosHits: 728 NegHits: 565 PosScore: 2091.5471970438957 NegScore: 1361.577339053154 Fitness: 4.637629083690236 
+***  TOTALS:   *****   f1list: [0.3976261127596305, 0.19216182045694657, 0.3151260504102253] averagef1: :0.3016379945422674  ** average precision: 0.3932600369333333 average recall: 0.2747634947
+************************************************ 
+ 
+Thu Aug 17 10:23:37 BST 2017  ***** Job: 1 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 291 Query:  team 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.5836139169217108 recall: 0.4333333333 precision: 0.8934707904
+ClusterQuery: 1 hits: 440 Query:  mark hell faith christian 
+categoryTotal: 599 for category: category:christian 
+f1: 0.6063522618082293 recall: 0.5258764608 precision: 0.7159090909
+ClusterQuery: 2 hits: 195 Query:  launch april 
+categoryTotal: 593 for category: category:space 
+f1: 0.3350253807227315 recall: 0.2225969646 precision: 0.6769230769
+TotalHits: 814 Total Docs:  1792 
+PosHits: 709 NegHits: 217 PosScore: 2392.1398696005344 NegScore: 523.4165678173304 Fitness: 60.48984373845323 
+***  TOTALS:   *****   f1list: [0.5836139169217108, 0.6063522618082293, 0.3350253807227315] averagef1: :0.5083305198175573  ** average precision: 0.7621009860666667 average recall: 0.39393558623333336
+************************************************ 
+ 
+Thu Aug 17 10:36:15 BST 2017  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 448 Query:  space nasa earth 
+categoryTotal: 593 for category: category:space 
+f1: 0.7223823246643086 recall: 0.6340640809 precision: 0.8392857143
+ClusterQuery: 1 hits: 305 Query:  church christians 
+categoryTotal: 599 for category: category:christian 
+f1: 0.6681415929104244 recall: 0.5041736227 precision: 0.9901639344
+ClusterQuery: 2 hits: 372 Query:  players nhl hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.7572016460569425 recall: 0.6133333333 precision: 0.9892473118
+TotalHits: 1083 Total Docs:  1792 
+PosHits: 1041 NegHits: 84 PosScore: 3878.706134662032 NegScore: 212.50342006981373 Fitness: 813.3393754526255 
+***  TOTALS:   *****   f1list: [0.7223823246643086, 0.6681415929104244, 0.7572016460569425] averagef1: :0.7159085212105585  ** average precision: 0.9395656534999999 average recall: 0.5838570123
+************************************************ 
+ 
+Thu Aug 17 10:36:25 BST 2017  ***** Job: 1 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 412 Query:  earth space 
+categoryTotal: 593 for category: category:space 
+f1: 0.6845771143974987 recall: 0.5801011804 precision: 0.8349514563
+ClusterQuery: 1 hits: 187 Query:  nhl 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.47522236344408586 recall: 0.3116666667 precision: 1.0
+ClusterQuery: 2 hits: 409 Query:  bible christ christian church 
+categoryTotal: 599 for category: category:christian 
+f1: 0.7777777777933516 recall: 0.6544240401 precision: 0.9584352078
+TotalHits: 954 Total Docs:  1792 
+PosHits: 900 NegHits: 108 PosScore: 3158.902900636196 NegScore: 328.27423037588596 Fitness: 496.3074996430859 
+***  TOTALS:   *****   f1list: [0.6845771143974987, 0.47522236344408586, 0.7777777777933516] averagef1: :0.6458590852116454  ** average precision: 0.9311288880333333 average recall: 0.5153972957333334
+************************************************ 
+ 
+Thu Aug 17 10:42:34 BST 2017  ***** Job: 0 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 364 Query:  space nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.7147335423643469 recall: 0.5767284992 precision: 0.9395604396
+ClusterQuery: 1 hits: 481 Query:  bible god christ christians 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+ClusterQuery: 2 hits: 465 Query:  players nhl game hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+TotalHits: 1265 Total Docs:  1792 
+PosHits: 1220 NegHits: 90 PosScore: 5227.545697554946 NegScore: 251.90465523302555 Fitness: 2852.2307916044138 
+***  TOTALS:   *****   f1list: [0.7147335423643469, 0.8518518518175271, 0.8375586854072207] averagef1: :0.8013813598630316  ** average precision: 0.9516803936000001 average recall: 0.6960028033666666
+************************************************ 
+ 
+Thu Aug 17 10:44:15 BST 2017  ***** Job: 1 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 364 Query:  space nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.7147335423643469 recall: 0.5767284992 precision: 0.9395604396
+ClusterQuery: 1 hits: 481 Query:  christ bible christians god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+ClusterQuery: 2 hits: 465 Query:  players nhl game hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+TotalHits: 1265 Total Docs:  1792 
+PosHits: 1220 NegHits: 90 PosScore: 5227.545697554946 NegScore: 251.90465523302555 Fitness: 2852.2307916044138 
+***  TOTALS:   *****   f1list: [0.7147335423643469, 0.8518518518175271, 0.8375586854072207] averagef1: :0.8013813598630316  ** average precision: 0.9516803936000001 average recall: 0.6960028033666666
+************************************************ 
+ 
+Thu Aug 17 12:46:11 BST 2017  ***** Job: 0 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 481 Query:  christ god bible christians 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+ClusterQuery: 1 hits: 465 Query:  nhl players game hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+ClusterQuery: 2 hits: 364 Query:  space nasa 
+categoryTotal: 593 for category: category:space 
+f1: 0.7147335423643469 recall: 0.5767284992 precision: 0.9395604396
+TotalHits: 1265 Total Docs:  1792 
+PosHits: 1220 NegHits: 90 PosScore: 5227.545697554946 NegScore: 251.90465523302555 Fitness: 2852.2307916044138 
+***  TOTALS:   *****   f1list: [0.8518518518175271, 0.8375586854072207, 0.7147335423643469] averagef1: :0.8013813598630316  ** average precision: 0.9516803936000001 average recall: 0.6960028033666666
+************************************************ 
+ 
+Thu Aug 17 12:48:01 BST 2017  ***** Job: 1 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 481 Query:  bible christ christians god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+ClusterQuery: 1 hits: 465 Query:  nhl game players hockey 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+ClusterQuery: 2 hits: 364 Query:  nasa space 
+categoryTotal: 593 for category: category:space 
+f1: 0.7147335423643469 recall: 0.5767284992 precision: 0.9395604396
+TotalHits: 1265 Total Docs:  1792 
+PosHits: 1220 NegHits: 90 PosScore: 5227.545697554946 NegScore: 251.90465523302555 Fitness: 2852.2307916044138 
+***  TOTALS:   *****   f1list: [0.8518518518175271, 0.8375586854072207, 0.7147335423643469] averagef1: :0.8013813598630316  ** average precision: 0.9516803936000001 average recall: 0.6960028033666666
+************************************************ 
+ 
+Thu Aug 17 12:50:19 BST 2017  ***** Job: 0 Gen: 172 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 318 Query:  space 
+categoryTotal: 593 for category: category:space 
+f1: 0.6586169044605725 recall: 0.5059021922 precision: 0.9433962264
+ClusterQuery: 1 hits: 296 Query:  bible orbit 
+categoryTotal: 599 for category: category:christian 
+f1: 0.36424581003082673 recall: 0.2721202003 precision: 0.5506756757
+ClusterQuery: 2 hits: 597 Query:  going cup game nhl 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.6917293233165207 recall: 0.69 precision: 0.6934673367
+TotalHits: 1046 Total Docs:  1792 
+PosHits: 902 NegHits: 309 PosScore: 2920.6416653841734 NegScore: 689.0381946116686 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.6586169044605725, 0.36424581003082673, 0.6917293233165207] averagef1: :0.5715306792693067  ** average precision: 0.7291797462666666 average recall: 0.4893407975
+************************************************ 
+ 
+Thu Aug 17 12:51:27 BST 2017  ***** Job: 1 Gen: 161 PopSize: 512 Noclusters: 3  pathToIndex: indexes/NG20SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 408 Query:  orbit henry space 
+categoryTotal: 593 for category: category:space 
+f1: 0.77922077919609 recall: 0.6576728499 precision: 0.9558823529
+ClusterQuery: 1 hits: 465 Query:  game hockey players nhl 
+categoryTotal: 600 for category: category:hockey 
+f1: 0.8375586854072207 recall: 0.7433333333 precision: 0.9591397849
+ClusterQuery: 2 hits: 481 Query:  christ bible christians god 
+categoryTotal: 599 for category: category:christian 
+f1: 0.8518518518175271 recall: 0.7679465776 precision: 0.9563409563
+TotalHits: 1312 Total Docs:  1792 
+PosHits: 1270 NegHits: 84 PosScore: 5566.384729370475 NegScore: 228.35325521230698 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.77922077919609, 0.8375586854072207, 0.8518518518175271] averagef1: :0.8228771054736126  ** average precision: 0.9571210313666666 average recall: 0.7229842536
+************************************************ 
+ 

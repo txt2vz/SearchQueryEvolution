@@ -21,8 +21,8 @@ pop.subpop.2.species.genome-size = 12
 pop.subpop.2.size = 128
 
 pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 100
+pop.subpop.0.species.max-gene = 20
 pop.subpop.1.species.min-gene = -1
-pop.subpop.1.species.max-gene = 100
+pop.subpop.1.species.max-gene = 20
 pop.subpop.2.species.min-gene = -1
-pop.subpop.2.species.max-gene = 100
+pop.subpop.2.species.max-gene = 20

@@ -1,5 +1,7 @@
 package index
 
+import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
 import org.apache.lucene.index.*
 import org.apache.lucene.search.DocIdSetIterator
 import org.apache.lucene.search.IndexSearcher
@@ -15,7 +17,8 @@ import org.apache.lucene.util.BytesRef
  * @author Laurie 
  */
 
-
+//@groovy.transform.CompileStatic
+//@groovy.transform.TypeChecked
 public class ImportantTerms  {
 
 	public final static int SPAN_FIRST_MAX_END = 300;
@@ -58,6 +61,7 @@ public class ImportantTerms  {
 	/**
 	 * create a set of words based on F1 measure of the term when used to classify current category
 	 */
+	//@TypeChecked(TypeCheckingMode.SKIP)
 	public TermQuery[] getF1TermQueryList(){
 
 		println "Important words terms.getDocCount: ${terms.getDocCount()}"
@@ -85,7 +89,7 @@ public class ImportantTerms  {
 
 		termQueryMap= termQueryMap.sort{-it.value}
 		println "termQueryMap: $termQueryMap"
-		TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable()
+		TermQuery[] termQueryList = (TermQuery[])termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable().toArray()
 		println "f1 map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
 		return termQueryList
 	}

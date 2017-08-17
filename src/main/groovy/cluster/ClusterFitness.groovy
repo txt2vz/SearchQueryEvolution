@@ -245,7 +245,7 @@ public class ClusterFitness extends SimpleFitness {
 	}
 
 	public String fitnessToStringForHumans() {
-		return "ClusterQuery Fitness: ${this.fitness()} "
+		return "ClusterQuery Fitness: ${this.fitness()}  ${queryShort()}"
 	}
 
 	public String toString(int gen) {
