@@ -71,7 +71,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 //				break;
         }
         assert bqbList.size() == IndexInfo.NUMBER_OF_CLUSTERS
-        final int hitsPerPage = IndexInfo.indexReader.maxDoc()
+      //  final int hitsPerPage = IndexInfo.indexReader.maxDoc()
 
         //set fitness based on set of boolean queries
         fitness.setClusterFitness(bqbList)

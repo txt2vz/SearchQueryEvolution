@@ -26,7 +26,7 @@ gp.type.a.1.name = Query
 gp.type.a.2.name = Cluster3Query
 
 gp.tc.0.returns = Cluster3Query
-gp.nc.size = 6
+gp.nc.size = 5
 
 gp.nc.0 = ec.gp.GPNodeConstraints
 gp.nc.0.name = Int
@@ -40,30 +40,30 @@ gp.nc.1.size = 2
 gp.nc.1.child.0 = Int
 gp.nc.1.child.1 = Int
 
+#gp.nc.2 = ec.gp.GPNodeConstraints
+#gp.nc.2.name = Query2Query
+#gp.nc.2.returns = Query
+#gp.nc.2.size = 2
+#gp.nc.2.child.0 = Query
+#gp.nc.2.child.1 = Query
+
 gp.nc.2 = ec.gp.GPNodeConstraints
-gp.nc.2.name = Query2Query
-gp.nc.2.returns = Query
-gp.nc.2.size = 2
+gp.nc.2.name = Cluster3Query
+gp.nc.2.returns = Cluster3Query
+gp.nc.2.size = 3
 gp.nc.2.child.0 = Query
 gp.nc.2.child.1 = Query
+gp.nc.2.child.2 = Query
 
 gp.nc.3 = ec.gp.GPNodeConstraints
-gp.nc.3.name = Cluster3Query
-gp.nc.3.returns = Cluster3Query
-gp.nc.3.size = 3
-gp.nc.3.child.0 = Query
-gp.nc.3.child.1 = Query
-gp.nc.3.child.2 = Query
+gp.nc.3.name = QueryDummy
+gp.nc.3.returns = Query
+gp.nc.3.size = 0
 
 gp.nc.4 = ec.gp.GPNodeConstraints
-gp.nc.4.name = QueryDummy
-gp.nc.4.returns = Query
+gp.nc.4.name = ClusterDummy
+gp.nc.4.returns = Cluster3Query
 gp.nc.4.size = 0
-
-gp.nc.5 = ec.gp.GPNodeConstraints
-gp.nc.5.name = ClusterDummy
-gp.nc.5.returns = Cluster3Query
-gp.nc.5.size = 0
 
 gp.fs.size = 1
 gp.fs.0.name = f0

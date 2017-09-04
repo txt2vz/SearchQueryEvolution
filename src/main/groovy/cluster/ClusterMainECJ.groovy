@@ -11,10 +11,10 @@ class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
 
-            // 'src/cfg/clusterGP.params'
+//            'src/cfg/clusterGP.params'
             'src/cfg/clusterGA.params'
 
-    private final int NUMBER_OF_JOBS = 2
+    private final int NUMBER_OF_JOBS = 1
 
     public ClusterMainECJ() {
         EvolutionState state;    
