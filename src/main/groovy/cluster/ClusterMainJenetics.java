@@ -49,7 +49,7 @@ public class ClusterMainJenetics {
 
                 new IntegerChromosome(-1, 100, 12));
 
-        final Engine<IntegerGene, Double> engine = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
+        final Engine<IntegerGene, Double> engine  = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
                 // .survivorsSelector(new
                 // StochasticUniversalSelector<>()).offspringSelector(new
                 // TournamentSelector<>(5))

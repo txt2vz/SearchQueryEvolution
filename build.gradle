@@ -10,7 +10,7 @@ repositories { jcenter() }
 
 dependencies {
 
-    compile group: 'io.jenetics', name: 'jenetics', version: '3.8.0'
+    compile group: 'io.jenetics', name: 'jenetics', version: '3.9.0'
     compile 'org.codehaus.groovy:groovy-all:2.4.12'
 
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
