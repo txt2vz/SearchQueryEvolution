@@ -30,7 +30,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 10
+	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 20
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -39,12 +39,12 @@ class IndexInfo {
 
 	static String pathToIndex =
 	//   'indexes/R10'
-	//     'indexes/NG20'
+	     'indexes/NG20'
 	//	 'indexes/crisis3FireBombFloodL6'
 	//	 'indexes/crisis3FireBombFloodL6.6'
 	// 'indexes/classic4_500L6'
 	//	 'indexes/20NG5WindowsmiscForsaleHockeySpaceChristianL6'
-	'indexes/NG20SpaceHockeyChristian'
+	//'indexes/NG20SpaceHockeyChristian'
 	
 	// set the index
 	static {	
@@ -108,21 +108,25 @@ class IndexInfo {
 		BooleanQuery.Builder bqb = new BooleanQuery.Builder()
 		bqb.add(catQ, BooleanClause.Occur.FILTER)
 		bqb.add(trainQ, BooleanClause.Occur.FILTER)
+		//catTrainBQ
 		trainDocsInCategoryFilter = bqb.build();
 
 		bqb = new BooleanQuery.Builder()
 		bqb.add(catQ, BooleanClause.Occur.FILTER)
 		bqb.add(testQ, BooleanClause.Occur.FILTER)
+		//catTestBQ
 		testDocsInCategoryFilter = bqb.build();
 
 		bqb = new BooleanQuery.Builder()
 		bqb.add(catQ, BooleanClause.Occur.MUST_NOT)
 		bqb.add(trainQ, BooleanClause.Occur.FILTER)
+		//othersTrainBQ
 		otherTrainDocsFilter = bqb.build();
 
 		bqb = new BooleanQuery.Builder()
 		bqb.add(catQ, BooleanClause.Occur.MUST_NOT)
 		bqb.add(testQ, BooleanClause.Occur.FILTER)
+		//othersTestBQ
 		otherTestDocsFilter = bqb.build();
 
 		TotalHitCountCollector collector  = new TotalHitCountCollector();

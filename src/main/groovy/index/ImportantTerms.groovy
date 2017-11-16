@@ -35,7 +35,10 @@ public class ImportantTerms  {
 		IndexInfo.instance.setIndexFieldsAndTotals()
 		def iw = new ImportantTerms()
 		//	iw.getF1TermQueryList()
-		iw.getTFIDFTermQueryList()
+		//iw.getTFIDFTermQueryList()
+		iw.getIGTermQueryList()
+		//iw.getChiTermQueryList()
+		//iw.getORTermQueryList()
 	}
 
 	public ImportantTerms() {
@@ -128,4 +131,200 @@ public class ImportantTerms  {
 		println "tfidf map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
 		return termQueryList
 	}
+	
+	private double log2(double value) {
+		return (Math.log(value) / Math.log(2));
+	}
+
+	private double eValXY(double x, double y) {
+						
+		return (
+				-((x / ( x + y )) * log2( x / ( x + y ))) - ( y / ( x + y ) * log2( y / ( x + y ) ))
+				)
+	}
+	
+	
+	// Written by Prasanna on 2017/05/07 to calculate information gain
+	public TermQuery[] getIGTermQueryList(){
+
+		println "Important words terms.getDocCount: ${terms.getDocCount()}"
+		println "Important words terms.size ${terms.size()}"
+
+		BytesRef termbr
+		def termQueryMap = [:]
+
+		while((termbr = termsEnum.next()) != null) {
+
+			Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+			if ( isUsefulTerm(t) ){
+
+				Query tq = new TermQuery(t)
+				//final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+				//final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+				
+				final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.trainDocsInCategoryFilter, tq)
+				final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
+				final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.otherTrainDocsFilter, tq)
+				final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+				final int all = tp + fn + fp + tn
+				final int posClass = tp + fn
+				final int negClass =  fp + tn
+				final double probPos = posClass / all
+				final double probNeg = negClass / all
+				final double probWord = ( tp + fp )	/ all
+				final double probInvWord = (1 - probWord )
+								
+				//println "true positive $tp"
+				//println "false negative $fn"
+				//println "false positive $fp"
+				//println "true negative $tn"
+				//println "ALL $all"
+				//println "Positive class: $posClass  Negative class: $negClass"
+				//println " probPos $probPos probNeg $probNeg probWord $probWord probInvWord $probInvWord"
+				
+				double IG = 0
+				if (tp != 0 && tn != 0 && fp != 0 && fn != 0) {
+					IG = 	eValXY (posClass, negClass) - ( probWord * eValXY (tp, fp) + probInvWord * eValXY (fn, tn) )
+				}
+				/*
+				def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+						IndexInfo.instance.totalTrainDocsInCat)
+				*/
+				if (IG > 0.002 ) {
+					termQueryMap += [(tq): IG]
+				}
+			}
+		}
+
+		termQueryMap= termQueryMap.sort{-it.value}
+		println "termQueryMap: $termQueryMap"
+		TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable()
+		println "IG map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+		return termQueryList
+	}
+
+
+	private double chi_t(double cnt, double expect) {
+		
+		return (
+				Math.pow((cnt - expect),2) / expect
+				)
+	}
+	
+	public TermQuery[] getChiTermQueryList(){
+		
+				println "Important words terms.getDocCount: ${terms.getDocCount()}"
+				println "Important words terms.size ${terms.size()}"
+		
+				BytesRef termbr
+				def termQueryMap = [:]
+		
+				while((termbr = termsEnum.next()) != null) {
+		
+					Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+					if ( isUsefulTerm(t) ){
+		
+						Query tq = new TermQuery(t)
+						//final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+						//final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+						
+						final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.trainDocsInCategoryFilter, tq)
+						final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
+						final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.otherTrainDocsFilter, tq)
+						final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+						final int all = tp + fn + fp + tn
+						final int posClass = tp + fn
+						final int negClass =  fp + tn
+						final double probPos = posClass / all
+						final double probNeg = negClass / all
+						final double probWord = ( tp + fp )	/ all
+						final double probInvWord = (1 - probWord )
+										
+						//println "true positive $tp"
+						//println "false negative $fn"
+						//println "false positive $fp"
+						//println "true negative $tn"
+						//println "ALL $all"
+						//println "Positive class: $posClass  Negative class: $negClass"
+						//println " probPos $probPos probNeg $probNeg probWord $probWord probInvWord $probInvWord"
+						double chi = 0
+						if (tp != 0 && tn != 0 && fp != 0 && fn != 0) {
+						chi = chi_t ( tp, ((tp + fp) * probPos) ) + 	chi_t ( fn, ((fn + tn) * probPos) ) + chi_t ( fp, ((tp + fp) * probNeg) ) + chi_t ( tn, ((fn + tn) * probNeg) )
+						}
+						/*
+						def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+								IndexInfo.instance.totalTrainDocsInCat)
+						*/
+						if (chi > 100) {
+							termQueryMap += [(tq): chi]
+						}
+					}
+				}
+		
+				termQueryMap= termQueryMap.sort{-it.value}
+				println "termQueryMap: $termQueryMap"
+				TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable()
+				println "Chi map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+				return termQueryList
+			}
+
+	public TermQuery[] getORTermQueryList(){
+		
+				println "Important words terms.getDocCount: ${terms.getDocCount()}"
+				println "Important words terms.size ${terms.size()}"
+		
+				BytesRef termbr
+				def termQueryMap = [:]
+		
+				while((termbr = termsEnum.next()) != null) {
+		
+					Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+					if ( isUsefulTerm(t) ){
+		
+						Query tq = new TermQuery(t)
+						//final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+						//final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+						
+						final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.trainDocsInCategoryFilter, tq)
+						final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
+						final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.otherTrainDocsFilter, tq)
+						final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+						final int all = tp + fn + fp + tn
+						final int posClass = tp + fn
+						final int negClass =  fp + tn
+						final double probPos = posClass / all
+						final double probNeg = negClass / all
+						final double probWord = ( tp + fp )	/ all
+						final double probInvWord = (1 - probWord )
+										
+						//println "true positive $tp"
+						//println "false negative $fn"
+						//println "false positive $fp"
+						//println "true negative $tn"
+						//println "ALL $all"
+						//println "Positive class: $posClass  Negative class: $negClass"
+						//println " probPos $probPos probNeg $probNeg probWord $probWord probInvWord $probInvWord"
+						double or = 0
+						
+						if (tp != 0 && tn != 0 && fp != 0 && fn != 0) {
+							or = ( tp * tn ) / ( fp * fn )
+						}
+						
+						/*
+						def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+								IndexInfo.instance.totalTrainDocsInCat)
+						*/
+						
+						if (or > 0.15 ) {
+							termQueryMap += [(tq): or]
+						}
+					}
+				}
+		
+				termQueryMap= termQueryMap.sort{-it.value}
+				println "termQueryMap: $termQueryMap"
+				TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable()
+				println "OR map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+				return termQueryList
+			}
 }
