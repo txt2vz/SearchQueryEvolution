@@ -37,7 +37,10 @@ public class ClusterFitness extends SimpleFitness {
 	double getFitness() {
 		return baseFitness;
 	}
-
+/**
+ * Take an array of lucene boolean queries
+ * @param bqbArray
+ */
 	void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
 		assert bqbArray.size() == IndexInfo.NUMBER_OF_CLUSTERS
 		boolean gp = false
