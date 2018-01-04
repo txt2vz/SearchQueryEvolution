@@ -14,7 +14,7 @@ class ClusterMainECJ extends Evolve {
             // 'src/cfg/clusterGP.params'
             'src/cfg/clusterGA.params'
 
-    private final int NUMBER_OF_JOBS = 2
+    private final int NUMBER_OF_JOBS = 1
 
     public ClusterMainECJ() {
         EvolutionState state;    
@@ -44,7 +44,7 @@ class ClusterMainECJ extends Evolve {
                 }.fitness
             }.max { it.fitness() }
             println "Population size: $popSize"
-            cfit.finalQueryStats(job, state.generation, popSize)
+            cfit.finalQueryStats(job, state.generation as int, popSize as int)
 
             cleanup(state);
             println ' ---------------------------------END-----------------------------------------------'

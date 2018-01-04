@@ -30,7 +30,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 20
+	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 3
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -38,16 +38,16 @@ class IndexInfo {
 		            // new ClassicSimilarity()
 
 	static String pathToIndex =
+//   'indexes/20NG'
 	//   'indexes/R10'
-	     'indexes/NG20'
-	//	 'indexes/crisis3FireBombFloodL6'
-	//	 'indexes/crisis3FireBombFloodL6.6'
-	// 'indexes/classic4_500L6'
-	//	 'indexes/20NG5WindowsmiscForsaleHockeySpaceChristianL6'
-	//'indexes/NG20SpaceHockeyChristian'
+         //   'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
+	      //'indexes/20NG3SpacehockeyChristian'
+		 'indexes/crisis3FireBombFlood'
+	// 'indexes/classic4_500'
+
 	
 	// set the index
-	static {	
+	static {
 		Path path = Paths.get(pathToIndex)
 		Directory directory = FSDirectory.open(path)
 		indexReader = DirectoryReader.open(directory)

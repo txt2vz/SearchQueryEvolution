@@ -7,6 +7,8 @@ import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
 import org.apache.lucene.document.TextField
+import org.apache.lucene.index.DirectoryReader
+import org.apache.lucene.index.IndexReader
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
@@ -32,7 +34,7 @@ import java.nio.file.Paths
 class IndexClassic {
 	// Create Lucene index in this directory
 	//def indexPath = 	'indexes/classic4_500L5'
-    def indexPath = 	'indexes/classic4_500L6'
+    def indexPath = 	'indexes/classic4_500'
 	// Index files in this directory
 	def docsPath =
 	// /C:\Users\Laurie\Dataset\classic/
@@ -84,6 +86,24 @@ class IndexClassic {
 		println "category frequencies: $catFreq"
 
 		writer.close()
+		IndexReader indexReader = DirectoryReader.open(directory)
+		IndexSearcher indexSearcher = new IndexSearcher(indexReader)
+		TotalHitCountCollector trainCollector = new TotalHitCountCollector();
+		final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "train"))
+
+		TotalHitCountCollector testCollector = new TotalHitCountCollector();
+		final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "test"))
+
+		indexSearcher.search(trainQ, trainCollector);
+		def trainTotal = trainCollector.getTotalHits();
+
+		indexSearcher.search(testQ, testCollector);
+		def testTotal = testCollector.getTotalHits();
+
+		println(end.getTime() - start.getTime() + " total milliseconds");
+		println "testTotal $testTotal trainTotal $trainTotal"
+
+
 		println "End ***************************************************************"
 	}
 
@@ -104,6 +124,15 @@ class IndexClassic {
 			Field catNameField = new StringField(IndexInfo.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
 			doc.add(catNameField)
 			doc.add(new TextField(IndexInfo.FIELD_CONTENTS, f.text,  Field.Store.YES)) ;
+
+			Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
+			doc.add(catNumberField)
+
+			String test_train
+			if (n%2==0) test_train = 'test' else test_train = 'train'
+			Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
+
+			doc.add(ttField)
 			writer.addDocument(doc);
 		}
 	}

@@ -9,7 +9,7 @@
 
      private final String parameterFilePath ='src/cfg/classify.params'
      private int totPosMatchedTest = 0, totTest = 0, totNegMatchTest = 0;
-     private final int NUMBER_OF_JOBS = 2
+     private final int NUMBER_OF_JOBS = 1
      private double microF1AllRunsTotal = 0, macroF1AllRunsTotal = 0, microBEPAllRunsTotal = 0;
 
      public GAmainClassify(){

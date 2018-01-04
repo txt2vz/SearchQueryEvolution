@@ -1,5 +1,8 @@
 package index
 
+import org.apache.lucene.index.DirectoryReader
+import org.apache.lucene.index.IndexReader
+
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -34,10 +37,19 @@ class BuildIndex {
         IndexName iName = IndexName.NG20
 
         final String r10DocsPath = /C:\Users\Laurie\Dataset\reuters-top10/
-        final String NG20DocsPath = /C:\Users\Laurie\Dataset\20NG3TestSpaceHockeyChristian/
-//    /C:\Users\Laurie\Dataset\20bydate/
+
+        final String NG20DocsPath =
+               /C:\Users\Laurie\Dataset\20NG5WindowsMotorcyclesSpaceMedMideast/
+       //        /C:\Users\Laurie\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
+     //   /C:\Users\Laurie\Dataset\20NG3SpaceHockeyChristian/
+               //   /C:\Users\Laurie\Dataset\20bydate/
         final String r10IndexPath = 'indexes/R10'
-        final String NG20IndexPath = 'indexes/NG20SpaceHockeyChristian'
+   //     final String NG20IndexPath = 'indexes/NG20SpaceHockeyChristianV7'
+        final String NG20IndexPath =
+                //'indexes/20NG'
+        //        'indexes/20NG5WindowsForsaleSpaceHockeyChristian'
+        //        'indexes/20NG3SpaceHockeyChristian'
+                'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
 
         String docsPath, indexPath
 
@@ -63,7 +75,7 @@ class BuildIndex {
 // previously indexed documents:
         iwc.setOpenMode(OpenMode.CREATE)
         IndexWriter writer = new IndexWriter(directory, iwc)
-        IndexSearcher indexSearcher = new IndexSearcher(writer.getReader())
+      //  IndexSearcher indexSearcher = new IndexSearcher(writer.getReader())
         Date start = new Date();
         println("Indexing to directory: $indexPath  from: $docsPath ...")
 
@@ -90,6 +102,7 @@ class BuildIndex {
 
                     def catName
                     //reuters dataset has different directory structure
+
                     if (iName == IndexName.R10)
                         catName = grandParent.substring(grandParent.lastIndexOf(File.separator) + 1, grandParent.length())
                     else
@@ -99,7 +112,12 @@ class BuildIndex {
                     doc.add(catNameField)
 
                     String test_train
+
+
                     if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
+                 //   println "cannonicla ptath is" + file.canonicalPath
+                //    println "test train $test_train"
+                 //   println ""
                     Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
 
@@ -111,7 +129,10 @@ class BuildIndex {
                 }
             }
         }
-
+        println "Total docs: " + writer.maxDoc()
+        writer.close()
+        IndexReader indexReader = DirectoryReader.open(directory)
+        IndexSearcher indexSearcher = new IndexSearcher(indexReader)
         TotalHitCountCollector trainCollector = new TotalHitCountCollector();
         final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "train"))
 
@@ -128,9 +149,7 @@ class BuildIndex {
         println(end.getTime() - start.getTime() + " total milliseconds");
         println "testTotal $testTotal trainTotal $trainTotal"
         println "catsFreq $catsFreq"
-        println "Total docs: " + writer.maxDoc()
-        writer.close()
-        println "End ***************************************************************"
 
+        println "End ***************************************************************"
     }
 }
