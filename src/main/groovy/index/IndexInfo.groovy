@@ -20,9 +20,14 @@ import java.nio.file.Paths
 
 @groovy.transform.TypeChecked
 @groovy.transform.CompileStatic
+
+enum ImportantTermsMethod {
+	F1, TFIDF, IG, Chi, OR
+}
+
 @Singleton
 class IndexInfo {
-
+	public static ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
 	// Lucene field names
 	public static final String FIELD_CATEGORY_NAME = 'category',
 	FIELD_CONTENTS = 'contents',
@@ -30,7 +35,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 3
+	static final int NUMBER_OF_CLUSTERS =  10 , NUMBER_OF_CATEGORIES =10
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -39,10 +44,10 @@ class IndexInfo {
 
 	static String pathToIndex =
 //   'indexes/20NG'
-	//   'indexes/R10'
-         //   'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
+	   'indexes/R10'
+    //     'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
 	      //'indexes/20NG3SpacehockeyChristian'
-		 'indexes/crisis3FireBombFlood'
+	//	 'indexes/crisis3FireBombFlood'
 	// 'indexes/classic4_500'
 
 	

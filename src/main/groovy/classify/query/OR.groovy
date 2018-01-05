@@ -18,64 +18,63 @@ import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
 
-@groovy.transform.CompileStatic
-@groovy.transform.TypeChecked
+//@groovy.transform.CompileStatic
+//@groovy.transform.TypeChecked
 
 /**
  * To generate queries to perform binary text classification using GA string of
  * integer pairs which are translated into OR (lucene SHOULD) queries
- * 
+ *
  * @author Laurie
  */
 
-//HitCounts is a groovy trait for counting query hits in a category
+
 public class OR extends Problem implements SimpleProblemForm {
 
-	private IndexSearcher searcher = IndexInfo.indexSearcher
-	private final ImportantTerms importantTerms = new ImportantTerms()
-	private TermQuery[] termQueryArray
+    private IndexSearcher searcher = IndexInfo.indexSearcher
+    private final ImportantTerms importantTerms = new ImportantTerms()
+    private TermQuery[] termQueryArray
 
-	
-	@TypeChecked(TypeCheckingMode.SKIP)
-	public void setup(final EvolutionState state, final Parameter base) {
+    public void setup(final EvolutionState state, final Parameter base) {
 
-		super.setup(state, base);
+        super.setup(state, base);
 
-		println("Total train docs in OR for cat:  " + IndexInfo.instance.getCategoryNumber() + " "
-				+ IndexInfo.instance.totalTrainDocsInCat + " Total test docs for cat "
-				+ IndexInfo.instance.totalTestDocsInCat)
+        println "Category number: ${IndexInfo.instance.getCategoryNumber()} Category Name: ${IndexInfo.instance.getCategoryName()} " +
+                "Total train docs: ${IndexInfo.instance.totalTrainDocsInCat} " +
+                "Total test docs: ${IndexInfo.instance.totalTestDocsInCat}"
 
-		termQueryArray = importantTerms.getF1TermQueryList()
-	}
+        termQueryArray = importantTerms.getImportantTerms() as TermQuery[]
+    }
 
-	public void evaluate(final EvolutionState state, final Individual ind,
+    public void evaluate(final EvolutionState state, final Individual ind,
                          final int subpopulation, final int threadnum) {
 
-		if (ind.evaluated)
-			return;
+        if (ind.evaluated)
+            return;
 
-		ClassifyFit fitness = (ClassifyFit) ind.fitness;
-		BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-		IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
+        ClassifyFit fitness = (ClassifyFit) ind.fitness;
+        BooleanQuery.Builder bqb = new BooleanQuery.Builder();
+        IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
 
-		def genes =[] as Set
-		int duplicateCount=0;
+        def genes = [] as Set
+     //   int duplicateCount = 0;
 
-		intVectorIndividual.genome.each {int gene ->
-			
-			//use gene set to prevent duplicates
-			if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)){				
-				bqb.add (termQueryArray[gene],BooleanClause.Occur.SHOULD)
-			}
+        intVectorIndividual.genome.each { int gene ->
 
-			fitness.query = bqb.build()			
-			fitness.positiveMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher,IndexInfo.trainDocsInCategoryFilter, fitness.query)
-			fitness.negativeMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher,IndexInfo.otherTrainDocsFilter, fitness.query)
+            //use gene set to prevent duplicates
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqb.add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+            }
+        }
 
-			fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, IndexInfo.totalTrainDocsInCat);
+        fitness.query = bqb.build()
+        fitness.positiveMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher, IndexInfo.trainDocsInCategoryFilter, fitness.query)
+        fitness.negativeMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher, IndexInfo.otherTrainDocsFilter, fitness.query)
 
-			((SimpleFitness) intVectorIndividual.fitness).setFitness(state, fitness.f1train, false)
-			ind.evaluated = true;
-		}
-	}
+        fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, IndexInfo.totalTrainDocsInCat);
+
+        ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, fitness.f1train, false)
+        ind.evaluated = true;
+        //}
+    }
 }

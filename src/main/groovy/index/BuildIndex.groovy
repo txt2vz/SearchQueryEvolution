@@ -112,8 +112,6 @@ class BuildIndex {
                     doc.add(catNameField)
 
                     String test_train
-
-
                     if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
                  //   println "cannonicla ptath is" + file.canonicalPath
                 //    println "test train $test_train"

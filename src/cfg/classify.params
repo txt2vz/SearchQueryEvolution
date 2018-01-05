@@ -27,7 +27,7 @@ pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness = classify.ClassifyFit
 
 pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 10
+pop.subpop.0.species.max-gene = 50
 
 pop.subpop.0.species.genome-size = 8
 pop.subpop.0.species.crossover-type	= two

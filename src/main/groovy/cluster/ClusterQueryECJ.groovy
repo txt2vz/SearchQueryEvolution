@@ -17,6 +17,10 @@ import org.apache.lucene.search.TermQuery
  * To generate sets of queries for clustering
  */
 
+enum QueryType {
+    OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP
+}
+
 @groovy.transform.CompileStatic
 @groovy.transform.TypeChecked
 public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
@@ -24,16 +28,14 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private IndexSearcher searcher = IndexInfo.indexSearcher
     private TermQuery[] termQueryArray
 
-    enum QueryType {
-        OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP
-    }
+
     final QueryType queryType = QueryType.OR
 
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + IndexInfo.indexReader.maxDoc()
-        termQueryArray = new ImportantTerms().getTFIDFTermQueryList()
+        termQueryArray = new ImportantTerms().getImportantTerms()
     }
 
     //@TypeChecked(TypeCheckingMode.SKIP)
