@@ -52,7 +52,8 @@ public class ImportantTerms {
             case IndexInfo.itm.OR : return getF1TermQueryList(); break;
             case IndexInfo.itm.TFIDF : return getTFIDFTermQueryList(); break;
             case IndexInfo.itm.IG : return getIGTermQueryList(); break;
-     //       default: println "Something else";
+            case IndexInfo.itm.OR : return getORTermQueryList(); break;
+           default: println "Incorrect selection method in getImportantTerms()";
         }
 
         return getF1TermQueryList()

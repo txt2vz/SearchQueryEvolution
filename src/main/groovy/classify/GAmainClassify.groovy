@@ -10,7 +10,7 @@
      private final String parameterFilePath = 'src/cfg/classifyOrSubpop.params'
              //'src/cfg/classify.params'
      private int totPosMatchedTest = 0, totTest = 0, totNegMatchTest = 0;
-     private final int NUMBER_OF_JOBS = 3
+     private final int NUMBER_OF_JOBS = 5
      private double microF1AllRunsTotal = 0, macroF1AllRunsTotal = 0, microBEPAllRunsTotal = 0;
 
      public GAmainClassify(){
@@ -101,7 +101,7 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println "ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns"
+			 println  "${IndexInfo.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",
