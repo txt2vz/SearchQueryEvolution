@@ -25,14 +25,14 @@ pop.subpops = 3
 pop.default-subpop =0
 
 pop.subpop.0 = ec.Subpopulation
-pop.subpop.0.size = 512 
+pop.subpop.0.size = 512
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness = cluster.ClusterFitness
 
 pop.subpop.0.species.min-gene = -1
 pop.subpop.0.species.max-gene = 100
-pop.subpop.0.species.genome-size = 30
+pop.subpop.0.species.genome-size = 8
 pop.subpop.0.species.crossover-type	= two
 pop.subpop.0.species.crossover-likelihood = 0.7
 pop.subpop.0.species.mutation-prob	= 0.2
@@ -52,7 +52,7 @@ pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
 ##########################################################
 pop.subpop.1 = ec.Subpopulation
-pop.subpop.1.size = 512
+pop.subpop.1.size = 256
 pop.subpop.1.duplicate-retries = 5
 
 pop.subpop.1.species = ec.vector.IntegerVectorSpecies
@@ -60,8 +60,8 @@ pop.subpop.1.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.1.species.fitness = cluster.ClusterFitness
 
 pop.subpop.1.species.min-gene = -1
-pop.subpop.1.species.max-gene = 300
-pop.subpop.1.species.genome-size = 30
+pop.subpop.1.species.max-gene = 100
+pop.subpop.1.species.genome-size = 8
 pop.subpop.1.species.crossover-type	= one
 pop.subpop.1.species.crossover-likelihood	= 0.7
 pop.subpop.1.species.mutation-prob	= 0.1
@@ -74,7 +74,7 @@ pop.subpop.1.species.pipe.source.0.source.1	= ec.select.SigmaScalingSelection
 
 ###############################################################
 pop.subpop.2 = ec.Subpopulation
-pop.subpop.2.size = 512
+pop.subpop.2.size = 256
 pop.subpop.2.duplicate-retries = 5
 
 pop.subpop.2.species = ec.vector.IntegerVectorSpecies
@@ -82,8 +82,8 @@ pop.subpop.2.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.2.species.fitness = cluster.ClusterFitness
 
 pop.subpop.2.species.min-gene = -1
-pop.subpop.2.species.max-gene = 300
-pop.subpop.2.species.genome-size = 30
+pop.subpop.2.species.max-gene = 100
+pop.subpop.2.species.genome-size = 8
 pop.subpop.2.species.crossover-type	= one
 pop.subpop.2.species.crossover-likelihood	= 0.7
 pop.subpop.2.species.mutation-prob	= 0.1
