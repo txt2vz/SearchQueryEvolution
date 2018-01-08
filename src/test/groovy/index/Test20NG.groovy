@@ -11,7 +11,7 @@
  import java.nio.file.Paths
 
  class Test20NG extends spock.lang.Specification {
-     Path path = Paths.get('indexes/NG20')
+     Path path = Paths.get('indexes/20NG')
      Directory directory = FSDirectory.open(path)
      DirectoryReader ireader = DirectoryReader.open(directory);
      IndexSearcher isearcher = new IndexSearcher(ireader)

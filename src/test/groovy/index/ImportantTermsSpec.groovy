@@ -20,7 +20,7 @@ class ImportantTermsSpec extends spock.lang.Specification {
 	
 	def "importantTerms F1 20NG graphics"() {
 		setup:
-		IndexInfo.pathToIndex = 'indexes/NG20'
+		IndexInfo.pathToIndex = 'indexes/20NG'
 		IndexInfo.setIndex()	
 		IndexInfo.instance.setCategoryNumber('2')
 		IndexInfo.instance.setIndexFieldsAndTotals()
@@ -36,7 +36,7 @@ class ImportantTermsSpec extends spock.lang.Specification {
 
 	def "ImportantTerms 20News3 tfidf"(){
 		setup:
-		IndexInfo.pathToIndex = 'indexes/NG20SpaceHockeyChristian'
+		IndexInfo.pathToIndex = 'indexes/20NG3SpaceHockeyChristian'
 		IndexInfo.setIndex()
 		//IndexInfo.instance.setPathToIndex('indexes/20NG3SpaceHockeyChristianL6')
 		IndexInfo.instance.setIndexFieldsAndTotals()
@@ -46,8 +46,8 @@ class ImportantTermsSpec extends spock.lang.Specification {
 		def tfidfList = impTerms.getTFIDFTermQueryList()
 
 		then:
-		tfidfList[0].getTerm().text() == 'space'
-		tfidfList[1].getTerm().text() == 'god'
+		tfidfList[0].getTerm().text() == 'god'
+		tfidfList[1].getTerm().text() == 'space'
 		tfidfList[3].getTerm().text() == 'game'
 	}
 }

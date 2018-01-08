@@ -96,9 +96,12 @@
 
              macroF1AllRunsTotal = macroF1AllRunsTotal + macroF1test;
              microF1AllRunsTotal = microF1AllRunsTotal + microF1test;
+			 
 
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
+			 
+			 println "ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

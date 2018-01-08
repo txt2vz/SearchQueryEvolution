@@ -9,7 +9,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
     def "QueryListFromChromosome OR 20News3 tfidf"() {
         setup:
-        IndexInfo.pathToIndex = 'indexes/NG20SpaceHockeyChristian'
+        IndexInfo.pathToIndex = 'indexes/20NG3SpaceHockeyChristian'
         int numberOfClusters = 3
         IndexInfo.setIndex()
         IndexInfo.instance.setIndexFieldsAndTotals()
@@ -26,7 +26,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         //   tfidfList[1].getTerm().text() == 'god'
         //   tfidfList[3].getTerm().text() == 'game'
         bqbL.size() == numberOfClusters
-        q.toString(IndexInfo.FIELD_CONTENTS) == 'space'
+        q.toString(IndexInfo.FIELD_CONTENTS) == 'god'
 
         when:
         intArray = [0, 1, 2, 3, 4, 5]
@@ -34,6 +34,6 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         q = bqbL[0].build()
 
         then:
-        q.toString(IndexInfo.FIELD_CONTENTS) == 'space game'
+        q.toString(IndexInfo.FIELD_CONTENTS) == 'god game'
     }
 }
