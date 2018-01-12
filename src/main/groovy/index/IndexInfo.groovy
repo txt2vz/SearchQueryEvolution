@@ -27,7 +27,7 @@ enum ImportantTermsMethod {
 
 @Singleton
 class IndexInfo {
-	public static ImportantTermsMethod itm = ImportantTermsMethod.Chi
+	public static ImportantTermsMethod itm = ImportantTermsMethod.F1
 	// Lucene field names
 	public static final String FIELD_CATEGORY_NAME = 'category',
 	FIELD_CONTENTS = 'contents',
@@ -35,7 +35,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  5 , NUMBER_OF_CATEGORIES = 10
+	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 3
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -44,9 +44,9 @@ class IndexInfo {
 
 	static String pathToIndex =
    // 'indexes/20NG'
-	   'indexes/R10'
+	 //  'indexes/R10'
    //     'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
-	//   'indexes/20NG3SpaceHockeyChristian'
+	   'indexes/20NG3SpaceHockeyChristian'
 	//	 'indexes/crisis3FireBombFlood'
 	// 'indexes/classic4_500'
 

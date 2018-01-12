@@ -1,7 +1,6 @@
 package index
 
-import groovy.transform.TypeChecked
-import groovy.transform.TypeCheckingMode
+import org.apache.lucene.document.Document
 import org.apache.lucene.index.*
 import org.apache.lucene.search.DocIdSetIterator
 import org.apache.lucene.search.IndexSearcher
@@ -33,9 +32,12 @@ public class ImportantTerms {
     public static void main(String[] args) {
         IndexInfo.instance.categoryNumber = '2'
         IndexInfo.instance.setIndexFieldsAndTotals()
+
         def iw = new ImportantTerms()
-        iw.getF1TermQueryList()
-        //iw.getTFIDFTermQueryList()
+        //   iw.getF1TermQueryList()
+        iw.getTFIDFTermQueryList()
+     //        iw.getTFIDFTermQueryListForCategory()
+
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
         //iw.getORTermQueryList()
@@ -49,11 +51,11 @@ public class ImportantTerms {
 
     public TermQuery[] getImportantTerms() {
         switch (IndexInfo.itm) {
-            case IndexInfo.itm.OR : return getF1TermQueryList(); break;
-            case IndexInfo.itm.TFIDF : return getTFIDFTermQueryList(); break;
-            case IndexInfo.itm.IG : return getIGTermQueryList(); break;
-            case IndexInfo.itm.OR : return getORTermQueryList(); break;
-           default: println "Incorrect selection method in getImportantTerms()";
+            case IndexInfo.itm.OR: return getF1TermQueryList(); break;
+            case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
+            case IndexInfo.itm.IG: return getIGTermQueryList(); break;
+            case IndexInfo.itm.OR: return getORTermQueryList(); break;
+            default: println "Incorrect selection method in getImportantTerms()";
         }
 
         return getF1TermQueryList()
@@ -110,29 +112,37 @@ public class ImportantTerms {
         return termQueryList
     }
 
-    private TermQuery[] getTFIDFTermQueryList() {
+//for clustering
+    public TermQuery[] getTFIDFTermQueryList() {
 
         println "Important terms terms.getDocCount: ${terms.getDocCount()}"
         def termQueryMap = [:]
         BytesRef termbr;
+        TFIDFSimilarity tfidfSim = new ClassicSimilarity()
+        int docCount = indexReader.numDocs()
 
         while ((termbr = termsEnum.next()) != null) {
 
             Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
-                long indexDf = indexReader.docFreq(t);
-                int docCount = indexReader.numDocs()
-
-                //for lucene 5 : TFIDFSimilarity tfidfSim = new DefaultSimilarity()
-                TFIDFSimilarity tfidfSim = new ClassicSimilarity()
-                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, IndexInfo.FIELD_CONTENTS, termbr))
+                long docFreq = indexReader.docFreq(t);
                 double tfidfTotal = 0
 
+                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, IndexInfo.FIELD_CONTENTS, termbr))
                 if (docsEnum != null) {
                     while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
-                        double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docCount, indexDf)
+
+                       // double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docFreq, docCount)
+                        //strangely the above commented code  line is correct according to https://lucene.apache.org/core/7_2_0/core/org/apache/lucene/search/similarities/TFIDFSimilarity.html but
+                        //does not produce useful reuslt.  Using the code below produces negative idf values but does produce useful lists of terms???
+                        double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docCount, docFreq)
                         tfidfTotal += tfidf
+
+                        //uncomment for debugging information
+                        //    if (docsEnum.freq() > 10)
+                        //        println " Term: $t  Docid: ${docsEnum.docID()} docsEnum.freq: ${docsEnum.freq()} tfidf: $tfidf tfidfTotal: $tfidfTotal tfidfSim.tf(docsEnum.freq()): ${tfidfSim.tf(docsEnum.freq())} tfidfSim.idf(docCount, docFreq): ${tfidfSim.idf(docCount, docFreq)}"
+
                     }
                 }
                 termQueryMap += [(new TermQuery(t)): tfidfTotal]
@@ -140,10 +150,63 @@ public class ImportantTerms {
         }
 
         termQueryMap = termQueryMap.sort { a, b -> a.value <=> b.value }
+       //reverse sort
+       // termQueryMap = termQueryMap.sort { a, b -> b.value <=> a.value }
+
         TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
-        println "tfidf map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+        println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+        println "termQueryMap $termQueryMap"
         return termQueryList
     }
+
+    private TermQuery[] getTFIDFTermQueryListForCategory() {
+
+        println "Important terms terms.getDocCount: ${terms.getDocCount()}"
+        def termQueryMap = [:]
+        BytesRef termbr;
+        TFIDFSimilarity tfidfSim = new ClassicSimilarity()
+        int totalTrainDocsInCat = IndexInfo.totalTrainDocsInCat
+
+        while ((termbr = termsEnum.next()) != null) {
+
+            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            if (isUsefulTerm(t)) {
+                Query tq = new TermQuery(t)
+                long matchingTrainDocsInCategoryDF = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.trainDocsInCategoryFilter, tq)
+                double tfidfTotal = 0
+
+                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, IndexInfo.FIELD_CONTENTS, termbr))
+                if (docsEnum != null) {
+                    while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
+
+                        Document d = indexSearcher.doc(docsEnum.docID())
+
+                        String categoryNumber = d.get(IndexInfo.FIELD_CATEGORY_NUMBER)
+                        String testTrain = d.get(IndexInfo.FIELD_TEST_TRAIN)
+                        if (categoryNumber == IndexInfo.categoryNumber && testTrain == "train") {
+
+                            double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(totalTrainDocsInCat, matchingTrainDocsInCategoryDF)
+
+                            // double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(matchingTrainDocsInCategoryDF, totalTrainDocsInCat)
+                            tfidfTotal += tfidf
+                      //      if (docsEnum.freq() > 11)
+                        //        println " Term $t  Docid ${docsEnum.docID()} docsEnum.freq ${docsEnum.freq()} tfidf $tfidf tfidfTotal $tfidfTotal categoryNumber: $categoryNumber matchingTrainDocsInCategoryDF $matchingTrainDocsInCategoryDF  totalTrainDocsInCat $totalTrainDocsInCat"
+
+                        }
+                    }
+                }
+                termQueryMap += [(tq): tfidfTotal]
+            }
+        }
+
+        termQueryMap = termQueryMap.sort { a, b -> a.value <=> b.value }
+        TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
+        println "tfidf map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+        println "termQUeryMap $termQueryMap"
+        return termQueryList
+    }
+
+
 
     private double log2(double value) {
         return (Math.log(value) / Math.log(2));
