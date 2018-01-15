@@ -34,13 +34,13 @@ public class ImportantTerms {
         IndexInfo.instance.setIndexFieldsAndTotals()
 
         def iw = new ImportantTerms()
-        //   iw.getF1TermQueryList()
-        iw.getTFIDFTermQueryList()
+       //    iw.getF1TermQueryList()
+      //  iw.getTFIDFTermQueryList()
      //        iw.getTFIDFTermQueryListForCategory()
 
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
-        //iw.getORTermQueryList()
+        iw.getORTermQueryList()
     }
 
     public ImportantTerms() {
@@ -51,7 +51,7 @@ public class ImportantTerms {
 
     public TermQuery[] getImportantTerms() {
         switch (IndexInfo.itm) {
-            case IndexInfo.itm.OR: return getF1TermQueryList(); break;
+            case IndexInfo.itm.F1: return getF1TermQueryList(); break;
             case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
             case IndexInfo.itm.IG: return getIGTermQueryList(); break;
             case IndexInfo.itm.OR: return getORTermQueryList(); break;
