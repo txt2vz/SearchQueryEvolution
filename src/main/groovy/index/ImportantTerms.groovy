@@ -25,7 +25,6 @@ public class ImportantTerms {
 
     private final IndexSearcher indexSearcher = IndexInfo.indexSearcher;
     private final IndexReader indexReader = indexSearcher.indexReader
-    private Terms terms
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
 
@@ -34,18 +33,109 @@ public class ImportantTerms {
         IndexInfo.instance.setIndexFieldsAndTotals()
 
         def iw = new ImportantTerms()
-       //    iw.getF1TermQueryList()
-      //  iw.getTFIDFTermQueryList()
-     //        iw.getTFIDFTermQueryListForCategory()
+        iw.mergeMethods()
+        //    iw.getF1TermQueryList()
+        //  iw.getTFIDFTermQueryList()
+        //        iw.getTFIDFTermQueryListForCategory()
 
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
-        iw.getORTermQueryList()
+        // iw.getORTermQueryList()
+    }
+
+    private TermQuery[] mergeMethods() {
+        // IndexInfo.instance.categoryNumber = '1'
+        IndexInfo.instance.setIndexFieldsAndTotals()
+
+        TermQuery[] ortq = getORTermQueryList()
+        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+
+        TermQuery[] f1tq = getF1TermQueryList()
+        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+
+        TermQuery[] igtq = getIGTermQueryList()
+        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+
+        TermQuery[] chitq = getChiTermQueryList()
+
+        //use sets to hold unique strings for each method
+        def ors = [] as Set
+        def f1s = [] as Set
+        def igs = [] as Set
+        def chis = [] as Set
+
+        //populate the sets with extracted strings (words from the document)
+        ortq.take(MAX_TERMQUERYLIST_SIZE).each { ors << it.toString(IndexInfo.FIELD_CONTENTS) }
+        f1tq.take(MAX_TERMQUERYLIST_SIZE).each { f1s << it.toString(IndexInfo.FIELD_CONTENTS) }
+        igtq.take(MAX_TERMQUERYLIST_SIZE).each { igs << it.toString(IndexInfo.FIELD_CONTENTS) }
+        chitq.take(MAX_TERMQUERYLIST_SIZE).each { chis << it.toString(IndexInfo.FIELD_CONTENTS) }
+
+        println " "
+        println "F1 $f1s"
+        println "OR $ors"
+        println "IG $igs"
+        println "chisie ${chis.size()} CHI $chis"
+
+        //experiment with set manipulations
+        def f1MinusOR = f1s - ors
+        def ORMinusF1 = ors - f1s
+        def ORplusF1 = ors + f1s
+        def F1plusOR = f1s + ors
+        println "f1MinusOR $f1MinusOR "
+        println "ORMinusF1 $ORMinusF1"
+        println ORplusF1.size() + " ORplusF1 $ORplusF1"
+        println F1plusOR.size() + " F1plusOR $F1plusOR"
+        println "intersect ${f1s.intersect(ors)}"
+        println "intersect ${ors.intersect(f1s)}"
+
+        //merge two or more sets of words created from different methods
+        def merged = [] as Set
+
+
+        MAX_TERMQUERYLIST_SIZE.times {
+            if ( it < f1s.size())
+                merged << f1s[it]
+
+    //        if (it < ors.size() )
+      //          merged << ors[it]
+
+            if (it < chis.size() )
+                 merged << chis[it]
+
+           // if (it < igs.size())
+             //   merged << igs[it]
+
+//            if (it < chitq.size() ) {
+//                returnTQ += chitq[it]
+//            }
+        }
+
+        //merged return list of termQueries
+        TermQuery[] returnTQ = []
+        merged.each {
+            returnTQ += new TermQuery(new Term(IndexInfo.FIELD_CONTENTS, it))
+        }
+
+        println merged.size() + " merged $merged "
+
+        //  TermQuery[] termQueryList = (TermQuery[]) termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable().toArray()
+        println returnTQ.size() + " returnTQ: $returnTQ"
+//        println "orlist  0 " + termQueryList
+//        println "OR map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+//        println "ORzzzz " +  termQueryList[0].toString(IndexInfo.FIELD_CONTENTS) //termQueryList.each {it.getTerm().text() }  //(IndexInfo.FIELD_CONTENTS)}
+//        println "ORzzzz " +  termQueryList.each {print it.toString(IndexInfo.FIELD_CONTENTS) + " "}
+
+        return returnTQ
     }
 
     public ImportantTerms() {
-        terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
-        termsEnum = terms.iterator();
+        Terms terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
+        //    termsEnum = terms.iterator();
+        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        //   termsEnum.
+
+        println "Important words terms.getDocCount: ${terms.getDocCount()}"
+        println "Important words terms.size ${terms.size()}"
     }
 
 
@@ -55,6 +145,7 @@ public class ImportantTerms {
             case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
             case IndexInfo.itm.IG: return getIGTermQueryList(); break;
             case IndexInfo.itm.OR: return getORTermQueryList(); break;
+            case IndexInfo.itm.Merged: return mergeMethods(); break;
             default: println "Incorrect selection method in getImportantTerms()";
         }
 
@@ -82,9 +173,6 @@ public class ImportantTerms {
     //@TypeChecked(TypeCheckingMode.SKIP)
     private TermQuery[] getF1TermQueryList() {
 
-        println "Important terms terms.getDocCount: ${terms.getDocCount()}"
-        println "Important terms terms.size ${terms.size()}"
-
         BytesRef termbr
         def termQueryMap = [:]
 
@@ -96,8 +184,7 @@ public class ImportantTerms {
                 Query tq = new TermQuery(t)
                 final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.trainDocsInCategoryFilter, tq)
                 final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.otherTrainDocsFilter, tq)
-                double F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
-                        IndexInfo.totalTrainDocsInCat)
+                double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, IndexInfo.totalTrainDocsInCat)
 
                 if (F1 > 0.02) {
                     termQueryMap += [(tq): F1]
@@ -115,7 +202,6 @@ public class ImportantTerms {
 //for clustering
     public TermQuery[] getTFIDFTermQueryList() {
 
-        println "Important terms terms.getDocCount: ${terms.getDocCount()}"
         def termQueryMap = [:]
         BytesRef termbr;
         TFIDFSimilarity tfidfSim = new ClassicSimilarity()
@@ -133,7 +219,7 @@ public class ImportantTerms {
                 if (docsEnum != null) {
                     while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
 
-                       // double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docFreq, docCount)
+                        // double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docFreq, docCount)
                         //strangely the above commented code  line is correct according to https://lucene.apache.org/core/7_2_0/core/org/apache/lucene/search/similarities/TFIDFSimilarity.html but
                         //does not produce useful reuslt.  Using the code below produces negative idf values but does produce useful lists of terms???
                         double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docCount, docFreq)
@@ -150,8 +236,8 @@ public class ImportantTerms {
         }
 
         termQueryMap = termQueryMap.sort { a, b -> a.value <=> b.value }
-       //reverse sort
-       // termQueryMap = termQueryMap.sort { a, b -> b.value <=> a.value }
+        //reverse sort
+        // termQueryMap = termQueryMap.sort { a, b -> b.value <=> a.value }
 
         TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
         println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
@@ -161,7 +247,6 @@ public class ImportantTerms {
 
     private TermQuery[] getTFIDFTermQueryListForCategory() {
 
-        println "Important terms terms.getDocCount: ${terms.getDocCount()}"
         def termQueryMap = [:]
         BytesRef termbr;
         TFIDFSimilarity tfidfSim = new ClassicSimilarity()
@@ -189,8 +274,8 @@ public class ImportantTerms {
 
                             // double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(matchingTrainDocsInCategoryDF, totalTrainDocsInCat)
                             tfidfTotal += tfidf
-                      //      if (docsEnum.freq() > 11)
-                        //        println " Term $t  Docid ${docsEnum.docID()} docsEnum.freq ${docsEnum.freq()} tfidf $tfidf tfidfTotal $tfidfTotal categoryNumber: $categoryNumber matchingTrainDocsInCategoryDF $matchingTrainDocsInCategoryDF  totalTrainDocsInCat $totalTrainDocsInCat"
+                            //      if (docsEnum.freq() > 11)
+                            //        println " Term $t  Docid ${docsEnum.docID()} docsEnum.freq ${docsEnum.freq()} tfidf $tfidf tfidfTotal $tfidfTotal categoryNumber: $categoryNumber matchingTrainDocsInCategoryDF $matchingTrainDocsInCategoryDF  totalTrainDocsInCat $totalTrainDocsInCat"
 
                         }
                     }
@@ -207,7 +292,6 @@ public class ImportantTerms {
     }
 
 
-
     private double log2(double value) {
         return (Math.log(value) / Math.log(2));
     }
@@ -221,9 +305,6 @@ public class ImportantTerms {
 
     // Written by Prasanna on 2017/05/07 to calculate information gain
     private TermQuery[] getIGTermQueryList() {
-
-        println "Important terms using Information Gain terms.getDocCount: ${terms.getDocCount()}"
-        println "Important words terms.size ${terms.size()}"
 
         BytesRef termbr
         def termQueryMap = [:]
@@ -288,8 +369,6 @@ public class ImportantTerms {
 
     private TermQuery[] getChiTermQueryList() {
 
-        println "Important words terms.getDocCount: ${terms.getDocCount()}"
-        println "Important words terms.size ${terms.size()}"
 
         BytesRef termbr
         def termQueryMap = [:]
@@ -344,9 +423,6 @@ public class ImportantTerms {
     }
 
     private TermQuery[] getORTermQueryList() {
-
-        println "Important words terms.getDocCount: ${terms.getDocCount()}"
-        println "Important words terms.size ${terms.size()}"
 
         BytesRef termbr
         def termQueryMap = [:]

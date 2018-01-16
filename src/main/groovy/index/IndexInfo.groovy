@@ -22,12 +22,12 @@ import java.nio.file.Paths
 @groovy.transform.CompileStatic
 
 enum ImportantTermsMethod {
-	F1, TFIDF, IG, Chi, OR
+	F1, TFIDF, IG, Chi, OR, Merged
 }
 
 @Singleton
 class IndexInfo {
-	public static ImportantTermsMethod itm = ImportantTermsMethod.F1
+	public static ImportantTermsMethod itm = ImportantTermsMethod.Merged
 	// Lucene field names
 	public static final String FIELD_CATEGORY_NAME = 'category',
 	FIELD_CONTENTS = 'contents',
@@ -35,7 +35,7 @@ class IndexInfo {
 	FIELD_TEST_TRAIN = 'test_train',
 	FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-	static final int NUMBER_OF_CLUSTERS =  3 , NUMBER_OF_CATEGORIES = 3
+	static final int NUMBER_OF_CLUSTERS =  4 , NUMBER_OF_CATEGORIES = 20
 	static IndexReader indexReader
 	static IndexSearcher indexSearcher
 	
@@ -43,10 +43,10 @@ class IndexInfo {
 		            // new ClassicSimilarity()
 
 	static String pathToIndex =
-   // 'indexes/20NG'
-	 //  'indexes/R10'
+      'indexes/20NG'
+	//  'indexes/R10'
    //     'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
-	   'indexes/20NG3SpaceHockeyChristian'
+	//   'indexes/20NG3SpaceHockeyChristian'
 	//	 'indexes/crisis3FireBombFlood'
 	// 'indexes/classic4_500'
 
