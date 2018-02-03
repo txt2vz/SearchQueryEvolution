@@ -101,7 +101,7 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println  "${IndexInfo.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns"
+			 println  "${IndexInfo.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${IndexInfo.indexEnum.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

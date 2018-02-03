@@ -37,7 +37,7 @@ enum IndexEnum {
     private final Similarity similarity = new BM25Similarity()
                                        // new ClassicSimilarity()
     private final String pathString;
-    private final int numberOfCategories; //
+    private final int numberOfCategories
 
     IndexEnum(String pathString, int numberOfCategories) {
         this.numberOfCategories = numberOfCategories
@@ -52,6 +52,10 @@ enum IndexEnum {
         return pathString
     }
 
+    String toString(){
+        return "Index: ${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
+    }
+
     IndexSearcher getIndexSearcher() {
         Path path = Paths.get(pathString)
         Directory directory = FSDirectory.open(path)
@@ -64,7 +68,7 @@ enum IndexEnum {
 
 @Singleton
 class IndexInfo {
-    static final IndexEnum indexEnum = IndexEnum.NG5
+    static final IndexEnum indexEnum = IndexEnum.CLASSIC4
     public static final ImportantTermsMethod itm = ImportantTermsMethod.F1
 
     // Lucene field names

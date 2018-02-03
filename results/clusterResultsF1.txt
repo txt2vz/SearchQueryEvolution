@@ -904,3 +904,117 @@ PosHits: 3009 NegHits: 16 PosScore: 9537.135098814964 NegScore: 36.1849864721298
 ***  TOTALS:   *****   f1list: [0.8968560397131825, 0.6017167382150638, 0.9319872476266566] averagef1: :0.8101866751849677  ** average precision: 0.840466245 average recall: 0.797
 ************************************************ 
  
+Fri Jan 12 13:57:39 GMT 2018  ***** Job: 0 Gen: 209 PopSize: 512 Noclusters: 3  pathToIndex: indexes/20NG3SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 710 Query:  play game hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7805734347729435 recall: 0.6676676677 precision: 0.9394366197
+ClusterQuery: 1 hits: 592 Query:  space nasa 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7017099430229295 recall: 0.5612968592 precision: 0.9358108108
+ClusterQuery: 2 hits: 765 Query:  christ christians bible god 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8206583427993415 recall: 0.7251755266 precision: 0.9450980392
+TotalHits: 1974 Total Docs:  2983 
+PosHits: 1883 NegHits: 184 PosScore: 8118.36227697134 NegScore: 590.9552053660154 Fitness: 3475.475061902431 
+***  TOTALS:   *****   f1list: [0.7805734347729435, 0.7017099430229295, 0.8206583427993415] averagef1: :0.7676472401984048  ** average precision: 0.9401151565666667 average recall: 0.6513800178333333
+************************************************ 
+ 
+Sat Feb 03 11:02:14 GMT 2018  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 3  pathToIndex: indexes/20NG3SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 727 Query:  faith christians god 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.7703016241282109 recall: 0.665997994 precision: 0.9133425034
+ClusterQuery: 1 hits: 861 Query:  team hockey games game 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.8526881720622207 recall: 0.7937937938 precision: 0.9210220674
+ClusterQuery: 2 hits: 526 Query:  space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.6596166556096656 recall: 0.5055724417 precision: 0.9486692015
+TotalHits: 2004 Total Docs:  2983 
+PosHits: 1895 NegHits: 219 PosScore: 7694.94724214077 NegScore: 576.7729582637548 Fitness: 850.9048308648545 
+***  TOTALS:   *****   f1list: [0.7703016241282109, 0.8526881720622207, 0.6596166556096656] averagef1: :0.7608688172666991  ** average precision: 0.9276779241 average recall: 0.6551214098333333
+************************************************ 
+ 
+Sat Feb 03 11:04:49 GMT 2018  ***** Job: 0 Gen: 189 PopSize: 512 Noclusters: 3  pathToIndex: indexes/20NG3SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 679 Query:  henry space moon shuttle 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7755102040971222 recall: 0.654508612 precision: 0.9513991163
+ClusterQuery: 1 hits: 732 Query:  sin christianity bible god 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8016194332289402 recall: 0.6950852558 precision: 0.9467213115
+ClusterQuery: 2 hits: 753 Query:  nhl play players game 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.802511415528986 recall: 0.7037037037 precision: 0.9335989376
+TotalHits: 2074 Total Docs:  2983 
+PosHits: 1986 NegHits: 178 PosScore: 9514.088964685798 NegScore: 584.4785734415054 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.7755102040971222, 0.8016194332289402, 0.802511415528986] averagef1: :0.793213684285016  ** average precision: 0.9439064551333333 average recall: 0.6844325238333333
+************************************************ 
+ 
+Sat Feb 03 11:06:47 GMT 2018  ***** Job: 1 Gen: 195 PopSize: 512 Noclusters: 3  pathToIndex: indexes/20NG3SpaceHockeyChristian  ************************************************************* 
+ClusterQuery: 0 hits: 782 Query:  bible jesus god christians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8274311410750742 recall: 0.7382146439 precision: 0.9411764706
+ClusterQuery: 1 hits: 864 Query:  games team play game 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.8255501878880067 recall: 0.7697697698 precision: 0.8900462963
+ClusterQuery: 2 hits: 595 Query:  orbit nasa pat henry 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.6485461441028428 recall: 0.5197568389 precision: 0.8621848739
+TotalHits: 2085 Total Docs:  2983 
+PosHits: 1934 NegHits: 307 PosScore: 9363.731411337852 NegScore: 1103.1637084186077 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.8274311410750742, 0.8255501878880067, 0.6485461441028428] averagef1: :0.7671758243553078  ** average precision: 0.8978025469333333 average recall: 0.6759137508666667
+************************************************ 
+ 
+Sat Feb 03 14:07:00 GMT 2018  ***** Job: 0 Gen: 9 PopSize: 512 Noclusters: 4  pathToIndex: null  ************************************************************* 
+ClusterQuery: 0 hits: 260 Query:  patients heat 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3710526315771468 recall: 0.282 precision: 0.5423076923
+ClusterQuery: 1 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+ClusterQuery: 2 hits: 395 Query:  theory pressure supersonic 
+categoryTotal: 500 for category: category:cran 
+f1: 0.6994413407855747 recall: 0.626 precision: 0.7924050633
+ClusterQuery: 3 hits: 190 Query:  system 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.32463768115782404 recall: 0.224 precision: 0.5894736842
+TotalHits: 816 Total Docs:  2000 
+PosHits: 689 NegHits: 260 PosScore: 2564.413287758827 NegScore: 795.4024616479874 Fitness: 46.933534683134894 
+***  TOTALS:   *****   f1list: [0.3710526315771468, 0.3443708609271523, 0.6994413407855747, 0.32463768115782404] averagef1: :0.4348756286119244  ** average precision: 0.73104660995 average recall: 0.335
+************************************************ 
+ 
+Sat Feb 03 14:09:26 GMT 2018  ***** Job: 0 Gen: 57 PopSize: 512 Noclusters: 4  pathToIndex: null  ************************************************************* 
+ClusterQuery: 0 hits: 166 Query:  algorithm 
+categoryTotal: 500 for category: category:cacm 
+f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145
+ClusterQuery: 1 hits: 485 Query:  flow boundary pressure 
+categoryTotal: 500 for category: category:cran 
+f1: 0.826395939070798 recall: 0.814 precision: 0.8391752577
+ClusterQuery: 2 hits: 315 Query:  library retrieval book 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.7582822086031841 recall: 0.618 precision: 0.980952381
+ClusterQuery: 3 hits: 234 Query:  patients cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.6376021798365124 recall: 0.468 precision: 1.0
+TotalHits: 1171 Total Docs:  2000 
+PosHits: 1142 NegHits: 58 PosScore: 4734.040664315224 NegScore: 169.15469455718994 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.826395939070798, 0.7582822086031841, 0.6376021798365124] averagef1: :0.677191703500555  ** average precision: 0.9490078133 average recall: 0.5559999999999999
+************************************************ 
+ 
+Sat Feb 03 14:10:46 GMT 2018  ***** Job: 1 Gen: 141 PopSize: 512 Noclusters: 4  pathToIndex: null  ************************************************************* 
+ClusterQuery: 0 hits: 166 Query:  algorithm 
+categoryTotal: 500 for category: category:cacm 
+f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145
+ClusterQuery: 1 hits: 336 Query:  methods retrieval field 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.4019138755980861 recall: 0.336 precision: 0.5
+ClusterQuery: 2 hits: 279 Query:  cells blood patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.7163029525032093 recall: 0.558 precision: 1.0
+ClusterQuery: 3 hits: 323 Query:  boundary libraries 
+categoryTotal: 500 for category: category:cran 
+f1: 0.5151883353504332 recall: 0.424 precision: 0.6563467492
+TotalHits: 1008 Total Docs:  2000 
+PosHits: 912 NegHits: 192 PosScore: 3546.326174259186 NegScore: 573.4900953769684 Fitness: 0.0 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.4019138755980861, 0.7163029525032093, 0.5151883353504332] averagef1: :0.5299729124858636  ** average precision: 0.783062590925 average recall: 0.4105
+************************************************ 
+ 
