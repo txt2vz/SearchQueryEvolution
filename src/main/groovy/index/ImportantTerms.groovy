@@ -96,14 +96,14 @@ public class ImportantTerms {
             if ( it < f1s.size())
                 merged << f1s[it]
 
-    //        if (it < ors.size() )
-      //          merged << ors[it]
+  //          if (it < ors.size() )
+   //             merged << ors[it]
 
-            if (it < chis.size() )
-                 merged << chis[it]
+//            if (it < chis.size() )
+//                merged << chis[it]
 
-           // if (it < igs.size())
-             //   merged << igs[it]
+            if (it < igs.size())
+                merged << igs[it]
 
 //            if (it < chitq.size() ) {
 //                returnTQ += chitq[it]
@@ -145,7 +145,7 @@ public class ImportantTerms {
             case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
             case IndexInfo.itm.IG: return getIGTermQueryList(); break;
             case IndexInfo.itm.OR: return getORTermQueryList(); break;
-            case IndexInfo.itm.Merged: return mergeMethods(); break;
+            case IndexInfo.itm.MERGED: return mergeMethods(); break;
             default: println "Incorrect selection method in getImportantTerms()";
         }
 

@@ -7,10 +7,10 @@
 
  class GAmainClassify extends Evolve {
 
-     private final String parameterFilePath = 'src/cfg/classifyOrSubpop.params'
-             //'src/cfg/classify.params'
+     private final String parameterFilePath = //'src/cfg/classifyOrSubpop.params'
+             'src/cfg/classify.params'
      private int totPosMatchedTest = 0, totTest = 0, totNegMatchTest = 0;
-     private final int NUMBER_OF_JOBS = 3
+     private final int NUMBER_OF_JOBS = 1
      private double microF1AllRunsTotal = 0, macroF1AllRunsTotal = 0, microBEPAllRunsTotal = 0;
 
      public GAmainClassify(){

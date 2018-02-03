@@ -151,7 +151,7 @@ public class ClusterFitness extends SimpleFitness {
 	void finalQueryStats(int job, int gen, int popSize) {
 		String messageOut = ""
 		FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)
-		resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Noclusters: ${IndexInfo.NUMBER_OF_CLUSTERS}  pathToIndex: ${IndexInfo.pathToIndex}  ************************************************************* \n"
+		resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Noclusters: ${IndexInfo.NUMBER_OF_CLUSTERS}  pathToIndex: ${IndexInfo.indexEnum.getPathString()}  ************************************************************* \n"
 
 		List<Double> f1list = [], precisionList = [], recallList = []
 		queryMap.keySet().eachWithIndex { q, index ->
@@ -225,7 +225,7 @@ public class ClusterFitness extends SimpleFitness {
 			final String fileHead = "gen, job, popSize, baseFitness, averageF1, averagePrecision, averageRecall, query, date, indexPath" + '\n';
 			fcsv << fileHead
 		}
-		fcsv << "$gen , $job , $popSize , $baseFitness , ${averageF1.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${queryForCSV(job)}, ${new Date()}, ${IndexInfo.pathToIndex} \n"
+		fcsv << "$gen , $job , $popSize , $baseFitness , ${averageF1.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${queryForCSV(job)}, ${new Date()}, ${IndexInfo.indexEnum.getPathString()} \n"
 		fcsv.flush()
 		fcsv.close()
 	}
