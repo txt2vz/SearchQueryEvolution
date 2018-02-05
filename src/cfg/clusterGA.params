@@ -1,6 +1,6 @@
-#parent.0 = clusterSubpop.params
+parent.0 = clusterSubpop.params
 #parent.0 = clusterSubpopTournament.params
-parent.0 = clusterSinglePop.params
+#parent.0 = clusterSinglePop.params
 #parent.0		= simple.params
 
 eval.problem = cluster.ClusterQueryECJ
@@ -8,7 +8,7 @@ stat = cluster.ClusterStatisticsECJ
 
 evalthreads = 4 
 breedthreads = 4
-generations = 10
+generations = 100
 
 breed.elite.0 = 1
 
@@ -21,7 +21,7 @@ pop.subpop.2.species.genome-size = 16
 pop.subpop.2.size = 128
 
 pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 20
+pop.subpop.0.species.max-gene = 100
 pop.subpop.1.species.min-gene = -1
 pop.subpop.1.species.max-gene = 20
 pop.subpop.2.species.min-gene = -1

@@ -27,13 +27,13 @@ enum ImportantTermsMethod {
 
 enum IndexEnum {
 
-  //  NG20('indexes/20NG', 20),
+    NG20('indexes/20NG', 20),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
     R10('indexes/R10', 10),
-    R8('indexes/r8', 8),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
-    CLASSIC4('indexes/classic4_500', 4)
+    CLASSIC4('indexes/classic4_500', 4),
+    R8('indexes/R8', 8)
 
     private final Similarity similarity = new BM25Similarity()
     // new ClassicSimilarity()
@@ -69,7 +69,7 @@ enum IndexEnum {
 
 @Singleton
 class IndexInfo {
-    static IndexEnum indexEnum = IndexEnum.CLASSIC4
+    static IndexEnum indexEnum = IndexEnum.R8
     public static final ImportantTermsMethod itm = ImportantTermsMethod.F1
 
     // Lucene field names
