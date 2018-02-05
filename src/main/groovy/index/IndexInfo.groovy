@@ -27,15 +27,16 @@ enum ImportantTermsMethod {
 
 enum IndexEnum {
 
-    NG20('indexes/20NG', 20),
+  //  NG20('indexes/20NG', 20),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
     R10('indexes/R10', 10),
+    R8('indexes/r8', 8),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
     CLASSIC4('indexes/classic4_500', 4)
 
     private final Similarity similarity = new BM25Similarity()
-                                       // new ClassicSimilarity()
+    // new ClassicSimilarity()
     private final String pathString;
     private final int numberOfCategories
 
@@ -48,11 +49,11 @@ enum IndexEnum {
         return numberOfCategories
     }
 
-    String getPathString(){
+    String getPathString() {
         return pathString
     }
 
-    String toString(){
+    String toString() {
         return "Index: ${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
     }
 
@@ -68,7 +69,7 @@ enum IndexEnum {
 
 @Singleton
 class IndexInfo {
-    static final IndexEnum indexEnum = IndexEnum.CLASSIC4
+    static IndexEnum indexEnum = IndexEnum.CLASSIC4
     public static final ImportantTermsMethod itm = ImportantTermsMethod.F1
 
     // Lucene field names
@@ -78,8 +79,8 @@ class IndexInfo {
                                FIELD_TEST_TRAIN = 'test_train',
                                FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-    public static final int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
-    public static final int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
+    public static int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
+    public static int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
 
     static IndexSearcher indexSearcher = indexEnum.getIndexSearcher()
     static IndexReader indexReader = indexSearcher.getIndexReader()
@@ -97,6 +98,15 @@ class IndexInfo {
 
     //Query to return documents in the current category based on categoryNumber
     static TermQuery catQ;
+
+    public void setIndex(IndexEnum ie) {
+        indexEnum = ie
+        NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
+        NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
+        indexSearcher = indexEnum.getIndexSearcher()
+        indexReader = indexSearcher.getIndexReader()
+        println "indexEnum $indexEnum"
+    }
 
     //get hits for a particular query using filter (e.g. a particular category)
     static int getQueryHitsWithFilter(IndexSearcher searcher, Query filter, Query q) {
@@ -120,10 +130,6 @@ class IndexInfo {
             categoryName = d.get(FIELD_CATEGORY_NAME)
         }
         return categoryName
-    }
-
-    public static void setIndex() {
-        println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
     }
 
     //set the filters and totals for the index

@@ -34,16 +34,17 @@ class BuildIndex {
 
     BuildIndex() {
 
-        IndexName iName = IndexName.NG20
+        IndexName iName = IndexName.R10
 
-        final String r10DocsPath = /C:\Users\Laurie\Dataset\reuters-top10/
+        final String r10DocsPath =  /C:\Users\Laurie\Dataset\R8/
+        // /C:\Users\Laurie\Dataset\reuters-top10/
 
         final String NG20DocsPath =
                /C:\Users\Laurie\Dataset\20NG5WindowsMotorcyclesSpaceMedMideast/
        //        /C:\Users\Laurie\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
      //   /C:\Users\Laurie\Dataset\20NG3SpaceHockeyChristian/
                //   /C:\Users\Laurie\Dataset\20bydate/
-        final String r10IndexPath = 'indexes/R10'
+        final String r10IndexPath = 'indexes/R8'//'indexes/R10'
    //     final String NG20IndexPath = 'indexes/NG20SpaceHockeyChristianV7'
         final String NG20IndexPath =
                 //'indexes/20NG'

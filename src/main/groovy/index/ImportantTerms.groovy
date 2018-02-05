@@ -140,6 +140,7 @@ public class ImportantTerms {
 
 
     public TermQuery[] getImportantTerms() {
+
         switch (IndexInfo.itm) {
             case IndexInfo.itm.F1: return getF1TermQueryList(); break;
             case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
@@ -201,6 +202,7 @@ public class ImportantTerms {
 
 //for clustering
     public TermQuery[] getTFIDFTermQueryList() {
+        println "Index: " + IndexInfo.indexEnum
 
         def termQueryMap = [:]
         BytesRef termbr;
