@@ -27,3 +27,4 @@ dependencies {
     //pick up ecj24 jar file
     compile fileTree(dir: 'lib', include: ['*.jar'])
 }
+
