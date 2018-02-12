@@ -1018,3 +1018,102 @@ PosHits: 912 NegHits: 192 PosScore: 3546.326174259186 NegScore: 573.490095376968
 ***  TOTALS:   *****   f1list: [0.48648648649172593, 0.4019138755980861, 0.7163029525032093, 0.5151883353504332] averagef1: :0.5299729124858636  ** average precision: 0.783062590925 average recall: 0.4105
 ************************************************ 
  
+Mon Feb 12 13:38:05 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 886 Query:  church faith christian bible god sin 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8475836431153037 recall: 0.8004012036 precision: 0.9006772009
+ClusterQuery: 1 hits: 701 Query:  game hockey games 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7929411765001588 recall: 0.6746746747 precision: 0.9614835949
+ClusterQuery: 2 hits: 526 Query:  space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.6596166556096656 recall: 0.5055724417 precision: 0.9486692015
+TotalHits: 2023 Total Docs:  2983 
+PosHits: 1933 NegHits: 180 PosScore: 8896.323067605495 NegScore: 511.1180247962475 Fitness: 4081.3979490862357 
+***  TOTALS:   *****   f1list: [0.8475836431153037, 0.7929411765001588, 0.6596166556096656] averagef1: :0.7667138250750427  ** average precision: 0.9369433324333333 average recall: 0.6602161066666666
+************************************************ 
+ 
+Mon Feb 12 13:39:56 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: NG5 path: indexes/20NG5WindowsMotorcyclesSpaceMedMideast numberOfCategories: 5   ************************************************************* 
+ClusterQuery: 0 hits: 2 Query:  armenian 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.00400400409531233 recall: 0.0020060181 precision: 1.0
+ClusterQuery: 1 hits: 1481 Query:  space state us first 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.5153970826884153 recall: 0.6443768997 precision: 0.4294395679
+ClusterQuery: 2 hits: 3 Query:  bike turkish 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.0060000000372878 recall: 0.0030090271 precision: 1.0
+ClusterQuery: 3 hits: 3 Query:  israeli 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.0060000000372878 recall: 0.0030090271 precision: 1.0
+ClusterQuery: 4 hits: 4 Query:  armenians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.007992007975490842 recall: 0.0040120361 precision: 1.0
+TotalHits: 1488 Total Docs:  4901 
+PosHits: 1484 NegHits: 9 PosScore: 4273.338065683842 NegScore: 40.67537009716034 Fitness: 68.37101718212475 
+***  TOTALS:   *****   f1list: [0.00400400409531233, 0.5153970826884153, 0.0060000000372878, 0.0060000000372878, 0.007992007975490842] averagef1: :0.10787861896675884  ** average precision: 0.8858879135800001 average recall: 0.13128260162
+************************************************ 
+ 
+Mon Feb 12 13:40:40 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 1277 Query:  us year agent good shooting 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.40193491643650753 recall: 0.4583751254 precision: 0.3578700078
+ClusterQuery: 1 hits: 1 Query:  lax wildfires custody 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.0020242914462062973 recall: 0.0010131712 precision: 1.0
+ClusterQuery: 2 hits: 185 Query:  bomb fires update highparkfire via 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.2184300341017857 recall: 0.1296859169 precision: 0.6918918919
+TotalHits: 1394 Total Docs:  4000 
+PosHits: 1325 NegHits: 138 PosScore: 3722.52502861619 NegScore: 371.4319531917572 Fitness: 483.33879753268343 
+***  TOTALS:   *****   f1list: [0.40193491643650753, 0.0020242914462062973, 0.2184300341017857] averagef1: :0.20746308066149985  ** average precision: 0.6832539665666667 average recall: 0.19635807116666668
+************************************************ 
+ 
+Mon Feb 12 13:41:34 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 975 Query:  body theory may number 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.5233265720064021 recall: 0.517552658 precision: 0.5292307692
+ClusterQuery: 1 hits: 108 Query:  effect 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.07782805435553276 recall: 0.0431293882 precision: 0.3981481481
+ClusterQuery: 2 hits: 56 Query:  layer library transfer 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.07670182160120714 recall: 0.040526849 precision: 0.7142857143
+ClusterQuery: 3 hits: 9 Query:  supersonic 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.018072289090960227 recall: 0.009118541 precision: 1.0
+TotalHits: 1076 Total Docs:  2000 
+PosHits: 1007 NegHits: 141 PosScore: 2708.457396566868 NegScore: 383.38990384340286 Fitness: 170.2901856071602 
+***  TOTALS:   *****   f1list: [0.5233265720064021, 0.07782805435553276, 0.07670182160120714, 0.018072289090960227] averagef1: :0.17398218426352555  ** average precision: 0.6604161579 average recall: 0.15258185905000002
+************************************************ 
+ 
+Mon Feb 12 13:43:09 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: R8 path: indexes/R8 numberOfCategories: 8   ************************************************************* 
+ClusterQuery: 0 hits: 2 Query:  oper wheat 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.001998001996007988 recall: 0.001001001 precision: 0.5
+ClusterQuery: 1 hits: 27 Query:  acquisition quarter 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.03313840152714681 recall: 0.017017017 precision: 0.6296296296
+ClusterQuery: 2 hits: 1 Query:  shareholders dividend 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.0020242914462062973 recall: 0.0010131712 precision: 1.0
+ClusterQuery: 3 hits: 4 Query:  earnings 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.008072653877527617 recall: 0.0040526849 precision: 1.0
+ClusterQuery: 4 hits: 100 Query:  cut sales 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.07359705605594087 recall: 0.040526849 precision: 0.4
+ClusterQuery: 5 hits: 77 Query:  includes cash 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.05586592176616696 recall: 0.0300902708 precision: 0.3896103896
+ClusterQuery: 6 hits: 36 Query:  ltd bank 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.043010752742845354 recall: 0.022289767 precision: 0.6111111111
+ClusterQuery: 7 hits: 759 Query:  avg may 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.4931662869874987 recall: 0.4343029087 precision: 0.5704874835
+TotalHits: 917 Total Docs:  9460 
+PosHits: 838 NegHits: 168 PosScore: 1850.3615384995937 NegScore: 353.70087203383446 Fitness: 1.8305337332098093 
+***  TOTALS:   *****   f1list: [0.001998001996007988, 0.03313840152714681, 0.0020242914462062973, 0.008072653877527617, 0.07359705605594087, 0.05586592176616696, 0.043010752742845354, 0.4931662869874987] averagef1: :0.08885917079991758  ** average precision: 0.637604826725 average recall: 0.0687867087
+************************************************ 
+ 
