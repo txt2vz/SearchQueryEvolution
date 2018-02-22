@@ -18,30 +18,23 @@ import java.nio.file.Paths
 
 enum IndexEnum {
 
-//    NG20('indexes/20NG', 20),
-//    R10('indexes/R10', 10),
-//    R8('indexes/R8', 8),
+    NG20('indexes/20NG', 20),
+    R10('indexes/R10', 10),
+    R8('indexes/R8', 8),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
- //   NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
+    OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
+    NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
     CLASSIC4('indexes/classic4_500', 4)
-  
+
     private final Similarity similarity = new BM25Similarity()
-                             // new ClassicSimilarity()
-    private final String pathString;
-    private final int numberOfCategories
+    // new ClassicSimilarity()
+    String pathString;
+    int numberOfCategories
 
     IndexEnum(String pathString, int numberOfCategories) {
         this.numberOfCategories = numberOfCategories
         this.pathString = pathString
-    }
-
-    int getNumberOfCategories() {
-        return numberOfCategories
-    }
-
-    String getPathString() {
-        return pathString
     }
 
     String toString() {
@@ -63,20 +56,21 @@ class IndexInfo {
     static IndexEnum indexEnum //= IndexEnum.R8
 
     // Lucene field names
-    public static final String FIELD_CATEGORY_NAME = 'category',
-                               FIELD_CONTENTS = 'contents',
-                               FIELD_PATH = 'path',
-                               FIELD_TEST_TRAIN = 'test_train',
-                               FIELD_CATEGORY_NUMBER = 'categoryNumber';
+    static final String FIELD_CATEGORY_NAME = 'category',
+                        FIELD_CONTENTS = 'contents',
+                        FIELD_PATH = 'path',
+                        FIELD_TEST_TRAIN = 'test_train',
+                        FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
     public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
     public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()
 
-    static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
-    static IndexReader indexReader// = indexSearcher.getIndexReader()
+    public static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
+    public static IndexReader indexReader// = indexSearcher.getIndexReader()
 
+    public
     static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
-    static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
+    public static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
 
     final TermQuery trainQ = new TermQuery(new Term(
             FIELD_TEST_TRAIN, 'train'));
@@ -89,12 +83,13 @@ class IndexInfo {
     //Query to return documents in the current category based on categoryNumber
     static TermQuery catQ;
 
-    public void setIndex(IndexEnum ie) {
+    void setIndex(IndexEnum ie) {
         indexEnum = ie
         NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
         NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
         indexSearcher = indexEnum.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
+       // setIndexFieldsAndTotals()
         println "indexEnum $indexEnum"
     }
 
@@ -109,7 +104,7 @@ class IndexInfo {
     }
 
     //get the category_name for the current category
-    public static String getCategoryName() {
+    static String getCategoryName() {
         TopScoreDocCollector collector = TopScoreDocCollector.create(1)
         indexSearcher.search(catQ, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs
@@ -123,7 +118,7 @@ class IndexInfo {
     }
 
     //set the filters and totals for the index
-    public void setIndexFieldsAndTotals() {
+    void setIndexFieldsAndTotals() {
         println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
         catQ = new TermQuery(new Term(FIELD_CATEGORY_NUMBER,
                 categoryNumber));

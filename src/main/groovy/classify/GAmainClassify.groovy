@@ -3,6 +3,7 @@
  import ec.EvolutionState
  import ec.Evolve
  import ec.util.ParameterDatabase
+ import index.IndexEnum
  import index.IndexInfo
 
  class GAmainClassify extends Evolve {
@@ -16,6 +17,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
+         IndexInfo.instance.setIndex(IndexEnum.OHS3)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
@@ -23,7 +25,7 @@
          ParameterDatabase parameters = null;
          final Date startRun = new Date();
          bestResultsOut.format("%s \n", startRun);
-         bestResultsOut.format("Term selector: %s  \n", IndexInfo.itm);
+         bestResultsOut.format("Term selector: %s  \n", index.ImportantTerms.itm);
          bestResultsOut.format("%s", fileHead);
 
          (1..NUMBER_OF_JOBS).each{job ->
@@ -101,7 +103,7 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println  "${IndexInfo.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${IndexInfo.indexEnum.toString()}"
+			 println  "${index.ImportantTerms.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${IndexInfo.indexEnum.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

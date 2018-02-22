@@ -34,7 +34,7 @@ public class ImportantTerms {
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
 
-    final ImportantTermsMethod itm = ImportantTermsMethod.F1
+   public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
 
     public static void main(String[] args) {
        IndexInfo.instance.setIndex(IndexInfo.indexEnum = IndexEnum.NG3)

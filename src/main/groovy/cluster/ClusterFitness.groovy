@@ -12,6 +12,8 @@ import org.apache.lucene.search.*
 @groovy.transform.TypeChecked
 public class ClusterFitness extends SimpleFitness {
 
+	double averageF1=0.0
+
 	private Map<Query, Integer> queryMap = [:]
 	private double positiveScoreTotal = 0.0
 	private double negativeScoreTotal = 0.0
@@ -149,6 +151,8 @@ public class ClusterFitness extends SimpleFitness {
 
 	// @TypeChecked(TypeCheckingMode.SKIP)
 	void finalQueryStats(int job, int gen, int popSize) {
+		println "xxxxxxxxxxxxxxxxx qmap $queryMap"
+
 		String messageOut = ""
 		FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)
 		resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Index: ${IndexInfo.indexEnum}  ************************************************************* \n"
@@ -205,7 +209,8 @@ public class ClusterFitness extends SimpleFitness {
 			// }
 		}
 
-		final double averageF1 = (f1list) ?  (double)f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+		//final double averageF1 = (f1list) ?  (double)f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+		averageF1 = (f1list) ?  (double)f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
 		final double averageRecall = (recallList) ?  (double)recallList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
 		final double averagePrecision = (precisionList) ?  (double)precisionList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
 		messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1  ** average precision: $averagePrecision average recall: $averageRecall"

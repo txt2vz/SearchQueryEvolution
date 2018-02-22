@@ -23,7 +23,7 @@ import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
 enum IndexName {
-    R10, NG20
+    R10, NG20, OHS
 }
 
 class BuildIndex {
@@ -34,7 +34,10 @@ class BuildIndex {
 
     BuildIndex() {
 
-        IndexName iName = IndexName.R10
+        IndexName iName = IndexName.OHS
+
+        final String ohsIndexPath = 'indexes/Ohsc06MuscC08RespC11Eye'
+        final String ohsDocsPath =/C:\Users\aceslh\Dataset\Ohsc06MuscC08RespC11Eye/
 
         final String r10DocsPath =  /C:\Users\Laurie\Dataset\R8/
         // /C:\Users\Laurie\Dataset\reuters-top10/
@@ -60,6 +63,10 @@ class BuildIndex {
         } else if (iName == IndexName.NG20) {
             docsPath = NG20DocsPath
             indexPath = NG20IndexPath
+        }
+        else if (iName==IndexName.OHS){
+            docsPath = ohsDocsPath
+            indexPath = ohsIndexPath
         }
 
 //Note: R10 - different directory structure
