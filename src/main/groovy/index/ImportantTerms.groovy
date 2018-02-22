@@ -16,6 +16,12 @@ import org.apache.lucene.util.BytesRef
  * @author Laurie
  */
 
+
+//the method for term selection / dimension reduction
+enum ImportantTermsMethod {
+    F1, TFIDF, IG, CHI, OR, MERGED
+}
+
 //@groovy.transform.CompileStatic
 //@groovy.transform.TypeChecked
 public class ImportantTerms {
@@ -28,7 +34,10 @@ public class ImportantTerms {
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
 
+    final ImportantTermsMethod itm = ImportantTermsMethod.F1
+
     public static void main(String[] args) {
+       IndexInfo.instance.setIndex(IndexInfo.indexEnum = IndexEnum.NG3)
         IndexInfo.instance.categoryNumber = '2'
         IndexInfo.instance.setIndexFieldsAndTotals()
 
@@ -41,6 +50,17 @@ public class ImportantTerms {
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
         // iw.getORTermQueryList()
+    }
+
+    public ImportantTerms() {
+
+        Terms terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
+        //    termsEnum = terms.iterator();
+        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        //   termsEnum.
+
+        println "Important words terms.getDocCount: ${terms.getDocCount()}"
+        println "Important words terms.size ${terms.size()}"
     }
 
     private TermQuery[] mergeMethods() {
@@ -128,25 +148,14 @@ public class ImportantTerms {
         return returnTQ
     }
 
-    public ImportantTerms() {
-        Terms terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
-        //    termsEnum = terms.iterator();
-        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
-        //   termsEnum.
-
-        println "Important words terms.getDocCount: ${terms.getDocCount()}"
-        println "Important words terms.size ${terms.size()}"
-    }
-
-
     public TermQuery[] getImportantTerms() {
 
-        switch (IndexInfo.itm) {
-            case IndexInfo.itm.F1: return getF1TermQueryList(); break;
-            case IndexInfo.itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
-            case IndexInfo.itm.IG: return getIGTermQueryList(); break;
-            case IndexInfo.itm.OR: return getORTermQueryList(); break;
-            case IndexInfo.itm.MERGED: return mergeMethods(); break;
+        switch (itm) {
+            case itm.F1: return getF1TermQueryList(); break;
+            case itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
+            case itm.IG: return getIGTermQueryList(); break;
+            case itm.OR: return getORTermQueryList(); break;
+            case itm.MERGED: return mergeMethods(); break;
             default: println "Incorrect selection method in getImportantTerms()";
         }
 

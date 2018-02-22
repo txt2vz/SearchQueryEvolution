@@ -17,12 +17,11 @@ class ClusterMainECJ extends Evolve {
 
     private final int NUMBER_OF_JOBS = 1
 
-
     public ClusterMainECJ() {
         EvolutionState state;    
         ParameterDatabase parameters = null;
         final Date startRun = new Date();
-		IndexInfo.instance.setIndex(IndexEnum.CRISIS3)
+	//	IndexInfo.instance.setIndex(IndexEnum.CRISIS3)
        // IndexEnum.values().each { index2 ->
         for (IndexEnum ie: IndexEnum.values()){
             println "ie $ie"

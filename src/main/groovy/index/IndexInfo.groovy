@@ -13,30 +13,21 @@ import org.apache.lucene.store.FSDirectory
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * Singleton class to store index information.
- * Set the path to the lucene index here
- */
-
 @groovy.transform.TypeChecked
 @groovy.transform.CompileStatic
 
-enum ImportantTermsMethod {
-    F1, TFIDF, IG, CHI, OR, MERGED
-}
-
 enum IndexEnum {
 
-    NG20('indexes/20NG', 20),
+//    NG20('indexes/20NG', 20),
+//    R10('indexes/R10', 10),
+//    R8('indexes/R8', 8),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
-    NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
-    R10('indexes/R10', 10),
+ //   NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
-    CLASSIC4('indexes/classic4_500', 4),
-    R8('indexes/R8', 8)
-
+    CLASSIC4('indexes/classic4_500', 4)
+  
     private final Similarity similarity = new BM25Similarity()
-    // new ClassicSimilarity()
+                             // new ClassicSimilarity()
     private final String pathString;
     private final int numberOfCategories
 
@@ -69,8 +60,7 @@ enum IndexEnum {
 
 @Singleton
 class IndexInfo {
-    static IndexEnum indexEnum = IndexEnum.R8
-    public static final ImportantTermsMethod itm = ImportantTermsMethod.F1
+    static IndexEnum indexEnum //= IndexEnum.R8
 
     // Lucene field names
     public static final String FIELD_CATEGORY_NAME = 'category',
@@ -79,11 +69,11 @@ class IndexInfo {
                                FIELD_TEST_TRAIN = 'test_train',
                                FIELD_CATEGORY_NUMBER = 'categoryNumber';
 
-    public static int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
-    public static int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
+    public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
+    public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()
 
-    static IndexSearcher indexSearcher = indexEnum.getIndexSearcher()
-    static IndexReader indexReader = indexSearcher.getIndexReader()
+    static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
+    static IndexReader indexReader// = indexSearcher.getIndexReader()
 
     static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
     static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
