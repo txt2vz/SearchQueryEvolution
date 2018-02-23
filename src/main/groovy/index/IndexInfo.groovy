@@ -28,7 +28,7 @@ enum IndexEnum {
     CLASSIC4('indexes/classic4_500', 4)
 
     private final Similarity similarity = new BM25Similarity()
-    // new ClassicSimilarity()
+                              // new ClassicSimilarity()
     String pathString;
     int numberOfCategories
 
@@ -89,7 +89,7 @@ class IndexInfo {
         NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
         indexSearcher = indexEnum.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
-       // setIndexFieldsAndTotals()
+        setIndexFieldsAndTotals()
         println "indexEnum $indexEnum"
     }
 

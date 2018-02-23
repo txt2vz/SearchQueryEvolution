@@ -34,7 +34,6 @@ public class ClusterFitness extends SimpleFitness {
 
 	private final static int hitsPerPage = IndexInfo.indexReader.maxDoc()
 	private final static int coreClusterSize = 20
-	private final static IndexSearcher searcher = IndexInfo.indexSearcher;
 
 	double getFitness() {
 		return baseFitness;
@@ -83,11 +82,11 @@ public class ClusterFitness extends SimpleFitness {
 			}
 			Query otherBQ = bqbOthers.build()
 
-			TopDocs otherTopDocs = searcher.search(otherBQ, hitsPerPage)
+			TopDocs otherTopDocs = IndexInfo.indexSearcher.search(otherBQ, hitsPerPage)
 			ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
 			hitsOthers.each { ScoreDoc otherHit -> otherdocIdSet << otherHit.doc }
 
-			TopDocs docs = searcher.search(q, hitsPerPage)
+			TopDocs docs = IndexInfo.indexSearcher.search(q, hitsPerPage)
 			ScoreDoc[] hits = docs.scoreDocs;
 			qMap.put(q, hits.size())
 
@@ -161,7 +160,7 @@ public class ClusterFitness extends SimpleFitness {
 		queryMap.keySet().eachWithIndex { q, index ->
 
 			TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
-			searcher.search(q, collector);
+			IndexInfo.indexSearcher.search(q, collector);
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
 			String qString = q.toString(IndexInfo.FIELD_CONTENTS)
 
@@ -174,7 +173,7 @@ public class ClusterFitness extends SimpleFitness {
 			Map<String, Integer> catsFreq = new HashMap<String, Integer>() //[:]
 			hits.eachWithIndex { ScoreDoc h, int i ->
 				int docId = h.doc;
-				Document d = searcher.doc(docId);
+				Document d = IndexInfo.indexSearcher.doc(docId);
 				String catName = d.get(IndexInfo.FIELD_CATEGORY_NAME)
 				int n = catsFreq.get((catName)) ?: 0
 				catsFreq.put((catName), n + 1)
@@ -190,7 +189,7 @@ public class ClusterFitness extends SimpleFitness {
 			TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
 			TermQuery catQ = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME,
 					catMax.key));
-			searcher.search(catQ, totalHitCollector);
+			IndexInfo.indexSearcher.search(catQ, totalHitCollector);
 			int categoryTotal = totalHitCollector.getTotalHits();
 			messageOut = "categoryTotal: $categoryTotal for category: $catQ \n"
 			println messageOut
