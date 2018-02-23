@@ -1849,3 +1849,438 @@ PosHits: 466 NegHits: 84 PosScore: 1635.9008107185364 NegScore: 249.713121175766
 ***  TOTALS:   *****   f1list: [0.3406451612903226, 0.10801393728160108, 0.21112696148686713] averagef1: :0.2199286866862636  ** average precision: 0.42235937430000003 average recall: 0.158
 ************************************************ 
  
+Fri Feb 23 11:57:58 GMT 2018  ***** Job: 0 Gen: 49 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 188 Query:  library 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.5436046511681922 recall: 0.374 precision: 0.9946808511
+ClusterQuery: 1 hits: 148 Query:  heat transfer 
+categoryTotal: 500 for category: category:cran 
+f1: 0.39814814814589233 recall: 0.258 precision: 0.8716216216
+ClusterQuery: 2 hits: 251 Query:  patients supersonic 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3621837549882688 recall: 0.272 precision: 0.5418326693
+ClusterQuery: 3 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+TotalHits: 664 Total Docs:  2000 
+PosHits: 637 NegHits: 54 PosScore: 2544.407355427742 NegScore: 188.7955677509308 Fitness: 349.0591510251102 
+***  TOTALS:   *****   f1list: [0.5436046511681922, 0.39814814814589233, 0.3621837549882688, 0.3443708609271523] averagef1: :0.41207685380737646  ** average precision: 0.8520337855 average recall: 0.278
+************************************************ 
+ 
+Fri Feb 23 11:58:32 GMT 2018  ***** Job: 0 Gen: 49 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 701 Query:  games game hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7929411765001588 recall: 0.6746746747 precision: 0.9614835949
+ClusterQuery: 1 hits: 727 Query:  god faith christians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.7703016241282109 recall: 0.665997994 precision: 0.9133425034
+ClusterQuery: 2 hits: 526 Query:  space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.6596166556096656 recall: 0.5055724417 precision: 0.9486692015
+TotalHits: 1881 Total Docs:  2983 
+PosHits: 1808 NegHits: 146 PosScore: 6796.599250584841 NegScore: 380.5855399519205 Fitness: 2797.4453932886872 
+***  TOTALS:   *****   f1list: [0.7929411765001588, 0.7703016241282109, 0.6596166556096656] averagef1: :0.7409531520793452  ** average precision: 0.9411650999333334 average recall: 0.6154150368
+************************************************ 
+ 
+Fri Feb 23 14:43:07 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+ClusterQuery: 1 hits: 292 Query:  library systems 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6313131313235589 recall: 0.5 precision: 0.8561643836
+ClusterQuery: 2 hits: 136 Query:  patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.4276729559748428 recall: 0.272 precision: 1.0
+ClusterQuery: 3 hits: 425 Query:  flow boundary 
+categoryTotal: 500 for category: category:cran 
+f1: 0.8151351351227173 recall: 0.754 precision: 0.8870588235
+TotalHits: 925 Total Docs:  2000 
+PosHits: 893 NegHits: 64 PosScore: 3205.2137154340744 NegScore: 172.85957551002502 Fitness: 275.1900030563958 
+***  TOTALS:   *****   f1list: [0.3443708609271523, 0.6313131313235589, 0.4276729559748428, 0.8151351351227173] averagef1: :0.5546230208370678  ** average precision: 0.935805801775 average recall: 0.4335
+************************************************ 
+ 
+Fri Feb 23 14:44:07 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 710 Query:  play game hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7805734347729435 recall: 0.6676676677 precision: 0.9394366197
+ClusterQuery: 1 hits: 714 Query:  christ god christians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.78667445935875 recall: 0.6750250752 precision: 0.9425770308
+ClusterQuery: 2 hits: 592 Query:  nasa space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7017099430229295 recall: 0.5612968592 precision: 0.9358108108
+TotalHits: 1927 Total Docs:  2983 
+PosHits: 1840 NegHits: 176 PosScore: 7418.679037570953 NegScore: 536.5786504000425 Fitness: 3065.3464823130685 
+***  TOTALS:   *****   f1list: [0.7805734347729435, 0.78667445935875, 0.7017099430229295] averagef1: :0.7563192790515411  ** average precision: 0.9392748204333333 average recall: 0.6346632007
+************************************************ 
+ 
+Fri Feb 23 14:45:38 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 251 Query:  supersonic patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3621837549882688 recall: 0.272 precision: 0.5418326693
+ClusterQuery: 1 hits: 109 Query:  libraries 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.3579638752052545 recall: 0.218 precision: 1.0
+ClusterQuery: 2 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+ClusterQuery: 3 hits: 307 Query:  solution heat equations 
+categoryTotal: 500 for category: category:cran 
+f1: 0.6220570012254868 recall: 0.502 precision: 0.8175895765
+TotalHits: 725 Total Docs:  2000 
+PosHits: 679 NegHits: 92 PosScore: 2693.850555062294 NegScore: 305.6013351678848 Fitness: 405.07919860234483 
+***  TOTALS:   *****   f1list: [0.3621837549882688, 0.3579638752052545, 0.3443708609271523, 0.6220570012254868] averagef1: :0.4216438730865406  ** average precision: 0.83985556145 average recall: 0.3
+************************************************ 
+ 
+Fri Feb 23 14:46:26 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 730 Query:  boston marathon prayforboston 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.8393063583654047 recall: 0.726 precision: 0.9945205479
+ClusterQuery: 1 hits: 1494 Query:  shooting colorado lax 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.6760224538803992 recall: 0.843 precision: 0.5642570281
+ClusterQuery: 2 hits: 793 Query:  highparkfire floods bigwet 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.7205800334807357 recall: 0.646 precision: 0.814627995
+TotalHits: 3004 Total Docs:  4000 
+PosHits: 2992 NegHits: 25 PosScore: 7732.568567156792 NegScore: 64.19817388057709 Fitness: 4852.761735911359 
+***  TOTALS:   *****   f1list: [0.8393063583654047, 0.6760224538803992, 0.7205800334807357] averagef1: :0.7453029485755133  ** average precision: 0.7911351903333333 average recall: 0.7383333333333333
+************************************************ 
+ 
+Fri Feb 23 14:48:16 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 310 Query:  research library 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6864197530722451 recall: 0.556 precision: 0.8967741935
+ClusterQuery: 1 hits: 234 Query:  cells patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.6376021798365124 recall: 0.468 precision: 1.0
+ClusterQuery: 2 hits: 115 Query:  supersonic 
+categoryTotal: 500 for category: category:cran 
+f1: 0.3739837398373984 recall: 0.23 precision: 1.0
+ClusterQuery: 3 hits: 109 Query:  transfer 
+categoryTotal: 500 for category: category:cran 
+f1: 0.3087027914613533 recall: 0.188 precision: 0.8623853211
+TotalHits: 739 Total Docs:  2000 
+PosHits: 711 NegHits: 57 PosScore: 2592.27509868145 NegScore: 165.6048719882965 Fitness: 445.2340681441928 
+***  TOTALS:   *****   f1list: [0.6864197530722451, 0.6376021798365124, 0.3739837398373984, 0.3087027914613533] averagef1: :0.5016771160518773  ** average precision: 0.93978987865 average recall: 0.3605
+************************************************ 
+ 
+Fri Feb 23 14:49:04 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 771 Query:  bigwet qldfloods highparkfire 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.7058159232216326 recall: 0.625 precision: 0.8106355383
+ClusterQuery: 1 hits: 730 Query:  boston prayforboston marathon 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.8393063583654047 recall: 0.726 precision: 0.9945205479
+ClusterQuery: 2 hits: 1494 Query:  lax shooting colorado 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.6760224538803992 recall: 0.843 precision: 0.5642570281
+TotalHits: 2982 Total Docs:  4000 
+PosHits: 2970 NegHits: 25 PosScore: 7785.570308208466 NegScore: 64.19817388057709 Fitness: 4811.399736291293 
+***  TOTALS:   *****   f1list: [0.7058159232216326, 0.8393063583654047, 0.6760224538803992] averagef1: :0.7403815784891455  ** average precision: 0.7898043714333333 average recall: 0.7313333333333333
+************************************************ 
+ 
+Fri Feb 23 14:50:03 GMT 2018  ***** Job: 0 Gen: 99 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 752 Query:  christian christians god 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8050314465760862 recall: 0.7061183551 precision: 0.9361702128
+ClusterQuery: 1 hits: 701 Query:  game games hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7929411765001588 recall: 0.6746746747 precision: 0.9614835949
+ClusterQuery: 2 hits: 526 Query:  space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.6596166556096656 recall: 0.5055724417 precision: 0.9486692015
+TotalHits: 1907 Total Docs:  2983 
+PosHits: 1835 NegHits: 144 PosScore: 6942.5931940078735 NegScore: 377.0130097568035 Fitness: 2937.901390840158 
+***  TOTALS:   *****   f1list: [0.8050314465760862, 0.7929411765001588, 0.6596166556096656] averagef1: :0.7525297595619702  ** average precision: 0.9487743364 average recall: 0.6287884905
+************************************************ 
+ 
+Fri Feb 23 14:55:47 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 310 Query:  research library 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6864197530722451 recall: 0.556 precision: 0.8967741935
+ClusterQuery: 1 hits: 251 Query:  supersonic patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3621837549882688 recall: 0.272 precision: 0.5418326693
+ClusterQuery: 2 hits: 215 Query:  equations laminar 
+categoryTotal: 500 for category: category:cran 
+f1: 0.5510489510548389 recall: 0.394 precision: 0.9162790698
+ClusterQuery: 3 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+TotalHits: 831 Total Docs:  2000 
+PosHits: 786 NegHits: 94 PosScore: 2877.679957985878 NegScore: 278.71879148483276 Fitness: 573.2074736833927 
+***  TOTALS:   *****   f1list: [0.6864197530722451, 0.3621837549882688, 0.5510489510548389, 0.3443708609271523] averagef1: :0.4860058300106263  ** average precision: 0.83872148315 average recall: 0.3575
+************************************************ 
+ 
+Fri Feb 23 14:57:31 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 738 Query:  bigwet qldfloods floods 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.8481012658048028 recall: 0.737 precision: 0.9986449864
+ClusterQuery: 1 hits: 1354 Query:  colorado prayforboston boston 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.5955819881097508 recall: 0.701 precision: 0.5177252585
+ClusterQuery: 2 hits: 991 Query:  shooting lax highparkfire 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.8468106479016705 recall: 0.843 precision: 0.8506559031
+TotalHits: 3070 Total Docs:  4000 
+PosHits: 3058 NegHits: 25 PosScore: 7501.865362763405 NegScore: 59.36742079257965 Fitness: 4938.135428065802 
+***  TOTALS:   *****   f1list: [0.8481012658048028, 0.5955819881097508, 0.8468106479016705] averagef1: :0.7634979672720746  ** average precision: 0.789008716 average recall: 0.7603333333333332
+************************************************ 
+ 
+Fri Feb 23 14:59:16 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 662 Query:  orbit henry space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7665251667873756 recall: 0.6403242148 precision: 0.9546827795
+ClusterQuery: 1 hits: 800 Query:  team games game 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.8137854363333423 recall: 0.7327327327 precision: 0.915
+ClusterQuery: 2 hits: 718 Query:  christians god bible 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.7953352769766946 recall: 0.6840521565 precision: 0.9498607242
+TotalHits: 2079 Total Docs:  2983 
+PosHits: 1979 NegHits: 201 PosScore: 8063.740401208401 NegScore: 571.306245714426 Fitness: 3847.5962981230764 
+***  TOTALS:   *****   f1list: [0.7665251667873756, 0.8137854363333423, 0.7953352769766946] averagef1: :0.7918819600324708  ** average precision: 0.9398478345666668 average recall: 0.6857030346666666
+************************************************ 
+ 
+Fri Feb 23 15:07:01 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 310 Query:  library research 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6864197530722451 recall: 0.556 precision: 0.8967741935
+ClusterQuery: 1 hits: 115 Query:  supersonic 
+categoryTotal: 500 for category: category:cran 
+f1: 0.3739837398373984 recall: 0.23 precision: 1.0
+ClusterQuery: 2 hits: 148 Query:  transfer heat 
+categoryTotal: 500 for category: category:cran 
+f1: 0.39814814814589233 recall: 0.258 precision: 0.8716216216
+ClusterQuery: 3 hits: 234 Query:  patients cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.6376021798365124 recall: 0.468 precision: 1.0
+TotalHits: 771 Total Docs:  2000 
+PosHits: 736 NegHits: 71 PosScore: 2952.668591737747 NegScore: 234.76807022094727 Fitness: 517.6291843701895 
+***  TOTALS:   *****   f1list: [0.6864197530722451, 0.3739837398373984, 0.39814814814589233, 0.6376021798365124] averagef1: :0.5240384552230121  ** average precision: 0.942098953775 average recall: 0.378
+************************************************ 
+ 
+Fri Feb 23 15:11:08 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 1494 Query:  lax colorado shooting 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.6760224538803992 recall: 0.843 precision: 0.5642570281
+ClusterQuery: 1 hits: 771 Query:  highparkfire bigwet qldfloods 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.7058159232216326 recall: 0.625 precision: 0.8106355383
+ClusterQuery: 2 hits: 730 Query:  marathon boston prayforboston 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.8393063583654047 recall: 0.726 precision: 0.9945205479
+TotalHits: 2982 Total Docs:  4000 
+PosHits: 2970 NegHits: 25 PosScore: 7785.570308208466 NegScore: 64.19817388057709 Fitness: 4811.399736291293 
+***  TOTALS:   *****   f1list: [0.6760224538803992, 0.7058159232216326, 0.8393063583654047] averagef1: :0.7403815784891455  ** average precision: 0.7898043714333333 average recall: 0.7313333333333333
+************************************************ 
+ 
+Fri Feb 23 15:14:54 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 782 Query:  christian god church 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8161888701750935 recall: 0.7281845537 precision: 0.9283887468
+ClusterQuery: 1 hits: 662 Query:  space henry orbit 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7665251667873756 recall: 0.6403242148 precision: 0.9546827795
+ClusterQuery: 2 hits: 701 Query:  game games hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7929411765001588 recall: 0.6746746747 precision: 0.9614835949
+TotalHits: 2060 Total Docs:  2983 
+PosHits: 1975 NegHits: 170 PosScore: 8136.5523372888565 NegScore: 503.4943265467882 Fitness: 3876.994380999542 
+***  TOTALS:   *****   f1list: [0.8161888701750935, 0.7665251667873756, 0.7929411765001588] averagef1: :0.7918850711542094  ** average precision: 0.9481850404 average recall: 0.6810611477333333
+************************************************ 
+ 
+Fri Feb 23 15:20:12 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 340 Query:  boundary mach heat 
+categoryTotal: 500 for category: category:cran 
+f1: 0.7928571428552156 recall: 0.666 precision: 0.9794117647
+ClusterQuery: 1 hits: 136 Query:  patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.4276729559748428 recall: 0.272 precision: 1.0
+ClusterQuery: 2 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+ClusterQuery: 3 hits: 390 Query:  library information 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.7685393258338342 recall: 0.684 precision: 0.8769230769
+TotalHits: 936 Total Docs:  2000 
+PosHits: 902 NegHits: 68 PosScore: 3476.3691724538803 NegScore: 186.72414594888687 Fitness: 224.6595357357302 
+***  TOTALS:   *****   f1list: [0.7928571428552156, 0.4276729559748428, 0.3443708609271523, 0.7685393258338342] averagef1: :0.5833600713977612  ** average precision: 0.9640837104 average recall: 0.4575
+************************************************ 
+ 
+Fri Feb 23 15:22:10 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 1435 Query:  prayforboston bostonmarathon colorado boston 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.6422997946669995 recall: 0.782 precision: 0.5449477352
+ClusterQuery: 1 hits: 876 Query:  flooding highparkfire bigwet floods 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.7761194029804948 recall: 0.728 precision: 0.8310502283
+ClusterQuery: 2 hits: 935 Query:  lax laxshooting shooting airport 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.9612403100695284 recall: 0.93 precision: 0.9946524064
+TotalHits: 3228 Total Docs:  4000 
+PosHits: 3215 NegHits: 31 PosScore: 8906.049550294876 NegScore: 73.1617214679718 Fitness: 6356.011867691398 
+***  TOTALS:   *****   f1list: [0.6422997946669995, 0.7761194029804948, 0.9612403100695284] averagef1: :0.7932198359056741  ** average precision: 0.7902167899666667 average recall: 0.8133333333333334
+************************************************ 
+ 
+Fri Feb 23 15:24:23 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 821 Query:  god christ christian church 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8349834983724345 recall: 0.7612838516 precision: 0.9244823386
+ClusterQuery: 1 hits: 614 Query:  hockey game 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7427154370818233 recall: 0.5995995996 precision: 0.9755700326
+ClusterQuery: 2 hits: 653 Query:  henry nasa space 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7463414634318962 recall: 0.6200607903 precision: 0.9372128637
+TotalHits: 2001 Total Docs:  2983 
+PosHits: 1914 NegHits: 174 PosScore: 8082.560408696532 NegScore: 533.1808537840843 Fitness: 3607.083070892407 
+***  TOTALS:   *****   f1list: [0.8349834983724345, 0.7427154370818233, 0.7463414634318962] averagef1: :0.7746801329620513  ** average precision: 0.9457550782999999 average recall: 0.6603147471666667
+************************************************ 
+ 
+Fri Feb 23 15:27:29 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 276 Query:  shock supersonic heat 
+categoryTotal: 500 for category: category:cran 
+f1: 0.6881443298848071 recall: 0.534 precision: 0.9673913043
+ClusterQuery: 1 hits: 136 Query:  patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.4276729559748428 recall: 0.272 precision: 1.0
+ClusterQuery: 2 hits: 390 Query:  information library 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.7685393258338342 recall: 0.684 precision: 0.8769230769
+ClusterQuery: 3 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+TotalHits: 874 Total Docs:  2000 
+PosHits: 842 NegHits: 64 PosScore: 3217.1521470546722 NegScore: 189.04159718751907 Fitness: 183.28578970606927 
+***  TOTALS:   *****   f1list: [0.6881443298848071, 0.4276729559748428, 0.7685393258338342, 0.3443708609271523] averagef1: :0.5571818681551591  ** average precision: 0.9610785953000001 average recall: 0.42450000000000004
+************************************************ 
+ 
+Fri Feb 23 15:29:31 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 863 Query:  queensland qld bigwet australia qldfloods 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.9264626945786366 recall: 0.863 precision: 1.0
+ClusterQuery: 1 hits: 961 Query:  fire colorado wildfire prayforboston springs 
+categoryTotal: 1000 for category: category:Colorado_w 
+f1: 0.7363590005061453 recall: 0.722 precision: 0.7513007284
+ClusterQuery: 2 hits: 1638 Query:  highparkfire boston shooting suspect bostonmarathon lax 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.6451857467500876 recall: 0.851 precision: 0.5195360195
+TotalHits: 3360 Total Docs:  4000 
+PosHits: 3277 NegHits: 185 PosScore: 10725.369564771652 NegScore: 530.1431559324265 Fitness: 7525.282743251038 
+***  TOTALS:   *****   f1list: [0.9264626945786366, 0.7363590005061453, 0.6451857467500876] averagef1: :0.7693358139449565  ** average precision: 0.7569455826333332 average recall: 0.8119999999999999
+************************************************ 
+ 
+Fri Feb 23 15:31:53 GMT 2018  ***** Job: 0 Gen: 199 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 592 Query:  space nasa 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7017099430229295 recall: 0.5612968592 precision: 0.9358108108
+ClusterQuery: 1 hits: 877 Query:  sin church god christian christ christians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8665955176094757 recall: 0.81444333 precision: 0.9258836944
+ClusterQuery: 2 hits: 614 Query:  game hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7427154370818233 recall: 0.5995995996 precision: 0.9755700326
+TotalHits: 1999 Total Docs:  2983 
+PosHits: 1915 NegHits: 168 PosScore: 8909.804193601012 NegScore: 532.78102453053 Fitness: 3971.729897458479 
+***  TOTALS:   *****   f1list: [0.7017099430229295, 0.8665955176094757, 0.7427154370818233] averagef1: :0.7703402992380761  ** average precision: 0.9457548459333333 average recall: 0.6584465962666667
+************************************************ 
+ 
+Fri Feb 23 15:37:17 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 310 Query:  library research 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6864197530722451 recall: 0.556 precision: 0.8967741935
+ClusterQuery: 1 hits: 148 Query:  heat transfer 
+categoryTotal: 500 for category: category:cran 
+f1: 0.39814814814589233 recall: 0.258 precision: 0.8716216216
+ClusterQuery: 2 hits: 115 Query:  supersonic 
+categoryTotal: 500 for category: category:cran 
+f1: 0.3739837398373984 recall: 0.23 precision: 1.0
+ClusterQuery: 3 hits: 234 Query:  cells patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.6376021798365124 recall: 0.468 precision: 1.0
+TotalHits: 771 Total Docs:  2000 
+PosHits: 736 NegHits: 71 PosScore: 2952.668591737747 NegScore: 234.76807022094727 Fitness: 517.6291843701895 
+***  TOTALS:   *****   f1list: [0.6864197530722451, 0.39814814814589233, 0.3739837398373984, 0.6376021798365124] averagef1: :0.5240384552230121  ** average precision: 0.942098953775 average recall: 0.378
+************************************************ 
+ 
+Fri Feb 23 15:41:37 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 1513 Query:  prayforboston boston highparkfire colorado wildfire 
+categoryTotal: 1000 for category: category:Colorado_w 
+f1: 0.6430561082118669 recall: 0.808 precision: 0.5340383344
+ClusterQuery: 1 hits: 943 Query:  shooting lax laxshooting airport tsa 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.965517241395946 recall: 0.938 precision: 0.9946977731
+ClusterQuery: 2 hits: 932 Query:  qldfloods bigwet floods bostonmarathon australia queensland 
+categoryTotal: 1000 for category: category:Queensland 
+f1: 0.8498964803528362 recall: 0.821 precision: 0.8809012876
+TotalHits: 3350 Total Docs:  4000 
+PosHits: 3318 NegHits: 70 PosScore: 10637.417699575424 NegScore: 210.03525936603546 Fitness: 7867.917421063408 
+***  TOTALS:   *****   f1list: [0.6430561082118669, 0.965517241395946, 0.8498964803528362] averagef1: :0.8194899433202162  ** average precision: 0.8032124650333333 average recall: 0.8556666666666667
+************************************************ 
+ 
+Fri Feb 23 15:45:57 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 592 Query:  space nasa 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7017099430229295 recall: 0.5612968592 precision: 0.9358108108
+ClusterQuery: 1 hits: 890 Query:  god jesus christian sin church christians 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.8701642819046732 recall: 0.8234704112 precision: 0.9224719101
+ClusterQuery: 2 hits: 614 Query:  game hockey 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7427154370818233 recall: 0.5995995996 precision: 0.9755700326
+TotalHits: 2010 Total Docs:  2983 
+PosHits: 1924 NegHits: 172 PosScore: 9015.856517478824 NegScore: 545.5138946324587 Fitness: 4052.149861911687 
+***  TOTALS:   *****   f1list: [0.7017099430229295, 0.8701642819046732, 0.7427154370818233] averagef1: :0.7715298873364754  ** average precision: 0.9446175845 average recall: 0.6614556233333334
+************************************************ 
+ 
+Fri Feb 23 15:53:52 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+ClusterQuery: 0 hits: 456 Query:  supersonic boundary layer flow 
+categoryTotal: 500 for category: category:cran 
+f1: 0.8410041841147878 recall: 0.804 precision: 0.8815789474
+ClusterQuery: 1 hits: 313 Query:  library libraries systems 
+categoryTotal: 500 for category: category:cisi 
+f1: 0.6666666666709287 recall: 0.542 precision: 0.8658146965
+ClusterQuery: 2 hits: 136 Query:  patients 
+categoryTotal: 500 for category: category:med. 
+f1: 0.4276729559748428 recall: 0.272 precision: 1.0
+ClusterQuery: 3 hits: 104 Query:  cells 
+categoryTotal: 500 for category: category:med. 
+f1: 0.3443708609271523 recall: 0.208 precision: 1.0
+TotalHits: 975 Total Docs:  2000 
+PosHits: 941 NegHits: 68 PosScore: 4633.108929872513 NegScore: 206.24800407886505 Fitness: 413.57042989209293 
+***  TOTALS:   *****   f1list: [0.8410041841147878, 0.6666666666709287, 0.4276729559748428, 0.3443708609271523] averagef1: :0.5699286669219279  ** average precision: 0.9368484109749999 average recall: 0.4565
+************************************************ 
+ 
+Fri Feb 23 15:58:08 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 1411 Query:  prayforboston bostonmarathon boston qldfloods bigwet 
+categoryTotal: 1000 for category: category:Boston_bom 
+f1: 0.6486934881998112 recall: 0.782 precision: 0.5542168675
+ClusterQuery: 1 hits: 874 Query:  colorado fire springs wildfire highparkfire 
+categoryTotal: 1000 for category: category:Colorado_w 
+f1: 0.9028815368075918 recall: 0.846 precision: 0.9679633867
+ClusterQuery: 2 hits: 1054 Query:  shooting lax airport los australia floods 
+categoryTotal: 1000 for category: category:LA_airport 
+f1: 0.8422590068399523 recall: 0.865 precision: 0.820683112
+TotalHits: 3287 Total Docs:  4000 
+PosHits: 3253 NegHits: 86 PosScore: 11132.254818677902 NegScore: 258.27783262729645 Fitness: 7843.768740410815 
+***  TOTALS:   *****   f1list: [0.6486934881998112, 0.9028815368075918, 0.8422590068399523] averagef1: :0.7979446772824517  ** average precision: 0.7809544554 average recall: 0.8310000000000001
+************************************************ 
+ 
+Fri Feb 23 16:02:28 GMT 2018  ***** Job: 0 Gen: 399 PopSize: 512 Index: Index: NG3 path: indexes/20NG3SpaceHockeyChristian numberOfCategories: 3   ************************************************************* 
+ClusterQuery: 0 hits: 653 Query:  space nasa henry 
+categoryTotal: 987 for category: category:sci.space 
+f1: 0.7463414634318962 recall: 0.6200607903 precision: 0.9372128637
+ClusterQuery: 1 hits: 870 Query:  sin bible christian christians god faith 
+categoryTotal: 997 for category: category:soc.religion.christian 
+f1: 0.846277450453602 recall: 0.7923771314 precision: 0.908045977
+ClusterQuery: 2 hits: 701 Query:  hockey game games 
+categoryTotal: 999 for category: category:rec.sport.hockey 
+f1: 0.7929411765001588 recall: 0.6746746747 precision: 0.9614835949
+TotalHits: 2126 Total Docs:  2983 
+PosHits: 2028 NegHits: 196 PosScore: 10128.932462513447 NegScore: 657.5496197491884 Fitness: 4984.925669659561 
+***  TOTALS:   *****   f1list: [0.7463414634318962, 0.846277450453602, 0.7929411765001588] averagef1: :0.795186696795219  ** average precision: 0.9355808118666668 average recall: 0.6957041988
+************************************************ 
+ 

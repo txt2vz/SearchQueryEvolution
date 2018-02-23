@@ -17,6 +17,7 @@ class ClusterMainECJ extends Evolve {
 
 	private final int NUMBER_OF_JOBS = 1
 
+	//indexes suitable for clustering.
 	def indexes = [
 		IndexEnum.CLASSIC4,
 		IndexEnum.CRISIS3,
@@ -27,7 +28,7 @@ class ClusterMainECJ extends Evolve {
 		EvolutionState state;
 		ParameterDatabase parameters = null;
 		final Date startRun = new Date();
-		//	IndexInfo.instance.setIndex(IndexEnum.CRISIS3)
+	
 		def f1Totals = []
 		indexes.each { ie ->
 			println "Index Enum ie: $ie"
