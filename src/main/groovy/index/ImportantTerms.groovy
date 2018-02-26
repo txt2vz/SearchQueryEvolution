@@ -46,7 +46,6 @@ public class ImportantTerms {
         //    iw.getF1TermQueryList()
         //  iw.getTFIDFTermQueryList()
         //        iw.getTFIDFTermQueryListForCategory()
-
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
         // iw.getORTermQueryList()
@@ -55,12 +54,39 @@ public class ImportantTerms {
     public ImportantTerms() {
 
         Terms terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
-        //    termsEnum = terms.iterator();
         termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
-        //   termsEnum.
 
         println "Important words terms.getDocCount: ${terms.getDocCount()}"
         println "Important words terms.size ${terms.size()}"
+    }
+
+    public TermQuery[] getImportantTerms() {
+
+        switch (itm) {
+            case itm.F1: return getF1TermQueryList(); break;
+            case itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
+            case itm.IG: return getIGTermQueryList(); break;
+            case itm.OR: return getORTermQueryList(); break;
+            case itm.MERGED: return mergeMethods(); break;
+            default: println "Incorrect selection method in getImportantTerms()";
+        }
+
+        return getF1TermQueryList()
+    }
+
+    //screen terms likely to be ineffective
+    private boolean isUsefulTerm(Term t) {
+        int df = indexReader.docFreq(t)
+        def word = t.text()
+
+        return (
+                df > 2
+                        && !stopSet.contains(word)
+                        && !word.contains("'")
+                        && word.length() > 1
+                        && word.charAt(0).isLetter()
+                //  && !word.contains(".")
+        )
     }
 
     private TermQuery[] mergeMethods() {
@@ -146,35 +172,6 @@ public class ImportantTerms {
 //        println "ORzzzz " +  termQueryList.each {print it.toString(IndexInfo.FIELD_CONTENTS) + " "}
 
         return returnTQ
-    }
-
-    public TermQuery[] getImportantTerms() {
-
-        switch (itm) {
-            case itm.F1: return getF1TermQueryList(); break;
-            case itm.TFIDF: return getTFIDFTermQueryListForCategory(); break;
-            case itm.IG: return getIGTermQueryList(); break;
-            case itm.OR: return getORTermQueryList(); break;
-            case itm.MERGED: return mergeMethods(); break;
-            default: println "Incorrect selection method in getImportantTerms()";
-        }
-
-        return getF1TermQueryList()
-    }
-
-    //screen terms likely to be ineffective
-    private boolean isUsefulTerm(Term t) {
-        int df = indexReader.docFreq(t)
-        def word = t.text()
-
-        return (
-                df > 2
-                        && !stopSet.contains(word)
-                        && !word.contains("'")
-                        && word.length() > 1
-                        && word.charAt(0).isLetter()
-                //  && !word.contains(".")
-        )
     }
 
     /**
