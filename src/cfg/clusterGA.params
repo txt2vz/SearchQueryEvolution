@@ -8,7 +8,7 @@ stat = cluster.ClusterStatisticsECJ
 
 evalthreads = 4 
 breedthreads = 4
-generations = 400
+generations = 10
 
 breed.elite.0 = 1
 

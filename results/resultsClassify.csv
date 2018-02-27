@@ -1,0 +1,10 @@
+Thu Feb 22 14:56:29 GMT 2018 
+Term selector: F1  
+categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query
+C06, 0, 0.720, 0.641, 401, 218, 632, hepatic liver gastric mean bowel abdominal acute biliary 
+C08, 1, 0.783, 0.834, 463, 47, 600, respiratory pneumonia lung pulmonary chest 
+C11, 2, 0.821, 0.813, 143, 7, 202, optic retinal cataract eyes choroidal intraocular ocular eye 
+ 
+Run Number, 1, Micro F1test: , 0.7424,  Macro F1test: , 0.7626, Total Positive Matches , 1007, Total Negative Matches, 272, Total Docs,  1434 
+,, Overall Test Micro F1 , 0.7424, Macro F1, 0.7626 
+ 

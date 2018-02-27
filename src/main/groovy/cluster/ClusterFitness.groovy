@@ -70,9 +70,6 @@ public class ClusterFitness extends SimpleFitness {
 
 			Query q = bqb.build()
 
-			//requires gp parameter to fitness
-			//  gpDummy =  gp && (q.toString(IndexInfo.FIELD_CONTENTS).contains("DummyXX") || q==null || q.toString(IndexInfo.FIELD_CONTENTS) == '' )
-
 			Set<Integer> otherdocIdSet = [] as Set<Integer>
 			List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
 
@@ -146,11 +143,12 @@ public class ClusterFitness extends SimpleFitness {
 		println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
 		println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} PosScr-(NegScr*2): ${posScrMinusNegScrTimes2.round(2)} CoreClstPen: $coreClusterPenalty"
 		println "TotalHits: $totalHits TotalDocs: ${IndexInfo.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount"
+	    println ""
 	}
 
 	// @TypeChecked(TypeCheckingMode.SKIP)
 	void finalQueryStats(int job, int gen, int popSize) {
-		println "xxxxxxxxxxxxxxxxx qmap $queryMap"
+		println "FinalQueryStats qmap $queryMap"
 
 		String messageOut = ""
 		FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)

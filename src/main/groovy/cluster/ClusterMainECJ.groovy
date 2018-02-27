@@ -18,11 +18,12 @@ class ClusterMainECJ extends Evolve {
 	private final int NUMBER_OF_JOBS = 1
 
 	//indexes suitable for clustering.
-	def indexes = [
+	def clusteringIndexes = [
 	//	IndexEnum.CLASSIC4,
 	//	IndexEnum.CRISIS3,
-            IndexEnum.OHS3,
+      //  IndexEnum.OHS3,
 		IndexEnum.NG3
+        //IndexEnum.NG5
 	]
 
 	public ClusterMainECJ() {
@@ -31,7 +32,7 @@ class ClusterMainECJ extends Evolve {
 		final Date startRun = new Date();
 	
 		def f1Totals = []
-		indexes.each { ie ->
+		clusteringIndexes.each { ie ->
 			println "Index Enum ie: $ie"
 			IndexInfo.instance.setIndex(ie)
 
@@ -67,8 +68,9 @@ class ClusterMainECJ extends Evolve {
 			}
 		}
 		final Date endRun = new Date();
-		def time = endRun.getTime() - startRun.getTime();
-		println "Total time taken: $time"
+		int time = endRun.getTime() - startRun.getTime();
+		println "Total time taken: $time " + new Date(time).format("'T'HH:mm:ss.SSS")
+
 		println "F1 list $f1Totals"
 		println " F1 Average " +  f1Totals.sum() / f1Totals.size()
 
