@@ -28,7 +28,7 @@ class IndexCrisisClusterFromCSV {
 
 	// Create Lucene index in this directory
 	Path indexPath = Paths.get('indexes/crisis3FireBombFlood')
-	Path docsPath = Paths.get('Datasets/crisisData')
+	Path docsPath = Paths.get('Datasets/crisisData3')
 	Directory directory = FSDirectory.open(indexPath)
 	Analyzer analyzer = //new EnglishAnalyzer();  //with stemming
 	              new StandardAnalyzer();
@@ -41,8 +41,8 @@ class IndexCrisisClusterFromCSV {
 
 	def buildIndex() {
 		IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
-		Similarity tfidf = new ClassicSimilarity()
-		iwc.setSimilarity(tfidf)
+		//Similarity tfidf = new ClassicSimilarity()
+		//iwc.setSimilarity(tfidf)
 
 		// Create a new index in the directory, removing any
 		// previously indexed documents:
@@ -76,13 +76,13 @@ class IndexCrisisClusterFromCSV {
 					Field catNameField = new StringField(IndexInfo.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
 					doc.add(catNameField)
 
-					Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
-					doc.add(catNumberField)
+				//	Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
+				//	doc.add(catNumberField)
 
-					String test_train
-					if (n%2==0) test_train = 'test' else test_train = 'train'
-					Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
-					doc.add(ttField)
+//					String test_train
+//					if (n%2==0) test_train = 'test' else test_train = 'train'
+//					Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
+//					doc.add(ttField)
 
 					writer.addDocument(doc);
 

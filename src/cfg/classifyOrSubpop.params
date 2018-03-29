@@ -20,7 +20,7 @@ stat.file = statDump/out.stat
 select.tournament.size = 5
 #breed.elite.0 = 2
 
-pop.subpops = 2
+pop.subpops = 3
 pop.default-subpop =0
 
 pop.subpop.0 = ec.Subpopulation
@@ -71,12 +71,31 @@ pop.subpop.1.species.pipe.source.0 = ec.vector.breed.VectorCrossoverPipeline
 pop.subpop.1.species.pipe.source.0.source.0	= ec.select.TournamentSelection
 pop.subpop.1.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
+
+pop.subpop.2.species = ec.vector.IntegerVectorSpecies
+pop.subpop.2.species.ind = ec.vector.IntegerVectorIndividual
+pop.subpop.2.species.fitness = classify.ClassifyFit
+
+pop.subpop.2.species.min-gene = -1
+pop.subpop.2.species.max-gene = 20
+pop.subpop.2.species.genome-size = 4
+pop.subpop.2.species.crossover-type	= one
+pop.subpop.2.species.crossover-likelihood	= 0.8
+pop.subpop.2.species.mutation-prob	= 0.1
+pop.subpop.2.species.mutation-type = reset
+
+pop.subpop.2.species.pipe = ec.vector.breed.VectorMutationPipeline
+pop.subpop.2.species.pipe.source.0 = ec.vector.breed.VectorCrossoverPipeline
+pop.subpop.2.species.pipe.source.0.source.0	= ec.select.TournamentSelection
+pop.subpop.2.species.pipe.source.0.source.1	= ec.select.TournamentSelection
+
+
 exch = ec.exchange.InterPopulationExchange
 
 exch.subpop.0.select = ec.select.TournamentSelection
 exch.subpop.0.select.size =3
 exch.subpop.0.mod = 30
-exch.subpop.0.start = 44
+exch.subpop.0.start = 40
 exch.subpop.0.size = 3
 exch.subpop.0.num-dest = 1
 exch.subpop.0.dest.0 = 1
@@ -84,10 +103,16 @@ exch.subpop.0.dest.0 = 1
 exch.subpop.1.select = ec.select.TournamentSelection
 exch.subpop.1.select.size=3
 exch.subpop.1.mod = 30
-exch.subpop.1.start = 48
+exch.subpop.1.start = 40
 exch.subpop.1.size = 3
 exch.subpop.1.num-dest = 1
-exch.subpop.1.dest.0 = 0
+exch.subpop.1.dest.0 = 2
 
-
+exch.subpop.2.select = ec.select.TournamentSelection
+exch.subpop.2.select.size=3
+exch.subpop.2.mod = 30
+exch.subpop.2.start = 70
+exch.subpop.2.size = 3
+exch.subpop.2.num-dest = 1
+exch.subpop.2.dest.0 = 0
 

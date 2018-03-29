@@ -44,6 +44,7 @@ public class ClusterMainJenetics {
 
         final int popSize = 512;
         final long maxGen = 210;
+        JobReport finalReport = new JobReport();
 
         final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
@@ -67,7 +68,7 @@ public class ClusterMainJenetics {
         Genotype<IntegerGene> g = result.getGenotype();
         ClusterFitness cfResult = cf(g);
         System.out.println("cluster fit result " + cfResult.queryShort());
-        cfResult.finalQueryStats(job, (int) result.getGeneration(), popSize);
+        finalReport.queriesReport(job, (int) result.getGeneration(), popSize, cfResult);
         System.out.println();
     }
 }

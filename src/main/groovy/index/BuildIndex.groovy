@@ -23,7 +23,7 @@ import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
 enum IndexName {
-    R10, NG20, OHS
+    R10, NG20, OHS,NG5
 }
 
 class BuildIndex {
@@ -34,7 +34,7 @@ class BuildIndex {
 
     BuildIndex() {
 
-        IndexName iName = IndexName.OHS
+        IndexName iName = IndexName.NG5
 
         final String ohsIndexPath = 'indexes/Ohsc06MuscC08RespC11Eye'
         final String ohsDocsPath =/C:\Users\aceslh\Dataset\Ohsc06MuscC08RespC11Eye/
@@ -42,27 +42,27 @@ class BuildIndex {
         final String r10DocsPath =  /C:\Users\Laurie\Dataset\R8/
         // /C:\Users\Laurie\Dataset\reuters-top10/
 
-        final String NG20DocsPath =
-               /C:\Users\Laurie\Dataset\20NG5WindowsMotorcyclesSpaceMedMideast/
-       //        /C:\Users\Laurie\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
+        final String NGDocsPath =
+         //      /C:\Users\Laurie\Dataset\20NG5WindowsMotorcyclesSpaceMedMideast/
+               /C:\Users\aceslh\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
      //   /C:\Users\Laurie\Dataset\20NG3SpaceHockeyChristian/
                //   /C:\Users\Laurie\Dataset\20bydate/
         final String r10IndexPath = 'indexes/R8'//'indexes/R10'
    //     final String NG20IndexPath = 'indexes/NG20SpaceHockeyChristianV7'
-        final String NG20IndexPath =
+        final String NGIndexPath =
                 //'indexes/20NG'
-        //        'indexes/20NG5WindowsForsaleSpaceHockeyChristian'
+                'indexes/20NG5WindowsForsaleSpaceHockeyChristian'
         //        'indexes/20NG3SpaceHockeyChristian'
-                'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
+          //      'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
 
         String docsPath, indexPath
 
         if (iName == IndexName.R10) {
             docsPath = r10DocsPath
             indexPath = r10IndexPath
-        } else if (iName == IndexName.NG20) {
-            docsPath = NG20DocsPath
-            indexPath = NG20IndexPath
+        } else if (iName == IndexName.NG5) {
+            docsPath = NGDocsPath
+            indexPath = NGIndexPath
         }
         else if (iName==IndexName.OHS){
             docsPath = ohsDocsPath
@@ -77,7 +77,7 @@ class BuildIndex {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
 
 //store doc counts for each category
-        def catsFreq = [:]
+        def catsNameFreq = [:]
 
 // Create a new index in the directory, removing any
 // previously indexed documents:
@@ -88,13 +88,15 @@ class BuildIndex {
         println("Indexing to directory: $indexPath  from: $docsPath ...")
 
         def categoryNumber = -1
+
         new File(docsPath).eachDir {
             if (iName == IndexName.R10) categoryNumber++
             else categoryNumber = -1  //reset for 20NG for test and train directories
 
+            int docCount=0
             it.eachFileRecurse { file ->
                 if (iName != IndexName.R10 && file.isDirectory()) categoryNumber++
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory()) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount <100) // && categoryNumber <3)
 
                 {
                     def doc = new Document()
@@ -129,10 +131,13 @@ class BuildIndex {
 
                     doc.add(new TextField(IndexInfo.FIELD_CONTENTS, file.text, Field.Store.YES))
 
-                    def n = catsFreq.get((catName)) ?: 0
-                    catsFreq.put((catName), n + 1)
+                    def n = catsNameFreq.get((catName)) ?: 0
+                    catsNameFreq.put((catName), n + 1)
+
+
                     writer.addDocument(doc)
                 }
+                docCount++
             }
         }
         println "Total docs: " + writer.maxDoc()
@@ -154,7 +159,8 @@ class BuildIndex {
         Date end = new Date();
         println(end.getTime() - start.getTime() + " total milliseconds");
         println "testTotal $testTotal trainTotal $trainTotal"
-        println "catsFreq $catsFreq"
+        println "catsNameFreq $catsNameFreq"
+
 
         println "End ***************************************************************"
     }

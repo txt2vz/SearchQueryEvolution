@@ -10,73 +10,67 @@ import index.IndexInfo
 //@groovy.transform.TypeChecked
 class ClusterMainECJ extends Evolve {
 
-	private final String parameterFilePath =
+    private final String parameterFilePath =
+            'src/cfg/clusterGA.params'
 
-	// 'src/cfg/clusterGP.params'
-	'src/cfg/clusterGA.params'
+    private final int NUMBER_OF_JOBS = 3
 
-	private final int NUMBER_OF_JOBS = 1
+    //indexes suitable for clustering.
+    def clusteringIndexes = [
+            IndexEnum.NG5,
+            IndexEnum.CLASSIC4,
+            IndexEnum.CRISIS3
+            //     IndexEnum.OHS3
+            //IndexEnum.NG3
+    ]
 
-	//indexes suitable for clustering.
-	def clusteringIndexes = [
-	//	IndexEnum.CLASSIC4,
-	//	IndexEnum.CRISIS3,
-      //  IndexEnum.OHS3,
-		IndexEnum.NG3
-        //IndexEnum.NG5
-	]
+    public ClusterMainECJ() {
 
-	public ClusterMainECJ() {
-		EvolutionState state;
-		ParameterDatabase parameters = null;
-		final Date startRun = new Date();
-	
-		def f1Totals = []
-		clusteringIndexes.each { ie ->
-			println "Index Enum ie: $ie"
-			IndexInfo.instance.setIndex(ie)
+        final Date startRun = new Date()
+        def jobReport = new JobReport()
 
-			NUMBER_OF_JOBS.times { job ->
-				parameters = new ParameterDatabase(new File(parameterFilePath));
+        clusteringIndexes.each { ie ->
+            EvolutionState state;
+            ParameterDatabase parameters = null;
+            println "Index Enum ie: $ie"
+            IndexInfo.instance.setIndex(ie)
 
-				state = initialize(parameters, job)
-				state.output.systemMessage("Job: " + job);
-				state.job = new Object[1];
-				state.job[0] = new Integer(job);
+            NUMBER_OF_JOBS.times { job ->
+                parameters = new ParameterDatabase(new File(parameterFilePath));
 
-				if (NUMBER_OF_JOBS >= 1) {
-					final String jobFilePrefix = "job." + job;
-					state.output.setFilePrefix(jobFilePrefix);
-					state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
-				}
-				state.run(EvolutionState.C_STARTED_FRESH);
+                state = initialize(parameters, job)
+                state.output.systemMessage("Job: " + job);
+                state.job = new Object[1];
+                state.job[0] = new Integer(job);
 
-				int popSize = 0;
-				ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
-					popSize = popSize + sbp.individuals.size()
-					sbp.individuals.max() { ind ->
-						ind.fitness.fitness()
-					}.fitness
-				}.max { it.fitness() }
-				println "Population size: $popSize"
-				cfit.finalQueryStats(job, state.generation as int, popSize as int)
+                if (NUMBER_OF_JOBS >= 1) {
+                    final String jobFilePrefix = "job." + job;
+                    state.output.setFilePrefix(jobFilePrefix);
+                    state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                }
+                state.run(EvolutionState.C_STARTED_FRESH);
 
-				f1Totals << cfit.averageF1
+                int popSize = 0;
+                ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
+                    popSize = popSize + sbp.individuals.size()
+                    sbp.individuals.max() { ind ->
+                        ind.fitness.fitness()
+                    }.fitness
+                }.max { it.fitness() }
 
-				cleanup(state);
-				println ' ---------------------------------END-----------------------------------------------'
-			}
-		}
-		final Date endRun = new Date();
-		int time = endRun.getTime() - startRun.getTime();
-		println "Total time taken: $time " + new Date(time).format("'T'HH:mm:ss.SSS")
+                jobReport.queriesReport(job, state.generation as int, popSize as int, cfit)
 
-		println "F1 list $f1Totals"
-		println " F1 Average " +  f1Totals.sum() / f1Totals.size()
+                cleanup(state);
+                println ' ---------------------------------END-----------------------------------------------'
+            }
+        }
+        final Date endRun = new Date();
+        long time = endRun.getTime() - startRun.getTime();
+        jobReport.writeOverallToFile()
+        println "Total time taken: $time " + new Date(time).format("'T'HH:mm:ss.SSS")
+    }
 
-	}
-
-	static main(args) {
-		new ClusterMainECJ()
-	}
+    static main(args) {
+        new ClusterMainECJ()
+    }
 }

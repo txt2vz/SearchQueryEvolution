@@ -6,6 +6,7 @@ import org.apache.lucene.index.IndexReader
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.*
 import org.apache.lucene.search.similarities.BM25Similarity
+import org.apache.lucene.search.similarities.ClassicSimilarity
 import org.apache.lucene.search.similarities.Similarity
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
@@ -23,12 +24,13 @@ enum IndexEnum {
     R8('indexes/R8', 8),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
-    NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
+    //NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
+    NG5('indexes/20NG5WindowsForsaleSpaceHockeyChristian', 5),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
     CLASSIC4('indexes/classic4_500', 4)
 
     private final Similarity similarity = new BM25Similarity()
-                              // new ClassicSimilarity()
+                             //  new ClassicSimilarity()
     String pathString;
     int numberOfCategories
 

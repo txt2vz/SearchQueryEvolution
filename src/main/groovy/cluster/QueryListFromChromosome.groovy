@@ -33,6 +33,30 @@ class QueryListFromChromosome {
         return bqbL
     }
 
+    static List<BooleanQuery.Builder> getORQueryListNot(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
+        //list of boolean queries
+        List<BooleanQuery.Builder> bqbL = []
+
+        // set of genes - for duplicate checking
+        Set <Integer> genes = [] as Set
+
+        intArray.eachWithIndex { int gene, int index ->
+            int clusterNumber = index % numberOfClusters
+            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+            }
+        }
+
+        bqbL.eachWithIndex { BooleanQuery.Builder bqb, index ->
+
+
+        }
+
+        return bqbL
+    }
+
     @TypeChecked(TypeCheckingMode.SKIP)
     public List getSpanFirstQL(IntegerVectorIndividual intVectorIndividual) {
 
