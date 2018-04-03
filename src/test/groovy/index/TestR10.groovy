@@ -22,7 +22,7 @@
          def categoryNumber= '7'
 
          setup:
-         TermQuery catQ 	= new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NUMBER,
+         TermQuery catQ 	= new TermQuery(new Term(Indexes.FIELD_CATEGORY_NUMBER,
                  categoryNumber))
 
          when:
@@ -35,15 +35,15 @@
          }
 
          then:
-         d.get(IndexInfo.FIELD_CATEGORY_NAME)== 'ship'
+         d.get(Indexes.FIELD_CATEGORY_NAME)== 'ship'
      }
 
      def 'total r10 docs in category'() {
          setup:
 
-         final TermQuery catQgrain = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME, 'grain'))
-         final TermQuery catQcrudeName = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME, 'crude'))
-         final TermQuery catQcrudeNumber = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NUMBER, '2'))
+         final TermQuery catQgrain = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME, 'grain'))
+         final TermQuery catQcrudeName = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME, 'crude'))
+         final TermQuery catQcrudeNumber = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NUMBER, '2'))
 
          when:
          TotalHitCountCollector thcollector  = new TotalHitCountCollector();
@@ -71,10 +71,10 @@
          setup:
 
          TotalHitCountCollector trainCollector  = new TotalHitCountCollector();
-         final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN,	"train"))
+         final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,	"train"))
 
          TotalHitCountCollector testCollector  = new TotalHitCountCollector();
-         final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN,	"test"))
+         final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,	"test"))
 
          when:
          isearcher.search(trainQ, trainCollector);

@@ -10,7 +10,7 @@ import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
 import index.ImportantTerms
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -34,9 +34,9 @@ public class AND_ORG extends Problem implements SimpleProblemForm {
 
 		super.setup(state, base);
 
-		println("Total docs for cat  " + IndexInfo.instance.categoryNumber + " "
-				+ IndexInfo.instance.totalTrainDocsInCat + " Total test docs for cat "
-				+ IndexInfo.instance.totalTestDocsInCat);
+		println("Total docs for cat  " + Indexes.instance.categoryNumber + " "
+				+ Indexes.instance.totalTrainDocsInCat + " Total test docs for cat "
+				+ Indexes.instance.totalTestDocsInCat);
 
 		ImportantTerms iw = new ImportantTerms();
 		//	wordArray = iw.getFreqWordList()
@@ -72,8 +72,8 @@ public class AND_ORG extends Problem implements SimpleProblemForm {
 			String word1 = wordArray[wordInd1];
 
 			BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
-			subbqb.add(new TermQuery(new Term(IndexInfo.FIELD_CONTENTS, word0)), BooleanClause.Occur.MUST);
-			subbqb.add(new TermQuery(new Term(IndexInfo.FIELD_CONTENTS, word1)), BooleanClause.Occur.MUST);
+			subbqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, word0)), BooleanClause.Occur.MUST);
+			subbqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, word1)), BooleanClause.Occur.MUST);
 
 			BooleanQuery subq = subbqb.build();
 			bqb.add(subq, BooleanClause.Occur.SHOULD);
@@ -82,11 +82,11 @@ public class AND_ORG extends Problem implements SimpleProblemForm {
 
 		query = bqb.build();
 
-		IndexSearcher searcher = IndexInfo.instance.indexSearcher;
+		IndexSearcher searcher = Indexes.instance.indexSearcher;
 		int    positiveMatch = getPositiveMatch(searcher, query)
 		int negativeMatch = getNegativeMatch(searcher,query)
 
-		def F1train = Effectiveness.f1(positiveMatch, negativeMatch, IndexInfo.instance.totalTrainDocsInCat);
+		def F1train = Effectiveness.f1(positiveMatch, negativeMatch, Indexes.instance.totalTrainDocsInCat);
 
 		fitness.setTrainValues(positiveMatch, negativeMatch);
 		fitness.setF1Train(F1train);

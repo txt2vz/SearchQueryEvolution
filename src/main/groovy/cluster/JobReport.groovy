@@ -1,8 +1,10 @@
 package cluster
 
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
+import org.apache.lucene.search.BooleanClause
+import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
@@ -10,50 +12,46 @@ import org.apache.lucene.search.TopScoreDocCollector
 import org.apache.lucene.search.TotalHitCountCollector
 
 class JobReport {
-    def finalReportF1List =[]
-    double averageF1forJob
+    def resultsF1 =[:]
 
-    void updateF1list(){
-        finalReportF1List<< averageF1forJob
-    }
-
-    private writeOverallToFile(){
-        boolean appnd = true
+    static boolean appnd = true
+    void writeOverallToFile(){
+        appnd = true
         FileWriter fw = new FileWriter("results/overallResultsCluster.txt", appnd)
 
-        double overallAverage = finalReportF1List.sum()/finalReportF1List.size()
+        double overallAverage = resultsF1.values().sum()/resultsF1.size()
         println "Overal Avearge:  ${overallAverage.round(3)}"
-        fw << "Overall Average: ${overallAverage.round(3)}  ${new Date()} F1 List: $finalReportF1List \n"
-        fw.flush()
+        fw << "Overall Average: ${overallAverage.round(3)}  ${new Date()} resultsF1: $resultsF1 \n"
+
         fw.close()
     }
 
-    // @TypeChecked(TypeCheckingMode.SKIP)
     void queriesReport(int job, int gen, int popSize, ClusterFitness cfit)  {
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        int hitsPerPage = IndexInfo.indexReader.maxDoc()
+        int hitsPerPage = Indexes.indexReader.maxDoc()
 
         String messageOut = ""
         FileWriter resultsOut = new FileWriter("results/clusterResultsF1.txt", true)
-        resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Index: ${IndexInfo.indexEnum}  ************************************************************* \n"
+        resultsOut << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
         List<Double> f1list = [], precisionList = [], recallList = []
+
         cfit.queryMap.keySet().eachWithIndex { q, index ->
 
             TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
-            IndexInfo.indexSearcher.search(q, collector);
+            Indexes.indexSearcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            String qString = q.toString(IndexInfo.FIELD_CONTENTS)
+            String qString = q.toString(Indexes.FIELD_CONTENTS)
 
             println "***********************************************************************************"
 
             //map of categories (ground truth) and their frequencies
-            Map<String, Integer> catsFreq = new HashMap<String, Integer>() //[:]
+            Map<String, Integer> catsFreq = new HashMap<String, Integer>()
             hits.eachWithIndex { ScoreDoc h, int i ->
                 int docId = h.doc;
-                Document d = IndexInfo.indexSearcher.doc(docId);
-                String catName = d.get(IndexInfo.FIELD_CATEGORY_NAME)
+                Document d = Indexes.indexSearcher.doc(docId);
+                String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
                 int n = catsFreq.get((catName)) ?: 0
                 catsFreq.put((catName), n + 1)
             }
@@ -66,9 +64,9 @@ class JobReport {
 
             if (catMax != null) {
                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
-                TermQuery catQ = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME,
+                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                         catMax.key));
-                IndexInfo.indexSearcher.search(catQ, totalHitCollector);
+                Indexes.indexSearcher.search(catQ, totalHitCollector);
                 int categoryTotal = totalHitCollector.getTotalHits();
 
                 double recall = catMax.value / categoryTotal;
@@ -84,30 +82,30 @@ class JobReport {
             }
         }
 
-        averageF1forJob = (f1list) ? (double) f1list.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
-        final double averageRecall = (recallList) ? (double) recallList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
-        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / IndexInfo.NUMBER_OF_CLUSTERS : 0
+        double averageF1forJob = (f1list) ? (double) f1list.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
+        final double averageRecall = (recallList) ? (double) recallList.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
+        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
         messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
-        resultsOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${IndexInfo.indexReader.maxDoc()} "
+        resultsOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
         resultsOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness()} \n"
         resultsOut << messageOut + "\n"
         resultsOut << "************************************************ \n \n"
-
-        resultsOut.flush()
         resultsOut.close()
 
-        boolean appnd = true //job > 0
-        FileWriter fcsv = new FileWriter("results/resultsCluster.csv", appnd)
+        //job > 0
+        FileWriter fcsv = new FileWriter("results/resultsClusterByJob.csv", appnd)
         if (!appnd) {
-            final String fileHead = "gen, job, popSize, baseFitness, aveargeF1, averagePrecision, averageRecall, query, date, indexPath" + '\n';
+            //final String fileHead = "gen, job, popSize, baseFitness, aveargeF1, averagePrecision, averageRecall, date, indexName" + '\n';
+            final String fileHead = "aveargeF1, averagePrecision, averageRecall, fitness, indexName , date, gen, job, popSize" + '\n';
             fcsv << fileHead
         }
-        fcsv << "$gen , $job , $popSize , ${cfit.getFitness()} , ${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${cfit.queryShort()}, ${new Date()}, ${IndexInfo.indexEnum.getPathString()} \n"
-        fcsv.flush()
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${cfit.getFitness()}, ${Indexes.indexEnum.name()},  ${new Date()},  $gen , $job , $popSize \n"
         fcsv.close()
+        appnd = true
 
-        updateF1list()
+        String jobAndIndex = "J" + job + "_" + Indexes.indexEnum.name()
+        resultsF1 << [(jobAndIndex): averageF1forJob]
     }
 }

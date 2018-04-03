@@ -1,26 +1,24 @@
 package cluster
 
 import ec.vector.IntegerVectorIndividual
+import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
 import groovy.transform.TypeCheckingMode
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.*
 import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
-@groovy.transform.CompileStatic
-@groovy.transform.TypeChecked
+@CompileStatic
 class QueryListFromChromosome {
-
-//    private IndexSearcher searcher = IndexInfo.indexSearcher
 
     static List<BooleanQuery.Builder> getORQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
-        Set <Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set
 
         intArray.eachWithIndex { int gene, int index ->
             int clusterNumber = index % numberOfClusters
@@ -38,7 +36,7 @@ class QueryListFromChromosome {
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
-        Set <Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set
 
         intArray.eachWithIndex { int gene, int index ->
             int clusterNumber = index % numberOfClusters
@@ -49,11 +47,22 @@ class QueryListFromChromosome {
             }
         }
 
-        bqbL.eachWithIndex { BooleanQuery.Builder bqb, index ->
+        BooleanQuery qNot
+        bqbL.eachWithIndex { BooleanQuery.Builder bqb, int index ->
 
-
+            if (index == 0) {
+                qNot = bqb.build()
+            } else
+            {
+                BooleanQuery qn0 = bqb.build()
+                def x = qNot.clauses()
+                for (y in x){
+                    bqb.add (y.getQuery(), BooleanClause.Occur.MUST_NOT )
+                }
+             //   bqb.add(qNot, BooleanClause.Occur.MUST_NOT)
+                qNot = qn0
+            }
         }
-
         return bqbL
     }
 
@@ -71,7 +80,7 @@ class QueryListFromChromosome {
 
         for (int i = 0; i < (intVectorIndividual.genome.length - 1); i = i + 2) {
 
-            int clusterNumber = qNumber % IndexInfo.NUMBER_OF_CLUSTERS
+            int clusterNumber = qNumber % Indexes.NUMBER_OF_CLUSTERS
             qNumber++
             bqbList[clusterNumber] = bqbList[clusterNumber] ?: new BooleanQuery.Builder()
 
@@ -108,11 +117,11 @@ class QueryListFromChromosome {
         int clusterNumber = -1
 
         intVectorIndividual.genome.eachWithIndex { gene, index ->
-            def z = index % IndexInfo.NUMBER_OF_CLUSTERS
+            def z = index % Indexes.NUMBER_OF_CLUSTERS
             if (z == 0) clusterNumber++
             //int clusterNumber =  0//index % IndexInfo.NUMBER_OF_CLUSTERS
 
-            assert clusterNumber < IndexInfo.NUMBER_OF_CLUSTERS
+            assert clusterNumber < Indexes.NUMBER_OF_CLUSTERS
 
             bqbList[clusterNumber] = bqbList[clusterNumber] ?: new BooleanQuery.Builder()
 
@@ -147,7 +156,7 @@ class QueryListFromChromosome {
 
         intVectorIndividual.genome.eachWithIndex { gene, index ->
 
-            int clusterNumber = index % IndexInfo.NUMBER_OF_CLUSTERS
+            int clusterNumber = index % Indexes.NUMBER_OF_CLUSTERS
             //String wrd = termArray[gene]
             bqbList[clusterNumber] = bqbList[clusterNumber] ?: new BooleanQuery.Builder()
 
@@ -155,7 +164,7 @@ class QueryListFromChromosome {
 
                 TermQuery tq = new TermQuery(termArray[gene])
 
-                if (index >= (intVectorIndividual.genome.size() - IndexInfo.NUMBER_OF_CLUSTERS)) {
+                if (index >= (intVectorIndividual.genome.size() - Indexes.NUMBER_OF_CLUSTERS)) {
                     bqbList[clusterNumber].add(tq, BooleanClause.Occur.MUST_NOT)
                 } else {
                     bqbList[clusterNumber].add(tq, BooleanClause.Occur.SHOULD)
@@ -182,7 +191,7 @@ class QueryListFromChromosome {
         //println "in allNot $allQ"
 
         intVectorIndividual.genome.eachWithIndex { gene, index ->
-            int clusterNumber = index % IndexInfo.NUMBER_OF_CLUSTERS
+            int clusterNumber = index % Indexes.NUMBER_OF_CLUSTERS
             if (bqbL[clusterNumber] == null) {
                 bqbL[clusterNumber] = new BooleanQuery.Builder()
                 bqbL[clusterNumber].add(allQ, BooleanClause.Occur.SHOULD)
@@ -191,7 +200,7 @@ class QueryListFromChromosome {
             if (gene < termArray.size() && gene >= 0 && genes.add(gene)) {
 
                 String word = termArray[gene]
-                TermQuery tq = new TermQuery(new Term(IndexInfo.FIELD_CONTENTS, word))
+                TermQuery tq = new TermQuery(new Term(Indexes.FIELD_CONTENTS, word))
                 bqbL[clusterNumber].add(tq, BooleanClause.Occur.MUST_NOT)
             }
         }
@@ -227,7 +236,7 @@ class QueryListFromChromosome {
             } else {
                 term1 = termArray[gene]
 
-                int clusterNumber = qNumber % IndexInfo.NUMBER_OF_CLUSTERS
+                int clusterNumber = qNumber % Indexes.NUMBER_OF_CLUSTERS
                 qNumber++
 
                 def wrds = [term0, term1] as Set

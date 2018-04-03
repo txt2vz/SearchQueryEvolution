@@ -4,7 +4,7 @@
  import ec.Evolve
  import ec.util.ParameterDatabase
  import index.IndexEnum
- import index.IndexInfo
+ import index.Indexes
 
  class GAmainClassify extends Evolve {
 
@@ -17,7 +17,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         IndexInfo.instance.setIndex(IndexEnum.OHS3)
+         Indexes.instance.setIndex(IndexEnum.OHS3)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
@@ -33,10 +33,10 @@
 
              double sumF1test = 0;
 
-             IndexInfo.NUMBER_OF_CATEGORIES.times{ categoryNumber ->
+             Indexes.NUMBER_OF_CATEGORIES.times{ categoryNumber ->
 
-                 IndexInfo.instance.setCategoryNumber(String.valueOf(categoryNumber))
-                 IndexInfo.instance.setIndexFieldsAndTotals()
+                 Indexes.instance.setCategoryNumber(String.valueOf(categoryNumber))
+                 Indexes.instance.setIndexFieldsAndTotals()
 
                  state = initialize(parameters, job);
 
@@ -66,16 +66,16 @@
 
                  totPosMatchedTest += cfit.positiveMatchTest
                  totNegMatchTest += cfit.negativeMatchTest
-                 totTest += IndexInfo.instance.totalTestDocsInCat;
+                 totTest += Indexes.instance.totalTestDocsInCat;
 
                  println "cfit.getQueryMinimal: ${cfit.getQueryMinimal()}"
 
                  bestResultsOut.format(
                          "%s, %d, %.3f, %.3f, %d, %d, %d, %s \n",
-                         IndexInfo.instance.getCategoryName(), categoryNumber, trainF1, testF1,
+                         Indexes.instance.getCategoryName(), categoryNumber, trainF1, testF1,
                          cfit.positiveMatchTest,
                          cfit.negativeMatchTest,
-                         IndexInfo.instance.totalTestDocsInCat,
+                         Indexes.instance.totalTestDocsInCat,
                          cfit.getQueryString() )
                  bestResultsOut.flush();
                  println "Test F1 for cat $categoryNumber : $testF1 *******************************"
@@ -85,7 +85,7 @@
              final double microF1test = Effectiveness.f1(totPosMatchedTest,
                      totNegMatchTest, totTest);
 
-             final double macroF1test = sumF1test / IndexInfo.NUMBER_OF_CATEGORIES;
+             final double macroF1test = sumF1test / Indexes.NUMBER_OF_CATEGORIES;
              println "OVERALL test: micro f1: $microF1test  macroF1: $macroF1test "
 
              bestResultsOut.format(" \n");
@@ -103,7 +103,7 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println  "${index.ImportantTerms.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${IndexInfo.indexEnum.toString()}"
+			 println  "${index.ImportantTerms.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

@@ -2,9 +2,9 @@ package cluster
 
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
+import groovy.transform.CompileStatic
 
-@groovy.transform.CompileStatic
-@groovy.transform.TypeChecked
+@CompileStatic
 public class ClusterStatisticsECJ extends SimpleStatistics {
 
     public void finalStatistics(final EvolutionState state, final int result) {

@@ -1,7 +1,7 @@
 package classify
 
 import groovy.json.JsonBuilder
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.search.Query
 
 import java.util.regex.Pattern
@@ -35,7 +35,7 @@ class QueryReadable {
 	public static String getQueryMinimal(Query query) {
 
 		final String queryWithoutComma = query.toString(
-				IndexInfo.FIELD_CONTENTS).replaceAll(", ", "#~");
+				Indexes.FIELD_CONTENTS).replaceAll(", ", "#~");
 
 		boolean spanF = queryWithoutComma.contains("spanFirst");
 		boolean spanN = queryWithoutComma.contains("spanNear")

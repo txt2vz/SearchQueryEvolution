@@ -1,5 +1,7 @@
 package index
 
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
@@ -14,14 +16,14 @@ import org.apache.lucene.store.FSDirectory
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@groovy.transform.TypeChecked
-@groovy.transform.CompileStatic
 
+@CompileStatic
 enum IndexEnum {
 
     NG20('indexes/20NG', 20),
     R10('indexes/R10', 10),
     R8('indexes/R8', 8),
+    R6('indexes/R6', 6),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
     //NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
@@ -29,8 +31,8 @@ enum IndexEnum {
     CRISIS3('indexes/crisis3FireBombFlood', 3),
     CLASSIC4('indexes/classic4_500', 4)
 
-    private final Similarity similarity = new BM25Similarity()
-                             //  new ClassicSimilarity()
+   // private final Similarity similarity = new BM25Similarity()
+                              // new ClassicSimilarity()
     String pathString;
     int numberOfCategories
 
@@ -48,13 +50,14 @@ enum IndexEnum {
         Directory directory = FSDirectory.open(path)
         IndexReader ir = DirectoryReader.open(directory)
         IndexSearcher is = new IndexSearcher(ir)
-        is.setSimilarity(similarity)
+    //    is.setSimilarity(similarity)
         return is
     }
 }
 
+@CompileStatic
 @Singleton
-class IndexInfo {
+class Indexes {
     static IndexEnum indexEnum //= IndexEnum.R8
 
     // Lucene field names
@@ -170,6 +173,6 @@ class IndexInfo {
         indexSearcher.search(testQ, collector);
         totalTestDocs = collector.getTotalHits();
 
-        println "IndexInfo:- CategoryNumber: $categoryNumber Total train in cat: $totalTrainDocsInCat  Total others tain: $totalOthersTrainDocs   Total test in cat : $totalTestDocsInCat  "
+        println "Indexes:- CategoryNumber: $categoryNumber Total train in cat: $totalTrainDocsInCat  Total others tain: $totalOthersTrainDocs   Total test in cat : $totalTestDocsInCat  "
     }
 }

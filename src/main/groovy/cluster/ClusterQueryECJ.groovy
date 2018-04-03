@@ -7,8 +7,9 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
+import groovy.transform.CompileStatic
 import index.ImportantTerms
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
@@ -16,25 +17,25 @@ import org.apache.lucene.search.TermQuery
 /**
  * To generate sets of queries for clustering
  */
-
+@CompileStatic
 enum QueryType {
     OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP
 }
 
-@groovy.transform.CompileStatic
-@groovy.transform.TypeChecked
+@CompileStatic
 public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
-    private IndexSearcher searcher = IndexInfo.indexSearcher
+    private IndexSearcher searcher = Indexes.indexSearcher
     private TermQuery[] termQueryArray
 
 
-    final QueryType queryType = QueryType.OR
+    final QueryType queryType = QueryType.OR//
+                            //   QueryType.ORNOT
 
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
-        println "Total docs for ClusterQueryECJ.groovy   " + IndexInfo.indexReader.maxDoc()
+        println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
         termQueryArray = new ImportantTerms().getTFIDFTermQueryList()
     }
 
@@ -53,15 +54,15 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, IndexInfo.NUMBER_OF_CLUSTERS)
+                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 break;
         //@TypeChecked(TypeCheckingMode.SKIP)
 //			case QueryType.AND :
 //				(bqbList, duplicateCount, lowSubqHits) = queryListFromChromosome.getANDQL(intVectorIndividual)
 //				break;
-//			case QueryType.ORNOT :
-//				(bqbList, duplicateCount) = queryListFromChromosome.getORNOTQL(intVectorIndividual)
-//				break;
+			case QueryType.ORNOT :
+				bqbList = QueryListFromChromosome.getORQueryListNot((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
+				break;
 //			case QueryType.ALLNOT :
 //				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)
 //				break;
@@ -72,8 +73,8 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 //				(bqbList, duplicateCount)  = queryListFromChromosome.getSpanFirstQL(intVectorIndividual)
 //				break;
         }
-        assert bqbList.size() == IndexInfo.NUMBER_OF_CLUSTERS
-        final int hitsPerPage = IndexInfo.indexReader.maxDoc()
+        assert bqbList.size() == Indexes.NUMBER_OF_CLUSTERS
+        final int hitsPerPage = Indexes.indexReader.maxDoc()
 
         //set fitness based on set of boolean queries
         fitness.setClusterFitness(bqbList)

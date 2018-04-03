@@ -3,7 +3,7 @@ package classify
 import ec.simple.SimpleFitness
 import groovy.transform.TypeChecked
 import groovy.transform.TypeCheckingMode
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.search.Query
 
 /**
@@ -29,7 +29,7 @@ public class ClassifyFit extends SimpleFitness {
 	int noHitsCount=0;
 	
 	public String getQueryString(){
-		return query.toString(IndexInfo.FIELD_CONTENTS)
+		return query.toString(Indexes.FIELD_CONTENTS)
 	}
 
 	public String getQueryMinimal() {
@@ -47,7 +47,7 @@ public class ClassifyFit extends SimpleFitness {
 	@TypeChecked(TypeCheckingMode.SKIP)
 	public String toString(int gen) {
 		return "Gen: $gen  F1: $f1train  Positive Match: $positiveMatchTrain Negative Match: $negativeMatchTrain "
-		+ " Total positive Docs: " + IndexInfo.instance.totalTrainDocsInCat
-		+ '\n' + "QueryString: " + query.toString(IndexInfo.FIELD_CONTENTS) + '\n';
+		+ " Total positive Docs: " + Indexes.instance.totalTrainDocsInCat
+		+ '\n' + "QueryString: " + query.toString(Indexes.FIELD_CONTENTS) + '\n';
 	}
 }

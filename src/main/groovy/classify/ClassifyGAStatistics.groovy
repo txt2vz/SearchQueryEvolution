@@ -2,7 +2,7 @@ package classify
 
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.search.*
 
 public class ClassifyGAStatistics extends SimpleStatistics {
@@ -38,13 +38,13 @@ public class ClassifyGAStatistics extends SimpleStatistics {
 
 		// get test results on best individual
 		Query q = gaFit.query
-		IndexSearcher searcher = IndexInfo.instance.indexSearcher;
+		IndexSearcher searcher = Indexes.instance.indexSearcher;
 
 		TotalHitCountCollector collector = new TotalHitCountCollector()
 		BooleanQuery.Builder bqb = new BooleanQuery.Builder()
 
 		bqb.add(q, BooleanClause.Occur.MUST);
-		bqb.add(IndexInfo.instance.testDocsInCategoryFilter, BooleanClause.Occur.FILTER);
+		bqb.add(Indexes.instance.testDocsInCategoryFilter, BooleanClause.Occur.FILTER);
 
 		searcher.search(bqb.build(), collector);
 		gaFit.positiveMatchTest = collector.getTotalHits();
@@ -52,16 +52,16 @@ public class ClassifyGAStatistics extends SimpleStatistics {
 		collector = new TotalHitCountCollector();
 		bqb = new BooleanQuery.Builder();
 		bqb.add(q, BooleanClause.Occur.MUST);
-		bqb.add(IndexInfo.instance.otherTestDocsFilter, BooleanClause.Occur.FILTER);
+		bqb.add(Indexes.instance.otherTestDocsFilter, BooleanClause.Occur.FILTER);
 		searcher.search(bqb.build(), collector);
 
 		gaFit.negativeMatchTest = collector.getTotalHits();
 
 		gaFit.f1test = Effectiveness.f1(gaFit.positiveMatchTest, gaFit.negativeMatchTest,
-				IndexInfo.instance.totalTestDocsInCat)
+				Indexes.instance.totalTestDocsInCat)
 
 		gaFit.BEPTest = Effectiveness.bep(gaFit.positiveMatchTest, gaFit.negativeMatchTest,
-				IndexInfo.instance.totalTestDocsInCat)
+				Indexes.instance.totalTestDocsInCat)
 
 		println "Fitness: " + gaFit.fitness() + " F1Test: " + gaFit.f1test +
 				" F1Train: " + gaFit.f1train + " positive match test: " + gaFit.positiveMatchTest +

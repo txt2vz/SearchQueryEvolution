@@ -101,10 +101,10 @@ class BuildIndex {
                 {
                     def doc = new Document()
 
-                    Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
+                    Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
-                    Field pathField = new StringField(IndexInfo.FIELD_PATH, file.getPath(), Field.Store.YES);
+                    Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
                     doc.add(pathField);
 
                     String parent = file.getParent()
@@ -118,7 +118,7 @@ class BuildIndex {
                     else
                         catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
 
-                    Field catNameField = new StringField(IndexInfo.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+                    Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
                     doc.add(catNameField)
 
                     String test_train
@@ -126,10 +126,10 @@ class BuildIndex {
                  //   println "cannonicla ptath is" + file.canonicalPath
                 //    println "test train $test_train"
                  //   println ""
-                    Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
+                    Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
 
-                    doc.add(new TextField(IndexInfo.FIELD_CONTENTS, file.text, Field.Store.YES))
+                    doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
                     def n = catsNameFreq.get((catName)) ?: 0
                     catsNameFreq.put((catName), n + 1)
@@ -145,10 +145,10 @@ class BuildIndex {
         IndexReader indexReader = DirectoryReader.open(directory)
         IndexSearcher indexSearcher = new IndexSearcher(indexReader)
         TotalHitCountCollector trainCollector = new TotalHitCountCollector();
-        final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "train"))
+        final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "train"))
 
         TotalHitCountCollector testCollector = new TotalHitCountCollector();
-        final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "test"))
+        final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "test"))
 
         indexSearcher.search(trainQ, trainCollector);
         def trainTotal = trainCollector.getTotalHits();

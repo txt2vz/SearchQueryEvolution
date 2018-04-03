@@ -29,7 +29,7 @@ public class ImportantTerms {
     public final static int SPAN_FIRST_MAX_END = 300;
     private final static int MAX_TERMQUERYLIST_SIZE = 300;
 
-    private final IndexSearcher indexSearcher = IndexInfo.indexSearcher;
+    private final IndexSearcher indexSearcher = Indexes.indexSearcher;
     private final IndexReader indexReader = indexSearcher.indexReader
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
@@ -37,9 +37,9 @@ public class ImportantTerms {
    public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
 
     public static void main(String[] args) {
-       IndexInfo.instance.setIndex(IndexInfo.indexEnum = IndexEnum.NG3)
-        IndexInfo.instance.categoryNumber = '2'
-        IndexInfo.instance.setIndexFieldsAndTotals()
+       Indexes.instance.setIndex(Indexes.indexEnum = IndexEnum.NG3)
+        Indexes.instance.categoryNumber = '2'
+        Indexes.instance.setIndexFieldsAndTotals()
 
         def iw = new ImportantTerms()
         iw.mergeMethods()
@@ -53,8 +53,8 @@ public class ImportantTerms {
 
     public ImportantTerms() {
 
-        Terms terms = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS)
-        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        Terms terms = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS)
+        termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
         println "Important words terms.getDocCount: ${terms.getDocCount()}"
         println "Important words terms.size ${terms.size()}"
@@ -91,16 +91,16 @@ public class ImportantTerms {
 
     private TermQuery[] mergeMethods() {
         // IndexInfo.instance.categoryNumber = '1'
-        IndexInfo.instance.setIndexFieldsAndTotals()
+        Indexes.instance.setIndexFieldsAndTotals()
 
         TermQuery[] ortq = getORTermQueryList()
-        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
         TermQuery[] f1tq = getF1TermQueryList()
-        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
         TermQuery[] igtq = getIGTermQueryList()
-        termsEnum = MultiFields.getTerms(indexReader, IndexInfo.FIELD_CONTENTS).iterator()
+        termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
         TermQuery[] chitq = getChiTermQueryList()
 
@@ -111,10 +111,10 @@ public class ImportantTerms {
         def chis = [] as Set
 
         //populate the sets with extracted strings (words from the document)
-        ortq.take(MAX_TERMQUERYLIST_SIZE).each { ors << it.toString(IndexInfo.FIELD_CONTENTS) }
-        f1tq.take(MAX_TERMQUERYLIST_SIZE).each { f1s << it.toString(IndexInfo.FIELD_CONTENTS) }
-        igtq.take(MAX_TERMQUERYLIST_SIZE).each { igs << it.toString(IndexInfo.FIELD_CONTENTS) }
-        chitq.take(MAX_TERMQUERYLIST_SIZE).each { chis << it.toString(IndexInfo.FIELD_CONTENTS) }
+        ortq.take(MAX_TERMQUERYLIST_SIZE).each { ors << it.toString(Indexes.FIELD_CONTENTS) }
+        f1tq.take(MAX_TERMQUERYLIST_SIZE).each { f1s << it.toString(Indexes.FIELD_CONTENTS) }
+        igtq.take(MAX_TERMQUERYLIST_SIZE).each { igs << it.toString(Indexes.FIELD_CONTENTS) }
+        chitq.take(MAX_TERMQUERYLIST_SIZE).each { chis << it.toString(Indexes.FIELD_CONTENTS) }
 
         println " "
         println "F1 $f1s"
@@ -159,7 +159,7 @@ public class ImportantTerms {
         //merged return list of termQueries
         TermQuery[] returnTQ = []
         merged.each {
-            returnTQ += new TermQuery(new Term(IndexInfo.FIELD_CONTENTS, it))
+            returnTQ += new TermQuery(new Term(Indexes.FIELD_CONTENTS, it))
         }
 
         println merged.size() + " merged $merged "
@@ -185,13 +185,13 @@ public class ImportantTerms {
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
-                final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.trainDocsInCategoryFilter, tq)
-                final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.otherTrainDocsFilter, tq)
-                double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, IndexInfo.totalTrainDocsInCat)
+                final int positiveHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
+                final int negativeHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.otherTrainDocsFilter, tq)
+                double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, Indexes.totalTrainDocsInCat)
 
                 if (F1 > 0.02) {
                     termQueryMap += [(tq): F1]
@@ -208,7 +208,7 @@ public class ImportantTerms {
 
 //for clustering
     public TermQuery[] getTFIDFTermQueryList() {
-        println "Index: " + IndexInfo.indexEnum
+        println "Index: " + Indexes.indexEnum
 
         def termQueryMap = [:]
         BytesRef termbr;
@@ -217,13 +217,13 @@ public class ImportantTerms {
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
                 long docFreq = indexReader.docFreq(t);
                 double tfidfTotal = 0
 
-                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, IndexInfo.FIELD_CONTENTS, termbr))
+                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, Indexes.FIELD_CONTENTS, termbr))
                 if (docsEnum != null) {
                     while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
 
@@ -249,7 +249,7 @@ public class ImportantTerms {
 
         TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
         println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
-        println "termQueryMap $termQueryMap"
+        println "termQueryMap ${termQueryMap.take(50)}"
         return termQueryList
     }
 
@@ -258,25 +258,25 @@ public class ImportantTerms {
         def termQueryMap = [:]
         BytesRef termbr;
         TFIDFSimilarity tfidfSim = new ClassicSimilarity()
-        int totalTrainDocsInCat = IndexInfo.totalTrainDocsInCat
+        int totalTrainDocsInCat = Indexes.totalTrainDocsInCat
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
                 Query tq = new TermQuery(t)
-                long matchingTrainDocsInCategoryDF = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.trainDocsInCategoryFilter, tq)
+                long matchingTrainDocsInCategoryDF = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
                 double tfidfTotal = 0
 
-                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, IndexInfo.FIELD_CONTENTS, termbr))
+                PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, Indexes.FIELD_CONTENTS, termbr))
                 if (docsEnum != null) {
                     while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
 
                         Document d = indexSearcher.doc(docsEnum.docID())
 
-                        String categoryNumber = d.get(IndexInfo.FIELD_CATEGORY_NUMBER)
-                        String testTrain = d.get(IndexInfo.FIELD_TEST_TRAIN)
-                        if (categoryNumber == IndexInfo.categoryNumber && testTrain == "train") {
+                        String categoryNumber = d.get(Indexes.FIELD_CATEGORY_NUMBER)
+                        String testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
+                        if (categoryNumber == Indexes.categoryNumber && testTrain == "train") {
 
                             double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(totalTrainDocsInCat, matchingTrainDocsInCategoryDF)
 
@@ -319,17 +319,17 @@ public class ImportantTerms {
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
                 //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
                 //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
-                final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.trainDocsInCategoryFilter, tq)
-                final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
-                final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.otherTrainDocsFilter, tq)
-                final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+                final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
+                final int fn = Indexes.instance.totalTrainDocsInCat - tp
+                final int fp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.otherTrainDocsFilter, tq)
+                final int tn = Indexes.instance.totalOthersTrainDocs - fp
                 final int all = tp + fn + fp + tn
                 final int posClass = tp + fn
                 final int negClass = fp + tn
@@ -383,17 +383,17 @@ public class ImportantTerms {
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
                 //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
                 //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
-                final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.trainDocsInCategoryFilter, tq)
-                final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
-                final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.otherTrainDocsFilter, tq)
-                final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+                final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
+                final int fn = Indexes.instance.totalTrainDocsInCat - tp
+                final int fp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.otherTrainDocsFilter, tq)
+                final int tn = Indexes.instance.totalOthersTrainDocs - fp
                 final int all = tp + fn + fp + tn
                 final int posClass = tp + fn
                 final int negClass = fp + tn
@@ -437,17 +437,17 @@ public class ImportantTerms {
 
         while ((termbr = termsEnum.next()) != null) {
 
-            Term t = new Term(IndexInfo.FIELD_CONTENTS, termbr);
+            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
                 //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
                 //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
-                final int tp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.trainDocsInCategoryFilter, tq)
-                final int fn = IndexInfo.instance.totalTrainDocsInCat - tp
-                final int fp = IndexInfo.getQueryHitsWithFilter(indexSearcher, IndexInfo.instance.otherTrainDocsFilter, tq)
-                final int tn = IndexInfo.instance.totalOthersTrainDocs - fp
+                final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
+                final int fn = Indexes.instance.totalTrainDocsInCat - tp
+                final int fp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.otherTrainDocsFilter, tq)
+                final int tn = Indexes.instance.totalOthersTrainDocs - fp
                 final int all = tp + fn + fp + tn
                 final int posClass = tp + fn
                 final int negClass = fp + tn

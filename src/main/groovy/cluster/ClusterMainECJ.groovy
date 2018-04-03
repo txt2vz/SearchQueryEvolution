@@ -3,11 +3,14 @@ package cluster
 import ec.EvolutionState
 import ec.Evolve
 import ec.util.ParameterDatabase
+import groovy.time.TimeCategory
+import groovy.time.TimeDuration
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
 import index.IndexEnum
-import index.IndexInfo
+import index.Indexes
 
-//@groovy.transform.CompileStatic
-//@groovy.transform.TypeChecked
+@CompileStatic
 class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
@@ -17,11 +20,12 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            IndexEnum.NG5,
+            IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
-            IndexEnum.CRISIS3
-            //     IndexEnum.OHS3
-            //IndexEnum.NG3
+            IndexEnum.NG5,
+            IndexEnum.R6
+      //    IndexEnum.OHS3
+         // IndexEnum.NG3
     ]
 
     public ClusterMainECJ() {
@@ -29,11 +33,12 @@ class ClusterMainECJ extends Evolve {
         final Date startRun = new Date()
         def jobReport = new JobReport()
 
-        clusteringIndexes.each { ie ->
+        clusteringIndexes.each {IndexEnum ie ->
             EvolutionState state;
             ParameterDatabase parameters = null;
             println "Index Enum ie: $ie"
-            IndexInfo.instance.setIndex(ie)
+
+            Indexes.instance.setIndex(ie)
 
             NUMBER_OF_JOBS.times { job ->
                 parameters = new ParameterDatabase(new File(parameterFilePath));
@@ -64,10 +69,10 @@ class ClusterMainECJ extends Evolve {
                 println ' ---------------------------------END-----------------------------------------------'
             }
         }
-        final Date endRun = new Date();
-        long time = endRun.getTime() - startRun.getTime();
+        final Date endRun = new Date()
         jobReport.writeOverallToFile()
-        println "Total time taken: $time " + new Date(time).format("'T'HH:mm:ss.SSS")
+        TimeDuration duration = TimeCategory.minus(endRun,startRun)
+        println "Duration: $duration"
     }
 
     static main(args) {

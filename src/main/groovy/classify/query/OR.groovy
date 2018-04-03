@@ -9,10 +9,8 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
-import groovy.transform.TypeChecked
-import groovy.transform.TypeCheckingMode
 import index.ImportantTerms
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
@@ -31,7 +29,7 @@ import org.apache.lucene.search.TermQuery
 
 public class OR extends Problem implements SimpleProblemForm {
 
-    private IndexSearcher searcher = IndexInfo.indexSearcher
+    private IndexSearcher searcher = Indexes.indexSearcher
     private final ImportantTerms importantTerms = new ImportantTerms()
     private TermQuery[] termQueryArray
 
@@ -39,9 +37,9 @@ public class OR extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
 
-        println "Category number: ${IndexInfo.instance.getCategoryNumber()} Category Name: ${IndexInfo.instance.getCategoryName()} " +
-                "Total train docs: ${IndexInfo.instance.totalTrainDocsInCat} " +
-                "Total test docs: ${IndexInfo.instance.totalTestDocsInCat}"
+        println "Category number: ${Indexes.instance.getCategoryNumber()} Category Name: ${Indexes.instance.getCategoryName()} " +
+                "Total train docs: ${Indexes.instance.totalTrainDocsInCat} " +
+                "Total test docs: ${Indexes.instance.totalTestDocsInCat}"
 
         termQueryArray = importantTerms.getImportantTerms() as TermQuery[]
     }
@@ -68,10 +66,10 @@ public class OR extends Problem implements SimpleProblemForm {
         }
 
         fitness.query = bqb.build()
-        fitness.positiveMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher, IndexInfo.trainDocsInCategoryFilter, fitness.query)
-        fitness.negativeMatchTrain = IndexInfo.getQueryHitsWithFilter(searcher, IndexInfo.otherTrainDocsFilter, fitness.query)
+        fitness.positiveMatchTrain = Indexes.getQueryHitsWithFilter(searcher, Indexes.trainDocsInCategoryFilter, fitness.query)
+        fitness.negativeMatchTrain = Indexes.getQueryHitsWithFilter(searcher, Indexes.otherTrainDocsFilter, fitness.query)
 
-        fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, IndexInfo.totalTrainDocsInCat);
+        fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, Indexes.totalTrainDocsInCat);
 
         ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, fitness.f1train, false)
         ind.evaluated = true;

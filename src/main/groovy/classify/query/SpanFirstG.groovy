@@ -10,7 +10,7 @@ import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
 import index.ImportantTerms
-import index.IndexInfo
+import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -34,9 +34,9 @@ public class SpanFirstG extends Problem implements SimpleProblemForm {
 
 		super.setup(state, base);
 
-		println("Total docs for cat  " + IndexInfo.instance.getCatnumberAsString() + " "
-				+ IndexInfo.instance.totalTrainDocsInCat + " Total test docs for cat "
-				+ IndexInfo.instance.totalTestDocsInCat);
+		println("Total docs for cat  " + Indexes.instance.getCatnumberAsString() + " "
+				+ Indexes.instance.totalTrainDocsInCat + " Total test docs for cat "
+				+ Indexes.instance.totalTestDocsInCat);
 
 		ImportantTerms iw = new ImportantTerms();
 		wordArray = iw.getF1TermQueryList(false, true);
@@ -73,7 +73,7 @@ public class SpanFirstG extends Problem implements SimpleProblemForm {
 			String word = wordArray[wordInd0];
 
 			SpanFirstQuery sfq = new SpanFirstQuery(new SpanTermQuery(new Term(
-					IndexInfo.FIELD_CONTENTS, word)),
+					Indexes.FIELD_CONTENTS, word)),
 					intVectorIndividual.genome[i + 1]);
 
 			bqb.add(sfq, BooleanClause.Occur.SHOULD);
@@ -81,11 +81,11 @@ public class SpanFirstG extends Problem implements SimpleProblemForm {
 
 		query = bqb.build();
 
-		IndexSearcher searcher = IndexInfo.instance.indexSearcher;
+		IndexSearcher searcher = Indexes.instance.indexSearcher;
 		int positiveMatch = getPositiveMatch(searcher, query)
 		int negativeMatch = getNegativeMatch(searcher,query)
 
-		def F1train = Effectiveness.f1(positiveMatch, negativeMatch, IndexInfo.instance.totalTrainDocsInCat);
+		def F1train = Effectiveness.f1(positiveMatch, negativeMatch, Indexes.instance.totalTrainDocsInCat);
 
 		fitness.setTrainValues(positiveMatch, negativeMatch);
 		fitness.setF1Train(F1train);

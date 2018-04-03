@@ -15,8 +15,6 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TotalHitCountCollector
-import org.apache.lucene.search.similarities.ClassicSimilarity
-import org.apache.lucene.search.similarities.Similarity
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
@@ -71,9 +69,9 @@ class IndexCrisisClusterFromCSV {
 					//def tweetID = fields[0]
 					def doc = new Document()
 					if (textBody!=" ")
-						doc.add(new TextField(IndexInfo.FIELD_CONTENTS, textBody,  Field.Store.YES))
+						doc.add(new TextField(Indexes.FIELD_CONTENTS, textBody,  Field.Store.YES))
 
-					Field catNameField = new StringField(IndexInfo.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+					Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
 					doc.add(catNameField)
 
 				//	Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
@@ -97,10 +95,10 @@ class IndexCrisisClusterFromCSV {
 		IndexReader indexReader = DirectoryReader.open(directory)
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader)
 		TotalHitCountCollector trainCollector = new TotalHitCountCollector();
-		final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "train"))
+		final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "train"))
 
 		TotalHitCountCollector testCollector = new TotalHitCountCollector();
-		final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "test"))
+		final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "test"))
 
 		indexSearcher.search(trainQ, trainCollector);
 		def trainTotal = trainCollector.getTotalHits();

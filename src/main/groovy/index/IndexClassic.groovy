@@ -79,7 +79,7 @@ class IndexClassic {
 		IndexSearcher searcher = new IndexSearcher(writer.getReader());
 
 		TotalHitCountCollector thcollector  = new TotalHitCountCollector();
-		final TermQuery catQ = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME,	"med."))
+		final TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,	"med."))
 		searcher.search(catQ, thcollector);
 		def categoryTotal = thcollector.getTotalHits();
 		println "med. total: $categoryTotal"
@@ -89,10 +89,10 @@ class IndexClassic {
 		IndexReader indexReader = DirectoryReader.open(directory)
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader)
 		TotalHitCountCollector trainCollector = new TotalHitCountCollector();
-		final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "train"))
+		final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "train"))
 
 		TotalHitCountCollector testCollector = new TotalHitCountCollector();
-		final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN, "test"))
+		final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "test"))
 
 		indexSearcher.search(trainQ, trainCollector);
 		def trainTotal = trainCollector.getTotalHits();
@@ -112,7 +112,7 @@ class IndexClassic {
 	throws IOException {
 
 		def doc = new Document()
-		Field pathField = new StringField(IndexInfo.FIELD_PATH, f.getPath(), Field.Store.YES);
+		Field pathField = new StringField(Indexes.FIELD_PATH, f.getPath(), Field.Store.YES);
 		doc.add(pathField);
 
 		//for classic dataset
@@ -121,16 +121,16 @@ class IndexClassic {
 		if (n<500){
 			catFreq.put((catName), n + 1)
 
-			Field catNameField = new StringField(IndexInfo.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+			Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
 			doc.add(catNameField)
-			doc.add(new TextField(IndexInfo.FIELD_CONTENTS, f.text,  Field.Store.YES)) ;
+			doc.add(new TextField(Indexes.FIELD_CONTENTS, f.text,  Field.Store.YES)) ;
 
-			Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
+			Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
 			doc.add(catNumberField)
 
 			String test_train
 			if (n%2==0) test_train = 'test' else test_train = 'train'
-			Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
+			Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
 
 			doc.add(ttField)
 			writer.addDocument(doc);

@@ -1,13 +1,11 @@
 package cluster
 
 import ec.simple.SimpleFitness
-import index.IndexInfo
-import org.apache.lucene.document.Document
-import org.apache.lucene.index.Term
+import groovy.transform.CompileStatic
+import index.Indexes
 import org.apache.lucene.search.*
 
-@groovy.transform.CompileStatic
-@groovy.transform.TypeChecked
+@CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
     Map<Query, Integer> queryMap = [:]
@@ -26,9 +24,10 @@ public class ClusterFitness extends SimpleFitness {
     private int totalHits = 0
     private int missedDocs = 0
     private int zeroHitsCount = 0
+    private int coreHitPenalty = 0
 
-    private int hitsPerPage = IndexInfo.indexReader.maxDoc()
-    private final static int coreClusterSize = 20
+    private int hitsPerPage = Indexes.indexReader.maxDoc()
+    private final static int coreClusterSize = 10
 
     double getFitness() {
         return baseFitness;
@@ -37,7 +36,7 @@ public class ClusterFitness extends SimpleFitness {
  * @param bqbArray an array of lucene boolean queries
  */
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
-        assert bqbArray.size() == IndexInfo.NUMBER_OF_CLUSTERS
+        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -53,6 +52,7 @@ public class ClusterFitness extends SimpleFitness {
         scorePlus = 0.0
         hitsOnly = 0
         hitsPlus = 0
+        coreHitPenalty=1
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
@@ -70,11 +70,11 @@ public class ClusterFitness extends SimpleFitness {
             }
             Query otherBQ = bqbOthers.build()
 
-            TopDocs otherTopDocs = IndexInfo.indexSearcher.search(otherBQ, hitsPerPage)
+            TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
             hitsOthers.each { ScoreDoc otherHit -> otherdocIdSet << otherHit.doc }
 
-            TopDocs docs = IndexInfo.indexSearcher.search(q, hitsPerPage)
+            TopDocs docs = Indexes.indexSearcher.search(q, hitsPerPage)
             ScoreDoc[] hits = docs.scoreDocs;
             qMap.put(q, hits.size())
 
@@ -85,9 +85,11 @@ public class ClusterFitness extends SimpleFitness {
 
                 if (otherdocIdSet.contains(d.doc)) {
                     negativeHits++;
+
                     negativeScoreTotal = negativeScoreTotal + d.score
                     if (position < coreClusterSize) {
                         coreClusterPenalty++
+                        coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
                     }
                 } else {
                     positiveHits++
@@ -100,15 +102,16 @@ public class ClusterFitness extends SimpleFitness {
         queryMap = qMap.asImmutable()
         if (zeroHitsCount == 0) {
             totalHits = allHits.size()
-            fraction = totalHits / IndexInfo.indexReader.maxDoc()
-            missedDocs = IndexInfo.indexReader.maxDoc() - allHits.size()
-            scoreOnly = positiveScoreTotal - negativeScoreTotal
+            fraction = totalHits / Indexes.indexReader.maxDoc()
+            missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+            scoreOnly = positiveScoreTotal - negativeScoreTotal    //(negativeScoreTotal + coreHitPenalty)
             scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
-         //   baseFitness = scorePlus
+            //baseFitness = scorePlus
 
-            hitsOnly = positiveHits - negativeHits
-            hitsPlus = (hitsOnly < minScore) ? 0 : hitsOnly + Math.abs(minScore)
+            hitsOnly = positiveHits - (negativeHits + coreHitPenalty)
+            hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
             baseFitness = (double) hitsPlus
+          //  baseFitness = (double) hitsPlus * fraction * fraction
 
             //* fraction * fraction
            // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
@@ -117,8 +120,8 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ScorePlus: ${scorePlus.round(2)} ${queryShort()}"
-        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty"
-        println "TotalHits: $totalHits TotalDocs: ${IndexInfo.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount hitsOnly: $hitsOnly "
+        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty CoreHitPenalty: $coreHitPenalty"
+        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount hitsOnly: $hitsOnly "
         println ""
     }
 
@@ -126,7 +129,7 @@ public class ClusterFitness extends SimpleFitness {
         def s = "\n"// "queryMap.size ${queryMap.size()} \n"
         queryMap.keySet().eachWithIndex { Query q, int index ->
             if (index > 0) s += '\n';
-            s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(IndexInfo.FIELD_CONTENTS)}"
+            s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)}"
         }
         return s
     }

@@ -20,7 +20,7 @@
          def Document d
          def categoryNumber= '3'
          setup:
-         TermQuery catQ 	= new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NUMBER,
+         TermQuery catQ 	= new TermQuery(new Term(Indexes.FIELD_CATEGORY_NUMBER,
                  categoryNumber))
 
          when:
@@ -33,15 +33,15 @@
          }
 
          then:
-         d.get(IndexInfo.FIELD_CATEGORY_NAME) == 'comp.sys.ibm.pc.hardware'
+         d.get(Indexes.FIELD_CATEGORY_NAME) == 'comp.sys.ibm.pc.hardware'
      }
 
      def 'total NG20 docs in comp.graphics categroy'() {
          setup:
 
          TotalHitCountCollector thcollector  = new TotalHitCountCollector();
-         final TermQuery graphicsNameQ = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NAME, 'comp.graphics'))
-         final TermQuery graphicsNumberQ = new TermQuery(new Term(IndexInfo.FIELD_CATEGORY_NUMBER, '1'))
+         final TermQuery graphicsNameQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME, 'comp.graphics'))
+         final TermQuery graphicsNumberQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NUMBER, '1'))
 
          when:
          isearcher.search(graphicsNameQ, thcollector)
@@ -63,10 +63,10 @@
          setup:
 
          TotalHitCountCollector trainCollector  = new TotalHitCountCollector();
-         final TermQuery trainQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN,	"train"))
+         final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,	"train"))
 
          TotalHitCountCollector testCollector  = new TotalHitCountCollector();
-         final TermQuery testQ = new TermQuery(new Term(IndexInfo.FIELD_TEST_TRAIN,	"test"))
+         final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,	"test"))
 
          when:
          isearcher.search(trainQ, trainCollector);
