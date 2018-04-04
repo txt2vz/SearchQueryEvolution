@@ -55,9 +55,9 @@ class QueryListFromChromosome {
             } else
             {
                 BooleanQuery qn0 = bqb.build()
-                def x = qNot.clauses()
-                for (y in x){
-                    bqb.add (y.getQuery(), BooleanClause.Occur.MUST_NOT )
+                def clauses = qNot.clauses()
+                for (clause in clauses){
+                    bqb.add (clause.getQuery(), BooleanClause.Occur.MUST_NOT )
                 }
              //   bqb.add(qNot, BooleanClause.Occur.MUST_NOT)
                 qNot = qn0
