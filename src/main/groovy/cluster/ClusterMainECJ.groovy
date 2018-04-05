@@ -6,7 +6,6 @@ import ec.util.ParameterDatabase
 import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 import groovy.transform.CompileStatic
-import groovy.transform.TypeChecked
 import index.IndexEnum
 import index.Indexes
 
@@ -23,21 +22,21 @@ class ClusterMainECJ extends Evolve {
             IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
             IndexEnum.NG5,
-            IndexEnum.R6
-      //    IndexEnum.OHS3
-         // IndexEnum.NG3
+            // IndexEnum.R6
+            // IndexEnum.OHS3
+            // IndexEnum.NG3
     ]
 
     public ClusterMainECJ() {
 
         final Date startRun = new Date()
-        def jobReport = new JobReport()
+        JobReport jobReport = new JobReport()
 
-        clusteringIndexes.each {IndexEnum ie ->
+        clusteringIndexes.each { IndexEnum ie ->
             EvolutionState state;
-            ParameterDatabase parameters = null;
-            println "Index Enum ie: $ie"
+            ParameterDatabase parameters = null
 
+            println "Index Enum ie: $ie"
             Indexes.instance.setIndex(ie)
 
             NUMBER_OF_JOBS.times { job ->
@@ -64,14 +63,13 @@ class ClusterMainECJ extends Evolve {
                 }.max { it.fitness() }
 
                 jobReport.queriesReport(job, state.generation as int, popSize as int, cfit)
-
                 cleanup(state);
                 println ' ---------------------------------END-----------------------------------------------'
             }
         }
         final Date endRun = new Date()
-        jobReport.writeOverallToFile()
-        TimeDuration duration = TimeCategory.minus(endRun,startRun)
+        jobReport.overallSummary()
+        TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
     }
 

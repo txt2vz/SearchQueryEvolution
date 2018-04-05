@@ -26,7 +26,6 @@ enum IndexEnum {
     R6('indexes/R6', 6),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
-    //NG5('indexes/20NG5WindowsMotorcyclesSpaceMedMideast', 5),
     NG5('indexes/20NG5WindowsForsaleSpaceHockeyChristian', 5),
     CRISIS3('indexes/crisis3FireBombFlood', 3),
     CLASSIC4('indexes/classic4_500', 4)
@@ -42,7 +41,7 @@ enum IndexEnum {
     }
 
     String toString() {
-        return "Index: ${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
+        return "${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
     }
 
     IndexSearcher getIndexSearcher() {

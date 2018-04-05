@@ -89,7 +89,7 @@ public class ClusterFitness extends SimpleFitness {
                     negativeScoreTotal = negativeScoreTotal + d.score
                     if (position < coreClusterSize) {
                         coreClusterPenalty++
-                        coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
+                      //  coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
                     }
                 } else {
                     positiveHits++
@@ -106,9 +106,9 @@ public class ClusterFitness extends SimpleFitness {
             missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
             scoreOnly = positiveScoreTotal - negativeScoreTotal    //(negativeScoreTotal + coreHitPenalty)
             scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
-            //baseFitness = scorePlus
+          //  baseFitness = scorePlus
 
-            hitsOnly = positiveHits - (negativeHits + coreHitPenalty)
+            hitsOnly = positiveHits - (negativeHits * 2)//(negativeHits + coreHitPenalty)
             hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
             baseFitness = (double) hitsPlus
           //  baseFitness = (double) hitsPlus * fraction * fraction

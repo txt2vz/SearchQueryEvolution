@@ -100,7 +100,7 @@ exch.subpop.0.select = ec.select.TournamentSelection
 exch.subpop.0.select.size = 5
 exch.subpop.0.mod = 50
 exch.subpop.0.start = 50
-exch.subpop.0.size = 10
+exch.subpop.0.size = 3
 exch.subpop.0.num-dest = 1
 exch.subpop.0.dest.0 = 1
 
@@ -108,7 +108,7 @@ exch.subpop.1.select = ec.select.TournamentSelection
 exch.subpop.1.select.size= 5
 exch.subpop.1.mod = 50
 exch.subpop.1.start = 50
-exch.subpop.1.size = 10  
+exch.subpop.1.size = 3
 exch.subpop.1.num-dest = 1
 exch.subpop.1.dest.0 = 2
 
@@ -116,6 +116,6 @@ exch.subpop.2.select = ec.select.TournamentSelection
 exch.subpop.2.select.size= 3
 exch.subpop.2.mod = 50
 exch.subpop.2.start = 50
-exch.subpop.2.size = 10  
+exch.subpop.2.size = 3
 exch.subpop.2.num-dest = 1
 exch.subpop.2.dest.0 = 0
