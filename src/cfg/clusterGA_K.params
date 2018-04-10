@@ -1,0 +1,56 @@
+parent.0 = clusterSubpop4.params
+#parent.0 = clusterSubpop.params
+#parent.0 = clusterSubpopTournament.params
+#parent.0 = clusterSinglePop.params
+#parent.0		= simple.params
+
+eval.problem = cluster.ClusterQueryECJ
+stat = cluster.ClusterStatisticsECJ
+
+evalthreads = 4 
+breedthreads = 4
+generations = 100
+
+breed.elite.0 = 2
+
+#pop.subpops = 1
+pop.subpop.0.species.genome-size = 17
+pop.subpop.0.size = 128
+pop.subpop.1.species.genome-size = 17
+pop.subpop.1.size = 128
+pop.subpop.2.species.genome-size = 17
+pop.subpop.2.size = 128
+pop.subpop.3.species.genome-size = 17
+pop.subpop.3.size = 128
+
+pop.subpop.0.species.num-segments = 2
+pop.subpop.1.species.num-segments = 2
+pop.subpop.2.species.num-segments = 2
+pop.subpop.3.species.num-segments = 2
+
+pop.subpop.0.species.segment.0.start = 0
+pop.subpop.0.species.segment.1.start = 1
+pop.subpop.1.species.segment.0.start = 0
+pop.subpop.1.species.segment.1.start = 1
+pop.subpop.2.species.segment.0.start = 0
+pop.subpop.2.species.segment.1.start = 1
+pop.subpop.3.species.segment.0.start = 0
+pop.subpop.3.species.segment.1.start = 1
+
+pop.subpop.0.species.segment.0.min-gene = 3
+pop.subpop.0.species.segment.0.max-gene = 10
+pop.subpop.1.species.segment.0.min-gene = 3
+pop.subpop.1.species.segment.0.max-gene = 10
+pop.subpop.2.species.segment.0.min-gene = 3
+pop.subpop.2.species.segment.0.max-gene = 10
+pop.subpop.3.species.segment.0.min-gene = 3
+pop.subpop.3.species.segment.0.max-gene = 10
+
+pop.subpop.0.species.segment.1.min-gene = -1
+pop.subpop.0.species.segment.1.max-gene = 100
+pop.subpop.1.species.segment.1.min-gene = -1
+pop.subpop.1.species.segment.1.max-gene = 100
+pop.subpop.2.species.segment.1.min-gene = -1
+pop.subpop.2.species.segment.1.max-gene = 100
+pop.subpop.3.species.segment.1.min-gene = -1
+pop.subpop.3.species.segment.1.max-gene = 100

@@ -1,5 +1,6 @@
 package cluster
 
+import groovy.time.TimeDuration
 import index.Indexes
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
@@ -15,14 +16,16 @@ class JobReport {
     def resultsF1 = [:]
     static boolean appnd = true
 
-    void overallSummary() {
+    void overallSummary(TimeDuration duration) {
 
         FileWriter fw = new FileWriter("results/overallResultsCluster.txt", appnd)
 
         def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries{ Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
-        println "categoryAverages $categoryAverages"
+        println "categoryAverages: $categoryAverages"
         categoryAverages.each { print it.key + ' Average: ' + it.value.round(3) + ' ' }
-        categoryAverages.each { fw.write(it.key + ' Average: ' + it.value.round(3) + ' ') }
+        categoryAverages.each { fw.write(it.key + ' Average: ' + it.value.round(3) + " " ) }
+
+        fw.write " Duration $duration"
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
         println "\nOverall Average:  ${overallAverage.round(3)}   ${new Date()} resultsF1: $resultsF1 \n"
@@ -36,7 +39,7 @@ class JobReport {
         int hitsPerPage = Indexes.indexReader.maxDoc()
 
         String messageOut = ""
-        FileWriter jobResultsQuery = new FileWriter("results/jobResultsQuery.txt", true)
+        FileWriter jobResultsQuery = new FileWriter("results/jobResultsClusterQuery.txt", true)
         jobResultsQuery << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
         List<Double> f1list = [], precisionList = [], recallList = []

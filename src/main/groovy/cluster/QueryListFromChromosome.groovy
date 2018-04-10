@@ -31,6 +31,31 @@ class QueryListFromChromosome {
         return bqbL
     }
 
+    static Tuple2 getORQueryListSetK(int[] intArray, TermQuery[] termQueryArray) {
+        //list of boolean queries
+        List<BooleanQuery.Builder> bqbL = []
+
+        // set of genes - for duplicate checking
+        Set<Integer> genes = [] as Set
+
+        int k = intArray[0]
+
+        int gene=0
+      //  intArray.eachWithIndex { int gene, int index ->
+        for (int i=1;i<intArray.size(); i++){
+            int clusterNumber = i % k
+            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+            gene = intArray[i]
+
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+            }
+        }
+        Tuple2 t2 = new Tuple2(bqbL, k)
+
+        return  t2// [bqbL, k]
+    }
+
     static List<BooleanQuery.Builder> getORQueryListNot(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []

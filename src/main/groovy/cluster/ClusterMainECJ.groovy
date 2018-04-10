@@ -14,15 +14,16 @@ class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
             'src/cfg/clusterGA.params'
+    //  'src/cfg/clusterGA_K.params'
 
-    private final int NUMBER_OF_JOBS = 3
+    private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
             IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
             IndexEnum.NG5,
-            // IndexEnum.R6
+            IndexEnum.R6
             // IndexEnum.OHS3
             // IndexEnum.NG3
     ]
@@ -68,9 +69,10 @@ class ClusterMainECJ extends Evolve {
             }
         }
         final Date endRun = new Date()
-        jobReport.overallSummary()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
+        jobReport.overallSummary(duration)
+
     }
 
     static main(args) {
