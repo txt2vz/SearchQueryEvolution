@@ -20,9 +20,9 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.NG5,
+          //  IndexEnum.CRISIS3,
+            //IndexEnum.CLASSIC4,
+            //IndexEnum.NG5,
             IndexEnum.R6
             // IndexEnum.OHS3
             // IndexEnum.NG3
@@ -72,7 +72,6 @@ class ClusterMainECJ extends Evolve {
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
         jobReport.overallSummary(duration)
-
     }
 
     static main(args) {

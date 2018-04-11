@@ -23,10 +23,9 @@ public class ClusterFitness extends SimpleFitness {
     private int coreClusterPenalty = 0
     private int totalHits = 0
     private int missedDocs = 0
-    private int zeroHitsCount = 0
+    private int lowHitsCount = 0
     private int coreHitPenalty = 0
     private int numberOfClusters = 0
-    private int hitsMin = 0
 
     private int hitsPerPage = Indexes.indexReader.maxDoc()
     private final static int coreClusterSize = 10
@@ -34,9 +33,7 @@ public class ClusterFitness extends SimpleFitness {
     double getFitness() {
         return baseFitness;
     }
-/**
- * @param bqbArray an array of lucene boolean queries
- */
+
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray, int k) {
         numberOfClusters = k
         setClusterFitness(bqbArray)
@@ -54,24 +51,21 @@ public class ClusterFitness extends SimpleFitness {
         coreClusterPenalty = 0
         totalHits = 0
         missedDocs = 0
-        zeroHitsCount = 0
+        lowHitsCount = 0
         scoreOnly = 0.0
         scorePlus = 0.0
         hitsOnly = 0
         hitsPlus = 0
         coreHitPenalty = 1
-        hitsMin = 0
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
-
-        hitsMin = Indexes.indexReader.maxDoc() / (bqbArray.size() * 2) as int
 
         bqbArray.eachWithIndex { BooleanQuery.Builder bqb, index ->
 
             Query q = bqb.build()
 
-            Set<Integer> otherdocIdSet = [] as Set<Integer>
+            Set<Integer> otherDocIdSet = [] as Set<Integer>
             List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
@@ -82,21 +76,21 @@ public class ClusterFitness extends SimpleFitness {
 
             TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
-            hitsOthers.each { ScoreDoc otherHit -> otherdocIdSet << otherHit.doc }
+            hitsOthers.each { ScoreDoc otherHit -> otherDocIdSet << otherHit.doc }
 
             TopDocs docs = Indexes.indexSearcher.search(q, hitsPerPage)
             ScoreDoc[] hits = docs.scoreDocs;
             qMap.put(q, hits.size())
 
-            if (hits.size() < 1) zeroHitsCount++
+            if (hits.size() < 2) lowHitsCount++
 
             hits.eachWithIndex { ScoreDoc d, int position ->
                 allHits << d.doc
 
-                if (otherdocIdSet.contains(d.doc)) {
-                    negativeHits++;
-
+                if (otherDocIdSet.contains(d.doc)) {
+                    negativeHits++
                     negativeScoreTotal = negativeScoreTotal + d.score
+
                     if (position < coreClusterSize) {
                         coreClusterPenalty++
                         //  coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
@@ -110,17 +104,18 @@ public class ClusterFitness extends SimpleFitness {
 
         final int minScore = -2000;
         queryMap = qMap.asImmutable()
-        if (zeroHitsCount == 0) {
+        if (lowHitsCount == 0) {
             totalHits = allHits.size()
             fraction = totalHits / Indexes.indexReader.maxDoc()
             missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
             scoreOnly = positiveScoreTotal - negativeScoreTotal
             scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
-          //  baseFitness = scorePlus
 
             hitsOnly = positiveHits - negativeHits// + missedDocs)
             hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
+
             baseFitness = (double) hitsPlus
+          //  baseFitness = scorePlus
 
             //  baseFitness = (double) hitsPlus * fraction * fraction
            // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
@@ -128,9 +123,9 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void generationStats(long generation) {
-        println "Gereration $generation BaseFitness: ${baseFitness.round(2)}  NumberOfClusters: $numberOfClusters  ${queryShort()}"
+        println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
         println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty"
-        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: $fraction ZeroHits: $zeroHitsCount hitsOnly: $hitsOnly ScorePlus: ${scorePlus.round(2)} "
+        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: ${fraction.round(2)} hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
         println ""
     }
 

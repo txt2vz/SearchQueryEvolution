@@ -208,7 +208,7 @@ public class ImportantTerms {
 
 //for clustering
     public TermQuery[] getTFIDFTermQueryList() {
-        println "Index: " + Indexes.indexEnum
+        println "getTFIDFTermQueryList Index: " + Indexes.indexEnum
 
         def termQueryMap = [:]
         BytesRef termbr;
@@ -247,10 +247,10 @@ public class ImportantTerms {
         //reverse sort
         // termQueryMap = termQueryMap.sort { a, b -> b.value <=> a.value }
 
-        TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
-        println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+        TermQuery[] termQueryArray = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE)
+        println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${termQueryArray.size()}  termQuerylist: $termQueryArray"
         println "termQueryMap ${termQueryMap.take(50)}"
-        return termQueryList
+        return termQueryArray
     }
 
     private TermQuery[] getTFIDFTermQueryListForCategory() {
