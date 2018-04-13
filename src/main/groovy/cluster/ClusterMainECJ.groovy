@@ -20,12 +20,10 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-          //  IndexEnum.CRISIS3,
-            //IndexEnum.CLASSIC4,
-            //IndexEnum.NG5,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.NG5,
             IndexEnum.R6
-            // IndexEnum.OHS3
-            // IndexEnum.NG3
     ]
 
     public ClusterMainECJ() {
@@ -65,7 +63,7 @@ class ClusterMainECJ extends Evolve {
 
                 jobReport.queriesReport(job, state.generation as int, popSize as int, cfit)
                 cleanup(state);
-                println ' ---------------------------------END-----------------------------------------------'
+                println "--------END JOB $job  -----------------------------------------------"
             }
         }
         final Date endRun = new Date()

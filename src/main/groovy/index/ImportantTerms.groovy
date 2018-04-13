@@ -16,7 +16,6 @@ import org.apache.lucene.util.BytesRef
  * @author Laurie
  */
 
-
 //the method for term selection / dimension reduction
 enum ImportantTermsMethod {
     F1, TFIDF, IG, CHI, OR, MERGED
@@ -34,10 +33,10 @@ public class ImportantTerms {
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
 
-   public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
+    public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
 
     public static void main(String[] args) {
-       Indexes.instance.setIndex(Indexes.indexEnum = IndexEnum.NG3)
+        Indexes.instance.setIndex(Indexes.indexEnum = IndexEnum.NG3)
         Indexes.instance.categoryNumber = '2'
         Indexes.instance.setIndexFieldsAndTotals()
 
@@ -139,11 +138,11 @@ public class ImportantTerms {
 
 
         MAX_TERMQUERYLIST_SIZE.times {
-            if ( it < f1s.size())
+            if (it < f1s.size())
                 merged << f1s[it]
 
-  //          if (it < ors.size() )
-   //             merged << ors[it]
+            //          if (it < ors.size() )
+            //             merged << ors[it]
 
 //            if (it < chis.size() )
 //                merged << chis[it]

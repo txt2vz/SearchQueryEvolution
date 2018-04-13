@@ -40,7 +40,8 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
-        //   assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
+
+        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -114,8 +115,8 @@ public class ClusterFitness extends SimpleFitness {
             hitsOnly = positiveHits - negativeHits// + missedDocs)
             hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
 
-            baseFitness = (double) hitsPlus
-          //  baseFitness = scorePlus
+          //  baseFitness = (double) hitsPlus
+            baseFitness = scorePlus
 
             //  baseFitness = (double) hitsPlus * fraction * fraction
            // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
