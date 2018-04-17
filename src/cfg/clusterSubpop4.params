@@ -30,9 +30,6 @@ pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.0.species.fitness = cluster.ClusterFitness
 
-pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 100
-pop.subpop.0.species.genome-size = 8
 pop.subpop.0.species.crossover-type	= two
 pop.subpop.0.species.crossover-likelihood = 0.7
 pop.subpop.0.species.mutation-prob	= 0.2
@@ -59,9 +56,6 @@ pop.subpop.1.species = ec.vector.IntegerVectorSpecies
 pop.subpop.1.species.ind = ec.vector.IntegerVectorIndividual 
 pop.subpop.1.species.fitness = cluster.ClusterFitness
 
-pop.subpop.1.species.min-gene = -1
-pop.subpop.1.species.max-gene = 100
-pop.subpop.1.species.genome-size = 8
 pop.subpop.1.species.crossover-type	= one
 pop.subpop.1.species.crossover-likelihood	= 0.8
 pop.subpop.1.species.mutation-prob	= 0.1
@@ -81,9 +75,6 @@ pop.subpop.2.species = ec.vector.IntegerVectorSpecies
 pop.subpop.2.species.ind = ec.vector.IntegerVectorIndividual 
 pop.subpop.2.species.fitness = cluster.ClusterFitness
 
-pop.subpop.2.species.min-gene = -1
-pop.subpop.2.species.max-gene = 100
-pop.subpop.2.species.genome-size = 8
 pop.subpop.2.species.crossover-type	= one
 pop.subpop.2.species.crossover-likelihood	= 0.7
 pop.subpop.2.species.mutation-prob	= 0.1
@@ -103,9 +94,6 @@ pop.subpop.3.species = ec.vector.IntegerVectorSpecies
 pop.subpop.3.species.ind = ec.vector.IntegerVectorIndividual
 pop.subpop.3.species.fitness = cluster.ClusterFitness
 
-pop.subpop.3.species.min-gene = -1
-pop.subpop.3.species.max-gene = 100
-pop.subpop.3.species.genome-size = 8
 pop.subpop.3.species.crossover-type	= one
 pop.subpop.3.species.crossover-likelihood	= 0.8
 pop.subpop.3.species.mutation-prob	= 0.1

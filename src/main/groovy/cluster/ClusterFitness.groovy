@@ -15,6 +15,9 @@ public class ClusterFitness extends SimpleFitness {
     private double baseFitness = 0.0
     private double scoreOnly = 0.0
     private double scorePlus = 0.0
+    private double scoreDivided = 0.0
+    private double precision = 0.0
+    private double recall = 0.0
 
     private int positiveHits = 0
     private int negativeHits = 0
@@ -58,6 +61,10 @@ public class ClusterFitness extends SimpleFitness {
         hitsOnly = 0
         hitsPlus = 0
         coreHitPenalty = 1
+        scoreDivided = 0.0
+
+        precision = 0.0
+        recall = 0.0
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
@@ -109,14 +116,29 @@ public class ClusterFitness extends SimpleFitness {
             totalHits = allHits.size()
             fraction = totalHits / Indexes.indexReader.maxDoc()
             missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+
             scoreOnly = positiveScoreTotal - negativeScoreTotal
             scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
 
             hitsOnly = positiveHits - negativeHits// + missedDocs)
             hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
 
+            scoreDivided = positiveScoreTotal/ (negativeScoreTotal + 1)
+
           //  baseFitness = (double) hitsPlus
-            baseFitness = scorePlus
+           // baseFitness = scorePlus
+            baseFitness = scoreDivided
+
+            precision = positiveHits / totalHits
+            recall = totalHits / Indexes.indexReader.maxDoc()
+
+            baseFitness = recall * precision
+
+
+          //  double recall = catMax.value / categoryTotal;
+          //  double precision = catMax.value / hits.size()
+           // double f1 = (2 * precision * recall) / (precision + recall);
+
 
             //  baseFitness = (double) hitsPlus * fraction * fraction
            // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
@@ -125,8 +147,8 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
-        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty"
-        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: ${fraction.round(2)} hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
+        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty precision $precision recall $recall"
+        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: ${fraction.round(2)} hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} scoreDivided: ${scoreDivided.round(2)} "
         println ""
     }
 
