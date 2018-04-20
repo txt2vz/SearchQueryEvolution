@@ -6,16 +6,22 @@ import index.Indexes
 import org.apache.lucene.search.*
 
 @CompileStatic
+enum FitnessMethod {
+    SCORE, HITS, P_TIMES_R
+}
+
+@CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
+    static final FitnessMethod fitnessMethod = FitnessMethod.SCORE
+
     Map<Query, Integer> queryMap = [:]
+    double baseFitness = 0.0
     private double positiveScoreTotal = 0.0
     private double negativeScoreTotal = 0.0
     private double fraction = 0.0
-    private double baseFitness = 0.0
     private double scoreOnly = 0.0
     private double scorePlus = 0.0
-    private double scoreDivided = 0.0
     private double precision = 0.0
     private double recall = 0.0
 
@@ -61,8 +67,6 @@ public class ClusterFitness extends SimpleFitness {
         hitsOnly = 0
         hitsPlus = 0
         coreHitPenalty = 1
-        scoreDivided = 0.0
-
         precision = 0.0
         recall = 0.0
 
@@ -99,10 +103,10 @@ public class ClusterFitness extends SimpleFitness {
                     negativeHits++
                     negativeScoreTotal = negativeScoreTotal + d.score
 
-                    if (position < coreClusterSize) {
-                        coreClusterPenalty++
-                        //  coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
-                    }
+//                    if (position < coreClusterSize) {
+//                        coreClusterPenalty++
+//                        //  coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
+//                    }
                 } else {
                     positiveHits++
                     positiveScoreTotal = positiveScoreTotal + d.score
@@ -114,41 +118,38 @@ public class ClusterFitness extends SimpleFitness {
         queryMap = qMap.asImmutable()
         if (lowHitsCount == 0) {
             totalHits = allHits.size()
-            fraction = totalHits / Indexes.indexReader.maxDoc()
+            // fraction = totalHits / Indexes.indexReader.maxDoc()
             missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
 
-            scoreOnly = positiveScoreTotal - negativeScoreTotal
-            scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
-
-            hitsOnly = positiveHits - negativeHits// + missedDocs)
-            hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
-
-            scoreDivided = positiveScoreTotal/ (negativeScoreTotal + 1)
-
-          //  baseFitness = (double) hitsPlus
-           // baseFitness = scorePlus
-            baseFitness = scoreDivided
-
-            precision = positiveHits / totalHits
-            recall = totalHits / Indexes.indexReader.maxDoc()
-
-            baseFitness = recall * precision
-
-
-          //  double recall = catMax.value / categoryTotal;
-          //  double precision = catMax.value / hits.size()
-           // double f1 = (2 * precision * recall) / (precision + recall);
-
-
-            //  baseFitness = (double) hitsPlus * fraction * fraction
-           // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
+            switch (fitnessMethod) {
+                case fitnessMethod.SCORE:
+                    scoreOnly = positiveScoreTotal - negativeScoreTotal
+                    scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
+                    baseFitness = scorePlus
+                    break;
+                case fitnessMethod.HITS:
+                    hitsOnly = positiveHits - negativeHits
+                    hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
+                    baseFitness = hitsPlus
+                    break;
+                case fitnessMethod.P_TIMES_R:
+                    precision = positiveHits / totalHits
+                    recall = totalHits / Indexes.indexReader.maxDoc()
+                    baseFitness = precision * recall
+                    break
+            }
         }
+
+        //  scoreDivided = positiveScoreTotal/ (negativeScoreTotal + 1)
+        //  baseFitness = (2 * precision * recall) / (precision + recall)
+        //  baseFitness = (double) hitsPlus * fraction * fraction
+        // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
     }
 
     void generationStats(long generation) {
         println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
         println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} CoreClstPen: $coreClusterPenalty precision $precision recall $recall"
-        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: ${fraction.round(2)} hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} scoreDivided: ${scoreDivided.round(2)} "
+        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs Fraction: ${fraction.round(2)} hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
         println ""
     }
 

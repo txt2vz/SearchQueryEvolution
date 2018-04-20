@@ -4,9 +4,6 @@ import groovy.time.TimeDuration
 import index.Indexes
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
-import org.apache.lucene.search.BooleanClause
-import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
@@ -14,23 +11,21 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 class JobReport {
     def resultsF1 = [:]
-    static boolean appnd = true
 
     void overallSummary(TimeDuration duration) {
 
-        FileWriter fw = new FileWriter("results/overallResultsCluster.txt", appnd)
+        File overallResults = new File("results/overallResultsCluster.txt")
 
-        def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries{ Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
+        def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
         println "categoryAverages: $categoryAverages"
         categoryAverages.each { print it.key + ' Average: ' + it.value.round(3) + ' ' }
-        categoryAverages.each { fw.write(it.key + ' Average: ' + it.value.round(3) + " " ) }
-
-        fw.write " Duration $duration"
+        categoryAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(3) + " ") }
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
-        println "\nOverall Average:  ${overallAverage.round(3)}   ${new Date()} resultsF1: $resultsF1 \n"
-        fw << "\nOverall Average: ${overallAverage.round(3)}   ${new Date()} resultsF1: $resultsF1 \n"
-        fw.close()
+        println "\nOverall Average:  ${overallAverage.round(3)} Fitness Method:  ${ClusterFitness.fitnessMethod}  ${new Date()} resultsF1: $resultsF1 \n"
+
+        overallResults << " Duration $duration Fitness Method: ${ClusterFitness.fitnessMethod} ${new Date()}"
+        overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 
     void queriesReport(int job, int gen, int popSize, ClusterFitness cfit) {
@@ -39,8 +34,8 @@ class JobReport {
         int hitsPerPage = Indexes.indexReader.maxDoc()
 
         String messageOut = ""
-        FileWriter jobResultsQuery = new FileWriter("results/jobResultsClusterQuery.txt", true)
-        jobResultsQuery << "${new Date()}  ***** Job: $job Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
+        File jobResultsQuery = new File("results/jobResultsClusterQuery.txt")
+        jobResultsQuery << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
         List<Double> f1list = [], precisionList = [], recallList = []
 
@@ -51,7 +46,7 @@ class JobReport {
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             String qString = q.toString(Indexes.FIELD_CONTENTS)
 
-            println "***********************************************************************************"
+            println '***********************************************************************************'
 
             //map of categories (ground truth) and their frequencies
             Map<String, Integer> catsFreq = new HashMap<String, Integer>()
@@ -99,15 +94,12 @@ class JobReport {
         jobResultsQuery << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness()} \n"
         jobResultsQuery << messageOut + "\n"
         jobResultsQuery << "************************************************ \n \n"
-        jobResultsQuery.close()
 
-        FileWriter fcsv = new FileWriter("results/resultsClusterByJob.csv", appnd)
-        if (!appnd) {
-            final String fileHead = "aveargeF1, averagePrecision, averageRecall, fitness, indexName , date, gen, job, popSize" + '\n';
-            fcsv << fileHead
+        File fcsv = new File("results/resultsClusterByJob.csv")
+        if (!fcsv.exists()) {
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, date, gen, job, popSize" \n'
         }
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${cfit.getFitness()}, ${Indexes.indexEnum.name()},  ${new Date()},  $gen , $job , $popSize \n"
-        fcsv.close()
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${new Date()},  $gen , $job , $popSize \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]

@@ -1,4 +1,5 @@
 parent.0 = clusterSubpop4.params
+#parent.0 = clusterSubpop8.params
 #parent.0 = clusterSinglePop.params
 
 eval.problem = cluster.ClusterQueryECJ
@@ -12,7 +13,7 @@ breed.elite.0 = 2
 
 #pop.subpops = 1
 pop.subpop.0.species.genome-size = 18
-pop.subpop.0.size = 512
+pop.subpop.0.size = 128
 pop.subpop.1.species.genome-size = 18
 pop.subpop.1.size = 128
 pop.subpop.2.species.genome-size = 18

@@ -20,7 +20,7 @@ stat.file = statDump/out.stat
 select.tournament.size = 3
 #breed.elite.0 = 2
 
-pop.subpops = 4
+pop.subpops = 8
 pop.default-subpop =0
 
 pop.subpop.0.species.genome-size = 18
@@ -147,7 +147,7 @@ exch.subpop.3.select.size= 3
 exch.subpop.3.mod = 50
 exch.subpop.3.start = 50
 exch.subpop.3.size = 4
-exch.subpop.3.num-dest = 1
+exch.subpop.3.num-dest = 2
 exch.subpop.3.dest.0 = 0
 exch.subpop.3.dest.1 = 4
 
