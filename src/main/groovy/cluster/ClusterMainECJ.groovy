@@ -22,8 +22,8 @@ class ClusterMainECJ extends Evolve {
     def clusteringIndexes = [
        //     IndexEnum.CRISIS3,
          //   IndexEnum.CLASSIC4,
-            IndexEnum.NG5,
-           // IndexEnum.R6
+         //   IndexEnum.NG5,
+            IndexEnum.R6
     ]
 
     public ClusterMainECJ() {

@@ -9,37 +9,16 @@ seed.4=time
 seed.5=time
 seed.6=time
 seed.7=time
-#seed.0=4357  
-
-evalthreads = 				4
-breedthreads = 				4
-
-stat = cluster.ClusterGAStatistics
-stat.file = statDump/out.stat
+#seed.0=4357
 
 select.tournament.size = 3
-#breed.elite.0 = 2
 
 pop.subpops = 4
 pop.default-subpop =0
 
-pop.subpop.0.species.genome-size = 18
-pop.subpop.0.size = 128
-pop.subpop.1.species.genome-size = 18
-pop.subpop.1.size = 128
-pop.subpop.2.species.genome-size = 18
-pop.subpop.2.size = 128
-pop.subpop.3.species.genome-size = 18
-pop.subpop.3.size = 128
-
-pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 100
-pop.subpop.1.species.min-gene = -1
-pop.subpop.1.species.max-gene = 100
-pop.subpop.2.species.min-gene = -1
-pop.subpop.2.species.max-gene = 100
-pop.subpop.3.species.min-gene = -1
-pop.subpop.3.species.max-gene = 100
+breed.elite.0 = 2
+breed.elite.2 = 3
+breed.elite.3 = 4
 
 pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
