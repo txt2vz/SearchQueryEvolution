@@ -21,9 +21,11 @@ import java.nio.file.Paths
 enum IndexEnum {
 
     NG20('indexes/20NG', 20),
+    NG6('indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns', 6),
     R10('indexes/R10', 10),
     R8('indexes/R8', 8),
     R6('indexes/R6', 6),
+    R4('indexes/R4', 4),
     NG3('indexes/20NG3SpaceHockeyChristian', 3),
     OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
     NG5('indexes/20NG5WindowsForsaleSpaceHockeyChristian', 5),

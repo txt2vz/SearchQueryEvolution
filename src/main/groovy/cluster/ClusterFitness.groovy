@@ -13,7 +13,7 @@ enum FitnessMethod {
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
-    static final FitnessMethod fitnessMethod = FitnessMethod.SCORE
+    static final FitnessMethod fitnessMethod = FitnessMethod.HITS
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0

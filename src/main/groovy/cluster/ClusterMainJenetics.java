@@ -43,12 +43,15 @@ public class ClusterMainJenetics {
     public ClusterMainJenetics(int job) {
 
         final int popSize = 512;
+        final int subpops = 1;
         final long maxGen = 210;
         JobReport finalReport = new JobReport();
+        int maxGene=100;
+        int genomeLength=18;
 
         final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
-                new IntegerChromosome(-1, 100, 12));
+                new IntegerChromosome(-1, maxGene, genomeLength));
 
         final Engine<IntegerGene, Double> engine = Engine.builder(ClusterMainJenetics::evaluate, gtf).populationSize(popSize)
                 // .survivorsSelector(new
@@ -68,7 +71,7 @@ public class ClusterMainJenetics {
         Genotype<IntegerGene> g = result.getGenotype();
         ClusterFitness cfResult = cf(g);
         System.out.println("cluster fit result " + cfResult.queryShort());
-        finalReport.queriesReport(job, (int) result.getGeneration(), popSize, cfResult);
+        finalReport.queriesReport(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
         System.out.println();
     }
 }

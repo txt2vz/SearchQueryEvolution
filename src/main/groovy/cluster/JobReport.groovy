@@ -1,5 +1,6 @@
 package cluster
 
+import ec.util.Parameter
 import groovy.time.TimeDuration
 import index.Indexes
 import org.apache.lucene.document.Document
@@ -28,7 +29,7 @@ class JobReport {
         overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 
-    void queriesReport(int job, int gen, int popSize, ClusterFitness cfit) {
+    void queriesReport(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
         println "Queries Report qmap: ${cfit.queryMap}"
         int hitsPerPage = Indexes.indexReader.maxDoc()
@@ -97,9 +98,9 @@ class JobReport {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, date, gen, job, popSize" \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSizePop0, wordListSizePop0, gen, job, date \n'
         }
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)} , ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${new Date()},  $gen , $job , $popSize \n"
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]

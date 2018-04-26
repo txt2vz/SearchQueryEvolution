@@ -23,7 +23,7 @@ import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
 enum IndexName {
-    R10, NG20, OHS,NG5
+    R10, NG20, OHS,NG5, NG6
 }
 
 class BuildIndex {
@@ -34,24 +34,37 @@ class BuildIndex {
 
     BuildIndex() {
 
-        IndexName iName = IndexName.NG5
+        IndexName iName = IndexName.NG6
 
         final String ohsIndexPath = 'indexes/Ohsc06MuscC08RespC11Eye'
         final String ohsDocsPath =/C:\Users\aceslh\Dataset\Ohsc06MuscC08RespC11Eye/
 
-        final String r10DocsPath =  /C:\Users\Laurie\Dataset\R8/
+        final String r10DocsPath = // /C:\Users\Laurie\Dataset\R8/
+
+        /C:\Users\aceslh\Dataset\r5/
+
+        final String NG6path = /C:\Users\aceslh\Dataset\r5corn/
         // /C:\Users\Laurie\Dataset\reuters-top10/
 
         final String NGDocsPath =
          //      /C:\Users\Laurie\Dataset\20NG5WindowsMotorcyclesSpaceMedMideast/
-               /C:\Users\aceslh\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
+              // /C:\Users\aceslh\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
+
+                /C:\Users\aceslh\Dataset\r4Ship/
+    //    /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
      //   /C:\Users\Laurie\Dataset\20NG3SpaceHockeyChristian/
                //   /C:\Users\Laurie\Dataset\20bydate/
-        final String r10IndexPath = 'indexes/R8'//'indexes/R10'
+        final String r10IndexPath = 'indexes/R4Ship'//'indexes/R10'
    //     final String NG20IndexPath = 'indexes/NG20SpaceHockeyChristianV7'
         final String NGIndexPath =
                 //'indexes/20NG'
-                'indexes/20NG5WindowsForsaleSpaceHockeyChristian'
+                //'indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns'
+
+        'indexes/R4Ship'
+
+
+
+             //   'indexes/20NG5WindowsForsaleSpaceHockeyChristian'
         //        'indexes/20NG3SpaceHockeyChristian'
           //      'indexes/20NG5WindowsMotorcyclesSpaceMedMideast'
 
@@ -60,7 +73,7 @@ class BuildIndex {
         if (iName == IndexName.R10) {
             docsPath = r10DocsPath
             indexPath = r10IndexPath
-        } else if (iName == IndexName.NG5) {
+        } else if (iName == IndexName.NG6) {
             docsPath = NGDocsPath
             indexPath = NGIndexPath
         }
