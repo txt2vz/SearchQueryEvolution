@@ -92,3 +92,191 @@ TotalHits: 381 Total Docs:  600 PosHits: 355 NegHits: 58 PosScore: 1656.27280533
 ***  TOTALS:   *****   f1list: [0.787878787878788, 0.18978102190490703, 0.7283950617208352, 0.6868686868586878, 0.813953488364305, 0.8268156424738803] averagef1: :0.6722821148669006  ** average precision: 0.8176288147666666 average recall: 0.5816666666666667
 ************************************************ 
  
+Fri Apr 27 11:33:20 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+Query 0 :  wildfires highparkfire springs fire colorado wildfire ## f1: 0.9167114454537125 recall: 0.853 precision: 0.9907084785 categoryTotal: 1000 for category: category:Colorado_w
+Query 1 :  qldfloods floods qld bigwet queensland australia ## f1: 0.929411764700409 recall: 0.869 precision: 0.9988505747 categoryTotal: 1000 for category: category:Queensland
+Query 2 :  bombing bostonmarathon tsarnaev prayforboston boston marathon ## f1: 0.9310529128808124 recall: 0.871 precision: 1.0 categoryTotal: 1000 for category: category:Boston_bom
+TotalHits: 2598 Total Docs:  3000 PosHits: 2594 NegHits: 8 PosScore: 9472.32797217369 NegScore: 26.516693115234375 Fitness: 11445.811279058456 
+***  TOTALS:   *****   f1list: [0.9167114454537125, 0.929411764700409, 0.9310529128808124] averagef1: :0.925725374344978  ** average precision: 0.9965196843999999 average recall: 0.8643333333333333
+************************************************ 
+ 
+Fri Apr 27 11:39:54 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+Query 0 :  fire colorado springs wildfire highparkfire wildfires ## f1: 0.9167114454537125 recall: 0.853 precision: 0.9907084785 categoryTotal: 1000 for category: category:Colorado_w
+Query 1 :  bigwet qldfloods floods queensland australia qld ## f1: 0.929411764700409 recall: 0.869 precision: 0.9988505747 categoryTotal: 1000 for category: category:Queensland
+Query 2 :  bombing boston bostonmarathon marathon prayforboston tsarnaev ## f1: 0.9310529128808124 recall: 0.871 precision: 1.0 categoryTotal: 1000 for category: category:Boston_bom
+TotalHits: 2598 Total Docs:  3000 PosHits: 2594 NegHits: 8 PosScore: 9472.32797217369 NegScore: 26.516693115234375 Fitness: 11445.811279058456 
+***  TOTALS:   *****   f1list: [0.9167114454537125, 0.929411764700409, 0.9310529128808124] averagef1: :0.925725374344978  ** average precision: 0.9965196843999999 average recall: 0.8643333333333333
+************************************************ 
+ 
+Fri Apr 27 11:44:55 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+Query 0 :  algorithm ## f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145 categoryTotal: 500 for category: category:cacm
+Query 1 :  library computer libraries retrieval ## f1: 0.6978818283022035 recall: 0.626 precision: 0.7884130982 categoryTotal: 500 for category: category:cisi
+Query 2 :  patients blood cells ## f1: 0.7163029525032093 recall: 0.558 precision: 1.0 categoryTotal: 500 for category: category:med.
+Query 3 :  supersonic flow layer boundary mach ## f1: 0.857731958772877 recall: 0.832 precision: 0.885106383 categoryTotal: 500 for category: category:cran
+TotalHits: 1274 Total Docs:  2000 PosHits: 1236 NegHits: 76 PosScore: 6428.086094856262 NegScore: 249.0972580909729 Fitness: 8178.988836765289 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.6978818283022035, 0.7163029525032093, 0.857731958772877] averagef1: :0.6896008065175039  ** average precision: 0.912355773925 average recall: 0.585
+************************************************ 
+ 
+Fri Apr 27 11:49:59 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+Query 0 :  algorithm ## f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145 categoryTotal: 500 for category: category:cacm
+Query 1 :  retrieval libraries computer library ## f1: 0.6978818283022035 recall: 0.626 precision: 0.7884130982 categoryTotal: 500 for category: category:cisi
+Query 2 :  blood cells patients ## f1: 0.7163029525032093 recall: 0.558 precision: 1.0 categoryTotal: 500 for category: category:med.
+Query 3 :  layer mach flow boundary supersonic ## f1: 0.857731958772877 recall: 0.832 precision: 0.885106383 categoryTotal: 500 for category: category:cran
+TotalHits: 1274 Total Docs:  2000 PosHits: 1236 NegHits: 76 PosScore: 6428.086094856262 NegScore: 249.0972580909729 Fitness: 8178.988836765289 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.6978818283022035, 0.7163029525032093, 0.857731958772877] averagef1: :0.6896008065175039  ** average precision: 0.912355773925 average recall: 0.585
+************************************************ 
+ 
+Fri Apr 27 11:52:31 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: R4 path: indexes/R4 numberOfCategories: 4   ************************************************************* 
+Query 0 :  stg currency money bank ## f1: 0.8376963350690552 recall: 0.8 precision: 0.8791208791 categoryTotal: 100 for category: category:money-fx
+Query 1 :  vs loss shr revs ## f1: 0.8491620111904435 recall: 0.76 precision: 0.9620253165 categoryTotal: 100 for category: category:earn
+Query 2 :  crude bpd barrel barrels opec ## f1: 0.9032258064317261 recall: 0.84 precision: 0.976744186 categoryTotal: 100 for category: category:crude
+Query 3 :  agriculture grain soviet corn wheat ## f1: 0.9333333333133464 recall: 0.91 precision: 0.9578947368 categoryTotal: 100 for category: category:grain
+TotalHits: 336 Total Docs:  400 PosHits: 322 NegHits: 29 PosScore: 2175.876029610634 NegScore: 102.63455605506897 Fitness: 4073.241473555565 
+***  TOTALS:   *****   f1list: [0.8376963350690552, 0.8491620111904435, 0.9032258064317261, 0.9333333333133464] averagef1: :0.8808543715011429  ** average precision: 0.9439462796 average recall: 0.8275
+************************************************ 
+ 
+Fri Apr 27 11:55:06 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: R4 path: indexes/R4 numberOfCategories: 4   ************************************************************* 
+Query 0 :  currency stg bank money ## f1: 0.8376963350690552 recall: 0.8 precision: 0.8791208791 categoryTotal: 100 for category: category:money-fx
+Query 1 :  shr revs vs profit loss ## f1: 0.8369565217530246 recall: 0.77 precision: 0.9166666667 categoryTotal: 100 for category: category:earn
+Query 2 :  blah crude barrel bpd opec ## f1: 0.826530612244898 recall: 0.81 precision: 0.84375 categoryTotal: 100 for category: category:crude
+Query 3 :  wheat corn grain agriculture ## f1: 0.9381443299048996 recall: 0.91 precision: 0.9680851064 categoryTotal: 100 for category: category:grain
+TotalHits: 344 Total Docs:  400 PosHits: 324 NegHits: 41 PosScore: 2190.2296632528305 NegScore: 147.17589247226715 Fitness: 4043.0537707805634 
+***  TOTALS:   *****   f1list: [0.8376963350690552, 0.8369565217530246, 0.826530612244898, 0.9381443299048996] averagef1: :0.8598319497429694  ** average precision: 0.90190566305 average recall: 0.8225
+************************************************ 
+ 
+Fri Apr 27 11:58:03 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG5 path: indexes/20NG5WindowsForsaleSpaceHockeyChristian numberOfCategories: 5   ************************************************************* 
+Query 0 :  god christ christians jesus ## f1: 0.8491620111904435 recall: 0.76 precision: 0.9620253165 categoryTotal: 100 for category: category:soc.religion.christian
+Query 1 :  mars ## f1: 0.319327731092437 recall: 0.19 precision: 1.0 categoryTotal: 100 for category: category:sci.space
+Query 2 :  software sale windows file ## f1: 0.5992217899037109 recall: 0.77 precision: 0.4904458599 categoryTotal: 100 for category: category:comp.os.ms-windows.misc
+Query 3 :  team nhl hockey play ## f1: 0.8085106382819375 recall: 0.76 precision: 0.8636363636 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 4 :  flight ## f1: 0.3720930232561625 recall: 0.24 precision: 0.8275862069 categoryTotal: 100 for category: category:sci.space
+TotalHits: 338 Total Docs:  500 PosHits: 313 NegHits: 59 PosScore: 1678.107972741127 NegScore: 163.18144249916077 Fitness: 3514.9265302419662 
+***  TOTALS:   *****   f1list: [0.8491620111904435, 0.319327731092437, 0.5992217899037109, 0.8085106382819375, 0.3720930232561625] averagef1: :0.5896630387449383  ** average precision: 0.82873874938 average recall: 0.5439999999999999
+************************************************ 
+ 
+Fri Apr 27 12:00:59 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG5 path: indexes/20NG5WindowsForsaleSpaceHockeyChristian numberOfCategories: 5   ************************************************************* 
+Query 0 :  shuttle orbit mars nasa ## f1: 0.7499999999999999 recall: 0.6 precision: 1.0 categoryTotal: 100 for category: category:sci.space
+Query 1 :  sale ## f1: 0.7125 recall: 0.57 precision: 0.95 categoryTotal: 100 for category: category:misc.forsale
+Query 2 :  god christ jesus ## f1: 0.8361581920756487 recall: 0.74 precision: 0.961038961 categoryTotal: 100 for category: category:soc.religion.christian
+Query 3 :  windows ## f1: 0.7764705882498271 recall: 0.66 precision: 0.9428571429 categoryTotal: 100 for category: category:comp.os.ms-windows.misc
+Query 4 :  players hockey nhl play ## f1: 0.8415300546557138 recall: 0.77 precision: 0.9277108434 categoryTotal: 100 for category: category:rec.sport.hockey
+TotalHits: 339 Total Docs:  500 PosHits: 329 NegHits: 21 PosScore: 1621.5314211249352 NegScore: 57.92799696326256 Fitness: 3563.6034241616726 
+***  TOTALS:   *****   f1list: [0.7499999999999999, 0.7125, 0.8361581920756487, 0.7764705882498271, 0.8415300546557138] averagef1: :0.7833317669962379  ** average precision: 0.95632138946 average recall: 0.6679999999999999
+************************************************ 
+ 
+Fri Apr 27 12:04:58 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   ************************************************************* 
+Query 0 :  nhl game hockey ## f1: 0.7934782608497165 recall: 0.73 precision: 0.869047619 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 1 :  space orbit nasa ## f1: 0.8307692307467456 recall: 0.81 precision: 0.8526315789 categoryTotal: 100 for category: category:sci.space
+Query 2 :  chip escrow clipper ## f1: 0.6013071895420308 recall: 0.46 precision: 0.8679245283 categoryTotal: 100 for category: category:sci.crypt
+Query 3 :  ftp ## f1: 0.18897637794873826 recall: 0.12 precision: 0.4444444444 categoryTotal: 100 for category: category:sci.crypt
+Query 4 :  christ jesus god ## f1: 0.8268156424738803 recall: 0.74 precision: 0.9367088608 categoryTotal: 100 for category: category:soc.religion.christian
+Query 5 :  gun ## f1: 0.813953488364305 recall: 0.7 precision: 0.9722222222 categoryTotal: 100 for category: category:talk.politics.guns
+TotalHits: 382 Total Docs:  600 PosHits: 358 NegHits: 52 PosScore: 1933.5613279342651 NegScore: 249.45574563741684 Fitness: 3684.1055822968483 
+***  TOTALS:   *****   f1list: [0.7934782608497165, 0.8307692307467456, 0.6013071895420308, 0.18897637794873826, 0.8268156424738803, 0.813953488364305] averagef1: :0.6758833649875694  ** average precision: 0.8238298756 average recall: 0.5933333333333334
+************************************************ 
+ 
+Fri Apr 27 12:09:03 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   ************************************************************* 
+Query 0 :  nasa space orbit ## f1: 0.8307692307467456 recall: 0.81 precision: 0.8526315789 categoryTotal: 100 for category: category:sci.space
+Query 1 :  escrow chip clipper ## f1: 0.6013071895420308 recall: 0.46 precision: 0.8679245283 categoryTotal: 100 for category: category:sci.crypt
+Query 2 :  ftp ## f1: 0.18897637794873826 recall: 0.12 precision: 0.4444444444 categoryTotal: 100 for category: category:sci.crypt
+Query 3 :  god jesus christ ## f1: 0.8268156424738803 recall: 0.74 precision: 0.9367088608 categoryTotal: 100 for category: category:soc.religion.christian
+Query 4 :  control gun ## f1: 0.7272727272967249 recall: 0.72 precision: 0.7346938776 categoryTotal: 100 for category: category:talk.politics.guns
+Query 5 :  hockey nhl play ## f1: 0.7640449438221942 recall: 0.68 precision: 0.8717948718 categoryTotal: 100 for category: category:rec.sport.hockey
+TotalHits: 381 Total Docs:  600 PosHits: 347 NegHits: 83 PosScore: 1988.078174829483 NegScore: 363.29547691345215 Fitness: 3624.782697916031 
+***  TOTALS:   *****   f1list: [0.8307692307467456, 0.6013071895420308, 0.18897637794873826, 0.8268156424738803, 0.7272727272967249, 0.7640449438221942] averagef1: :0.6565310186383857  ** average precision: 0.7846996936333333 average recall: 0.5883333333333333
+************************************************ 
+ 
+Fri Apr 27 14:05:23 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+Query 0 :  highparkfire colorado fire springs wildfires wildfire ## f1: 0.9167114454537125 recall: 0.853 precision: 0.9907084785 categoryTotal: 1000 for category: category:Colorado_w
+Query 1 :  queensland qldfloods australia qld bigwet floods ## f1: 0.929411764700409 recall: 0.869 precision: 0.9988505747 categoryTotal: 1000 for category: category:Queensland
+Query 2 :  prayforboston bombing marathon tsarnaev boston bostonmarathon ## f1: 0.9310529128808124 recall: 0.871 precision: 1.0 categoryTotal: 1000 for category: category:Boston_bom
+TotalHits: 2598 Total Docs:  3000 PosHits: 2594 NegHits: 8 PosScore: 9472.32797217369 NegScore: 26.516693115234375 Fitness: 11445.811279058456 
+***  TOTALS:   *****   f1list: [0.9167114454537125, 0.929411764700409, 0.9310529128808124] averagef1: :0.925725374344978  ** average precision: 0.9965196843999999 average recall: 0.8643333333333333
+************************************************ 
+ 
+Fri Apr 27 14:11:42 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   ************************************************************* 
+Query 0 :  wildfires colorado highparkfire springs wildfire fire ## f1: 0.9167114454537125 recall: 0.853 precision: 0.9907084785 categoryTotal: 1000 for category: category:Colorado_w
+Query 1 :  floods queensland australia qldfloods bigwet qld ## f1: 0.929411764700409 recall: 0.869 precision: 0.9988505747 categoryTotal: 1000 for category: category:Queensland
+Query 2 :  tsarnaev marathon bostonmarathon bombing boston prayforboston ## f1: 0.9310529128808124 recall: 0.871 precision: 1.0 categoryTotal: 1000 for category: category:Boston_bom
+TotalHits: 2598 Total Docs:  3000 PosHits: 2594 NegHits: 8 PosScore: 9472.32797217369 NegScore: 26.516693115234375 Fitness: 11445.811279058456 
+***  TOTALS:   *****   f1list: [0.9167114454537125, 0.929411764700409, 0.9310529128808124] averagef1: :0.925725374344978  ** average precision: 0.9965196843999999 average recall: 0.8643333333333333
+************************************************ 
+ 
+Fri Apr 27 14:16:55 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+Query 0 :  algorithm ## f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145 categoryTotal: 500 for category: category:cacm
+Query 1 :  patients cells blood ## f1: 0.7163029525032093 recall: 0.558 precision: 1.0 categoryTotal: 500 for category: category:med.
+Query 2 :  boundary flow layer heat ## f1: 0.8387096774303368 recall: 0.806 precision: 0.874186551 categoryTotal: 500 for category: category:cran
+Query 3 :  library book libraries retrieval computer ## f1: 0.748663101582882 recall: 0.7 precision: 0.8045977011 categoryTotal: 500 for category: category:cisi
+TotalHits: 1301 Total Docs:  2000 PosHits: 1261 NegHits: 80 PosScore: 6335.958137154579 NegScore: 269.49622762203217 Fitness: 8066.461909532547 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.7163029525032093, 0.8387096774303368, 0.748663101582882] averagef1: :0.6975405545020386  ** average precision: 0.9136719666500001 average recall: 0.597
+************************************************ 
+ 
+Fri Apr 27 14:22:06 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   ************************************************************* 
+Query 0 :  algorithm ## f1: 0.48648648649172593 recall: 0.324 precision: 0.9759036145 categoryTotal: 500 for category: category:cacm
+Query 1 :  cells blood patients ## f1: 0.7163029525032093 recall: 0.558 precision: 1.0 categoryTotal: 500 for category: category:med.
+Query 2 :  library book libraries retrieval computer ## f1: 0.748663101582882 recall: 0.7 precision: 0.8045977011 categoryTotal: 500 for category: category:cisi
+Query 3 :  heat boundary flow layer mach ## f1: 0.8600612870225814 recall: 0.842 precision: 0.878914405 categoryTotal: 500 for category: category:cran
+TotalHits: 1318 Total Docs:  2000 PosHits: 1277 NegHits: 82 PosScore: 6748.63506269455 NegScore: 276.19073009490967 Fitness: 8472.44433259964 
+***  TOTALS:   *****   f1list: [0.48648648649172593, 0.7163029525032093, 0.748663101582882, 0.8600612870225814] averagef1: :0.7028784569000996  ** average precision: 0.91485393015 average recall: 0.606
+************************************************ 
+ 
+Fri Apr 27 14:24:41 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: R4 path: indexes/R4 numberOfCategories: 4   ************************************************************* 
+Query 0 :  blah revs cts vs shr ## f1: 0.7577092510820975 recall: 0.86 precision: 0.6771653543 categoryTotal: 100 for category: category:earn
+Query 1 :  money stg bank currency ## f1: 0.8376963350690552 recall: 0.8 precision: 0.8791208791 categoryTotal: 100 for category: category:money-fx
+Query 2 :  corn agriculture grain tonnes wheat ## f1: 0.955223880594515 recall: 0.96 precision: 0.9504950495 categoryTotal: 100 for category: category:grain
+Query 3 :  ecuador bpd energy opec ## f1: 0.6923076923113742 recall: 0.54 precision: 0.9642857143 categoryTotal: 100 for category: category:crude
+TotalHits: 353 Total Docs:  400 PosHits: 333 NegHits: 42 PosScore: 2240.0298405885696 NegScore: 165.7049995660782 Fitness: 4074.3248410224915 
+***  TOTALS:   *****   f1list: [0.7577092510820975, 0.8376963350690552, 0.955223880594515, 0.6923076923113742] averagef1: :0.8107342897642604  ** average precision: 0.8677667493 average recall: 0.79
+************************************************ 
+ 
+Fri Apr 27 14:27:16 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: R4 path: indexes/R4 numberOfCategories: 4   ************************************************************* 
+Query 0 :  vs revs loss shr profit ## f1: 0.8369565217530246 recall: 0.77 precision: 0.9166666667 categoryTotal: 100 for category: category:earn
+Query 1 :  money stg currency bank central ## f1: 0.8333333333373264 recall: 0.8 precision: 0.8695652174 categoryTotal: 100 for category: category:money-fx
+Query 2 :  blah opec crude barrel ## f1: 0.8144329896837283 recall: 0.79 precision: 0.8404255319 categoryTotal: 100 for category: category:crude
+Query 3 :  wheat grain corn tonnes ## f1: 0.9591836734853811 recall: 0.94 precision: 0.9791666667 categoryTotal: 100 for category: category:grain
+TotalHits: 344 Total Docs:  400 PosHits: 322 NegHits: 44 PosScore: 2209.2386301755905 NegScore: 174.97906064987183 Fitness: 4034.2595695257187 
+***  TOTALS:   *****   f1list: [0.8369565217530246, 0.8333333333373264, 0.8144329896837283, 0.9591836734853811] averagef1: :0.8609766295648651  ** average precision: 0.901456020675 average recall: 0.8250000000000001
+************************************************ 
+ 
+Fri Apr 27 14:30:28 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG5 path: indexes/20NG5WindowsForsaleSpaceHockeyChristian numberOfCategories: 5   ************************************************************* 
+Query 0 :  christ jesus god ## f1: 0.8361581920756487 recall: 0.74 precision: 0.961038961 categoryTotal: 100 for category: category:soc.religion.christian
+Query 1 :  play players nhl hockey ## f1: 0.8415300546557138 recall: 0.77 precision: 0.9277108434 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 2 :  orbit mars shuttle nasa ## f1: 0.7499999999999999 recall: 0.6 precision: 1.0 categoryTotal: 100 for category: category:sci.space
+Query 3 :  sale ## f1: 0.7125 recall: 0.57 precision: 0.95 categoryTotal: 100 for category: category:misc.forsale
+Query 4 :  windows ## f1: 0.7764705882498271 recall: 0.66 precision: 0.9428571429 categoryTotal: 100 for category: category:comp.os.ms-windows.misc
+TotalHits: 339 Total Docs:  500 PosHits: 329 NegHits: 21 PosScore: 1621.5314211249352 NegScore: 57.92799696326256 Fitness: 3563.6034241616726 
+***  TOTALS:   *****   f1list: [0.8361581920756487, 0.8415300546557138, 0.7499999999999999, 0.7125, 0.7764705882498271] averagef1: :0.7833317669962379  ** average precision: 0.95632138946 average recall: 0.6679999999999999
+************************************************ 
+ 
+Fri Apr 27 14:33:41 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG5 path: indexes/20NG5WindowsForsaleSpaceHockeyChristian numberOfCategories: 5   ************************************************************* 
+Query 0 :  christ christians jesus god ## f1: 0.8491620111904435 recall: 0.76 precision: 0.9620253165 categoryTotal: 100 for category: category:soc.religion.christian
+Query 1 :  sale ## f1: 0.7125 recall: 0.57 precision: 0.95 categoryTotal: 100 for category: category:misc.forsale
+Query 2 :  shuttle orbit nasa ## f1: 0.7421383647798743 recall: 0.59 precision: 1.0 categoryTotal: 100 for category: category:sci.space
+Query 3 :  play hockey nhl ## f1: 0.7861271676246919 recall: 0.68 precision: 0.9315068493 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 4 :  file windows ## f1: 0.8087431694152647 recall: 0.74 precision: 0.8915662651 categoryTotal: 100 for category: category:comp.os.ms-windows.misc
+TotalHits: 339 Total Docs:  500 PosHits: 324 NegHits: 30 PosScore: 1630.5383588671684 NegScore: 102.44802406430244 Fitness: 3528.090334802866 
+***  TOTALS:   *****   f1list: [0.8491620111904435, 0.7125, 0.7421383647798743, 0.7861271676246919, 0.8087431694152647] averagef1: :0.7797341426020549  ** average precision: 0.94701968618 average recall: 0.6679999999999999
+************************************************ 
+ 
+Fri Apr 27 14:37:43 BST 2018  ***** Job: 0 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   ************************************************************* 
+Query 0 :  god christ jesus ## f1: 0.8268156424738803 recall: 0.74 precision: 0.9367088608 categoryTotal: 100 for category: category:soc.religion.christian
+Query 1 :  chip algorithm encryption ## f1: 0.6892655367202145 recall: 0.61 precision: 0.7922077922 categoryTotal: 100 for category: category:sci.crypt
+Query 2 :  orbit nasa shuttle ## f1: 0.7283950617208352 recall: 0.59 precision: 0.9516129032 categoryTotal: 100 for category: category:sci.space
+Query 3 :  play nhl hockey ## f1: 0.7640449438221942 recall: 0.68 precision: 0.8717948718 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 4 :  files ## f1: 0.3235294117631488 recall: 0.22 precision: 0.6111111111 categoryTotal: 100 for category: category:sci.crypt
+Query 5 :  gun ## f1: 0.813953488364305 recall: 0.7 precision: 0.9722222222 categoryTotal: 100 for category: category:talk.politics.guns
+TotalHits: 368 Total Docs:  600 PosHits: 342 NegHits: 62 PosScore: 1845.6144666671753 NegScore: 245.2634745836258 Fitness: 3600.3509920835495 
+***  TOTALS:   *****   f1list: [0.8268156424738803, 0.6892655367202145, 0.7283950617208352, 0.7640449438221942, 0.3235294117631488, 0.813953488364305] averagef1: :0.691000680810763  ** average precision: 0.8559429602166667 average recall: 0.59
+************************************************ 
+ 
+Fri Apr 27 14:41:52 BST 2018  ***** Job: 1 Fitness Method: SCORE  Gen: 799 PopSize: 512 Index: NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   ************************************************************* 
+Query 0 :  jesus christ god ## f1: 0.8268156424738803 recall: 0.74 precision: 0.9367088608 categoryTotal: 100 for category: category:soc.religion.christian
+Query 1 :  ftp ## f1: 0.18897637794873826 recall: 0.12 precision: 0.4444444444 categoryTotal: 100 for category: category:sci.crypt
+Query 2 :  gun ## f1: 0.813953488364305 recall: 0.7 precision: 0.9722222222 categoryTotal: 100 for category: category:talk.politics.guns
+Query 3 :  nasa space orbit ## f1: 0.8307692307467456 recall: 0.81 precision: 0.8526315789 categoryTotal: 100 for category: category:sci.space
+Query 4 :  nhl hockey game ## f1: 0.7934782608497165 recall: 0.73 precision: 0.869047619 categoryTotal: 100 for category: category:rec.sport.hockey
+Query 5 :  chip escrow clipper ## f1: 0.6013071895420308 recall: 0.46 precision: 0.8679245283 categoryTotal: 100 for category: category:sci.crypt
+TotalHits: 382 Total Docs:  600 PosHits: 358 NegHits: 52 PosScore: 1933.5613279342651 NegScore: 249.45574563741684 Fitness: 3684.1055822968483 
+***  TOTALS:   *****   f1list: [0.8268156424738803, 0.18897637794873826, 0.813953488364305, 0.8307692307467456, 0.7934782608497165, 0.6013071895420308] averagef1: :0.6758833649875694  ** average precision: 0.8238298756 average recall: 0.5933333333333334
+************************************************ 
+ 
