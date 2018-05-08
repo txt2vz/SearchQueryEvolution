@@ -1,10 +1,10 @@
 package cluster
 
-import ec.util.Parameter
 import groovy.time.TimeDuration
 import index.Indexes
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
@@ -32,58 +32,12 @@ class JobReport {
     void queriesReport(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
         println "Queries Report qmap: ${cfit.queryMap}"
-        int hitsPerPage = Indexes.indexReader.maxDoc()
 
         String messageOut = ""
-        File jobResultsQuery = new File("results/jobResultsClusterQuery.txt")
-        jobResultsQuery << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
+        File jobResultsQueryFileOut = new File("results/jobResultsClusterQuery.txt")
+        jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
-        List<Double> f1list = [], precisionList = [], recallList = []
-
-        cfit.queryMap.keySet().eachWithIndex { q, index ->
-
-            TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
-            Indexes.indexSearcher.search(q, collector);
-            ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            String qString = q.toString(Indexes.FIELD_CONTENTS)
-
-            println '***********************************************************************************'
-
-            //map of categories (ground truth) and their frequencies
-            Map<String, Integer> catsFreq = new HashMap<String, Integer>()
-            hits.eachWithIndex { ScoreDoc h, int i ->
-                int docId = h.doc;
-                Document d = Indexes.indexSearcher.doc(docId);
-                String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
-                int n = catsFreq.get((catName)) ?: 0
-                catsFreq.put((catName), n + 1)
-            }
-            println "Gen: $gen ClusterQuery: $index catsFreq: $catsFreq for query: $qString "
-
-            //find the category with maximimum returned docs for this query
-            Map.Entry<String, Integer> catMax = catsFreq?.max { it?.value }
-
-            println "catsFreq: $catsFreq cats max: $catMax "
-
-            if (catMax != null) {
-                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
-                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
-                        catMax.key));
-                Indexes.indexSearcher.search(catQ, totalHitCollector);
-                int categoryTotal = totalHitCollector.getTotalHits();
-
-                double recall = catMax.value / categoryTotal;
-                double precision = catMax.value / hits.size()
-                double f1 = (2 * precision * recall) / (precision + recall);
-
-                f1list << f1
-                precisionList << precision
-                recallList << recall
-                messageOut = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
-                println messageOut
-                jobResultsQuery << messageOut + "\n"
-            }
-        }
+        def (ArrayList<Double> f1list, ArrayList<Double> recallList, ArrayList<Double> precisionList) = evaluateClusters(cfit.queryMap, jobResultsQueryFileOut)
 
         double averageF1forJob = (f1list) ? (double) f1list.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
         final double averageRecall = (recallList) ? (double) recallList.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
@@ -91,10 +45,10 @@ class JobReport {
         messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
-        jobResultsQuery << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        jobResultsQuery << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness()} \n"
-        jobResultsQuery << messageOut + "\n"
-        jobResultsQuery << "************************************************ \n \n"
+        jobResultsQueryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
+        jobResultsQueryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness()} \n"
+        jobResultsQueryFileOut << messageOut + "\n"
+        jobResultsQueryFileOut << "************************************************ \n \n"
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
@@ -104,5 +58,69 @@ class JobReport {
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
+    }
+
+    List evaluateClusters(Map queryMap, File jobResultsQuery) {
+        List<Double> f1list = [], precisionList = [], recallList = []
+
+        queryMap.keySet().eachWithIndex { Query q, index ->
+
+            String qString = q.toString(Indexes.FIELD_CONTENTS)
+            //map of categories (ground truth) and their frequencies
+            //  def (HashMap<String, Integer> catsFreq, int hitsSize) = findMostFrequentCategoryForQuery(q)
+
+            //find the category with maximimum returned docs for this query
+            //  Map.Entry<String, Integer> catMax = catsFreq?.max { it?.value }
+            def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
+            println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
+
+            if (maxCatName != null) {
+                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
+                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
+                        maxCatName));
+                Indexes.indexSearcher.search(catQ, totalHitCollector);
+                int categoryTotal = totalHitCollector.getTotalHits();
+
+                double recall = (double) maxCatHits / categoryTotal;
+                double precision = (double) maxCatHits / totalHits
+                double f1 = (2 * precision * recall) / (precision + recall)
+
+                f1list << f1
+                precisionList << precision
+                recallList << recall
+
+                def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                println out
+                jobResultsQuery << out + "\n"
+            }
+        }
+        [f1list, recallList, precisionList]
+    }
+
+    private List findMostFrequentCategoryForQuery(Query q, int index) {
+        Map<String, Integer> catsFreq = new HashMap<String, Integer>()
+        String qString = q.toString(Indexes.FIELD_CONTENTS)
+
+        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.maxDoc());
+        Indexes.indexSearcher.search(q, collector);
+        ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+        hits.eachWithIndex { ScoreDoc h, int i ->
+            int docId = h.doc;
+            Document d = Indexes.indexSearcher.doc(docId);
+            String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
+            int n = catsFreq.get((catName)) ?: 0
+            catsFreq.put((catName), n + 1)
+        }
+
+        Map.Entry<String, Integer> catMax = catsFreq?.max { it?.value }
+        println '***********************************************************************************'
+        println "ClusterQuery: $index catsFreq: $catsFreq for query: $qString "
+        println "catsFreq: $catsFreq cats max: $catMax "
+
+        String maxCategoryName = catMax.key
+        int maxCategoryHits = catMax.value
+
+        [maxCategoryName, maxCategoryHits, hits.size()]
     }
 }
