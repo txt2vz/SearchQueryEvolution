@@ -26,6 +26,7 @@ class EvaluateClustersSpec extends spock.lang.Specification {
         then:
         maxCatName == 'grain'
         maxCatHits == 100
+        totalHits == 100
 
         when:
         catQ = new TermQuery(new Term(Indexes.FIELD_CONTENTS,
@@ -35,5 +36,15 @@ class EvaluateClustersSpec extends spock.lang.Specification {
         then:
         maxCatName == 'crude'
         maxCatHits == 28
+        totalHits == 28
+
+        when:
+        catQ = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'oil'))
+        (maxCatName, maxCatHits, totalHits) = jr.findMostFrequentCategoryForQuery(catQ, 0)
+
+        then:
+        maxCatName == 'crude'
+        maxCatHits == 91
+        totalHits == 103
     }
 }
