@@ -40,20 +40,18 @@ class QueryListFromChromosome {
 
         int k = intArray[0]
 
-        int gene=0
+        int gene
       //  intArray.eachWithIndex { int gene, int index ->
         for (int i=1;i<intArray.size(); i++){
             int clusterNumber = i % k
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
             gene = intArray[i]
 
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+            if (gene < termQueryArray.size() && gene >= 0  && bqbL[clusterNumber]  && i<= (k *1)){//} && genes.add(gene)) {
                 bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
             }
         }
-        Tuple2 t2 = new Tuple2(bqbL, k)
-
-        return  t2// [bqbL, k]
+        return new Tuple2(bqbL, k)
     }
 
     static List<BooleanQuery.Builder> getORQueryListNot(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {

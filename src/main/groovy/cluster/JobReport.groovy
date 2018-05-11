@@ -97,7 +97,7 @@ class JobReport {
         [f1list, recallList, precisionList]
     }
 
-    private List findMostFrequentCategoryForQuery(Query q, int index) {
+    List findMostFrequentCategoryForQuery(Query q, int index) {
         Map<String, Integer> catsFreq = new HashMap<String, Integer>()
         String qString = q.toString(Indexes.FIELD_CONTENTS)
 

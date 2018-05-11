@@ -7,13 +7,13 @@ import org.apache.lucene.search.*
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, P_TIMES_R
+    SCORE, HITS, P_TIMES_R, SETK
 }
 
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
-    static final FitnessMethod fitnessMethod = FitnessMethod.HITS
+    static final FitnessMethod fitnessMethod = FitnessMethod.SETK
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0
@@ -50,7 +50,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
 
-        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
+//        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -137,6 +137,11 @@ public class ClusterFitness extends SimpleFitness {
                     recall = totalHits / Indexes.indexReader.maxDoc()
                     baseFitness = precision * recall
                     break
+                case fitnessMethod.SETK:
+                    hitsOnly = positiveHits - negativeHits
+                    hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
+                    baseFitness = hitsPlus
+                    break;
             }
         }
 
