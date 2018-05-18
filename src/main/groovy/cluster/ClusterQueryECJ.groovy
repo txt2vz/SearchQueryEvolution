@@ -22,7 +22,7 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP, ORSETK
+    OR, ORNOT, AND, ALLNOT, ORNOTEVOLVED, SpanFirst, GP, ORSETK, DNF, ORDNF
 }
 
 @CompileStatic
@@ -31,9 +31,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private IndexSearcher searcher = Indexes.indexSearcher
     private TermQuery[] termQueryArray
 
-    final QueryType queryType = QueryType.OR//
-                            //   QueryType.ORNOT
-                             //    QueryType.ORSETK
+    final QueryType queryType = QueryType.ORDNF
+                              //QueryType.OR
+                             //   QueryType.ORNOT
+                             //   QueryType.ORSETK
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
@@ -59,6 +60,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 fitness.setClusterFitness(bqbList)
                 break;
+
             case QueryType.ORSETK :
                 Tuple2 returnvalues  = QueryListFromChromosome.getORQueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
                 bqbList = (List<BooleanQuery.Builder>) returnvalues.first
@@ -66,11 +68,17 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 fitness.setClusterFitness(bqbList, k)
                 break;
 
-        //@TypeChecked(TypeCheckingMode.SKIP)
-//			case QueryType.AND :
-//				(bqbList, duplicateCount, lowSubqHits) = queryListFromChromosome.getANDQL(intVectorIndividual)
-//				break;
-			case QueryType.ORNOT :
+			case QueryType.DNF :
+				bqbList =  QueryListFromChromosome.getDNFQueryList( (int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS )
+                fitness.setClusterFitness(bqbList)
+                break;
+
+            case QueryType.ORDNF :
+                bqbList =  QueryListFromChromosome.getORDNFQueryList( (int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS )
+                fitness.setClusterFitness(bqbList)
+                break;
+
+            case QueryType.ORNOT :
 				bqbList = QueryListFromChromosome.getORQueryListNot((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 fitness.setClusterFitness(bqbList)
 				break;

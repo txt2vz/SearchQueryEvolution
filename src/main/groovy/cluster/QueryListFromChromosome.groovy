@@ -41,17 +41,126 @@ class QueryListFromChromosome {
         int k = intArray[0]
 
         int gene
-      //  intArray.eachWithIndex { int gene, int index ->
-        for (int i=1;i<intArray.size(); i++){
+        //  intArray.eachWithIndex { int gene, int index ->
+        for (int i = 1; i < intArray.size(); i++) {
             int clusterNumber = i % k
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
             gene = intArray[i]
 
-            if (gene < termQueryArray.size() && gene >= 0  && bqbL[clusterNumber]  && i<= (k *1)){//} && genes.add(gene)) {
+            if (gene < termQueryArray.size() && gene >= 0 && bqbL[clusterNumber] && i <= (k * 2)) {
+//} && genes.add(gene)) {
+                //if (gene < termQueryArray.size() && gene >= 0   && genes.add(gene)) {
                 bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                //    bqbL[clusterNumber].setMinimumNumberShouldMatch(2)
             }
         }
         return new Tuple2(bqbL, k)
+    }
+
+    static List<BooleanQuery.Builder> getORDNFQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
+
+        Set andPairSet = [] as Set
+        TermQuery term0, term1
+        int queryNumber = 0;
+
+        List<BooleanQuery.Builder> bqbL = []
+
+        intArray.eachWithIndex { int gene, int index ->
+
+            if (index < Indexes.NUMBER_OF_CLUSTERS) {
+                int clusterNumber = index % numberOfClusters
+                bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+
+                if (gene < termQueryArray.size() && gene >= 0) {//&& genes.add(gene)) {
+                    bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                }
+
+            } else if (gene < termQueryArray.size() && gene >= 0) {
+                if (term0 == null) {
+                    term0 = termQueryArray[gene]
+                } else {
+                    term1 = termQueryArray[gene]
+
+                    Set andPair = [term0, term1] as Set
+                    if ((term0 != term1) && andPairSet.add(andPair)) {
+
+                        int clusterNumber = queryNumber % Indexes.NUMBER_OF_CLUSTERS
+                        queryNumber++
+
+                        BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
+                        subbqb.add(term0, BooleanClause.Occur.MUST);
+                        subbqb.add(term1, BooleanClause.Occur.MUST)
+                        BooleanQuery subq = subbqb.build();
+
+                        bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+
+                        bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
+                        term0 = null;
+                    }
+                }
+            }
+        }
+        return bqbL
+    }
+
+    //query in DNF format - could be used to generate graph for cluster visualisation?
+    static List<BooleanQuery.Builder> getDNFQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
+
+        def andPairSet = [] as Set
+        TermQuery term0, term1
+        int qNumber = 0;
+
+        List<BooleanQuery.Builder> bqbL = []
+
+        intArray.eachWithIndex { int gene, int index ->
+
+            if (gene < termQueryArray.size() && gene >= 0) {
+                if (term0 == null) {
+                    term0 = termQueryArray[gene]
+                } else {
+                    term1 = termQueryArray[gene]
+
+                    Set andPair = [term0, term1] as Set
+                    if ((term0 != term1) && andPairSet.add(andPair)) {
+
+                        int clusterNumber = qNumber % Indexes.NUMBER_OF_CLUSTERS
+                        qNumber++
+
+                        //check in graph form for viz
+                        //     if (!clusterSets[clusterNumber]) {
+                        //       clusterSets[clusterNumber] = [] as Set
+                        //  } else if (!(clusterSets[clusterNumber].contains(term0) || clusterSets[clusterNumber].contains(term1)))
+                        //    graphPen = graphPen + 1
+
+                        //check that query will be in tree form (for Viz)
+                        //	if (clusterSets[clusterNumber].size()>0 )
+                        //		if (! ( (clusterSets[clusterNumber].contains(word0) && !clusterSets[clusterNumber].contains(word1))
+                        //		|| (clusterSets[clusterNumber].contains(word1) && !clusterSets[clusterNumber].contains(word0)) )) treePen = treePen + 1;
+
+                        // clusterSets[clusterNumber].add(term0)
+                        // clusterSets[clusterNumber].add(term1)
+
+                        BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
+                        subbqb.add(term0, BooleanClause.Occur.MUST);
+                        subbqb.add(term1, BooleanClause.Occur.MUST)
+                        BooleanQuery subq = subbqb.build();
+
+                        bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+
+                        //check that the subquery returns something
+                        //     TotalHitCountCollector collector = new TotalHitCountCollector();
+                        //   Indexes.indexSearcher.search(subq, collector);
+                        //   if (collector.getTotalHits() < hitsMin) {
+                        //     lowSubqHits = lowSubqHits + 1;
+                        // }
+
+                        bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
+                        term0 = null;
+                    }
+                }
+            }
+        }
+        return bqbL//[bqbList, duplicateCount, lowSubqHits]
     }
 
     static List<BooleanQuery.Builder> getORQueryListNot(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
@@ -75,14 +184,13 @@ class QueryListFromChromosome {
 
             if (index == 0) {
                 qNot = bqb.build()
-            } else
-            {
+            } else {
                 BooleanQuery qn0 = bqb.build()
                 def clauses = qNot.clauses()
-                for (clause in clauses){
-                    bqb.add (clause.getQuery(), BooleanClause.Occur.MUST_NOT )
+                for (clause in clauses) {
+                    bqb.add(clause.getQuery(), BooleanClause.Occur.MUST_NOT)
                 }
-             //   bqb.add(qNot, BooleanClause.Occur.MUST_NOT)
+                //   bqb.add(qNot, BooleanClause.Occur.MUST_NOT)
                 qNot = qn0
             }
         }
@@ -231,74 +339,5 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    @TypeChecked(TypeCheckingMode.SKIP)
-    //query in DNF format - could be used to generate graph for cluster visualisation?
-    public List getANDQL(IntegerVectorIndividual intVectorIndividual) {
 
-        int duplicateCount = 0
-        int lowSubqHits = 0
-        int treePen = 0
-        int graphPen = 0
-        int hitsMin = 4
-
-        def andPairSet = [] as Set
-        def clusterSets = []
-        def term0 = null, term1 = null
-        int qNumber = 0;
-
-        def bqbList = []
-
-        intVectorIndividual.genome.eachWithIndex { gene, index ->
-            assert gene < termArray.size()
-
-            //if (gene >termArray.size() || gene < 0)
-            //	gene =0;
-
-            if (term0 == null) {
-                term0 = termArray[gene]
-            } else {
-                term1 = termArray[gene]
-
-                int clusterNumber = qNumber % Indexes.NUMBER_OF_CLUSTERS
-                qNumber++
-
-                def wrds = [term0, term1] as Set
-                if (term0 == term1 || !andPairSet.add(wrds)) {
-                    duplicateCount = duplicateCount + 1;
-                }
-
-                //check in graph form for viz
-                if (!clusterSets[clusterNumber]) {
-                    clusterSets[clusterNumber] = [] as Set
-                } else if (!(clusterSets[clusterNumber].contains(term0) || clusterSets[clusterNumber].contains(term1)))
-                    graphPen = graphPen + 1
-
-                //check that query will be in tree form (for Viz)
-                //	if (clusterSets[clusterNumber].size()>0 )
-                //		if (! ( (clusterSets[clusterNumber].contains(word0) && !clusterSets[clusterNumber].contains(word1))
-                //		|| (clusterSets[clusterNumber].contains(word1) && !clusterSets[clusterNumber].contains(word0)) )) treePen = treePen + 1;
-
-                clusterSets[clusterNumber].add(term0)
-                clusterSets[clusterNumber].add(term1)
-
-                BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
-                subbqb.add(new TermQuery(term0), BooleanClause.Occur.MUST);
-                subbqb.add(new TermQuery(term1), BooleanClause.Occur.MUST);
-                BooleanQuery subq = subbqb.build();
-
-                bqbList[clusterNumber] = bqbList[clusterNumber] ?: new BooleanQuery.Builder()
-
-                //check that the subquery returns something
-                TotalHitCountCollector collector = new TotalHitCountCollector();
-                searcher.search(subq, collector);
-                if (collector.getTotalHits() < hitsMin) {
-                    lowSubqHits = lowSubqHits + 1;
-                }
-
-                bqbList[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
-                term0 = null;
-            }
-        }
-        return [bqbList, duplicateCount, lowSubqHits]
-    }
 }
