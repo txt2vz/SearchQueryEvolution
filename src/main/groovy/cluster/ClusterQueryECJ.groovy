@@ -31,8 +31,8 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private IndexSearcher searcher = Indexes.indexSearcher
     private TermQuery[] termQueryArray
 
-    final QueryType queryType =// QueryType.ORDNF
-                              QueryType.OR
+    static final QueryType queryType = QueryType.ORDNF
+                              //QueryType.OR
                              //   QueryType.ORNOT
                              //   QueryType.ORSETK
     public void setup(final EvolutionState state, final Parameter base) {

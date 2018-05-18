@@ -52,9 +52,10 @@ class JobReport {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSizePop0, wordListSizePop0, gen, job, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSizePop0, wordListSizePop0, queryType gen, job, date \n'
         }
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, $gen, $job, ${new Date()} \n"
+	   
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
