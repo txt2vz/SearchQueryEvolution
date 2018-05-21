@@ -15,20 +15,19 @@ class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
             'src/cfg/clusterGA.params'
-         //    'src/cfg/clusterGA_K.params'
+    //    'src/cfg/clusterGA_K.params'
 
-    private final int NUMBER_OF_JOBS = 2
+    private final int NUMBER_OF_JOBS = 3
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-       //   IndexEnum.CRISIS3,
-           //IndexEnum.CLASSIC4,
-        //   IndexEnum.R4,
-       //    IndexEnum.NG5,
-           //IndexEnum.NG6
-           IndexEnum.R5
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
+            IndexEnum.R5,
+            IndexEnum.NG5,
+            IndexEnum.NG6
 
-         //  IndexEnum.R6
     ]
 
     public ClusterMainECJ() {
@@ -66,9 +65,9 @@ class ClusterMainECJ extends Evolve {
                     }.fitness
                 }.max { it.fitness() }
 
-                final int numberOfSubpops =  state.parameters.getInt(new Parameter("pop.subpops"),new Parameter("pop.subpops" ))
-                final int wordListSizePop0 =  state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"),new Parameter("pop.subpop.0.species.max-gene" ))
-                final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"),new Parameter("pop.subpop.0.species.genome-size" ))
+                final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
+                final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
+                final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                 println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0"
 
                 jobReport.queriesReport(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
