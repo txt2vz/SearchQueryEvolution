@@ -92,11 +92,16 @@ class QueryListFromChromosome {
                         subbqb.add(term1, BooleanClause.Occur.MUST)
                         BooleanQuery subq = subbqb.build();
 
-                        bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
-
-                        bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
-                        term0 = null;
+                        //check that the subquery returns something
+//                        TotalHitCountCollector collector = new TotalHitCountCollector();
+//                        Indexes.indexSearcher.search(subq, collector);
+//                        if (collector.getTotalHits() > 10) {
+//
+//                            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+//                            bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
+//                        }
                     }
+                    term0 = null;
                 }
             }
         }
