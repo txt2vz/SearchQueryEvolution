@@ -39,9 +39,11 @@ class JobReport {
 
         def (ArrayList<Double> f1list, ArrayList<Double> recallList, ArrayList<Double> precisionList) = evaluateClusters(cfit.queryMap, jobResultsQueryFileOut)
 
-        double averageF1forJob = (f1list) ? (double) f1list.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
-        final double averageRecall = (recallList) ? (double) recallList.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
-        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / Indexes.NUMBER_OF_CLUSTERS : 0
+        int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.numberOfClusters)
+
+        double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters:0 // Indexes.NUMBER_OF_CLUSTERS : 0
+        final double averageRecall = (recallList) ? (double) recallList.sum() /  numClusters:0  // Indexes.NUMBER_OF_CLUSTERS : 0
+        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters:0  //Indexes.NUMBER_OF_CLUSTERS : 0
         messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 

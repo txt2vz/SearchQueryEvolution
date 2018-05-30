@@ -34,7 +34,7 @@ public class ClusterFitness extends SimpleFitness {
     private int missedDocs = 0
     private int lowHitsCount = 0
     private int coreHitPenalty = 0
-    private int numberOfClusters = 0
+    int numberOfClusters = 0
 
     private int hitsPerPage = Indexes.indexReader.maxDoc()
     private final static int coreClusterSize = 10
@@ -49,7 +49,7 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
-
+        numberOfClusters = bqbArray.size()
 //        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
 
         positiveScoreTotal = 0.0
@@ -86,6 +86,7 @@ public class ClusterFitness extends SimpleFitness {
             }
             Query otherBQ = bqbOthers.build()
 
+            //collect docid from other queries
             TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
             hitsOthers.each { ScoreDoc otherHit -> otherDocIdSet << otherHit.doc }
@@ -96,17 +97,13 @@ public class ClusterFitness extends SimpleFitness {
 
             if (hits.size() < 2) lowHitsCount++
 
-            hits.eachWithIndex { ScoreDoc d, int position ->
+            hits.each { ScoreDoc d ->
                 allHits << d.doc
 
                 if (otherDocIdSet.contains(d.doc)) {
                     negativeHits++
                     negativeScoreTotal = negativeScoreTotal + d.score
 
-//                    if (position < coreClusterSize) {
-//                        coreClusterPenalty++
-//                        //  coreHitPenalty = coreHitPenalty + (coreClusterSize - position)
-//                    }
                 } else {
                     positiveHits++
                     positiveScoreTotal = positiveScoreTotal + d.score
@@ -148,7 +145,6 @@ public class ClusterFitness extends SimpleFitness {
             }
         }
 
-        //  scoreDivided = positiveScoreTotal/ (negativeScoreTotal + 1)
         //  baseFitness = (2 * precision * recall) / (precision + recall)
         //  baseFitness = (double) hitsPlus * fraction * fraction
         // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction

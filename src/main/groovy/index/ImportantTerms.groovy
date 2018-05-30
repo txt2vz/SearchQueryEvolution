@@ -79,7 +79,7 @@ public class ImportantTerms {
         def word = t.text()
 
         return (
-                df > 2
+                df > 10
                         && !stopSet.contains(word)
                         && !word.contains("'")
                         && word.length() > 1

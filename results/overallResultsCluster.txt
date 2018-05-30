@@ -98,3 +98,45 @@ R5 Average: 0.506  Duration 4 minutes, 6.523 seconds Fitness Method: SETK Thu Ma
 Overall Average: 0.506 resultsF1: [[R5, 0]:0.6347203824931005, [R5, 1]:0.37810686475547156] 
 R5 Average: 0.64  Duration 4 minutes, 1.514 seconds Fitness Method: SETK Thu May 24 12:37:18 BST 2018
 Overall Average: 0.64 resultsF1: [[R5, 0]:0.6382593135343414, [R5, 1]:0.6419213362506422] 
+NG6 Average: 0.513  Duration 1 minutes, 33.135 seconds Fitness Method: HITS Fri May 25 10:27:47 BST 2018
+Overall Average: 0.513 resultsF1: [[NG6, 0]:0.5403415450788086, [NG6, 1]:0.48634227516490774] 
+NG6 Average: 0.609  Duration 1 minutes, 7.808 seconds Fitness Method: HITS Fri May 25 12:43:10 BST 2018
+Overall Average: 0.609 resultsF1: [[NG6, 0]:0.610175172774221, [NG6, 1]:0.6072822073515493] 
+CRISIS3 Average: 0.745  Duration 1 minutes, 24.504 seconds Fitness Method: HITS Fri May 25 12:45:05 BST 2018
+Overall Average: 0.745 resultsF1: [[CRISIS3, 0]:0.7474197043849365, [CRISIS3, 1]:0.7416474787355156] 
+R5 Average: 0.696  Duration 2 minutes, 15.402 seconds Fitness Method: HITS Fri May 25 15:41:07 BST 2018
+Overall Average: 0.696 resultsF1: [[R5, 0]:0.64125117995366, [R5, 1]:0.7506339930536413] 
+R4 Average: 0.616  Duration 2 minutes, 14.595 seconds Fitness Method: HITS Fri May 25 15:57:34 BST 2018
+Overall Average: 0.616 resultsF1: [[R4, 0]:0.8643543048795549, [R4, 1]:0.3671979835346172] 
+NG5 Average: 0.639  Duration 2 minutes, 21.122 seconds Fitness Method: HITS Fri May 25 16:00:45 BST 2018
+Overall Average: 0.639 resultsF1: [[NG5, 0]:0.7226554493649655, [NG5, 1]:0.5551475893387658] 
+NG6 Average: 0.262  Duration 1 minutes, 56.167 seconds Fitness Method: HITS Fri May 25 16:07:50 BST 2018
+Overall Average: 0.262 resultsF1: [[NG6, 0]:0.19323901031218105, [NG6, 1]:0.32984384138516676] 
+NG6 Average: 0.532  Duration 4 minutes, 32.319 seconds Fitness Method: HITS Fri May 25 16:13:59 BST 2018
+Overall Average: 0.532 resultsF1: [[NG6, 0]:0.49381696207038334, [NG6, 1]:0.569995000417438] 
+CLASSIC4 Average: 0.624  Duration 9 minutes, 5.313 seconds Fitness Method: HITS Fri May 25 17:06:16 BST 2018
+Overall Average: 0.624 resultsF1: [[CLASSIC4, 0]:0.6243149086115571, [CLASSIC4, 1]:0.6231988762327099] 
+NG5 Average: 0.232  Duration 3 minutes, 9.735 seconds Fitness Method: SCORE Tue May 29 13:19:39 BST 2018
+Overall Average: 0.232 resultsF1: [[NG5, 0]:0.23067607557477804, [NG5, 1]:0.23363525610466657] 
+NG5 Average: 0.37  Duration 4 minutes, 7.706 seconds Fitness Method: SCORE Tue May 29 13:23:56 BST 2018
+Overall Average: 0.37 resultsF1: [[NG5, 0]:0.5180249616674706, [NG5, 1]:0.22291873963515751] 
+NG5 Average: 0.385  Duration 4 minutes, 7.924 seconds Fitness Method: HITS Tue May 29 13:28:27 BST 2018
+Overall Average: 0.385 resultsF1: [[NG5, 0]:0.2153365655245047, [NG5, 1]:0.5555603278348376] 
+NG6 Average: 0.534  Duration 4 minutes, 40.282 seconds Fitness Method: HITS Tue May 29 13:34:40 BST 2018
+Overall Average: 0.534 resultsF1: [[NG6, 0]:0.6028523237545116, [NG6, 1]:0.4654700062080954] 
+NG6 Average: 0.501  Duration 5 minutes, 15.780 seconds Fitness Method: P_TIMES_R Tue May 29 13:48:05 BST 2018
+Overall Average: 0.501 resultsF1: [[NG6, 0]:0.4139556778418653, [NG6, 1]:0.588090484283218] 
+NG6 Average: 0.191  Duration 3 minutes, 40.580 seconds Fitness Method: POS_DIV_NEG Tue May 29 13:54:36 BST 2018
+Overall Average: 0.191 resultsF1: [[NG6, 0]:0.19005010737294203, [NG6, 1]:0.19118701243938432] 
+NG6 Average: 0.61  Duration 4 minutes, 43.768 seconds Fitness Method: HITS Tue May 29 13:59:30 BST 2018
+Overall Average: 0.61 resultsF1: [[NG6, 0]:0.6168727763032494, [NG6, 1]:0.6023885545254417] 
+NG5 Average: 0.549  Duration 3 minutes, 55.091 seconds Fitness Method: HITS Tue May 29 14:10:21 BST 2018
+Overall Average: 0.549 resultsF1: [[NG5, 0]:0.5403667807226592, [NG5, 1]:0.5573239962651728] 
+NG5 Average: 0.624  Duration 3 minutes, 13.131 seconds Fitness Method: HITS Tue May 29 14:38:35 BST 2018
+Overall Average: 0.624 resultsF1: [[NG5, 0]:0.6913156434209067, [NG5, 1]:0.5570908289241623] 
+R4 Average: 0.33  Duration 3 minutes, 8.009 seconds Fitness Method: HITS Tue May 29 14:53:47 BST 2018
+Overall Average: 0.33 resultsF1: [[R4, 0]:0.34971305595408897, [R4, 1]:0.30957446808510636] 
+R4 Average: 0.322  Duration 3 minutes, 49.700 seconds Fitness Method: HITS Tue May 29 14:57:57 BST 2018
+Overall Average: 0.322 resultsF1: [[R4, 0]:0.3479024837444612, [R4, 1]:0.29653428672657584] 
+R4 Average: 0.771 R5 Average: 0.62 NG5 Average: 0.77  Duration 5 minutes, 44.030 seconds Fitness Method: HITS Wed May 30 10:44:12 BST 2018
+Overall Average: 0.72 resultsF1: [[R4, 0]:0.7200385668973471, [R4, 1]:0.8214364906511277, [R5, 0]:0.519884406798695, [R5, 1]:0.7193006277397547, [NG5, 0]:0.7719093761535623, [NG5, 1]:0.7687448191915369] 

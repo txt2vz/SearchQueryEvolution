@@ -16,7 +16,7 @@ generations = 400
 pop.default-subpop =0
 breed.elite.0 = 2
 
-pop.subpops = 4
+pop.subpops = 8
 pop.subpop.0.species.genome-size = 19
 pop.subpop.0.size = 128
 pop.subpop.1.species.genome-size = 19
