@@ -19,7 +19,7 @@ class ClusterMainECJ extends Evolve {
    // 'src/cfg/clusterGA_Kbypop.params'
         //    'src/cfg/clusterGA_w1_lt20.params'
 
-    private final int NUMBER_OF_JOBS = 2
+    private final int NUMBER_OF_JOBS = 4
 
     //indexes suitable for clustering.
     def clusteringIndexes = [

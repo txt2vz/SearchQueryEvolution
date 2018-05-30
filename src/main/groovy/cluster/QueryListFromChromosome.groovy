@@ -10,6 +10,7 @@ import org.apache.lucene.search.*
 import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
+
 @CompileStatic
 class QueryListFromChromosome {
 
@@ -20,8 +21,10 @@ class QueryListFromChromosome {
         // set of genes - for duplicate checking
         Set<Integer> genes = [] as Set
 
-        intArray.eachWithIndex { int gene, int index ->
-            int clusterNumber = index % numberOfClusters
+       // intArray.eachWithIndex { int gene, int index ->
+		 for (int index = 0; index < intArray.size(); index++) {
+			final int gene = intArray[index]
+            final int clusterNumber = index % numberOfClusters
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
             if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
