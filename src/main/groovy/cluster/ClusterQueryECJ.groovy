@@ -69,11 +69,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 fitness.setClusterFitness(bqbList, k)
                 break;
 
-//            case QueryType.DNF:
-//                bqbList = QueryListFromChromosome.getDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
-//                fitness.setClusterFitness(bqbList)
-//                break;
-
             case QueryType.ORDNFSETK:
                 bqbList = QueryListFromChromosome.getORDNFQueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
                 fitness.setClusterFitness(bqbList)
@@ -83,10 +78,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = QueryListFromChromosome.getORDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 fitness.setClusterFitness(bqbList)
                 break;
-        //    case QueryType.ORDNFSETK :
-        //      bqbList =  QueryListFromChromosome.ge( (int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS )
-        //    fitness.setClusterFitness(bqbList)
-        //  break;
 
             case QueryType.ORNOT:
                 bqbList = QueryListFromChromosome.getORQueryListNot((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)

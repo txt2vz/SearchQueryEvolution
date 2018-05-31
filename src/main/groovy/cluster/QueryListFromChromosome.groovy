@@ -10,23 +10,22 @@ import org.apache.lucene.search.*
 import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
-
 @CompileStatic
 class QueryListFromChromosome {
 
-    static List<BooleanQuery.Builder> getORQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
+    static List<BooleanQuery.Builder> getORQueryList(int[] intChromosome, TermQuery[] termQueryArray, int numberOfClusters) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
         Set<Integer> genes = [] as Set
 
-       // intArray.eachWithIndex { int gene, int index ->
-		 for (int index = 0; index < intArray.size(); index++) {
-			final int gene = intArray[index]
-            final int clusterNumber = index % numberOfClusters
-            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
+        int arrayIndex=0
+        for (int gene: intChromosome){
+            final int clusterNumber = arrayIndex % numberOfClusters
+            arrayIndex++
 
+            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
             if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
                 bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
             }
@@ -79,7 +78,7 @@ class QueryListFromChromosome {
 
         intArray.eachWithIndex { int gene, int index ->
 
-            if (index < numberOfClusters ) {
+            if (index < numberOfClusters) {
                 int clusterNumber = index % numberOfClusters
                 bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
@@ -93,7 +92,7 @@ class QueryListFromChromosome {
                 } else {
                     term1 = termQueryArray[gene]
 
-                  //  Set andPair = [term0, term1] as Set
+                    //  Set andPair = [term0, term1] as Set
                     if (term0 != term1) {////&& andPairSet.add(andPair)) {
 
                         int clusterNumber = queryNumber % numberOfClusters
@@ -295,6 +294,4 @@ class QueryListFromChromosome {
         //println "end allNot bqbl  $bqbL"
         return bqbL
     }
-
-
 }
