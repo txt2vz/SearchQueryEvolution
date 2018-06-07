@@ -1,14 +1,15 @@
 #parent.0 = clusterSinglePop.params
-#parent.0 = clusterSubpop2.params
-parent.0 = clusterSubpop4.params
+parent.0 = clusterSubpop2.params
+#parent.0 = clusterSubpop4.params
 #parent.0 = clusterSubpop8.params
 
 eval.problem = cluster.ClusterQueryECJ
 stat = cluster.ClusterStatisticsECJ
+stat.file = statDump/clout.stat
 
 evalthreads = 4 
 breedthreads = 4
-generations = 400
+generations = 20
 breed.elite.0 = 2
 
 #pop.subpops = 1

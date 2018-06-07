@@ -17,23 +17,23 @@ public class ClusterFitness extends SimpleFitness {
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0
+    double scorePlus = 0.0
+    int hitsPlus = 0
+
     private double positiveScoreTotal = 0.0
     private double negativeScoreTotal = 0.0
     private double fraction = 0.0
     private double scoreOnly = 0.0
-    private double scorePlus = 0.0
     private double precision = 0.0
     private double recall = 0.0
-
     private int positiveHits = 0
     private int negativeHits = 0
     private int hitsOnly = 0
-    private int hitsPlus = 0
     private int coreClusterPenalty = 0
     private int totalHits = 0
     private int missedDocs = 0
     private int lowHitsCount = 0
-    private int coreHitPenalty = 0
+   // private int coreHitPenalty = 0
     int numberOfClusters = 0
 
     private int hitsPerPage = Indexes.indexReader.maxDoc()
@@ -66,7 +66,7 @@ public class ClusterFitness extends SimpleFitness {
         scorePlus = 0.0
         hitsOnly = 0
         hitsPlus = 0
-        coreHitPenalty = 1
+        //coreHitPenalty = 1
         precision = 0.0
         recall = 0.0
 
@@ -99,9 +99,9 @@ public class ClusterFitness extends SimpleFitness {
             if (hits.size() < 2) lowHitsCount++
             for (ScoreDoc d : hits) {
 
-               if (fitnessMethod == FitnessMethod.P_TIMES_R) {
+            //   if (fitnessMethod == FitnessMethod.P_TIMES_R) {
                    allHits << d.doc
-               }
+            //   }
 
                 if (otherDocIdSet.contains(d.doc)) {
                     negativeHits++
@@ -170,8 +170,9 @@ public class ClusterFitness extends SimpleFitness {
         return s
     }
 
+    //sent to stat file in statDump
     public String fitnessToStringForHumans() {
-        return "ClusterQuery Fitness: ${this.fitness()} "// ${queryShort()}"
+        return "ClusterQuery Fitness: ${this.fitness()} scorePlus $scorePlus hitsPlus $hitsPlus "// ${queryShort()}"
     }
 
     public String toString(int gen) {
