@@ -1,17 +1,5 @@
 parent.0		= simple.params
 
-seed=time
-seed.0=time
-seed.1=time
-seed.2=time
-seed.3=time
-seed.4=time
-seed.5=time
-seed.6=time
-seed.7=time
-
-#seed.0=4357  
-
 evalthreads = 				4
 breedthreads = 				4
 generations =  10

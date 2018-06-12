@@ -1,20 +1,12 @@
 parent.0		= simple.params
 
-seed=time
-seed.0=time
-seed.1=time
-seed.2=time
-seed.3=time
-seed.4=time
-seed.5=time
-seed.6=time
-seed.7=time
-#seed.0=4357
-
 select.tournament.size = 3
 
 pop.subpops = 2
 pop.default-subpop =0
+
+pop.subpop.0.size = 256
+pop.subpop.1.size = 256
 
 pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
@@ -34,7 +26,6 @@ pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
 ##########################################################
 pop.subpop.1 = ec.Subpopulation
-pop.subpop.1.size = 128
 pop.subpop.1.duplicate-retries = 5
 
 pop.subpop.1.species = ec.vector.IntegerVectorSpecies

@@ -20,6 +20,11 @@ breed.elite.0 = 2
 breed.elite.2 = 3
 breed.elite.3 = 4
 
+pop.subpop.0.size = 128
+pop.subpop.1.size = 128
+pop.subpop.2.size = 128
+pop.subpop.3.size = 128
+
 pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
@@ -38,7 +43,6 @@ pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
 ##########################################################
 pop.subpop.1 = ec.Subpopulation
-pop.subpop.1.size = 128
 pop.subpop.1.duplicate-retries = 5
 
 pop.subpop.1.species = ec.vector.IntegerVectorSpecies
@@ -57,7 +61,6 @@ pop.subpop.1.species.pipe.source.0.source.1	= ec.select.SigmaScalingSelection
 
 ###############################################################
 pop.subpop.2 = ec.Subpopulation
-pop.subpop.2.size = 128
 pop.subpop.2.duplicate-retries = 5
 
 pop.subpop.2.species = ec.vector.IntegerVectorSpecies
@@ -77,7 +80,6 @@ pop.subpop.2.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
 ###############################################################
 pop.subpop.3 = ec.Subpopulation
-pop.subpop.3.size = 128
 pop.subpop.3.duplicate-retries = 5
 
 pop.subpop.3.species = ec.vector.IntegerVectorSpecies
@@ -128,36 +130,3 @@ exch.subpop.3.start = 50
 exch.subpop.3.size = 4
 exch.subpop.3.num-dest = 1
 exch.subpop.3.dest.0 = 0
-exch.subpop.3.dest.1 = 4
-
-exch.subpop.4.select = ec.select.TournamentSelection
-exch.subpop.4.select.size= 3
-exch.subpop.4.mod = 50
-exch.subpop.4.start = 50
-exch.subpop.4.size = 3
-exch.subpop.4.num-dest = 1
-exch.subpop.4.dest.0 = 5
-
-exch.subpop.5.select = ec.select.TournamentSelection
-exch.subpop.5.select.size= 3
-exch.subpop.5.mod = 50
-exch.subpop.5.start = 50
-exch.subpop.5.size = 3
-exch.subpop.5.num-dest = 1
-exch.subpop.5.dest.0 = 6
-
-exch.subpop.6.select = ec.select.TournamentSelection
-exch.subpop.6.select.size= 3
-exch.subpop.6.mod = 50
-exch.subpop.6.start = 50
-exch.subpop.6.size = 3
-exch.subpop.6.num-dest = 1
-exch.subpop.6.dest.0 = 7
-
-exch.subpop.7.select = ec.select.TournamentSelection
-exch.subpop.7.select.size= 3
-exch.subpop.7.mod = 50
-exch.subpop.7.start = 50
-exch.subpop.7.size = 3
-exch.subpop.7.num-dest = 1
-exch.subpop.7.dest.0 = 0

@@ -13,7 +13,7 @@ import org.apache.lucene.search.spans.SpanTermQuery
 @CompileStatic
 class QueryListFromChromosome {
 
-    static List<BooleanQuery.Builder> getORQueryList(int[] intChromosome, TermQuery[] termQueryArray, int numberOfClusters) {
+    static List<BooleanQuery.Builder> getORQueryList(int[] intChromosome, TermQuery[] termQueryArray, int numberOfClusters, BooleanClause.Occur bco) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
@@ -26,8 +26,9 @@ class QueryListFromChromosome {
             arrayIndex++
 
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
-                bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+      //      if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+            if (gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber].add(termQueryArray[gene], bco)
             }
         }
         return bqbL

@@ -1,32 +1,41 @@
 #parent.0 = clusterSinglePop.params
-parent.0 = clusterSubpop2.params
-#parent.0 = clusterSubpop4.params
+#parent.0 = clusterSubpop2.params
+parent.0 = clusterSubpop4.params
 #parent.0 = clusterSubpop8.params
 
 eval.problem = cluster.ClusterQueryECJ
 stat = cluster.ClusterStatisticsECJ
 stat.file = statDump/clout.stat
 
-evalthreads = 4 
-breedthreads = 4
-generations = 20
+evalthreads = auto
+breedthreads = auto
+generations = 400
+
 breed.elite.0 = 2
 
-#pop.subpops = 1
 pop.subpop.0.species.genome-size = 18
-pop.subpop.0.size = 128
 pop.subpop.1.species.genome-size = 18
-pop.subpop.1.size = 128
 pop.subpop.2.species.genome-size = 18
-pop.subpop.2.size = 128
 pop.subpop.3.species.genome-size = 18
-pop.subpop.3.size = 128
+
+pop.subpop.0.species.max-gene = 100
+pop.subpop.1.species.max-gene = 100
+pop.subpop.2.species.max-gene = 100
+pop.subpop.3.species.max-gene = 100
+
 
 pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 100
 pop.subpop.1.species.min-gene = -1
-pop.subpop.1.species.max-gene = 100
 pop.subpop.2.species.min-gene = -1
-pop.subpop.2.species.max-gene = 100
 pop.subpop.3.species.min-gene = -1
-pop.subpop.3.species.max-gene = 100
+
+#seed=time
+#seed.0=time
+#seed.1=time
+#seed.2=time
+#seed.3=time
+#seed.4=time
+#seed.5=time
+#seed.6=time
+#seed.7=time
+#seed.0=4357

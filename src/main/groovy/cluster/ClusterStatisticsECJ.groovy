@@ -21,13 +21,13 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
             }.fitness
         }.max { it.fitness() }
 
-        generationReport(state, cf)
+       // generationReport(state, cf)
 
         cf.generationStats(state.generation)
     }
 
     private void generationReport(EvolutionState state, ClusterFitness cf) {
-        File fcsv = new File("results/generationReport.csv")
+        File fcsv = new File('results/generationReport.csv')
         if (!fcsv.exists()) {
             fcsv << 'generation, baseFitness, hitsPlus, scorePlus \n'
         }

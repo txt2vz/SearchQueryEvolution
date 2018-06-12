@@ -12,6 +12,7 @@ import groovy.transform.TypeChecked
 import groovy.transform.TypeCheckingMode
 import index.ImportantTerms
 import index.Indexes
+import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
@@ -32,8 +33,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private TermQuery[] termQueryArray
 
     static final QueryType queryType = //QueryType.ORDNFSETK
-             QueryType.OR
-        //    QueryType.ORDNF
+             //QueryType.OR
+  //  QueryType.AND
+            QueryType.ORDNF
     //   QueryType.ORNOT
       // QueryType.ORDNFSETK
     public void setup(final EvolutionState state, final Parameter base) {
@@ -58,7 +60,12 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
+                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD)
+                fitness.setClusterFitness(bqbList)
+                break;
+
+            case QueryType.AND:
+                bqbList = QueryListFromChromosome.getORQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.MUST)
                 fitness.setClusterFitness(bqbList)
                 break;
 
