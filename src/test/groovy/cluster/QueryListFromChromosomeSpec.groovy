@@ -17,7 +17,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         int[] intArray = [0, 1, 2]
-        List<BooleanQuery.Builder> bqbL = QueryListFromChromosome.getORQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        List<BooleanQuery.Builder> bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
         Query q = bqbL[0].build()
 
         then:
@@ -29,7 +29,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         intArray = [0, 1, 2, 3, 4, 5]
-        bqbL = QueryListFromChromosome.getORQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
         q = bqbL[0].build()
 
         then:

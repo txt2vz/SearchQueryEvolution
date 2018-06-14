@@ -48,7 +48,7 @@ class JobReport {
         println messageOut
 
         jobResultsQueryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        jobResultsQueryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness()} \n"
+        jobResultsQueryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness().round(2)} \n"
         jobResultsQueryFileOut << messageOut + "\n"
         jobResultsQueryFileOut << "************************************************ \n \n"
 
@@ -57,7 +57,7 @@ class JobReport {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSizePop0, wordListSizePop0, queryType, gen, job, date \n'
         }
 	   
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness()}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
@@ -69,15 +69,10 @@ class JobReport {
         queryMap.keySet().eachWithIndex { Query q, index ->
 
             String qString = q.toString(Indexes.FIELD_CONTENTS)
-            //map of categories (ground truth) and their frequencies
-            //  def (HashMap<String, Integer> catsFreq, int hitsSize) = findMostFrequentCategoryForQuery(q)
-
-            //find the category with maximimum returned docs for this query
-            //  Map.Entry<String, Integer> catMax = catsFreq?.max { it?.value }
             def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
             println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
 
-            if (maxCatName != null) {
+            if (maxCatName != 'Not_Found') {
                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
                 TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                         maxCatName));
@@ -95,6 +90,10 @@ class JobReport {
                 def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
                 println out
                 jobResultsQuery << out + "\n"
+            }  else{
+                f1list << 0
+                precisionList << 0
+                recallList << 0
             }
         }
         [f1list, recallList, precisionList]
@@ -121,8 +120,8 @@ class JobReport {
         println "ClusterQuery: $index catsFreq: $catsFreq for query: $qString "
         println "catsFreq: $catsFreq cats max: $catMax "
 
-        String maxCategoryName = catMax.key
-        int maxCategoryHits = catMax.value
+        String maxCategoryName = catMax?.key ?: 'Not_Found'
+        int maxCategoryHits = catMax?.value ?: -1
 
         [maxCategoryName, maxCategoryHits, hits.size()]
     }
