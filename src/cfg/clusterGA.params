@@ -1,7 +1,7 @@
 #parent.0 = clusterSinglePop.params
 #parent.0 = clusterSubpop2.params
-#parent.0 = clusterSubpop4.params
-parent.0 = clusterSubpop8.params
+parent.0 = clusterSubpop4.params
+#parent.0 = clusterSubpop8.params
 
 eval.problem = cluster.ClusterQueryECJ
 stat = cluster.ClusterStatisticsECJ

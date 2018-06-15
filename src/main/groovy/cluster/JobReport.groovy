@@ -25,7 +25,7 @@ class JobReport {
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
         println "\nOverall Average:  ${overallAverage.round(3)} Fitness Method:  ${ClusterFitness.fitnessMethod}  ${new Date()} resultsF1: $resultsF1 \n"
 
-        overallResults << " Duration $duration Fitness Method: ${ClusterFitness.fitnessMethod} ${new Date()}"
+        overallResults << " Duration $duration Fitness Method: ${ClusterFitness.fitnessMethod}  ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 

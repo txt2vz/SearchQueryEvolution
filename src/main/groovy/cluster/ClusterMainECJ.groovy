@@ -15,37 +15,34 @@ class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
             'src/cfg/clusterGA.params'
-    // 'src/cfg/clusterGA_K.params'
-    // 'src/cfg/clusterGA_Kbypop.params'
-    //    'src/cfg/clusterGA_w1_lt20.params'
 
     private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            //     IndexEnum.CRISIS3,
-            //   IndexEnum.CLASSIC4,
-            //    IndexEnum.R4,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
             IndexEnum.R5,
-            //   IndexEnum.NG5,
+            IndexEnum.NG5,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethods = [
             FitnessMethod.SCORE,
-       //     FitnessMethod.HITS,
-         //   FitnessMethod.P_TIMES_R,
-         //   FitnessMethod.POS_DIV_NEG
+            //     FitnessMethod.HITS,
+            //     FitnessMethod.P_TIMES_R,
+            //   FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
-           QueryType.OR,
-           // QueryType.AND,
-           // QueryType.DNF_OR_AND,
-           // QueryType.DNF_AND_OR,
+            QueryType.OR,
+            //      QueryType.AND,
+            // QueryType.DNF_OR_AND,
+            // QueryType.DNF_AND_OR,
             //QueryType.MINSHOULD2,
-       //     QueryType.ORNOT,
-           // QueryType.SPAN_FIRST
+            // QueryType.ORNOT,
+            //    QueryType.SPAN_FIRST
     ]
 
 
@@ -54,33 +51,34 @@ class ClusterMainECJ extends Evolve {
         final Date startRun = new Date()
         JobReport jobReport = new JobReport()
 
-        fitnessMethods.each { fitnessMethod ->
-            ClusterFitness.fitnessMethod = fitnessMethod
+        clusteringIndexes.each { IndexEnum ie ->
 
-            queryTypes.each { qt ->
-                ClusterQueryECJ.queryType = qt
+            int jNo = 0
+            NUMBER_OF_JOBS.times { job ->
+                EvolutionState state;
+                ParameterDatabase parameters = null
 
-                clusteringIndexes.each { IndexEnum ie ->
-                    EvolutionState state;
-                    ParameterDatabase parameters = null
+                println "Index Enum ie: $ie"
+                Indexes.instance.setIndex(ie)
+                parameters = new ParameterDatabase(new File(parameterFilePath));
 
-                    println "Index Enum ie: $ie"
-                    Indexes.instance.setIndex(ie)
+                state = initialize(parameters, job)
+                //  state.parameters.set(new Parameter("generations"), "7")
+                state.output.systemMessage("Job: " + job);
+                state.job = new Object[1]
+                state.job[0] = new Integer(job)
 
-                    NUMBER_OF_JOBS.times { job ->
-                        parameters = new ParameterDatabase(new File(parameterFilePath));
+                if (NUMBER_OF_JOBS >= 1) {
+                    final String jobFilePrefix = "job." + job;
+                    state.output.setFilePrefix(jobFilePrefix);
+                    state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                }
 
-                        state = initialize(parameters, job)
-                      //  state.parameters.set(new Parameter("generations"), "7")
-                        state.output.systemMessage("Job: " + job);
-                        state.job = new Object[1]
-                        state.job[0] = new Integer(job)
+                fitnessMethods.each { fitnessMethod ->
+                    ClusterFitness.fitnessMethod = fitnessMethod
 
-                        if (NUMBER_OF_JOBS >= 1) {
-                            final String jobFilePrefix = "job." + job;
-                            state.output.setFilePrefix(jobFilePrefix);
-                            state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
-                        }
+                    queryTypes.each { qt ->
+                        ClusterQueryECJ.queryType = qt
 
                         state.run(EvolutionState.C_STARTED_FRESH);
                         int popSize = 0;
@@ -96,17 +94,19 @@ class ClusterMainECJ extends Evolve {
                         final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                         println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0"
 
-                        jobReport.queriesReport(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
-                        cleanup(state);
-                        println "--------END JOB $job  -----------------------------------------------"
+                        jobReport.queriesReport(jNo, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                        jNo++
                     }
                 }
-                final Date endRun = new Date()
-                TimeDuration duration = TimeCategory.minus(endRun, startRun)
-                println "Duration: $duration"
-                jobReport.overallSummary(duration)
+                cleanup(state);
+                println "--------END JOB $job  -----------------------------------------------"
             }
+
         }
+        final Date endRun = new Date()
+        TimeDuration duration = TimeCategory.minus(endRun, startRun)
+        println "Duration: $duration"
+        jobReport.overallSummary(duration)
     }
 
     static main(args) {
