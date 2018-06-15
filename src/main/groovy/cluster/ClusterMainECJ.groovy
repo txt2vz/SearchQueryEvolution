@@ -53,6 +53,7 @@ class ClusterMainECJ extends Evolve {
 
         clusteringIndexes.each { IndexEnum ie ->
 
+            //j2
             int jNo = 0
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state;
