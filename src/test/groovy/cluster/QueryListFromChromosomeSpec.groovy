@@ -3,6 +3,7 @@ package cluster
 import index.ImportantTerms
 import index.IndexEnum
 import index.Indexes
+import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 
@@ -17,7 +18,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         int[] intArray = [0, 1, 2]
-        List<BooleanQuery.Builder> bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        List<BooleanQuery.Builder> bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1)
         Query q = bqbL[0].build()
 
         then:
@@ -29,7 +30,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         intArray = [0, 1, 2, 3, 4, 5]
-        bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        bqbL = QueryListFromChromosome.getSimpleQueryList(intArray, tfidfList, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1)
         q = bqbL[0].build()
 
         then:
