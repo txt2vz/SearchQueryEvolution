@@ -30,19 +30,19 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethods = [
             FitnessMethod.SCORE,
-            //     FitnessMethod.HITS,
+           //      FitnessMethod.HITS,
             //     FitnessMethod.P_TIMES_R,
             //   FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
             QueryType.OR,
-            //      QueryType.AND,
-            // QueryType.DNF_OR_AND,
-            // QueryType.DNF_AND_OR,
-            //QueryType.MINSHOULD2,
-            // QueryType.ORNOT,
-            //    QueryType.SPAN_FIRST
+            QueryType.AND,
+            QueryType.DNF_OR_AND,
+            QueryType.AND_OR,
+            QueryType.MINSHOULD2,
+            QueryType.ORNOT,
+            QueryType.SPAN_FIRST
     ]
 
 

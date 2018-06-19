@@ -33,7 +33,6 @@ public class ClusterFitness extends SimpleFitness {
     private int totalHits = 0
     private int missedDocs = 0
     private int lowHitsCount = 0
-   // private int coreHitPenalty = 0
     int numberOfClusters = 0
 
     private int hitsPerPage = Indexes.indexReader.maxDoc()
@@ -66,7 +65,6 @@ public class ClusterFitness extends SimpleFitness {
         scorePlus = 0.0
         hitsOnly = 0
         hitsPlus = 0
-        //coreHitPenalty = 1
         precision = 0.0
         recall = 0.0
 

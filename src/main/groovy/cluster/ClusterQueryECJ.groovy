@@ -22,7 +22,7 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, ORNOT, AND,  SPAN_FIRST, ORSETK, DNF_OR_AND, DNF_AND_OR, ORDNFSETK, MINSHOULD2
+    OR, ORNOT, AND,  SPAN_FIRST, ORSETK, DNF_OR_AND, AND_OR, ORDNFSETK, MINSHOULD2
 }
 
 @CompileStatic
@@ -32,14 +32,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private TermQuery[] termQueryArray
 
     static QueryType queryType //=   QueryType.OR
-            //QueryType.AND
-            // QueryType.DNF_OR_AND
-            //   QueryType.DNF_AND_OR
-            // QueryType.MINSHOULD2
-            //  QueryType.ORNOT
-          //  QueryType.SPAN_FIRST
-
-
 
     public void setup(final EvolutionState state, final Parameter base) {
 
@@ -77,7 +69,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 fitness.setClusterFitness(bqbList)
                 break;
 
-            case QueryType.DNF_AND_OR:
+            case QueryType.AND_OR:
                 bqbList = QueryListFromChromosome.getDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, false)
                 fitness.setClusterFitness(bqbList)
                 break;
@@ -105,19 +97,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 fitness.setClusterFitness(bqbList)
                 break;
 
-
-            case QueryType.ORNOT:
-                bqbList = QueryListFromChromosome.getORQueryListNot((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
-                fitness.setClusterFitness(bqbList)
-                break;
 //			case QueryType.ALLNOT :
 //				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)
 //				break;
 //			case QueryType.ORNOTEVOLVED :
 //				bqbList = queryListFromChromosome.getORNOTfromEvolvedList(intVectorIndividual)
-//				break;
-//			case QueryType.SpanFirst :
-//				(bqbList, duplicateCount)  = queryListFromChromosome.getSpanFirstQL(intVectorIndividual)
 //				break;
         }
 
