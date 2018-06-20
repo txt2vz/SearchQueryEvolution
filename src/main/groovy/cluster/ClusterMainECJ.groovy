@@ -20,10 +20,10 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.R4,
-            IndexEnum.R5,
+        //    IndexEnum.CRISIS3,
+         //   IndexEnum.CLASSIC4,
+          //  IndexEnum.R4,
+           // IndexEnum.R5,
             IndexEnum.NG5,
             IndexEnum.NG6
     ]
@@ -37,12 +37,12 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypes = [
             QueryType.OR,
-            QueryType.AND,
-            QueryType.DNF_OR_AND,
-            QueryType.AND_OR,
-            QueryType.MINSHOULD2,
+         //   QueryType.AND,
+        //    QueryType.DNF_OR_AND,
+         //   QueryType.AND_OR,
+          //  QueryType.MINSHOULD2,
             QueryType.ORNOT,
-            QueryType.SPAN_FIRST
+          //  QueryType.SPAN_FIRST
     ]
 
 
