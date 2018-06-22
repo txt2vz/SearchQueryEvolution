@@ -20,23 +20,21 @@ public class ClusterFitness extends SimpleFitness {
     double scorePlus = 0.0
     int hitsPlus = 0
 
-    private double positiveScoreTotal = 0.0
-    private double negativeScoreTotal = 0.0
-    private double fraction = 0.0
-    private double scoreOnly = 0.0
-    private double precision = 0.0
-    private double recall = 0.0
-    private int positiveHits = 0
-    private int negativeHits = 0
-    private int hitsOnly = 0
-    private int coreClusterPenalty = 0
-    private int totalHits = 0
-    private int missedDocs = 0
-    private int lowHitsCount = 0
+    double positiveScoreTotal = 0.0
+    double negativeScoreTotal = 0.0
+    double fraction = 0.0
+    double scoreOnly = 0.0
+    double precision = 0.0
+    double recall = 0.0
+    int positiveHits = 0
+    int negativeHits = 0
+    int hitsOnly = 0
+    int coreClusterPenalty = 0
+    int totalHits = 0
+    int missedDocs = 0
     int numberOfClusters = 0
-
+    int lowHitsCount = 0
     private int hitsPerPage = Indexes.indexReader.maxDoc()
-    private final static int coreClusterSize = 10
 
     double getFitness() {
         return baseFitness;

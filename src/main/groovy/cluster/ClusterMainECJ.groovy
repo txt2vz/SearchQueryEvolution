@@ -20,10 +20,10 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-        //    IndexEnum.CRISIS3,
-         //   IndexEnum.CLASSIC4,
-          //  IndexEnum.R4,
-           // IndexEnum.R5,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
+            IndexEnum.R5,
             IndexEnum.NG5,
             IndexEnum.NG6
     ]
@@ -37,12 +37,12 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypes = [
             QueryType.OR,
-         //   QueryType.AND,
-        //    QueryType.DNF_OR_AND,
-         //   QueryType.AND_OR,
-          //  QueryType.MINSHOULD2,
-            QueryType.ORNOT,
-          //  QueryType.SPAN_FIRST
+            QueryType.AND,
+          //  QueryType.DNF_OR_AND,
+           // QueryType.AND_OR,
+           // QueryType.MINSHOULD2,
+           // QueryType.ORNOT,
+            //QueryType.SPAN_FIRST
     ]
 
 
@@ -93,7 +93,7 @@ class ClusterMainECJ extends Evolve {
                         final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
                         final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
                         final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
-                        println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0"
+                        println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
                         jobReport.queriesReport(jNo, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                         jNo++

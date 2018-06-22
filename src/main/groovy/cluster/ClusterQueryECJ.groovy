@@ -91,7 +91,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
 //******************************************************************************
 
-
             case QueryType.ORDNFSETK:
                 bqbList = QueryListFromChromosome.getORDNFQueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
                 fitness.setClusterFitness(bqbList)
