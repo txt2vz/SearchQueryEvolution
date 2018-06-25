@@ -12,6 +12,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 class JobReport {
     def resultsF1 = [:]
+    File resultsDir = new File(/results/).mkdir()
 
     void overallSummary(TimeDuration duration) {
 
