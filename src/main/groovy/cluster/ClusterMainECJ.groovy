@@ -38,10 +38,10 @@ class ClusterMainECJ extends Evolve {
     List<QueryType> queryTypes = [
             QueryType.OR,
             QueryType.AND,
-            QueryType.DNF_OR_AND,
-            QueryType.AND_OR,
+            QueryType.OR_WITH_AND_SUBQ,
+            QueryType.AND_WITH_OR_SUBQ,
             QueryType.MINSHOULD2,
-            QueryType.ORNOT,
+            QueryType.OR_WITH_NOT,
             QueryType.SPAN_FIRST
     ]
 
@@ -53,7 +53,6 @@ class ClusterMainECJ extends Evolve {
 
         clusteringIndexes.each { IndexEnum ie ->
 
-            //j2
             int jNo = 0
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state;
