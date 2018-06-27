@@ -13,10 +13,14 @@ import org.apache.lucene.search.TotalHitCountCollector
 class JobReport {
     def resultsF1 = [:]
     def resultsDir = new File(/results/).mkdir()
+    File jobResultsQueryFileOut = new File('results/Queries.txt')
+
+    JobReport(){
+    }
 
     void overallSummary(TimeDuration duration) {
 
-        File overallResults = new File("results/overallResultsCluster.txt")
+       File overallResults = new File("results/overallResultsCluster.txt")
 
         def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
         println "categoryAverages: $categoryAverages"
@@ -30,22 +34,22 @@ class JobReport {
         overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 
-    void queriesReport(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
+    void queriesReport(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
+
+        File fcsv = new File("results/resultsClusterByJob.csv")
+
+        if (!fcsv.exists()) {
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, gen, job, date \n'
+        }
+
+        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        String messageOut = ""
-        File jobResultsQueryFileOut = new File("results/jobResultsClusterQuery.txt")
+        // File jobResultsQueryFileOut = new File('results/jobResultsClusterQuery.txt')
         jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
-        def (ArrayList<Double> f1list, ArrayList<Double> recallList, ArrayList<Double> precisionList) = evaluateClusters(cfit.queryMap, jobResultsQueryFileOut)
-
-        int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.numberOfClusters)
-
-        double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters:0 // Indexes.NUMBER_OF_CLUSTERS : 0
-        final double averageRecall = (recallList) ? (double) recallList.sum() /  numClusters:0  // Indexes.NUMBER_OF_CLUSTERS : 0
-        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters:0  //Indexes.NUMBER_OF_CLUSTERS : 0
-        messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
+        String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
         jobResultsQueryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
@@ -53,7 +57,7 @@ class JobReport {
         jobResultsQueryFileOut << messageOut + "\n"
         jobResultsQueryFileOut << "************************************************ \n \n"
 
-        File fcsv = new File("results/resultsClusterByJob.csv")
+       // File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, gen, job, date \n'
         }
@@ -64,40 +68,49 @@ class JobReport {
         resultsF1 << [(indexAndJob): averageF1forJob]
     }
 
-    List evaluateClusters(Map queryMap, File jobResultsQuery) {
-        List<Double> f1list = [], precisionList = [], recallList = []
+     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
+         List<Double> f1list = [], precisionList = [], recallList = []
 
-        queryMap.keySet().eachWithIndex { Query q, index ->
+         cfit.queryMap.keySet().eachWithIndex { Query q, index ->
 
-            String qString = q.toString(Indexes.FIELD_CONTENTS)
-            def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
-            println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
+             String qString = q.toString(Indexes.FIELD_CONTENTS)
+             def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
+             println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
 
-            if (maxCatName != 'Not_Found') {
-                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
-                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
-                        maxCatName));
-                Indexes.indexSearcher.search(catQ, totalHitCollector);
-                int categoryTotal = totalHitCollector.getTotalHits();
+             if (maxCatName != 'Not_Found') {
+                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
+                 TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
+                         maxCatName));
+                 Indexes.indexSearcher.search(catQ, totalHitCollector);
+                 int categoryTotal = totalHitCollector.getTotalHits();
 
-                double recall = (double) maxCatHits / categoryTotal;
-                double precision = (double) maxCatHits / totalHits
-                double f1 = (2 * precision * recall) / (precision + recall)
+                 double recall = (double) maxCatHits / categoryTotal;
+                 double precision = (double) maxCatHits / totalHits
+                 double f1 = (2 * precision * recall) / (precision + recall)
 
-                f1list << f1
-                precisionList << precision
-                recallList << recall
+                 f1list << f1
+                 precisionList << precision
+                 recallList << recall
 
-                def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
-                println out
-                jobResultsQuery << out + "\n"
-            }  else{
-                f1list << 0
-                precisionList << 0
-                recallList << 0
-            }
-        }
-        [f1list, recallList, precisionList]
+                 if (queryReport){
+
+                      def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                      println out
+                      jobResultsQueryFileOut << out + "\n"
+                 }
+             }  else{
+                 f1list << 0
+                 precisionList << 0
+                 recallList << 0
+             }
+         }
+
+        final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.numberOfClusters)
+        final double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters : 0
+        final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
+        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0
+
+        [f1list, averageF1forJob, averagePrecision, averageRecall]
     }
 
     List findMostFrequentCategoryForQuery(Query q, int index) {
