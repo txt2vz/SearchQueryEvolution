@@ -15,12 +15,12 @@ class JobReport {
     def resultsDir = new File(/results/).mkdir()
     File jobResultsQueryFileOut = new File('results/Queries.txt')
 
-    JobReport(){
+    JobReport() {
     }
 
     void overallSummary(TimeDuration duration) {
 
-       File overallResults = new File("results/overallResultsCluster.txt")
+        File overallResults = new File("results/overallResultsCluster.txt")
 
         def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
         println "categoryAverages: $categoryAverages"
@@ -46,7 +46,6 @@ class JobReport {
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        // File jobResultsQueryFileOut = new File('results/jobResultsClusterQuery.txt')
         jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
@@ -57,53 +56,53 @@ class JobReport {
         jobResultsQueryFileOut << messageOut + "\n"
         jobResultsQueryFileOut << "************************************************ \n \n"
 
-       // File fcsv = new File("results/resultsClusterByJob.csv")
+        // File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, gen, job, date \n'
         }
-	   
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
+
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
     }
 
-     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
-         List<Double> f1list = [], precisionList = [], recallList = []
+    List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
+        List<Double> f1list = [], precisionList = [], recallList = []
 
-         cfit.queryMap.keySet().eachWithIndex { Query q, index ->
+        cfit.queryMap.keySet().eachWithIndex { Query q, index ->
 
-             String qString = q.toString(Indexes.FIELD_CONTENTS)
-             def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
-             println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
+            String qString = q.toString(Indexes.FIELD_CONTENTS)
+            def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
+            println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
 
-             if (maxCatName != 'Not_Found') {
-                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
-                 TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
-                         maxCatName));
-                 Indexes.indexSearcher.search(catQ, totalHitCollector);
-                 int categoryTotal = totalHitCollector.getTotalHits();
+            if (maxCatName != 'Not_Found') {
+                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
+                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
+                        maxCatName));
+                Indexes.indexSearcher.search(catQ, totalHitCollector);
+                int categoryTotal = totalHitCollector.getTotalHits();
 
-                 double recall = (double) maxCatHits / categoryTotal;
-                 double precision = (double) maxCatHits / totalHits
-                 double f1 = (2 * precision * recall) / (precision + recall)
+                double recall = (double) maxCatHits / categoryTotal;
+                double precision = (double) maxCatHits / totalHits
+                double f1 = (2 * precision * recall) / (precision + recall)
 
-                 f1list << f1
-                 precisionList << precision
-                 recallList << recall
+                f1list << f1
+                precisionList << precision
+                recallList << recall
 
-                 if (queryReport){
+                if (queryReport) {
 
-                      def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
-                      println out
-                      jobResultsQueryFileOut << out + "\n"
-                 }
-             }  else{
-                 f1list << 0
-                 precisionList << 0
-                 recallList << 0
-             }
-         }
+                    def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                    println out
+                    jobResultsQueryFileOut << out + "\n"
+                }
+            } else {
+                f1list << 0
+                precisionList << 0
+                recallList << 0
+            }
+        }
 
         final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.numberOfClusters)
         final double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters : 0
