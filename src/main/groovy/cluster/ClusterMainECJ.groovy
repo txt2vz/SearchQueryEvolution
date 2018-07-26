@@ -37,12 +37,12 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypes = [
             QueryType.OR,
-            QueryType.AND,
-            QueryType.OR_WITH_AND_SUBQ,
-            QueryType.AND_WITH_OR_SUBQ,
-            QueryType.MINSHOULD2,
-            QueryType.OR_WITH_NOT,
-            QueryType.SPAN_FIRST
+//            QueryType.AND,
+//            QueryType.OR_WITH_AND_SUBQ,
+//            QueryType.AND_WITH_OR_SUBQ,
+//            QueryType.MINSHOULD2,
+//            QueryType.OR_WITH_NOT,
+//            QueryType.SPAN_FIRST
     ]
 
 

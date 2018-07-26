@@ -25,6 +25,7 @@ dependencies {
 
     //for some reason ecj24 not on maven: compile 'edu.gmu.cs:ecj:22'
     //pick up ecj24 jar file
-    compile fileTree(dir: 'lib', include: ['*.jar'])
+    //compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile fileTree(dir: 'lib', include: 'ecj-26.jar')
 }
 

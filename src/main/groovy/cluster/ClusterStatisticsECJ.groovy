@@ -26,7 +26,7 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
         }.max { it.fitness() }
 
 
-        if (state.generation % 10 == 0) generationReport(state, cf)
+        if (state.generation % 50 == 0) generationReport(state, cf)
 
         cf.generationStats(state.generation)
     }
