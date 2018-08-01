@@ -96,14 +96,12 @@ class ClusterMainECJ extends Evolve {
 
 
                         jobReport.queriesReport(jNo, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
-
                     }
                 }
                 cleanup(state);
                 println "--------END JOB $job  -----------------------------------------------"
                 jNo++
             }
-
         }
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
