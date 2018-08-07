@@ -14,29 +14,33 @@ import index.Indexes
 class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
-            'src/cfg/clusterGA.params'
+            //'src/cfg/clusterGA.params'
+    'src/cfg/clusterGA_K.params'
 
     private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            IndexEnum.CRISIS3,
+          //  IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
-            IndexEnum.R4,
+           // IndexEnum.R4,
             IndexEnum.R5,
-            IndexEnum.NG5,
+            //IndexEnum.NG5,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethods = [
-            FitnessMethod.SCORE,
-           //      FitnessMethod.HITS,
+         //   FitnessMethod.SCORE,
+                 FitnessMethod.HITS,
             //     FitnessMethod.P_TIMES_R,
             //   FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
-            QueryType.OR,
+
+         QueryType.OR1SETK
+          //  QueryType.ORDNFSETK
+            //  QueryType.OR,
 //            QueryType.AND,
 //            QueryType.OR_WITH_AND_SUBQ,
 //            QueryType.AND_WITH_OR_SUBQ,

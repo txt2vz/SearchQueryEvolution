@@ -22,7 +22,7 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST,   ORSETK,  ORDNFSETK,  ORDNF
+    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST,   ORSETK,  ORDNFSETK,  ORDNF, OR1SETK
 }
 
 @CompileStatic
@@ -31,7 +31,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private IndexSearcher searcher = Indexes.indexSearcher
     private TermQuery[] termQueryArray
 
-    static QueryType queryType //=   QueryType.OR
+    static QueryType queryType = QueryType.OR1SETK
+            //QueryType.OR
+                 // = QueryType.
 
     public void setup(final EvolutionState state, final Parameter base) {
 
@@ -98,6 +100,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
             case QueryType.ORDNFSETK:
                 bqbList = QueryListFromChromosome.getORDNFQueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
+                fitness.setClusterFitness(bqbList)
+                break;
+
+            case QueryType.OR1SETK:
+                bqbList = QueryListFromChromosome.getOR1QueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
                 fitness.setClusterFitness(bqbList)
                 break;
 

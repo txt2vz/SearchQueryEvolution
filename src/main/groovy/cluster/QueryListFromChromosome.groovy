@@ -163,7 +163,32 @@ class QueryListFromChromosome {
         return QueryListFromChromosome.getORDNFQueryList(rest, termQueryArray, k)
     }
 
-    //first word is OR followed by DNF clauses
+    static List<BooleanQuery.Builder> getOR1QueryListSetK(int[] intArray, TermQuery[] termQueryArray) {
+
+        int k = intArray[0]
+        int[] rest = intArray[1..intArray.size() - 1]
+
+        return QueryListFromChromosome.getOR1QueryList(rest, termQueryArray, k)
+    }
+
+    static List<BooleanQuery.Builder> getOR1QueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
+
+        List<BooleanQuery.Builder> bqbL = []
+
+        for (int clusterNumber = 0; clusterNumber < numberOfClusters; clusterNumber++){
+            bqbL[clusterNumber] =  new BooleanQuery.Builder()
+
+            int gene = intArray[clusterNumber]
+
+            if (gene < termQueryArray.size() && gene >= 0) {//&& genes.add(gene)) {
+                bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+            }
+        }
+
+        return bqbL
+    }
+
+        //first word is OR followed by DNF clauses
     static List<BooleanQuery.Builder> getORDNFQueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
 
         Set andPairSet = [] as Set
