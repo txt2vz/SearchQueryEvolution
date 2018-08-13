@@ -154,23 +154,7 @@ class QueryListFromChromosome {
 
     //*******************************************************************************
 
-
-    static List<BooleanQuery.Builder> getORDNFQueryListSetK(int[] intArray, TermQuery[] termQueryArray) {
-
-        int k = intArray[0]
-        int[] rest = intArray[1..intArray.size() - 1]
-
-        return QueryListFromChromosome.getORDNFQueryList(rest, termQueryArray, k)
-    }
-
-    static List<BooleanQuery.Builder> getOR1QueryListSetK(int[] intArray, TermQuery[] termQueryArray) {
-
-        int k = intArray[0]
-        int[] rest = intArray[1..intArray.size() - 1]
-
-        return QueryListFromChromosome.getOR1QueryList(rest, termQueryArray, k)
-    }
-
+//one word query setting k
     static List<BooleanQuery.Builder> getOR1QueryList(int[] intArray, TermQuery[] termQueryArray, int numberOfClusters) {
 
         List<BooleanQuery.Builder> bqbL = []

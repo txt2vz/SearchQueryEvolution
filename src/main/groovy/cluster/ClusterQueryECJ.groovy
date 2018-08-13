@@ -31,7 +31,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     private IndexSearcher searcher = Indexes.indexSearcher
     private TermQuery[] termQueryArray
 
-    static QueryType queryType = QueryType.OR1SETK
+    static QueryType queryType// = QueryType.OR1SETK
             //QueryType.OR
                  // = QueryType.
 
@@ -53,41 +53,42 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         //list of lucene Boolean Query Builder
         List<BooleanQuery.Builder> bqbList
-        int k = 0
+      //  int k = 0
+        final int[] genome = (int[]) intVectorIndividual.genome
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = QueryListFromChromosome.getSimpleQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1)
+                bqbList = QueryListFromChromosome.getSimpleQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.AND:
-                bqbList = QueryListFromChromosome.getSimpleQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.MUST, 1)
+                bqbList = QueryListFromChromosome.getSimpleQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.MUST, 1)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.MINSHOULD2:
-                bqbList = QueryListFromChromosome.getSimpleQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 2)
+                bqbList = QueryListFromChromosome.getSimpleQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 2)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
-                bqbList = QueryListFromChromosome.getDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, false)
+                bqbList = QueryListFromChromosome.getDNFQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, false)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.OR_WITH_AND_SUBQ:
-                bqbList = QueryListFromChromosome.getDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, true)
+                bqbList = QueryListFromChromosome.getDNFQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS, true)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.OR_WITH_NOT:
-                bqbList = QueryListFromChromosome.getORwithNOT((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
+                bqbList = QueryListFromChromosome.getORwithNOT(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.ORDNF:
-                bqbList = QueryListFromChromosome.getORDNFQueryList((int[]) intVectorIndividual.genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
+                bqbList = QueryListFromChromosome.getORDNFQueryList(genome, termQueryArray, Indexes.NUMBER_OF_CLUSTERS)
                 fitness.setClusterFitness(bqbList)
                 break;
 
@@ -99,12 +100,18 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 //******************************************************************************
 
             case QueryType.ORDNFSETK:
-                bqbList = QueryListFromChromosome.getORDNFQueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
+                int k = genome[0]
+                int[] rest = genome[1..genome.size() - 1]
+                bqbList =  QueryListFromChromosome.getORDNFQueryList(rest, termQueryArray, k)
                 fitness.setClusterFitness(bqbList)
                 break;
 
             case QueryType.OR1SETK:
-                bqbList = QueryListFromChromosome.getOR1QueryListSetK((int[]) intVectorIndividual.genome, termQueryArray)
+                int k = genome[0]
+                int[] rest = genome[1..genome.size() - 1]
+                bqbList = QueryListFromChromosome.getOR1QueryList(rest, termQueryArray, k)
+
+//                bqbList = QueryListFromChromosome.getOR1QueryListSetK(genome, termQueryArray, k)
                 fitness.setClusterFitness(bqbList)
                 break;
 
