@@ -14,7 +14,7 @@ import index.Indexes
 class ClusterMainECJ extends Evolve {
 
     private final String parameterFilePath =
-            //'src/cfg/clusterGA.params'
+        //    'src/cfg/clusterGA.params'
     'src/cfg/clusterGA_K.params'
 
     private final int NUMBER_OF_JOBS = 2
@@ -31,22 +31,27 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethods = [
          //   FitnessMethod.SCORE,
-          //       FitnessMethod.HITS,
-                 FitnessMethod.P_TIMES_R,
+                 FitnessMethod.HITS,
+            //     FitnessMethod.P_TIMES_R,
             //   FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
 
-         QueryType.OR1SETK,
-            QueryType.ORDNFSETK
-            //  QueryType.OR,
-//            QueryType.AND,
-//            QueryType.OR_WITH_AND_SUBQ,
-//            QueryType.AND_WITH_OR_SUBQ,
+       //  QueryType.OR1SETK,
+         //   QueryType.ORDNFSETK,
+           // QueryType.ORSETK,
+            QueryType.MINSHOULDSETK
+
+
+
+      //        QueryType.OR,
+       //     QueryType.AND,
+     //       QueryType.OR_WITH_AND_SUBQ,
+     //       QueryType.AND_WITH_OR_SUBQ,
 //            QueryType.MINSHOULD2,
-//            QueryType.OR_WITH_NOT,
-//            QueryType.SPAN_FIRST
+       //     QueryType.OR_WITH_NOT,
+        //    QueryType.SPAN_FIRST
     ]
 
 
@@ -97,7 +102,6 @@ class ClusterMainECJ extends Evolve {
                         final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
                         final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                         println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
-
 
                         jobReport.queriesReport(jNo, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
                     }

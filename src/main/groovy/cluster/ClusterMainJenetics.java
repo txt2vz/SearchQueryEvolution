@@ -25,8 +25,10 @@ public class ClusterMainJenetics {
     }
 
     private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
-        List<BooleanQuery.Builder> bqbList = QueryListFromChromosome
-                .getSimpleQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
+        QueryListFromChromosome qlc = new QueryListFromChromosome(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS);
+        List<BooleanQuery.Builder> bqbList = qlc.getSimpleQueryList();
+                //QueryListFromChromosome
+               // .getSimpleQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
 
         ClusterFitness clusterFitness = new ClusterFitness();
         clusterFitness.setClusterFitness(bqbList);

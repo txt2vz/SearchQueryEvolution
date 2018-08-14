@@ -9,9 +9,9 @@ parent.0 = clusterSubpop4.params
 eval.problem = cluster.ClusterQueryECJ
 stat = cluster.ClusterStatisticsECJ
 
-evalthreads = 4 
-breedthreads = 4
-generations = 200
+evalthreads =  auto
+breedthreads = auto
+generations = 400
 
 pop.default-subpop =0
 breed.elite.0 = 2
@@ -81,7 +81,7 @@ pop.subpop.7.species.segment.0.min-gene = 2
 pop.subpop.7.species.segment.0.max-gene = 8
 
 pop.subpop.0.species.segment.1.min-gene = -1
-pop.subpop.0.species.segment.1.max-gene =  30
+pop.subpop.0.species.segment.1.max-gene =  100
 pop.subpop.1.species.segment.1.min-gene = -1
 pop.subpop.1.species.segment.1.max-gene = 100
 pop.subpop.2.species.segment.1.min-gene = -1
