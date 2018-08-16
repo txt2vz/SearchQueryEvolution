@@ -74,12 +74,22 @@ public class ClusterFitness extends SimpleFitness {
             Query q = bqb.build()
 
             Set<Integer> otherDocIdSet = [] as Set<Integer>
-            List<BooleanQuery.Builder> otherQueries = bqbArray - bqb
+            List<BooleanQuery.Builder> otherQueries = bqbArray - bqb// ?: [new BooleanQuery.Builder()]
+
+            if (otherQueries == null) println "nuuss"
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
 
             for (BooleanQuery.Builder obqb : otherQueries) {
-                bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
+                if (obqb == null) {
+                    println "zzssss obqb $obqb otherQueries $otherQueries"
+                } else {
+
+                    def y = obqb.build()
+
+                    bqbOthers.add(y, BooleanClause.Occur.SHOULD)
+                }
+                //bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
             }
             Query otherBQ = bqbOthers.build()
 
@@ -95,9 +105,9 @@ public class ClusterFitness extends SimpleFitness {
             if (hits.size() < 2) lowHitsCount++
             for (ScoreDoc d : hits) {
 
-            //   if (fitnessMethod == FitnessMethod.P_TIMES_R) {
-                   allHits << d.doc
-            //   }
+                //   if (fitnessMethod == FitnessMethod.P_TIMES_R) {
+                allHits << d.doc
+                //   }
 
                 if (otherDocIdSet.contains(d.doc)) {
                     negativeHits++
@@ -115,7 +125,7 @@ public class ClusterFitness extends SimpleFitness {
         if (lowHitsCount == 0) {
 
             // fraction = totalHits / Indexes.indexReader.maxDoc()
-           // missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+            // missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
 
             switch (fitnessMethod) {
                 case fitnessMethod.SCORE:

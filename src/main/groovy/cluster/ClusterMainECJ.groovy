@@ -38,20 +38,20 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypes = [
 
-       //  QueryType.OR1SETK,
-         //   QueryType.ORDNFSETK,
-           // QueryType.ORSETK,
-            QueryType.MINSHOULDSETK
+         QueryType.OR1SETK,
+         QueryType.ORDNFSETK,
+        //   QueryType.ORSETK,
+         //  QueryType.MINSHOULDSETK
 
 
 
-      //        QueryType.OR,
-       //     QueryType.AND,
-     //       QueryType.OR_WITH_AND_SUBQ,
-     //       QueryType.AND_WITH_OR_SUBQ,
+//              QueryType.OR,
+//            QueryType.AND,
+//            QueryType.OR_WITH_AND_SUBQ,
+//            QueryType.AND_WITH_OR_SUBQ,
 //            QueryType.MINSHOULD2,
-       //     QueryType.OR_WITH_NOT,
-        //    QueryType.SPAN_FIRST
+//            QueryType.OR_WITH_NOT,
+//            QueryType.SPAN_FIRST
     ]
 
 
@@ -87,6 +87,8 @@ class ClusterMainECJ extends Evolve {
                     ClusterFitness.fitnessMethod = fitnessMethod
 
                     queryTypes.each { qt ->
+                        println "query type $qt"
+
                         ClusterQueryECJ.queryType = qt
 
                         state.run(EvolutionState.C_STARTED_FRESH);

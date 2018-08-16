@@ -28,18 +28,15 @@ enum QueryType {
 @CompileStatic
 public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
-    private IndexSearcher searcher = Indexes.indexSearcher
-    private TermQuery[] tqa
-
-    static QueryType queryType// = QueryType.OR1SETK
-            //QueryType.OR
-                 // = QueryType.
+    private QueryListFromChromosome qlfc
+    static QueryType queryType
 
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
-        tqa = new ImportantTerms().getTFIDFTermQueryList()
+        TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
+        qlfc = new QueryListFromChromosome(tqa, Indexes.NUMBER_OF_CLUSTERS)
     }
 
     public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
@@ -53,9 +50,8 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         //list of lucene Boolean Query Builder
         List<BooleanQuery.Builder> bqbList
-        final int[] genome = (int[]) intVectorIndividual.genome
-
-        QueryListFromChromosome qlfc = new QueryListFromChromosome(genome, tqa, Indexes.NUMBER_OF_CLUSTERS)
+        final int[] genome = intVectorIndividual.genome as int[]
+        qlfc.intChromosome = genome
 
         switch (queryType) {
             case QueryType.OR:
@@ -88,7 +84,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = qlfc.getSpanFirstQueryList()
                 break;
 
-//*****************set k *************************************************************
+//*****************set k methods *************************************************************
             case QueryType.OR1SETK:
                 qlfc.numberOfClusters = genome[0]
                 qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
@@ -113,7 +109,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 qlfc.minShould=2
                 bqbList = qlfc.getSimpleQueryList()
 
-
 //			case QueryType.ALLNOT :
 //				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)
 //				break;
@@ -123,8 +118,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         }
         fitness.setClusterFitness(bqbList)
-
-        //assert bqbList.size() == Indexes.NUMBER_OF_CLUSTERS
 
 //rawfitness used by ECJ for evaluation
         def rawfitness = fitness.getFitness()
