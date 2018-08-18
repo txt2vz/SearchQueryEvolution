@@ -17,8 +17,9 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         def tfidfList = impTerms.getTFIDFTermQueryList()
 
         when:
-        int[] genome = [0, 1, 2]
-        QueryListFromChromosome qlfc = new QueryListFromChromosome(genome, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        int[] genome = [0, 1, 2] as int[]
+        QueryListFromChromosome qlfc = new QueryListFromChromosome(tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        qlfc.intChromosome = genome
 
         List<BooleanQuery.Builder> bqbL = qlfc.getSimpleQueryList()
         Query q = bqbL[0].build()
@@ -31,8 +32,9 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         q.toString(Indexes.FIELD_CONTENTS) == 'god'
 
         when:
-        genome = [0, 1, 2, 3, 4, 5]
-        qlfc = new QueryListFromChromosome(genome, tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        genome = [0, 1, 2, 3, 4, 5] as int[]
+        qlfc = new QueryListFromChromosome(tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        qlfc.intChromosome = genome as int[]
         bqbL = qlfc.getSimpleQueryList()
         q = bqbL[0].build()
 
