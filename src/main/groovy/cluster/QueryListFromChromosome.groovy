@@ -5,7 +5,9 @@ import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.MatchAllDocsQuery
+import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
+import org.apache.lucene.search.TopDocs
 import org.apache.lucene.search.TotalHitCountCollector
 import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
@@ -17,29 +19,61 @@ class QueryListFromChromosome {
     int numberOfClusters
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     int minShould = 1
+    private int hitsPerPage = Indexes.indexReader.maxDoc()
+    private final int maxIntersectCount = 10
 
     QueryListFromChromosome(TermQuery[] tq, int numClust) {
         termQueryArray = tq
         numberOfClusters = numClust
     }
 
-    List<BooleanQuery.Builder> getSimpleQueryList() {
+    QueryListFromChromosome() {
+    }
+
+    List<BooleanQuery.Builder> getOR_List(boolean setk) {
         //list of boolean queries
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
         Set<Integer> genes = [] as Set
 
-        int arrayIndex = 0
-        for (int gene : intChromosome) {
-            final int clusterNumber = arrayIndex % numberOfClusters
-            arrayIndex++
+        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+
+        for (int i = (setk)? 1 : 0 ; i < intChromosome.size(); i++) {
+            final int gene = intChromosome[i]
+            final int clusterNumber = i % k
 
             bqbL[clusterNumber] = bqbL[clusterNumber] ?:
                     (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
 
             if (gene >= 0 && genes.add(gene)) {
                 bqbL[clusterNumber].add(termQueryArray[gene], bco)
+            }
+        }
+        return bqbL
+    }
+
+    List<BooleanQuery.Builder> OR_segments(boolean setk) {
+        //list of boolean queries
+        List<BooleanQuery.Builder> bqbL = []
+
+        // set of genes - for duplicate checking
+        Set<Integer> genes = [] as Set
+
+        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        int size = setk ?  intChromosome.size() - 1 :  intChromosome.size()
+        int divNumber = size.intdiv(k) as int
+
+        int clusterNumber = 0
+        for (int i = (setk)? 1 : 0 ; i < intChromosome.size(); i++) {
+            if (i % divNumber == 0 && i + divNumber < intChromosome.size()) {
+                bqbL[clusterNumber] =
+                        (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
+                clusterNumber++
+            }
+            int gene = intChromosome[i]
+            if (gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber - 1].add(termQueryArray[gene], bco)
             }
         }
         return bqbL
@@ -75,12 +109,10 @@ class QueryListFromChromosome {
                     Set andPair = [term0, term1] as Set
                     if ((term0 != term1) && andPairSet.add(andPair)) {
 
-                        BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
-                        subbqb.add(term0, boInner)
+                        BooleanQuery.Builder subbqb = new BooleanQuery.Builder().add(term0, boInner)
                         subbqb.add(term1, boInner)
                         BooleanQuery subq = subbqb.build();
 
-                        //check that the subquery returns something
                         TotalHitCountCollector collector = new TotalHitCountCollector();
                         Indexes.indexSearcher.search(subq, collector);
                         if (collector.getTotalHits() > 10) {
@@ -167,12 +199,13 @@ class QueryListFromChromosome {
 
 //one word per query
     List<BooleanQuery.Builder> getOR1QueryList() {
+        final int k = intChromosome[0]
         Set<Integer> genes = [] as Set
         List<BooleanQuery.Builder> bqbL = []
 
-        int index = 0
+        int index = 1
         int clusterNumber = 0
-        while (clusterNumber < numberOfClusters && index < intChromosome.size()) {
+        while (clusterNumber < k && index < intChromosome.size()) {
             int gene = intChromosome[index]
 
             if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
@@ -184,29 +217,79 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    //first word is OR followed by DNF clauses
+    List<BooleanQuery.Builder> getOR2ntersect() {
+
+        final int k = intChromosome[0]
+        Set<Integer> genes = [] as Set
+        List<BooleanQuery.Builder> bqbL = []
+
+        int index = 1   //gene 0 is k
+        int clusterNumber = 0
+        while (clusterNumber < k && index < intChromosome.size()) {
+            int gene = intChromosome[index]
+
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                clusterNumber++
+            }
+            index++
+        }
+
+        for (int i = index; i < intChromosome.size() && i < k * 2; i++) {
+            final int gene = intChromosome[index]
+            clusterNumber = i % k
+
+            BooleanQuery rootq = bqbL[clusterNumber].build()
+            Set<Integer> rootqDocIds = [] as Set<Integer>
+
+            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq, hitsPerPage)
+            ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
+            rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
+
+            TopDocs docs = Indexes.indexSearcher.search(termQueryArray[gene], hitsPerPage)
+            ScoreDoc[] hits = docs.scoreDocs;
+
+            int intersectCount = 0
+            for (ScoreDoc d : hits) {
+                if (rootqDocIds.contains(d.doc)) {
+                    intersectCount++
+                }
+            }
+
+            if (intersectCount > maxIntersectCount) {
+                bqbL[clusterNumber].add(termQueryArray[gene], bco)
+            }
+        }
+        return bqbL
+    }
+
+    //first word is OR_segments followed by DNF clauses
     List<BooleanQuery.Builder> getOR1DNFQueryList() {
 
         Set andPairSet = [] as Set
         TermQuery term0, term1
         int queryNumber = 0;
-        int clusterNumber = 0
-        boolean orPart = true
+        Set<Integer> genes = [] as Set
         List<BooleanQuery.Builder> bqbL = []
+        final int k = intChromosome[0]
 
-        //    intChromosome.eachWithIndex { int gene, int index ->
-        for (int index = 0; index < intChromosome.size(); index++) {
-            int gene = intChromosome[index]
+        int index = 1
+        int clusterNumber = 0
 
-            if (clusterNumber < numberOfClusters && orPart) {
+        while (clusterNumber < k && index < intChromosome.size()) {
+            final int gene = intChromosome[index]
 
-                if (gene < termQueryArray.size() && gene >= 0) {//&& genes.add(gene)) {
-                    bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
-                    bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
-                    clusterNumber++
-                }
-            } else if (gene < termQueryArray.size() && gene >= 0) {
-                orPart = false
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                clusterNumber++
+            }
+            index++
+        }
+
+        for (int i = index; i < intChromosome.size(); i++) {
+            final int gene = intChromosome[i]
+            if (gene < termQueryArray.size() && gene >= 0  && ! genes.contains(gene)) {
+
                 if (term0 == null) {
                     term0 = termQueryArray[gene]
                 } else {
@@ -215,24 +298,36 @@ class QueryListFromChromosome {
                     Set andPair = [term0, term1] as Set
                     if (term0 != term1 && andPairSet.add(andPair)) {
 
-                        clusterNumber = queryNumber % numberOfClusters
+                        clusterNumber = queryNumber % k
 
                         BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
                         subbqb.add(term0, BooleanClause.Occur.MUST);
                         subbqb.add(term1, BooleanClause.Occur.MUST)
-                        BooleanQuery subq = subbqb.build();
+                        BooleanQuery subq = subbqb.build()
 
-                        //check that the subquery returns something useful
-                        TotalHitCountCollector collector = new TotalHitCountCollector();
-                        Indexes.indexSearcher.search(subq, collector);
-                        if (collector.getTotalHits() > 10) {
-                            if (bqbL[clusterNumber]) {
-                                bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD);
-                                queryNumber++
+                        BooleanQuery rootq = bqbL[clusterNumber].build()
+                        Set<Integer> rootqDocIds = [] as Set<Integer>
+
+                        TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq, hitsPerPage)
+                        ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
+                        rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
+
+                        TopDocs subqdocs = Indexes.indexSearcher.search(subq, hitsPerPage)
+                        ScoreDoc[] subqhits = subqdocs.scoreDocs;
+
+                        int intersectCount = 0
+                        for (ScoreDoc d : subqhits) {
+                            if (rootqDocIds.contains(d.doc)) {
+                                intersectCount++
                             }
                         }
+
+                        if (intersectCount > maxIntersectCount) {
+                            bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD)
+                            queryNumber++
+                        }
                     }
-                    term0 = null;
+                    term0 = null
                 }
             }
         }

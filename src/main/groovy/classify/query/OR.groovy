@@ -21,7 +21,7 @@ import org.apache.lucene.search.TermQuery
 
 /**
  * To generate queries to perform binary text classification using GA string of
- * integer pairs which are translated into OR (lucene SHOULD) queries
+ * integer pairs which are translated into OR_segments (lucene SHOULD) queries
  *
  * @author Laurie
  */

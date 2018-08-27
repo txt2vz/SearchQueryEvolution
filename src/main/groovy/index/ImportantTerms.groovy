@@ -117,7 +117,7 @@ public class ImportantTerms {
 
         println " "
         println "F1 $f1s"
-        println "OR $ors"
+        println "OR_segments $ors"
         println "IG $igs"
         println "chisie ${chis.size()} CHI $chis"
 
@@ -166,7 +166,7 @@ public class ImportantTerms {
         //  TermQuery[] termQueryList = (TermQuery[]) termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable().toArray()
         println returnTQ.size() + " returnTQ: $returnTQ"
 //        println "orlist  0 " + termQueryList
-//        println "OR map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+//        println "OR_segments map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
 //        println "ORzzzz " +  termQueryList[0].toString(IndexInfo.FIELD_CONTENTS) //termQueryList.each {it.getTerm().text() }  //(IndexInfo.FIELD_CONTENTS)}
 //        println "ORzzzz " +  termQueryList.each {print it.toString(IndexInfo.FIELD_CONTENTS) + " "}
 
@@ -482,7 +482,7 @@ public class ImportantTerms {
         termQueryMap = termQueryMap.sort { -it.value }
         println "termQueryMap: $termQueryMap"
         TermQuery[] termQueryList = termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable()
-        println "OR map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
+        println "OR_segments map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
         return termQueryList
     }
 }

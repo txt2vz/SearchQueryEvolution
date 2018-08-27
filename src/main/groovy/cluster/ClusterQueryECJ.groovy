@@ -13,7 +13,6 @@ import index.ImportantTerms
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
 
 /**
@@ -22,7 +21,7 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST,   ORSETK,  ORDNFSETK,  ORDNF, OR1SETK, MINSHOULDSETK
+    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF, OR1SETK, MINSHOULDSETK, ORorig, OR_INTERSECT
 }
 
 @CompileStatic
@@ -55,17 +54,24 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
             case QueryType.OR:
-                bqbList = qlfc.getSimpleQueryList()
+                // bqbList = qlfc.getOR_List()
+                //   qlfc.numberOfClusters = genome[0]
+                //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
+                bqbList = qlfc.OR_segments(false)
+                break;
+
+            case QueryType.ORorig:
+                bqbList = qlfc.getOR_List(false)
                 break;
 
             case QueryType.AND:
                 qlfc.bco = BooleanClause.Occur.MUST
-                bqbList = qlfc.getSimpleQueryList()
+                bqbList = qlfc.getOR_List(false)
                 break;
 
             case QueryType.MINSHOULD2:
-                qlfc.minShould=2
-                bqbList = qlfc.getSimpleQueryList()
+                qlfc.minShould = 2
+                bqbList = qlfc.getOR_List(false)
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
@@ -86,28 +92,28 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
 //*****************set k methods *************************************************************
             case QueryType.OR1SETK:
-                qlfc.numberOfClusters = genome[0]
-                qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
                 bqbList = qlfc.getOR1QueryList()
                 break;
 
+            case QueryType.OR_INTERSECT:
+                bqbList = qlfc.getOR2ntersect()
+                break;
+
             case QueryType.ORDNFSETK:
-                qlfc.numberOfClusters = genome[0]
-                qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
                 bqbList = qlfc.getOR1DNFQueryList()
                 break;
 
             case QueryType.ORSETK:
-                qlfc.numberOfClusters = genome[0]
-                qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                bqbList = qlfc.getSimpleQueryList()
+               // qlfc.numberOfClusters = genome[0]
+               // qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
+                bqbList = qlfc.getOR_List(true)
                 break
 
             case QueryType.MINSHOULDSETK:
                 qlfc.numberOfClusters = genome[0]
                 qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                qlfc.minShould=2
-                bqbList = qlfc.getSimpleQueryList()
+                qlfc.minShould = 2
+                bqbList = qlfc.getOR_List(true)
 
 //			case QueryType.ALLNOT :
 //				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)

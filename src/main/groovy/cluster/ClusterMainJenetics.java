@@ -2,7 +2,6 @@ package cluster;
 
 import index.ImportantTerms;
 import index.Indexes;
-import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
 import org.jenetics.*;
@@ -26,9 +25,9 @@ public class ClusterMainJenetics {
 
     private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
         QueryListFromChromosome qlc = new QueryListFromChromosome(termQueryArray, Indexes.NUMBER_OF_CLUSTERS);
-        List<BooleanQuery.Builder> bqbList = qlc.getSimpleQueryList();
+        List<BooleanQuery.Builder> bqbList = qlc.getOR_List(false);
                 //QueryListFromChromosome
-               // .getSimpleQueryList(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
+               // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
 
         ClusterFitness clusterFitness = new ClusterFitness();
         clusterFitness.setClusterFitness(bqbList);

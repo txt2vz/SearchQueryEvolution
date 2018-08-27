@@ -46,7 +46,7 @@ class JobReport {
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
+        jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut

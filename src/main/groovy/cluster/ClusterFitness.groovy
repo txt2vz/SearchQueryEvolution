@@ -76,18 +76,15 @@ public class ClusterFitness extends SimpleFitness {
             Set<Integer> otherDocIdSet = [] as Set<Integer>
             List<BooleanQuery.Builder> otherQueries = bqbArray - bqb// ?: [new BooleanQuery.Builder()]
 
-            if (otherQueries == null) println "nuuss"
+            if (otherQueries == null) println "other queries null"
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
 
             for (BooleanQuery.Builder obqb : otherQueries) {
                 if (obqb == null) {
-                    println "zzssss obqb $obqb otherQueries $otherQueries"
+                    println "obqb null  $obqb otherQueries $otherQueries"
                 } else {
-
-                    def y = obqb.build()
-
-                    bqbOthers.add(y, BooleanClause.Occur.SHOULD)
+                    bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
                 }
                 //bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
             }
@@ -122,7 +119,7 @@ public class ClusterFitness extends SimpleFitness {
 
         final int minScore = -2000;
         queryMap = qMap.asImmutable()
-        if (lowHitsCount == 0) {
+        if (lowHitsCount == 0 && numberOfClusters > 1) {
 
             // fraction = totalHits / Indexes.indexReader.maxDoc()
             // missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
