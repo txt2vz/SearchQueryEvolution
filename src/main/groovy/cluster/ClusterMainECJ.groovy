@@ -77,7 +77,7 @@ class ClusterMainECJ extends Evolve {
                     queryTypes.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK] ?   'src/cfg/clusterGA_K.params' :    'src/cfg/clusterGA.params'
+                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK, QueryType.ORSETK] ?   'src/cfg/clusterGA_K.params' :    'src/cfg/clusterGA.params'
                         parameters = new ParameterDatabase(new File(parameterFilePath));
 
                         state = initialize(parameters, job)
