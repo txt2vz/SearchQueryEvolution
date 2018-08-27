@@ -13,9 +13,9 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    private final String parameterFilePath =
+   // private final String parameterFilePath =
        //     'src/cfg/clusterGA.params'
-    'src/cfg/clusterGA_K.params'
+   // 'src/cfg/clusterGA_K.params'
 
     private final int NUMBER_OF_JOBS = 2
 
@@ -40,7 +40,7 @@ class ClusterMainECJ extends Evolve {
 
          QueryType.OR1SETK,
          QueryType.ORDNFSETK,
-      //   QueryType.ORSETK,
+         QueryType.ORSETK,
       //   QueryType.MINSHOULDSETK
 
 
@@ -70,27 +70,26 @@ class ClusterMainECJ extends Evolve {
 
                 println "Index Enum ie: $ie"
                 Indexes.instance.setIndex(ie)
-                parameters = new ParameterDatabase(new File(parameterFilePath));
-
-                state = initialize(parameters, job)
-                //  state.parameters.set(new Parameter("generations"), "7")
-                state.output.systemMessage("Job: " + job);
-                state.job = new Object[1]
-                state.job[0] = new Integer(job)
-
-                if (NUMBER_OF_JOBS >= 1) {
-                    final String jobFilePrefix = "job." + job;
-                    state.output.setFilePrefix(jobFilePrefix);
-                    state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
-                }
 
                 fitnessMethods.each { fitnessMethod ->
                     ClusterFitness.fitnessMethod = fitnessMethod
 
                     queryTypes.each { qt ->
                         println "query type $qt"
-
                         ClusterQueryECJ.queryType = qt
+                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK] ?   'src/cfg/clusterGA_K.params' :    'src/cfg/clusterGA.params'
+                        parameters = new ParameterDatabase(new File(parameterFilePath));
+
+                        state = initialize(parameters, job)
+                        if (NUMBER_OF_JOBS >= 1) {
+                            final String jobFilePrefix = "job." + job;
+                            state.output.setFilePrefix(jobFilePrefix);
+                            state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                        }
+                        //  state.parameters.set(new Parameter("generations"), "7")
+                        state.output.systemMessage("Job: " + job);
+                        state.job = new Object[1]
+                        state.job[0] = new Integer(job)
 
                         state.run(EvolutionState.C_STARTED_FRESH);
                         int popSize = 0;

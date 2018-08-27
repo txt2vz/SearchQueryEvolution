@@ -16,22 +16,23 @@ import org.apache.lucene.search.spans.SpanTermQuery
 class QueryListFromChromosome {
     int[] intChromosome
     TermQuery[] termQueryArray
-    int numberOfClusters
+  //  int numberOfClusters
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     int minShould = 1
     private int hitsPerPage = Indexes.indexReader.maxDoc()
     private final int maxIntersectCount = 10
 
-    QueryListFromChromosome(TermQuery[] tq, int numClust) {
+    QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
-        numberOfClusters = numClust
+       // numberOfClusters = numClust
     }
 
     QueryListFromChromosome() {
     }
 
     List<BooleanQuery.Builder> getOR_List(boolean setk) {
-        //list of boolean queries
+
+        //list of boolean query builders to return
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
@@ -79,8 +80,9 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    List<BooleanQuery.Builder> getDNFQueryList(boolean ORAND) {
+    List<BooleanQuery.Builder> getDNFQueryList(boolean setk, boolean ORAND) {
 
+        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
         Set andPairSet = [] as Set
         TermQuery term0, term1
         List<BooleanQuery.Builder> bqbL = []
@@ -95,9 +97,9 @@ class QueryListFromChromosome {
         }
 
         //  intChromosome.eachWithIndex { int gene, int index ->  //slower
-        for (int index = 0; index < intChromosome.size(); index++) {
+        for (int index = (setk)? 1 : 0 ; index < intChromosome.size(); index++) {
             int gene = intChromosome[index]
-            int clusterNumber = index % numberOfClusters
+            int clusterNumber = index % k
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
             if (gene < termQueryArray.size() && gene >= 0) {
@@ -127,21 +129,23 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    List<BooleanQuery.Builder> getORwithNOT() {
-        //list of boolean queries
+    List<BooleanQuery.Builder> getORwithNOT(boolean  setk) {
+
+        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
         List<BooleanQuery.Builder> bqbL = []
 
         // set of genes - for duplicate checking
         Set<Integer> genes = [] as Set
         int arrayIndex = 0
 
-        for (int gene : intChromosome) {
-            final int clusterNumber = arrayIndex % numberOfClusters
+        for (int index = (setk)? 1 : 0 ; index < intChromosome.size(); index++) {
+            int gene = intChromosome[index]
+            final int clusterNumber = index % k
 
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
             if (gene >= 0) {
-                if (arrayIndex >= numberOfClusters && arrayIndex < numberOfClusters * 2) {
+                if (arrayIndex >= k && arrayIndex < k * 2) {
                     bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.MUST_NOT)
                 } else if (genes.add(gene)) {
                     bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
@@ -152,17 +156,16 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    List<BooleanQuery.Builder> getSpanFirstQueryList() {
-
+    List<BooleanQuery.Builder> getSpanFirstQueryList(boolean setk) {
+        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
         TermQuery term
         List<BooleanQuery.Builder> bqbL = []
         Set<Integer> genes = [] as Set
 
-        //  intChromosome.eachWithIndex { int gene, int index ->
-        for (int index = 0; index < intChromosome.size(); index++) {
+        for (int index = (setk)? 1 : 0 ; index < intChromosome.size(); index++) {
             int gene = intChromosome[index]
 
-            int clusterNumber = index % numberOfClusters
+            int clusterNumber = index % k
             bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
 
             if (gene >= 0) {

@@ -35,7 +35,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
         TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
-        qlfc = new QueryListFromChromosome(tqa, Indexes.NUMBER_OF_CLUSTERS)
+        qlfc = new QueryListFromChromosome(tqa)
     }
 
     public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
@@ -75,19 +75,19 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
-                bqbList = qlfc.getDNFQueryList(false)
+                bqbList = qlfc.getDNFQueryList(false, false )
                 break;
 
             case QueryType.OR_WITH_AND_SUBQ:
-                bqbList = qlfc.getDNFQueryList(true)
+                bqbList = qlfc.getDNFQueryList(false, true)
                 break;
 
             case QueryType.OR_WITH_NOT:
-                bqbList = qlfc.getORwithNOT()
+                bqbList = qlfc.getORwithNOT(false)
                 break;
 
             case QueryType.SPAN_FIRST:
-                bqbList = qlfc.getSpanFirstQueryList()
+                bqbList = qlfc.getSpanFirstQueryList(false)
                 break;
 
 //*****************set k methods *************************************************************
@@ -109,11 +109,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = qlfc.getOR_List(true)
                 break
 
-            case QueryType.MINSHOULDSETK:
-                qlfc.numberOfClusters = genome[0]
-                qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                qlfc.minShould = 2
-                bqbList = qlfc.getOR_List(true)
+          //  case QueryType.MINSHOULDSETK:
+            //    qlfc.numberOfClusters = genome[0]
+              //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
+                //qlfc.minShould = 2
+               // bqbList = qlfc.getOR_List(true)
 
 //			case QueryType.ALLNOT :
 //				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)
