@@ -37,19 +37,19 @@ class ClusterMainECJ extends Evolve {
     ]
 
     List<QueryType> queryTypes = [
-//           QueryType.OR,
-//            QueryType.OR_WITH_AND_SUBQ,
-//           QueryType.AND_WITH_OR_SUBQ,
-//            QueryType.AND,
-//           QueryType.MINSHOULD2,
+   //        QueryType.OR,
+     //       QueryType.OR_WITH_AND_SUBQ,
+//     //      QueryType.AND_WITH_OR_SUBQ,
+         //   QueryType.AND,
+           //QueryType.MINSHOULD2,
 //            QueryType.MINSHOULDSETK,
 
-       //     QueryType.OR1SETK,
+          //  QueryType.OR1SETK,
          //   QueryType.ORDNFSETK,
-            QueryType.ORSETK,
-            //   QueryType.MINSHOULDSETK
+            //QueryType.ORSETK,
+          //     QueryType.MINSHOULDSETK
 
-          //  QueryType.OR_INTERSECT,
+            QueryType.OR_INTERSECT_SETK,
 
            // QueryType.ORorig
 //
@@ -81,7 +81,7 @@ class ClusterMainECJ extends Evolve {
                     queryTypes.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK] ?
+                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK] ?
                                 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
                         parameters = new ParameterDatabase(new File(parameterFilePath));
 
