@@ -42,8 +42,8 @@ class QueryListFromChromosome {
             final int gene = intChromosome[i]
             final int clusterNumber = i % k
 
-            bqbArray[clusterNumber] = bqbArray[clusterNumber] ?:
-                    (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
+           // bqbArray[clusterNumber] = bqbArray[clusterNumber] ?:
+           //         (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
 
             if (gene >= 0 && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
