@@ -21,7 +21,7 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF, OR1SETK, MINSHOULDSETK, ORorig, OR_INTERSECT
+    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF, OR1SETK, MINSHOULDSETK, OR_INTERSECT
 }
 
 @CompileStatic
@@ -47,36 +47,55 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         ClusterFitness fitness = (ClusterFitness) ind.fitness;
         IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
 
-        //list of lucene Boolean Query Builder
-        List<BooleanQuery.Builder> bqbList
+        BooleanQuery.Builder [] bqbArray
         final int[] genome = intVectorIndividual.genome as int[]
-        qlfc.intChromosome = genome
+      //  qlfc.intChromosome = genome
 
         switch (queryType) {
+//            case QueryType.OR:
+//                // bqbList = qlfc.getOR_List()
+//                //   qlfc.numberOfClusters = genome[0]
+//                //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
+//                bqbList = qlfc.OR_segments(false)
+//                break;
+
             case QueryType.OR:
-                // bqbList = qlfc.getOR_List()
-                //   qlfc.numberOfClusters = genome[0]
-                //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                bqbList = qlfc.OR_segments(false)
+                bqbArray = qlfc.getSimple(genome)
                 break;
 
-            case QueryType.ORorig:
-                bqbList = qlfc.getOR_List(false)
-                break;
-
-            case QueryType.AND:
-                qlfc.bco = BooleanClause.Occur.MUST
-                bqbList = qlfc.getOR_List(false)
-                break;
-
-            case QueryType.MINSHOULD2:
-                qlfc.minShould = 2
-                bqbList = qlfc.getOR_List(false)
+            case QueryType.ORSETK:
+                bqbArray = qlfc.getSimple(genome, true)
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
-                bqbList = qlfc.getDNFQueryList(false, false )
+                bqbArray = qlfc.getDNFQueryList(genome,false )
                 break;
+
+            case QueryType.OR_WITH_AND_SUBQ:
+                bqbArray = qlfc.getDNFQueryList(genome,true )
+                break;
+
+            case QueryType.AND:
+                bqbArray = qlfc.getSimple(genome, false, 1, BooleanClause.Occur.MUST)
+                break;
+
+            case QueryType.MINSHOULD2:
+                bqbArray = qlfc.getSimple(genome, false, 2, BooleanClause.Occur.SHOULD)
+                break;
+
+            case QueryType.MINSHOULDSETK:
+                bqbArray = qlfc.getSimple(genome, true, 2, BooleanClause.Occur.SHOULD)
+                break;
+
+            case QueryType.OR_WITH_NOT:
+                bqbArray = qlfc.getORwithNOT(genome, false)
+                break;
+
+            case QueryType.SPAN_FIRST:
+                bqbArray = qlfc.getSpanFirstQueryList(genome, false)
+                break;
+/*
+
 
             case QueryType.OR_WITH_AND_SUBQ:
                 bqbList = qlfc.getDNFQueryList(false, true)
@@ -121,9 +140,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 //			case QueryType.ORNOTEVOLVED :
 //				bqbList = queryListFromChromosome.getORNOTfromEvolvedList(intVectorIndividual)
 //				break;
+*/
 
         }
-        fitness.setClusterFitness(bqbList)
+        fitness.setClusterFitness(bqbArray as List <BooleanQuery.Builder>)
 
 //rawfitness used by ECJ for evaluation
         def rawfitness = fitness.getFitness()

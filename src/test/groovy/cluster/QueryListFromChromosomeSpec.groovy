@@ -17,10 +17,10 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         int[] genome = [0, 1, 2] as int[]
-        QueryListFromChromosome qlfc = new QueryListFromChromosome(tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        QueryListFromChromosome qlfc = new QueryListFromChromosome(tfidfList)
         qlfc.intChromosome = genome
 
-        List<BooleanQuery.Builder> bqbL = qlfc.getOR_List()
+        List<BooleanQuery.Builder> bqbL = qlfc.getOR_List(false)
         Query q = bqbL[0].build()
 
         then:
@@ -32,9 +32,9 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         when:
         genome = [0, 1, 2, 3, 4, 5] as int[]
-        qlfc = new QueryListFromChromosome(tfidfList, Indexes.NUMBER_OF_CLUSTERS)
+        qlfc = new QueryListFromChromosome(tfidfList)
         qlfc.intChromosome = genome as int[]
-        bqbL = qlfc.getOR_List()
+        bqbL = qlfc.getOR_List(false)
         q = bqbL[0].build()
 
         then:

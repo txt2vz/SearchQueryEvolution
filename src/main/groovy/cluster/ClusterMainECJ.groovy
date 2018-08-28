@@ -13,46 +13,50 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-   // private final String parameterFilePath =
-       //     'src/cfg/clusterGA.params'
-   // 'src/cfg/clusterGA_K.params'
+    // private final String parameterFilePath =
+    //     'src/cfg/clusterGA.params'
+    // 'src/cfg/clusterGA_K.params'
 
     private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-       //    IndexEnum.CRISIS3,
-      //      IndexEnum.CLASSIC4,
-           // IndexEnum.R4,
+            //    IndexEnum.CRISIS3,
+            //      IndexEnum.CLASSIC4,
+            // IndexEnum.R4,
             IndexEnum.R5,
-        //    IndexEnum.NG5,
+            //    IndexEnum.NG5,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethods = [
-         //   FitnessMethod.SCORE,
-                 FitnessMethod.HITS,
-              //   FitnessMethod.P_TIMES_R,
+            //   FitnessMethod.SCORE,
+            FitnessMethod.HITS,
+            //   FitnessMethod.P_TIMES_R,
             //   FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
-
-         QueryType.OR1SETK,
-         QueryType.ORDNFSETK,
-         QueryType.ORSETK,
-      //   QueryType.MINSHOULDSETK
-
-
-    QueryType.OR_INTERSECT,
-              QueryType.OR,
-            QueryType.ORorig
-//            QueryType.AND,
+//           QueryType.OR,
 //            QueryType.OR_WITH_AND_SUBQ,
-//            QueryType.AND_WITH_OR_SUBQ,
-//            QueryType.MINSHOULD2,
-//            QueryType.OR_WITH_NOT,
-//            QueryType.SPAN_FIRST
+//           QueryType.AND_WITH_OR_SUBQ,
+//            QueryType.AND,
+//           QueryType.MINSHOULD2,
+//            QueryType.MINSHOULDSETK,
+
+       //     QueryType.OR1SETK,
+         //   QueryType.ORDNFSETK,
+            QueryType.ORSETK,
+            //   QueryType.MINSHOULDSETK
+
+          //  QueryType.OR_INTERSECT,
+
+           // QueryType.ORorig
+//
+
+//
+        //    QueryType.OR_WITH_NOT,
+         //   QueryType.SPAN_FIRST
     ]
 
 
@@ -77,7 +81,8 @@ class ClusterMainECJ extends Evolve {
                     queryTypes.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK, QueryType.ORSETK] ?   'src/cfg/clusterGA_K.params' :    'src/cfg/clusterGA.params'
+                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK] ?
+                                'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
                         parameters = new ParameterDatabase(new File(parameterFilePath));
 
                         state = initialize(parameters, job)

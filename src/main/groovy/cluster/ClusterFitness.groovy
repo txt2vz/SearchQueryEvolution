@@ -45,9 +45,8 @@ public class ClusterFitness extends SimpleFitness {
         setClusterFitness(bqbArray)
     }
 
-    void setClusterFitness(List<BooleanQuery.Builder> bqbArray) {
-        numberOfClusters = bqbArray.size()
-        //        assert bqbArray.size() == Indexes.NUMBER_OF_CLUSTERS
+    void setClusterFitness(List<BooleanQuery.Builder> bqbList) {
+        numberOfClusters = bqbList.size()
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -69,12 +68,12 @@ public class ClusterFitness extends SimpleFitness {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
 
-        for (BooleanQuery.Builder bqb : bqbArray) {
+        for (BooleanQuery.Builder bqb : bqbList) {
 
             Query q = bqb.build()
 
             Set<Integer> otherDocIdSet = [] as Set<Integer>
-            List<BooleanQuery.Builder> otherQueries = bqbArray - bqb// ?: [new BooleanQuery.Builder()]
+            List<BooleanQuery.Builder> otherQueries = bqbList - bqb// ?: [new BooleanQuery.Builder()]
 
             if (otherQueries == null) println "other queries null"
 
