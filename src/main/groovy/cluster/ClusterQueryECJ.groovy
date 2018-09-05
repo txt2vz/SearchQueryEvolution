@@ -36,6 +36,12 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
         TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
         qlfc = new QueryListFromChromosome(tqa)
+       // def x =state.parameters .g .getInt(new Parameter("subpopulations"))
+
+       // final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
+        //def  p = state.parameters.getString(new Parameter("pop.subpop.0"), new Parameter("pop.subpop.0"))
+
+       // println " $numberOfSubpops PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP $p"
     }
 
     public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
@@ -45,26 +51,14 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
             return;
 
         ClusterFitness fitness = (ClusterFitness) ind.fitness;
-        IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
-
+        IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind
         BooleanQuery.Builder [] bqbArray
         final int[] genome = intVectorIndividual.genome as int[]
-      //  qlfc.intChromosome = genome
 
         switch (queryType) {
-//            case QueryType.OR:
-//                // bqbList = qlfc.getOR_List()
-//                //   qlfc.numberOfClusters = genome[0]
-//                //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-//                bqbList = qlfc.OR_segments(false)
-//                break;
 
             case QueryType.OR:
                 bqbArray = qlfc.getSimple(genome)
-                break;
-
-            case QueryType.ORSETK:
-                bqbArray = qlfc.getSimple(genome, true)
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
@@ -83,10 +77,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, false, 2, BooleanClause.Occur.SHOULD)
                 break;
 
-            case QueryType.MINSHOULDSETK:
-                bqbArray = qlfc.getSimple(genome, true, 2, BooleanClause.Occur.SHOULD)
-                break;
-
             case QueryType.OR_WITH_NOT:
                 bqbArray = qlfc.getORwithNOT(genome, false)
                 break;
@@ -95,8 +85,18 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
+//*****************set k methods *************************************************************
+
+            case QueryType.ORSETK:
+                bqbArray = qlfc.getSimple(genome, true)
+                break;
+
             case QueryType.OR_INTERSECT_SETK:
                 bqbArray = qlfc.getOR2ntersect(genome)
+                break;
+
+            case QueryType.MINSHOULDSETK:
+                bqbArray = qlfc.getSimple(genome, true, 2, BooleanClause.Occur.SHOULD)
                 break;
 /*
 
@@ -113,8 +113,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = qlfc.getSpanFirstQueryList(false)
                 break;
 
-//*****************set k methods *************************************************************
-            case QueryType.OR1SETK:
+          case QueryType.OR1SETK:
                 bqbList = qlfc.getOR1QueryList()
                 break;
 

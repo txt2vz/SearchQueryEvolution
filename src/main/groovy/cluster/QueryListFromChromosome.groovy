@@ -3,9 +3,8 @@ package cluster
 import groovy.transform.CompileStatic
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
+
 import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.MatchAllDocsQuery
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
@@ -15,12 +14,10 @@ import org.apache.lucene.search.spans.SpanTermQuery
 
 @CompileStatic
 class QueryListFromChromosome {
-    //   int[] intChromosome
     final TermQuery[] termQueryArray
-     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
-    // int minShould = 1
+    BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    private final int maxIntersectCount = 10
+    private final int minIntersectCount = 10
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
@@ -37,22 +34,14 @@ class QueryListFromChromosome {
                     new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
         }
 
-       int clusterNumber=0
+        int clusterNumber = 0
         Set<Integer> genes = [] as Set
         for (int i = (setk) ? 1 : 0; i < intChromosome.size(); i++) {
             final int gene = intChromosome[i]
-    //        final int clusterNumber = i % k
-
-           // bqbArray[clusterNumber] = bqbArray[clusterNumber] ?:
-           //         (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
-
-      //      if (gene >= 0 && genes.add(gene)) {
-        //        bqbArray[clusterNumber].add(termQueryArray[gene], bco)
-          //  }
 
             if (gene >= 0 && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
-                clusterNumber = (clusterNumber < k -1) ? clusterNumber + 1 : i % k
+                clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : i % k
             }
         }
         return bqbArray
@@ -184,16 +173,12 @@ class QueryListFromChromosome {
 
         final int k = intChromosome[0]
 
-       // final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
-       // TermQuery term
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
             bqbArray[i] = new BooleanQuery.Builder()
         }
 
-
         Set<Integer> genes = [] as Set
-        //List<BooleanQuery.Builder> bqbL = []
 
         int index = 1   //gene 0 is k
         int clusterNumber = 0
@@ -208,13 +193,17 @@ class QueryListFromChromosome {
         }
 
         for (int i = index; i < intChromosome.size() && i < k * 2; i++) {
-            final int gene = intChromosome[index]
+     //   for (int i = index; i < intChromosome.size(); i++) {
+            final int gene = intChromosome[i]
             clusterNumber = i % k
 
+            //BooleanQuery rootq = bqbArray[clusterNumber].build()
             BooleanQuery rootq = bqbArray[clusterNumber].build()
+            def x = rootq.clauses()
+            def rootqFirst = x.first()
             Set<Integer> rootqDocIds = [] as Set<Integer>
 
-            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq, hitsPerPage)
+            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootqFirst.getQuery(), hitsPerPage)
             ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
             rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
 
@@ -228,7 +217,7 @@ class QueryListFromChromosome {
                 }
             }
 
-            if (intersectCount > maxIntersectCount) {
+            if (intersectCount > minIntersectCount && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }
@@ -349,7 +338,7 @@ class QueryListFromChromosome {
                             }
                         }
 
-                        if (intersectCount > maxIntersectCount) {
+                        if (intersectCount > minIntersectCount) {
                             bqbL[clusterNumber].add(subq, BooleanClause.Occur.SHOULD)
                             queryNumber++
                         }

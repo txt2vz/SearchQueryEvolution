@@ -21,7 +21,7 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-            //    IndexEnum.CRISIS3,
+                IndexEnum.CRISIS3,
             //      IndexEnum.CLASSIC4,
             // IndexEnum.R4,
             IndexEnum.R5,
@@ -31,8 +31,8 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethods = [
             //   FitnessMethod.SCORE,
-            FitnessMethod.HITS,
-            //   FitnessMethod.P_TIMES_R,
+        //    FitnessMethod.HITS,
+               FitnessMethod.P_TIMES_R,
             //   FitnessMethod.POS_DIV_NEG
     ]
 
@@ -46,7 +46,7 @@ class ClusterMainECJ extends Evolve {
 
           //  QueryType.OR1SETK,
          //   QueryType.ORDNFSETK,
-            //QueryType.ORSETK,
+            QueryType.ORSETK,
           //     QueryType.MINSHOULDSETK
 
             QueryType.OR_INTERSECT_SETK,
