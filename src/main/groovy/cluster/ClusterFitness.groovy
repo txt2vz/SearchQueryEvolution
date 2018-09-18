@@ -144,7 +144,7 @@ public class ClusterFitness extends SimpleFitness {
                     totalHits = allHits.size()
                     precision = positiveHits / totalHits
                     recall = positiveHits / Indexes.indexReader.maxDoc()
-                    baseFitness = (precision * recall)/(precision + recall)
+                    baseFitness = 2 * (precision * recall)/(precision + recall)
                     break
                 case fitnessMethod.SETK:
                     hitsOnly = positiveHits - negativeHits
