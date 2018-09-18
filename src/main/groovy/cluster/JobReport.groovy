@@ -104,7 +104,7 @@ class JobReport {
             }
         }
 
-        final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.numberOfClusters)
+        final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.queryMap.size())  //.numberOfClusters)
         final double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters : 0
         final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
         final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0

@@ -91,12 +91,20 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, true)
                 break;
 
+            case QueryType.OR1SETK:
+                bqbArray = qlfc.getOR1QueryList(genome)
+                break;
+
             case QueryType.OR_INTERSECT_SETK:
                 bqbArray = qlfc.getOR2ntersect(genome)
                 break;
 
             case QueryType.MINSHOULDSETK:
                 bqbArray = qlfc.getSimple(genome, true, 2, BooleanClause.Occur.SHOULD)
+                break;
+
+            case QueryType.ORDNFSETK:
+                bqbArray = qlfc.getOR1DNF(genome)
                 break;
 /*
 
@@ -121,9 +129,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbList = qlfc.getOR2ntersect()
                 break;
 
-            case QueryType.ORDNFSETK:
-                bqbList = qlfc.getOR1DNFQueryList()
-                break;
+
 
             case QueryType.ORSETK:
                // qlfc.numberOfClusters = genome[0]
@@ -146,7 +152,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 */
 
         }
-        fitness.setClusterFitness(bqbArray as List <BooleanQuery.Builder>)
+        Set<BooleanQuery.Builder> bqbSet = bqbArray as Set <BooleanQuery.Builder>
+        assert bqbSet.size() == bqbArray.size()
+        fitness.setClusterFitness(bqbSet)//(bqbArray as Set <BooleanQuery.Builder>)
 
 //rawfitness used by ECJ for evaluation
         def rawfitness = fitness.getFitness()

@@ -7,7 +7,7 @@ import org.apache.lucene.search.*
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, P_TIMES_R, SETK, POS_DIV_NEG
+    SCORE, HITS, P_TIMES_R, SETK, POS_DIV_NEG, POS, PSEUDOF1, F1_0
 }
 
 @CompileStatic
@@ -32,21 +32,16 @@ public class ClusterFitness extends SimpleFitness {
     int coreClusterPenalty = 0
     int totalHits = 0
     int missedDocs = 0
-    int numberOfClusters = 0
-    int lowHitsCount = 0
+ //   int numberOfClusters = 0
+   // int lowHitsCount = 0
     private int hitsPerPage = Indexes.indexReader.maxDoc()
 
     double getFitness() {
         return baseFitness;
     }
 
-    void setClusterFitness(List<BooleanQuery.Builder> bqbArray, int k) {
-        numberOfClusters = k
-        setClusterFitness(bqbArray)
-    }
-
-    void setClusterFitness(List<BooleanQuery.Builder> bqbList) {
-        numberOfClusters = bqbList.size()
+    void setClusterFitness(Set<BooleanQuery.Builder> bqbSet) {
+       // numberOfClusters = bqbSet.size()
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -57,7 +52,7 @@ public class ClusterFitness extends SimpleFitness {
         coreClusterPenalty = 0
         totalHits = 0
         missedDocs = 0
-        lowHitsCount = 0
+    //    lowHitsCount = 0
         scoreOnly = 0.0
         scorePlus = 0.0
         hitsOnly = 0
@@ -68,23 +63,25 @@ public class ClusterFitness extends SimpleFitness {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
 
-        for (BooleanQuery.Builder bqb : bqbList) {
+        for (BooleanQuery.Builder bqb : bqbSet) {
 
             Query q = bqb.build()
 
             Set<Integer> otherDocIdSet = [] as Set<Integer>
-            List<BooleanQuery.Builder> otherQueries = bqbList - bqb// ?: [new BooleanQuery.Builder()]
+            Set<BooleanQuery.Builder> otherQueries = bqbSet - bqb
 
-            if (otherQueries == null) println "other queries null"
+           // if (otherQueries == null) println "other queries null"
+            assert otherQueries
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
 
             for (BooleanQuery.Builder obqb : otherQueries) {
-                if (obqb == null) {
-                    println "obqb null  $obqb otherQueries $otherQueries"
-                } else {
-                    bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
-                }
+             //   if (obqb == null) {
+               //     println "obqb null  $obqb otherQueries $otherQueries"
+              //  } else {
+                assert obqb
+                bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
+               // }
                 //bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
             }
             Query otherBQ = bqbOthers.build()
@@ -98,7 +95,7 @@ public class ClusterFitness extends SimpleFitness {
             ScoreDoc[] hits = docs.scoreDocs;
             qMap.put(q, hits.size())
 
-            if (hits.size() < 2) lowHitsCount++
+           // if (hits.size() < 2) lowHitsCount++
             for (ScoreDoc d : hits) {
 
                 //   if (fitnessMethod == FitnessMethod.P_TIMES_R) {
@@ -118,12 +115,15 @@ public class ClusterFitness extends SimpleFitness {
 
         final int minScore = -2000;
         queryMap = qMap.asImmutable()
-        if (lowHitsCount == 0 && numberOfClusters > 1) {
+      //  if (lowHitsCount == 0 && numberOfClusters > 1) {
 
             // fraction = totalHits / Indexes.indexReader.maxDoc()
             // missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
 
             switch (fitnessMethod) {
+                case fitnessMethod.POS:
+                    baseFitness = positiveScoreTotal
+
                 case fitnessMethod.SCORE:
                     scoreOnly = positiveScoreTotal - negativeScoreTotal
                     scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
@@ -140,6 +140,12 @@ public class ClusterFitness extends SimpleFitness {
                     recall = totalHits / Indexes.indexReader.maxDoc()
                     baseFitness = precision * recall
                     break
+                case fitnessMethod.F1_0:
+                    totalHits = allHits.size()
+                    precision = positiveHits / totalHits
+                    recall = positiveHits / Indexes.indexReader.maxDoc()
+                    baseFitness = (precision * recall)/(precision + recall)
+                    break
                 case fitnessMethod.SETK:
                     hitsOnly = positiveHits - negativeHits
                     hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
@@ -148,8 +154,13 @@ public class ClusterFitness extends SimpleFitness {
                 case fitnessMethod.POS_DIV_NEG:
                     baseFitness = (double) positiveHits / (negativeHits + 1)
                     break;
+
+                case fitnessMethod.PSEUDOF1:
+                    missedDocs = Indexes.indexReader.maxDoc()-totalHits
+                    baseFitness = 2*positiveHits/(2*positiveHits+negativeHits+missedDocs)
+                    break
             }
-        }
+       // }
 
         //  baseFitness = (2 * precision * recall) / (precision + recall)
         //  baseFitness = (double) hitsPlus * fraction * fraction
