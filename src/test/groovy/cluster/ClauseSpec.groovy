@@ -16,54 +16,28 @@ class ClauseSpec extends spock.lang.Specification {
 
         when:
 
-      //  List<BooleanQuery.Builder> bqbL = []
-
         def tq0 = new TermQuery(new Term(Indexes.FIELD_CONTENTS,
                 'bpd'));
-
 
         def tq1 = new TermQuery(new Term(Indexes.FIELD_CONTENTS,
                 'oil'));
 
-      //  def bq = new BooleanQuery(tq, BoooleanClause.O)
-
         def bqb = new BooleanQuery.Builder()
-                bqb.add(tq0,BooleanClause.Occur.MUST)
-        bqb.add(tq1,BooleanClause.Occur.MUST)
+        bqb.add(tq0, BooleanClause.Occur.MUST)
+        bqb.add(tq1, BooleanClause.Occur.MUST)
 
-
-       // BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
-       // BooleanQuery.Builder subbqb = new BooleanQuery.Builder();
-       // subbqb.add(term0, BooleanClause.Occur.MUST)
-
-
-
-      //  bqb.add(bq)
-       // BooleanQuery bq
         def clauses = bqb.clauses
 
         then:
         clauses != null
-
-        def z = clauses[0]
-        !clauses.isEmpty()
+        clauses[0].toString() == '+contents:bpd'
+        clauses[1].toString() == '+contents:oil'
 
         for (clause in clauses) {
-            println "cluase is $clause"
-            println "query " +clause.query
+            println "clause:  $clause"
+            println "clause.query " + clause.query
             println "word " + clause.query.toString(Indexes.FIELD_CONTENTS)
-            println "z is $z"
-
+            println "clause.occur: " + clause.occur
         }
-
-        when:
-        def words = ['first', 'second', 'third', 'fourth' ,'fifth'] as String[]
-        TermQuery[] tqa = new TermQuery[5]
-
-        words.eachWithIndex{w, i ->
-            tqa[i] = new TermQuery(new Term(t))
-        }
-
     }
-
 }

@@ -13,17 +13,13 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    // private final String parameterFilePath =
-    //     'src/cfg/clusterGA.params'
-    // 'src/cfg/clusterGA_K.params'
-
     private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-                IndexEnum.CRISIS3,
+         //   IndexEnum.CRISIS3,
             //      IndexEnum.CLASSIC4,
-             IndexEnum.R4,
+           // IndexEnum.R4,
             IndexEnum.R5,
             //    IndexEnum.NG5,
             IndexEnum.NG6
@@ -31,36 +27,28 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethods = [
 
-//            FitnessMethod.POS
-//   FitnessMethod.SCORE,
-FitnessMethod.HITS,
-//FitnessMethod.P_TIMES_R,
-FitnessMethod.F1_0,
-FitnessMethod.PSEUDOF1
-//   FitnessMethod.POS_DIV_NEG
+        //    FitnessMethod.SCORE,
+          //  FitnessMethod.HITS,
+            //FitnessMethod.P_TIMES_R,
+             FitnessMethod.F1_0,
+            FitnessMethod.PSEUDOF1
+            //  FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
-           QueryType.OR,
-     //       QueryType.OR_WITH_AND_SUBQ,
-//     //      QueryType.AND_WITH_OR_SUBQ,
-         //   QueryType.AND,
-           //QueryType.MINSHOULD2,
-//            QueryType.MINSHOULDSETK,
+            QueryType.OR,
+            //       QueryType.OR_WITH_AND_SUBQ,
+     //      QueryType.AND_WITH_OR_SUBQ,
+            //   QueryType.AND,
+            //QueryType.MINSHOULD2,
+            //    QueryType.OR_WITH_NOT,
+            //   QueryType.SPAN_FIRST
 
-   //         QueryType.OR1SETK,
-     //       QueryType.ORDNFSETK,
-       //     QueryType.ORSETK,
-          //     QueryType.MINSHOULDSETK
-
-         //   QueryType.OR_INTERSECT_SETK,
-
-           // QueryType.ORorig
-//
-
-//
-        //    QueryType.OR_WITH_NOT,
-         //   QueryType.SPAN_FIRST
+            //         QueryType.OR1SETK,
+            //       QueryType.ORDNFSETK,
+            //     QueryType.ORSETK,
+            //     QueryType.MINSHOULDSETK
+            //   QueryType.OR_INTERSECT_SETK,
     ]
 
 
@@ -71,10 +59,8 @@ FitnessMethod.PSEUDOF1
 
         clusteringIndexes.each { IndexEnum ie ->
 
-            int jNo = 0
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state;
-                ParameterDatabase parameters = null
 
                 println "Index Enum ie: $ie"
                 Indexes.instance.setIndex(ie)
@@ -87,7 +73,7 @@ FitnessMethod.PSEUDOF1
                         ClusterQueryECJ.queryType = qt
                         String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK] ?
                                 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
-                        parameters = new ParameterDatabase(new File(parameterFilePath));
+                        ParameterDatabase  parameters = new ParameterDatabase(new File(parameterFilePath));
 
                         state = initialize(parameters, job)
                         if (NUMBER_OF_JOBS >= 1) {
@@ -114,12 +100,12 @@ FitnessMethod.PSEUDOF1
                         final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                         println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                        jobReport.queriesReport(jNo, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
+                        jobReport.queriesReport(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
                     }
                 }
                 cleanup(state);
                 println "--------END JOB $job  -----------------------------------------------"
-                jNo++
+
             }
         }
         final Date endRun = new Date()
