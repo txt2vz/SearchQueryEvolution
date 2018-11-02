@@ -22,7 +22,7 @@ public class Effectiveness {
 	}
 
 	/**
-	 * Fitness is based on the F1 measure which combines precision and recall
+	 * Fitness is based on the F1 measure which combines pseudo_precision and pseudo_recall
 	 */
 	public static double f1(final int positiveMatch, final int negativeMatch, final int totalPositive) {
 

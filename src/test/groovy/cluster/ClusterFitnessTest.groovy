@@ -20,7 +20,7 @@ class ClusterFitnessTest extends Specification {
         def pseudoF1 = 2 * positiveHits / (2 * positiveHits + negativeHits + missedDocs)
 
         then:
-        println "preciionst $precision  recall $recall"
+        println "preciionst $precision  pseudo_recall $recall"
         println "f1 $f1 pseudoF1 $pseudoF1 missed docs $missedDocs"
 
         precision ==0.5

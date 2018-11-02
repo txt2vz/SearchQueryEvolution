@@ -23,8 +23,9 @@ public class ClusterFitness extends SimpleFitness {
     double positiveScoreTotal = 0.0
     double negativeScoreTotal = 0.0
     double scoreOnly = 0.0
-    double precision = 0.0
-    double recall = 0.0
+    double pseudo_precision = 0.0
+    double pseudo_recall = 0.0
+    double pseudo_f1 = 0.0
     int positiveHits = 0
     int negativeHits = 0
     int hitsOnly = 0
@@ -52,8 +53,8 @@ public class ClusterFitness extends SimpleFitness {
         scorePlus = 0.0
         hitsOnly = 0
         hitsPlus = 0
-        precision = 0.0
-        recall = 0.0
+        pseudo_precision = 0.0
+        pseudo_recall = 0.0
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
@@ -107,9 +108,11 @@ public class ClusterFitness extends SimpleFitness {
         final int minScore = -2000;
         queryMap = qMap.asImmutable()
 
-        // fraction = totalHits / Indexes.indexReader.maxDoc()
         totalHits = allHits.size()
         missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+        pseudo_precision = positiveHits / totalHits
+        pseudo_recall = totalHits / Indexes.indexReader.maxDoc()
+        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
 
         switch (fitnessMethod) {
             case fitnessMethod.POS:
@@ -126,14 +129,14 @@ public class ClusterFitness extends SimpleFitness {
                 baseFitness = hitsPlus
                 break;
             case fitnessMethod.P_TIMES_R:
-                precision = positiveHits / totalHits
-                recall = totalHits / Indexes.indexReader.maxDoc()
-                baseFitness = precision * recall
+              //  pseudo_precision = positiveHits / totalHits
+              //  pseudo_recall = totalHits / Indexes.indexReader.maxDoc()
+                baseFitness = pseudo_precision * pseudo_recall
                 break
             case fitnessMethod.F1_0:
-                precision = positiveHits / totalHits
-                recall = positiveHits / Indexes.indexReader.maxDoc()
-                baseFitness = 2 * (precision * recall) / (precision + recall)
+              //  pseudo_precision = positiveHits / totalHits
+             //   pseudo_recall = positiveHits / Indexes.indexReader.maxDoc()
+                baseFitness = pseudo_f1//2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
                 break
             case fitnessMethod.SETK:
                 hitsOnly = positiveHits - negativeHits
@@ -151,7 +154,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
-        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} precision $precision recall $recall"
+        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} pseudo_precision $pseudo_precision pseudo_recall $pseudo_recall pseudo_f1 $pseudo_f1"
         println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
         println ""
     }

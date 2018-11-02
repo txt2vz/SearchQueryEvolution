@@ -189,7 +189,7 @@ class QueryListFromChromosome {
         return bqbL
     }
 
-    BooleanQuery.Builder[] getOR2ntersect(int[] intChromosome) {
+    BooleanQuery.Builder[] getOR2Intersect(int[] intChromosome, int maxQueryWords) {
 
         final int k = intChromosome[0]
 
@@ -212,18 +212,20 @@ class QueryListFromChromosome {
             index++
         }
 
-        for (int i = index; i < intChromosome.size() && i < k * 2; i++) {
+        for (int i = index; i < intChromosome.size() && i < k * maxQueryWords; i++) {
+       // for (int i = index; i < intChromosome.size() && i < k * 2; i++) {
             //   for (int i = index; i < intChromosome.size(); i++) {
             final int gene = intChromosome[i]
             clusterNumber = i % k
 
             //BooleanQuery rootq = bqbArray[clusterNumber].build()
             BooleanQuery rootq = bqbArray[clusterNumber].build()
-            def x = rootq.clauses()
-            def rootqFirst = x.first()
+        //    def rootqClauses = rootq.clauses()
+          //  def rootqFirstClause = rootqClauses.first()
             Set<Integer> rootqDocIds = [] as Set<Integer>
 
-            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootqFirst.getQuery(), hitsPerPage)
+          // TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootqFirstClause.getQuery(), hitsPerPage)
+            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq.clauses().first().getQuery(), hitsPerPage)
             ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
             rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
 

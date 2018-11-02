@@ -48,7 +48,7 @@ class JobReport {
 
         jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
 
-        String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
+        String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average pseudo_precision: $averagePrecision average pseudo_recall: $averageRecall"
         println messageOut
 
         jobResultsQueryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
@@ -93,7 +93,7 @@ class JobReport {
 
                 if (queryReport) {
 
-                    def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                    def out = "Query $index :  $qString ## f1: $f1 pseudo_recall: $recall pseudo_precision: $precision categoryTotal: $categoryTotal for category: $catQ"
                     println out
                     jobResultsQueryFileOut << out + "\n"
                 }
