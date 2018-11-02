@@ -147,11 +147,6 @@ public class ClusterFitness extends SimpleFitness {
                 baseFitness = 2 * positiveHits / (2 * positiveHits + negativeHits + missedDocs)
                 break
         }
-        // }
-
-        //  baseFitness = (2 * precision * recall) / (precision + recall)
-        //  baseFitness = (double) hitsPlus * fraction * fraction
-        // baseFitness = (scorePlus / (coreClusterPenalty + 1)) //* fraction * fraction
     }
 
     void generationStats(long generation) {

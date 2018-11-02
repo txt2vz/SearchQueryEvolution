@@ -17,7 +17,7 @@ class QueryListFromChromosome {
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    private final int minIntersectCount = 10
+    private final int minIntersectCount = 20
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
@@ -170,10 +170,10 @@ class QueryListFromChromosome {
     }
 
     //one word per query
-    BooleanQuery.Builder[]  getOR1QueryList(int[] intChromosome) {
+    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
         final int k = intChromosome[0]
         Set<Integer> genes = [] as Set
-        BooleanQuery.Builder[]  bqbL = new BooleanQuery.Builder[k]
+        BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
         int index = 1
         int clusterNumber = 0
@@ -213,7 +213,7 @@ class QueryListFromChromosome {
         }
 
         for (int i = index; i < intChromosome.size() && i < k * 2; i++) {
-     //   for (int i = index; i < intChromosome.size(); i++) {
+            //   for (int i = index; i < intChromosome.size(); i++) {
             final int gene = intChromosome[i]
             clusterNumber = i % k
 
@@ -270,7 +270,7 @@ class QueryListFromChromosome {
 
         for (index; index < intChromosome.size(); index++) {
             final int gene = intChromosome[index]
-            if (gene < termQueryArray.size() && gene >= 0  && ! genes.contains(gene)) {
+            if (gene < termQueryArray.size() && gene >= 0 && !genes.contains(gene)) {
 
                 if (term0 == null) {
                     term0 = termQueryArray[gene]
