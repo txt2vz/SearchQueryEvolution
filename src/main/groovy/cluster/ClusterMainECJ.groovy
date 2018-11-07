@@ -17,37 +17,38 @@ class ClusterMainECJ extends Evolve {
 
     //indexes suitable for clustering.
     def clusteringIndexes = [
-         //   IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.R4,
-            IndexEnum.R5,
+            //   IndexEnum.CRISIS3,
+            IndexEnum.NG3,
+            //      IndexEnum.CLASSIC4,
+            //       IndexEnum.R4,
+            //     IndexEnum.R5,
             //    IndexEnum.NG5,
-            IndexEnum.NG6
+            //   IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethods = [
 
-        //    FitnessMethod.SCORE,
-          //  FitnessMethod.HITS,
+            //    FitnessMethod.SCORE,
+            //  FitnessMethod.HITS,
             //FitnessMethod.P_TIMES_R,
-             FitnessMethod.F1_0,
-        //    FitnessMethod.PSEUDOF1
+            FitnessMethod.F1_0,
+            //    FitnessMethod.PSEUDOF1
             //  FitnessMethod.POS_DIV_NEG
     ]
 
     List<QueryType> queryTypes = [
-       //     QueryType.OR,
+            //     QueryType.OR,
             //       QueryType.OR_WITH_AND_SUBQ,
-     //      QueryType.AND_WITH_OR_SUBQ,
+            //      QueryType.AND_WITH_OR_SUBQ,
             //   QueryType.AND,
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-
-           //          QueryType.OR1SETK,
-         //          QueryType.ORDNFSETK,
+            QueryType.ORSETK,
+            QueryType.OR1SETK,
             QueryType.OR2_INTERSECT_SETK,
-       //          QueryType.ORSETK,
+            QueryType.OR3_INSTERSECT_SETK,
+            QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
             //   QueryType.OR2_INTERSECT_SETK,
     ]
@@ -72,9 +73,10 @@ class ClusterMainECJ extends Evolve {
                     queryTypes.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR2_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK,  QueryType.OR3_INSTERSECT_SETK] ?
+                        String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR2_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK,
+                                                          QueryType.OR3_INSTERSECT_SETK] ?
                                 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
-                        ParameterDatabase  parameters = new ParameterDatabase(new File(parameterFilePath));
+                        ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
                         state = initialize(parameters, job)
                         if (NUMBER_OF_JOBS >= 1) {
