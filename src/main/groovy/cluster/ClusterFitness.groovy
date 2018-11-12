@@ -7,7 +7,7 @@ import org.apache.lucene.search.*
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, P_TIMES_R, SETK, POS_DIV_NEG, POS, PSEUDOF1, F1_0
+    SCORE, HITS, PSEUDOF1, F1_0
 }
 
 @CompileStatic
@@ -128,21 +128,10 @@ public class ClusterFitness extends SimpleFitness {
                 hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
                 baseFitness = hitsPlus
                 break;
-            case fitnessMethod.P_TIMES_R:
-              //  pseudo_precision = positiveHits / totalHits
-              //  pseudo_recall = totalHits / Indexes.indexReader.maxDoc()
-                baseFitness = pseudo_precision * pseudo_recall
-                break
+
             case fitnessMethod.F1_0:
-              //  pseudo_precision = positiveHits / totalHits
-             //   pseudo_recall = positiveHits / Indexes.indexReader.maxDoc()
-                baseFitness = pseudo_f1//2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+                baseFitness = pseudo_f1
                 break
-            case fitnessMethod.SETK:
-                hitsOnly = positiveHits - negativeHits
-                hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
-                baseFitness = hitsPlus
-                break;
             case fitnessMethod.POS_DIV_NEG:
                 baseFitness = (double) positiveHits / (negativeHits + 1)
                 break;
