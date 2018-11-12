@@ -115,14 +115,13 @@ public class ClusterFitness extends SimpleFitness {
         pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
 
         switch (fitnessMethod) {
-            case fitnessMethod.POS:
-                baseFitness = positiveScoreTotal
 
             case fitnessMethod.SCORE:
                 scoreOnly = positiveScoreTotal - negativeScoreTotal
                 scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
                 baseFitness = scorePlus
                 break;
+
             case fitnessMethod.HITS:
                 hitsOnly = positiveHits - negativeHits
                 hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
@@ -132,9 +131,7 @@ public class ClusterFitness extends SimpleFitness {
             case fitnessMethod.F1_0:
                 baseFitness = pseudo_f1
                 break
-            case fitnessMethod.POS_DIV_NEG:
-                baseFitness = (double) positiveHits / (negativeHits + 1)
-                break;
+
             case fitnessMethod.PSEUDOF1:
                 baseFitness = 2 * positiveHits / (2 * positiveHits + negativeHits + missedDocs)
                 break
