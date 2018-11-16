@@ -169,7 +169,9 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-   private  Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
+    //********************************   set k methods
+
+   private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
 
         final int k = intChromosome[0]
         Set<Integer> genes = [] as Set
@@ -226,6 +228,7 @@ class QueryListFromChromosome {
                     intersectCount++
                 }
             }
+            //final int minIntersect = ( (Indexes.indexReader.maxDoc() / k) * 0.15 ).toDouble().round().toInteger()
 
             if (intersectCount > minIntersectCount && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)

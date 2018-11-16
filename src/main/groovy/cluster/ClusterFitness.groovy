@@ -26,10 +26,10 @@ public class ClusterFitness extends SimpleFitness {
     double pseudo_precision = 0.0
     double pseudo_recall = 0.0
     double pseudo_f1 = 0.0
+
     int positiveHits = 0
     int negativeHits = 0
     int hitsOnly = 0
-    int coreClusterPenalty = 0
     int totalHits = 0
     int missedDocs = 0
 
@@ -46,7 +46,6 @@ public class ClusterFitness extends SimpleFitness {
         baseFitness = 0.0
         positiveHits = 0
         negativeHits = 0
-        coreClusterPenalty = 0
         totalHits = 0
         missedDocs = 0
         scoreOnly = 0.0
@@ -83,7 +82,13 @@ public class ClusterFitness extends SimpleFitness {
             //collect docid from other queries
             TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
-            hitsOthers.each { ScoreDoc otherHit -> otherDocIdSet << otherHit.doc }
+
+           //for loop faster
+           // hitsOthers.each { ScoreDoc otherHit -> otherDocIdSet << otherHit.doc }
+
+            for (ScoreDoc otherHit : hitsOthers) {
+                otherDocIdSet << otherHit.doc
+            }
 
             TopDocs docs = Indexes.indexSearcher.search(q, hitsPerPage)
             ScoreDoc[] hits = docs.scoreDocs;
@@ -105,15 +110,17 @@ public class ClusterFitness extends SimpleFitness {
             }
         }
 
-        final int minScore = -2000;
+
         queryMap = qMap.asImmutable()
 
         totalHits = allHits.size()
         missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+
         pseudo_precision = positiveHits / totalHits
         pseudo_recall = totalHits / Indexes.indexReader.maxDoc()
         pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
 
+        final int minScore = -2000;
         switch (fitnessMethod) {
 
             case fitnessMethod.SCORE:
