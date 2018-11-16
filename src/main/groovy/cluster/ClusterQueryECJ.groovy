@@ -21,7 +21,8 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF, OR1SETK, MINSHOULDSETK, OR2_INTERSECT_SETK, OR3_INSTERSECT_SETK
+    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF,
+    OR1SETK, MINSHOULDSETK, OR2_INTERSECT_SETK, OR3_INSTERSECT_SETK, OR_INTERSECT_MAX
 }
 
 @CompileStatic
@@ -101,6 +102,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
             case QueryType.OR3_INSTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 3)
+                break;
+
+            case QueryType.OR_INTERSECT_MAX:
+                bqbArray = qlfc.getORIntersect(genome, 100)
                 break;
 
             case QueryType.ORDNFSETK:

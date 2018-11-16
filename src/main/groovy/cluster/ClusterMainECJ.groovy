@@ -18,12 +18,12 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexes = [
             //   IndexEnum.CRISIS3,
-        //    IndexEnum.NG3,
+            IndexEnum.NG3,
                   IndexEnum.CLASSIC4,
-            //       IndexEnum.R4,
+                   IndexEnum.R4,
              //    IndexEnum.R5,
-            //    IndexEnum.NG5,
-            //   IndexEnum.NG6
+                IndexEnum.NG5,
+               IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethods = [
@@ -44,10 +44,11 @@ class ClusterMainECJ extends Evolve {
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-         //   QueryType.ORSETK,
-          //  QueryType.OR1SETK,
+            QueryType.ORSETK,
+            QueryType.OR1SETK,
             QueryType.OR2_INTERSECT_SETK,
             QueryType.OR3_INSTERSECT_SETK,
+            QueryType.OR_INTERSECT_MAX
            // QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
             //   QueryType.OR2_INTERSECT_SETK,
@@ -74,7 +75,7 @@ class ClusterMainECJ extends Evolve {
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
                         String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR2_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK,
-                                                          QueryType.OR3_INSTERSECT_SETK] ?
+                                                          QueryType.OR3_INSTERSECT_SETK, QueryType.OR_INTERSECT_MAX] ?
                                 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
                         ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
