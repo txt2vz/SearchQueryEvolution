@@ -74,7 +74,7 @@ public class ClusterMainJenetics {
         Genotype<IntegerGene> g = result.getGenotype();
         ClusterFitness cfResult = cf(g);
         System.out.println("cluster fit result " + cfResult.queryShort());
-      //  finalReport.queriesReport(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
+      //  finalReport.reportsOut(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
         System.out.println();
     }
 }

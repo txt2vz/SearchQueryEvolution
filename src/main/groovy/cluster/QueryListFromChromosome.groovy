@@ -17,7 +17,7 @@ class QueryListFromChromosome {
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    private final static int minIntersectCount = 20
+    private int minIntersectCount = 20
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
@@ -169,9 +169,9 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-    //********************************   set k methods
+    //********************************   set k methods  *******
 
-   private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
+    private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
 
         final int k = intChromosome[0]
         Set<Integer> genes = [] as Set
@@ -203,6 +203,10 @@ class QueryListFromChromosome {
         BooleanQuery.Builder[] bqbArray = tuple4.first
         final int k = tuple4.second
 
+        if (ClusterFitness.IntersectMethod == IntersectMethod.TEN_PERECENT_TOTAL_DIV_K) {
+            minIntersectCount = ((Indexes.indexReader.maxDoc() / k) * 0.1).round().toInteger()
+        }
+
         assert k == bqbArray.size()
         int index = tuple4.third
         Set<Integer> genes = tuple4.fourth
@@ -228,7 +232,6 @@ class QueryListFromChromosome {
                     intersectCount++
                 }
             }
-            //final int minIntersect = ( (Indexes.indexReader.maxDoc() / k) * 0.15 ).toDouble().round().toInteger()
 
             if (intersectCount > minIntersectCount && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)

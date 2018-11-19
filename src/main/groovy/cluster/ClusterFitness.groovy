@@ -11,9 +11,15 @@ enum FitnessMethod {
 }
 
 @CompileStatic
+enum IntersectMethod {
+    HITS20, TEN_PERECENT_TOTAL_DIV_K
+}
+
+@CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
     static FitnessMethod fitnessMethod// = FitnessMethod.SCORE
+    static IntersectMethod// = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0

@@ -13,7 +13,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 class JobReport {
     def resultsF1 = [:]
     def resultsDir = new File(/results/).mkdir()
-    File jobResultsQueryFileOut = new File('results/Queries.txt')
+    File queryFileOut = new File('results/Queries.txt')
 
     JobReport() {
     }
@@ -34,34 +34,30 @@ class JobReport {
         overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 
-    void queriesReport(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
+    void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
 
-        File fcsv = new File("results/resultsClusterByJob.csv")
 
-        if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, gen, job, date \n'
-        }
 
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        jobResultsQueryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum}  ************************************************************* \n"
+        queryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${ClusterFitness.intersectMethod} ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
-        jobResultsQueryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        jobResultsQueryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness().round(2)} \n"
-        jobResultsQueryFileOut << messageOut + "\n"
-        jobResultsQueryFileOut << "************************************************ \n \n"
+        queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
+        queryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness().round(2)} \n"
+        queryFileOut << messageOut + "\n"
+        queryFileOut << "************************************************ \n \n"
 
-        // File fcsv = new File("results/resultsClusterByJob.csv")
+        File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, gen, job, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod,  gen, job, date \n'
         }
 
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ClusterQueryECJ.queryType}, $gen, $job, ${new Date()} \n"
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ClusterQueryECJ.queryType}, ${ClusterFitness.intersectMethod}, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
@@ -95,7 +91,7 @@ class JobReport {
 
                     def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
                     println out
-                    jobResultsQueryFileOut << out + "\n"
+                    queryFileOut << out + "\n"
                 }
             } else {
                 f1list << 0
@@ -112,7 +108,7 @@ class JobReport {
         [f1list, averageF1forJob, averagePrecision, averageRecall]
     }
 
-    List findMostFrequentCategoryForQuery(Query q, int index) {
+    private List findMostFrequentCategoryForQuery(Query q, int index) {
         Map<String, Integer> catsFreq = new HashMap<String, Integer>()
         String qString = q.toString(Indexes.FIELD_CONTENTS)
 
