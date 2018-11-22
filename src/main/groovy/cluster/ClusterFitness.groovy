@@ -12,7 +12,7 @@ enum FitnessMethod {
 
 @CompileStatic
 enum IntersectMethod {
-    HITS20, TEN_PERECENT_TOTAL_DIV_K
+    HITS20, TEN_PERECENT_TOTAL_DIV_K, COOCCURRENCE
 }
 
 @CompileStatic
