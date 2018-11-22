@@ -65,7 +65,7 @@ public class ClusterFitness extends SimpleFitness {
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         Set<Integer> allHits = [] as Set
-       // Set<Integer> negDocs = [] as Set  //to count negDoc only once
+        // Set<Integer> negDocs = [] as Set  //to count negDoc only once
 
         for (BooleanQuery.Builder bqb : bqbSet) {
 

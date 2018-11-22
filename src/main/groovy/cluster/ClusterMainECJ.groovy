@@ -41,12 +41,12 @@ class ClusterMainECJ extends Evolve {
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-            QueryType.ORSETK,
-            QueryType.OR1SETK,
-            QueryType.OR2_INTERSECT_SETK,
+      //      QueryType.ORSETK,
+        //    QueryType.OR1SETK,
+          //  QueryType.OR2_INTERSECT_SETK,
             QueryType.OR3_INSTERSECT_SETK,
-            QueryType.OR4_INSTERSECT_SETK,
-            QueryType.OR_INTERSECT_MAX
+          ///  QueryType.OR4_INSTERSECT_SETK,
+        //    QueryType.OR_INTERSECT_MAX_SETK
             // QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
     ]

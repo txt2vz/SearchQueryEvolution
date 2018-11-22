@@ -36,7 +36,7 @@ enum QueryType {
     OR2_INTERSECT_SETK(true),
     OR3_INSTERSECT_SETK(true),
     OR4_INSTERSECT_SETK(true),
-    OR_INTERSECT_MAX(true)
+    OR_INTERSECT_MAX_SETK(true)
 
     boolean setk
     QueryType(boolean setk){
@@ -121,7 +121,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getORIntersect(genome, 4)
                 break;
 
-            case QueryType.OR_INTERSECT_MAX:
+            case QueryType.OR_INTERSECT_MAX_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 100)
                 break;
 
