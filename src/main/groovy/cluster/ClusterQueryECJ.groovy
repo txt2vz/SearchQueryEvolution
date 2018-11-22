@@ -21,8 +21,27 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR, AND, OR_WITH_AND_SUBQ, AND_WITH_OR_SUBQ, OR_WITH_NOT, MINSHOULD2, SPAN_FIRST, ORSETK, ORDNFSETK, ORDNF,
-    OR1SETK, MINSHOULDSETK, OR2_INTERSECT_SETK, OR3_INSTERSECT_SETK, OR_INTERSECT_MAX
+    OR (false),
+    AND (false),
+    OR_WITH_AND_SUBQ(false),
+    AND_WITH_OR_SUBQ(false),
+    OR_WITH_NOT(false),
+    MINSHOULD2(false),
+    SPAN_FIRST(false),
+    ORSETK(true),
+    ORDNFSETK(true),
+    ORDNF(true),
+    OR1SETK(true),
+    MINSHOULDSETK(true),
+    OR2_INTERSECT_SETK(true),
+    OR3_INSTERSECT_SETK(true),
+    OR4_INSTERSECT_SETK(true),
+    OR_INTERSECT_MAX(true)
+
+    boolean setk
+    QueryType(boolean setk){
+        this.setk = setk
+    }
 }
 
 @CompileStatic
@@ -37,12 +56,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
         TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
         qlfc = new QueryListFromChromosome(tqa)
-       // def x =state.parameters .g .getInt(new Parameter("subpopulations"))
-
-       // final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
-        //def  p = state.parameters.getString(new Parameter("pop.subpop.0"), new Parameter("pop.subpop.0"))
-
-       // println " $numberOfSubpops PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP $p"
     }
 
     public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
@@ -104,6 +117,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getORIntersect(genome, 3)
                 break;
 
+            case QueryType.OR4_INSTERSECT_SETK:
+                bqbArray = qlfc.getORIntersect(genome, 4)
+                break;
+
             case QueryType.OR_INTERSECT_MAX:
                 bqbArray = qlfc.getORIntersect(genome, 100)
                 break;
@@ -111,53 +128,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
             case QueryType.ORDNFSETK:
                 bqbArray = qlfc.getOR1DNF(genome)
                 break;
-/*
-
-            case QueryType.MINSHOULDSETK:
-                bqbArray = qlfc.getSimple(genome, true, 2, BooleanClause.Occur.SHOULD)
-                break;
-
-            case QueryType.OR_WITH_AND_SUBQ:
-                bqbList = qlfc.getDNFQueryList(false, true)
-                break;
-
-            case QueryType.OR_WITH_NOT:
-                bqbList = qlfc.getORwithNOT(false)
-                break;
-
-            case QueryType.SPAN_FIRST:
-                bqbList = qlfc.getSpanFirstQueryList(false)
-                break;
-
-          case QueryType.OR1SETK:
-                bqbList = qlfc.getOR1QueryList()
-                break;
-
-            case QueryType.OR2_INTERSECT_SETK:
-                bqbList = qlfc.getOR2Intersect()
-                break;
-
-
-
-            case QueryType.ORSETK:
-               // qlfc.numberOfClusters = genome[0]
-               // qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                bqbList = qlfc.getOR_List(true)
-                break
-
-          //  case QueryType.MINSHOULDSETK:
-            //    qlfc.numberOfClusters = genome[0]
-              //  qlfc.intChromosome = genome[1..genome.size() - 1] as int[]
-                //qlfc.minShould = 2
-               // bqbList = qlfc.getOR_List(true)
-
-//			case QueryType.ALLNOT :
-//				bqbList = queryListFromChromosome.getALLNOTQL(intVectorIndividual)
-//				break;
-//			case QueryType.ORNOTEVOLVED :
-//				bqbList = queryListFromChromosome.getORNOTfromEvolvedList(intVectorIndividual)
-//				break;
-*/
 
         }
         Set<BooleanQuery.Builder> bqbSet = bqbArray as Set <BooleanQuery.Builder>

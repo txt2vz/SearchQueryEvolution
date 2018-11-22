@@ -169,7 +169,7 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-    //********************************   set k methods  *******
+    //********************************   set k methods  *******  first gene is k
 
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
 
@@ -191,8 +191,6 @@ class QueryListFromChromosome {
         return new Tuple4(bqbL, k, index, genes)
     }
 
-    //one word per query
-    //first gene is k
     BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
         return getOneWordQueryPerCluster(intChromosome).first
     }
@@ -203,7 +201,7 @@ class QueryListFromChromosome {
         BooleanQuery.Builder[] bqbArray = tuple4.first
         final int k = tuple4.second
 
-        if (ClusterFitness.IntersectMethod == IntersectMethod.TEN_PERECENT_TOTAL_DIV_K) {
+        if (ClusterFitness.intersectMethod == IntersectMethod.TEN_PERECENT_TOTAL_DIV_K) {
             minIntersectCount = ((Indexes.indexReader.maxDoc() / k) * 0.1).round().toInteger()
         }
 
@@ -303,150 +301,4 @@ class QueryListFromChromosome {
         }
         return bqbArray
     }
-
-/*
-    List<BooleanQuery.Builder> OR_segments(boolean setk) {
-        //list of boolean queries
-        List<BooleanQuery.Builder> bqbL = []
-
-        // set of genes - for duplicate checking
-        Set<Integer> genes = [] as Set
-
-        final int k = (setk)? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
-        int size = setk ?  intChromosome.size() - 1 :  intChromosome.size()
-        int divNumber = size.intdiv(k) as int
-
-        int clusterNumber = 0
-        for (int i = (setk)? 1 : 0 ; i < intChromosome.size(); i++) {
-            if (i % divNumber == 0 && i + divNumber < intChromosome.size()) {
-                bqbL[clusterNumber] =
-                        (minShould == 1) ? new BooleanQuery.Builder() : new BooleanQuery.Builder().setMinimumNumberShouldMatch(minShould)
-                clusterNumber++
-            }
-            int gene = intChromosome[i]
-            if (gene >= 0 && genes.add(gene)) {
-                bqbL[clusterNumber - 1].add(termQueryArray[gene], bco)
-            }
-        }
-        return bqbL
-    }
-
-
-
-
-
-//*********set k methods**********************************************************************
-
-
-
-
-
-
-
-    /*
-     List<BooleanQuery.Builder> getORQueryListNot() {
-        //list of boolean queries
-        List<BooleanQuery.Builder> bqbL = []
-
-        // set of genes - for duplicate checking
-        Set<Integer> genes = [] as Set
-
-        intChromosome.eachWithIndex { int gene, int index ->
-            int clusterNumber = index % numberOfClusters
-            bqbL[clusterNumber] = bqbL[clusterNumber] ?: new BooleanQuery.Builder()
-
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
-                bqbL[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
-            }
-        }
-
-        BooleanQuery qNot
-        bqbL.eachWithIndex { BooleanQuery.Builder bqb, int index ->
-
-            if (index == 0) {
-                qNot = bqb.build()
-            } else {
-                BooleanQuery qn0 = bqb.build()
-                def clauses = qNot.clauses()
-                for (clause in clauses) {
-                    bqb.add(clause.getQuery(), BooleanClause.Occur.MUST_NOT)
-                }
-                //   bqb.add(qNot, BooleanClause.Occur.MUST_NOT)
-                qNot = qn0
-            }
-        }
-        return bqbL
-    }
-
-    @TypeChecked(TypeCheckingMode.SKIP)
-    public List getORNOTfromEvolvedList(IntegerVectorIndividual intVectorIndividual) {
-
-        def duplicateCount = 0
-        def genes = [] as Set
-        def bqbList = []
-        int clusterNumber = -1
-
-        intVectorIndividual.genome.eachWithIndex { gene, index ->
-            def z = index % Indexes.NUMBER_OF_CLUSTERS
-            if (z == 0) clusterNumber++
-            //int clusterNumber =  0//index % IndexInfo.NUMBER_OF_CLUSTERS
-
-            assert clusterNumber < Indexes.NUMBER_OF_CLUSTERS
-
-            bqbList[clusterNumber] = bqbList[clusterNumber] ?: new BooleanQuery.Builder()
-
-            if (gene >= 0) {
-
-                //if (index >=  (intVectorIndividual.genome.size() -  IndexInfo.NUMBER_OF_CLUSTERS )){
-                if (z == 4) {
-                    //if ()
-                    assert gene <= notWords20NG5.size()
-                    //String wrd = notWords20NG5[gene]
-                    TermQuery tq = new TermQuery(notWords20NG5[gene])
-                    bqbList[clusterNumber].add(tq, BooleanClause.Occur.MUST_NOT)
-                } else {
-                    if (genes.add(gene) && gene < termArray.size()) {
-                        //String wrd = termArray[gene]
-                        TermQuery tq = new TermQuery(termArray[gene])
-                        bqbList[clusterNumber].add(tq, BooleanClause.Occur.SHOULD)
-                    }
-                }
-            }
-
-        }
-        return bqbList
-    }
-
-
-    @TypeChecked(TypeCheckingMode.SKIP)
-    public List getALLNOTQL(IntegerVectorIndividual intVectorIndividual) {
-
-
-        final MatchAllDocsQuery allQ = new MatchAllDocsQuery();
-
-        //list of queries
-        def bqbL = []
-        // set of genes - for duplicate checking
-        def genes = [] as Set
-
-        //println "in allNot $allQ"
-
-        intVectorIndividual.genome.eachWithIndex { gene, index ->
-            int clusterNumber = index % Indexes.NUMBER_OF_CLUSTERS
-            if (bqbL[clusterNumber] == null) {
-                bqbL[clusterNumber] = new BooleanQuery.Builder()
-                bqbL[clusterNumber].add(allQ, BooleanClause.Occur.SHOULD)
-            }
-
-            if (gene < termArray.size() && gene >= 0 && genes.add(gene)) {
-
-                String word = termArray[gene]
-                TermQuery tq = new TermQuery(new Term(Indexes.FIELD_CONTENTS, word))
-                bqbL[clusterNumber].add(tq, BooleanClause.Occur.MUST_NOT)
-            }
-        }
-        //println "end allNot bqbl  $bqbL"
-        return bqbL
-    }
-    */
 }

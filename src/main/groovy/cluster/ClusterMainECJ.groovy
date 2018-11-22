@@ -16,27 +16,24 @@ class ClusterMainECJ extends Evolve {
     private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
-    def clusteringIndexes = [
+    def clusteringIndexesList = [
             //   IndexEnum.CRISIS3,
-        //    IndexEnum.NG3,
-          //        IndexEnum.CLASSIC4,
+            //    IndexEnum.NG3,
+            //        IndexEnum.CLASSIC4,
             //       IndexEnum.R4,
-             //    IndexEnum.R5,
-                IndexEnum.NG5,
-              // IndexEnum.NG6
+            //    IndexEnum.R5,
+            IndexEnum.NG5,
+            // IndexEnum.NG6
     ]
 
-    List<FitnessMethod> fitnessMethods = [
+    List<FitnessMethod> fitnessMethodsList = [
 
-            //    FitnessMethod.SCORE,
-           //   FitnessMethod.HITS,
-            //FitnessMethod.P_TIMES_R,
-            FitnessMethod.F1_0,
-            //    FitnessMethod.PSEUDOF1
-            //  FitnessMethod.POS_DIV_NEG
+            //        FitnessMethod.SCORE,
+            //      FitnessMethod.HITS,
+            FitnessMethod.PSEUDOF1
     ]
 
-    List<QueryType> queryTypes = [
+    List<QueryType> queryTypesList = [
             //     QueryType.OR,
             //       QueryType.OR_WITH_AND_SUBQ,
             //      QueryType.AND_WITH_OR_SUBQ,
@@ -44,20 +41,20 @@ class ClusterMainECJ extends Evolve {
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-         //   QueryType.ORSETK,
-          //  QueryType.OR1SETK,
-          //  QueryType.OR2_INTERSECT_SETK,
+            QueryType.ORSETK,
+            QueryType.OR1SETK,
+            QueryType.OR2_INTERSECT_SETK,
             QueryType.OR3_INSTERSECT_SETK,
-           // QueryType.OR_INTERSECT_MAX
-           // QueryType.ORDNFSETK,
+            QueryType.OR4_INSTERSECT_SETK,
+            QueryType.OR_INTERSECT_MAX
+            // QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
-            //   QueryType.OR2_INTERSECT_SETK,
     ]
 
-    List <IntersectMethod> intersectMethodList = [
+    List<IntersectMethod> intersectMethodList = [
 
             IntersectMethod.HITS20,
-            IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
+          //  IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
     ]
 
     public ClusterMainECJ() {
@@ -65,7 +62,7 @@ class ClusterMainECJ extends Evolve {
         final Date startRun = new Date()
         JobReport jobReport = new JobReport()
 
-        clusteringIndexes.each { IndexEnum ie ->
+        clusteringIndexesList.each { IndexEnum ie ->
 
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state;
@@ -73,18 +70,18 @@ class ClusterMainECJ extends Evolve {
                 println "Index Enum ie: $ie"
                 Indexes.instance.setIndex(ie)
 
-                fitnessMethods.each { fitnessMethod ->
+                fitnessMethodsList.each { FitnessMethod fitnessMethod ->
                     ClusterFitness.fitnessMethod = fitnessMethod
 
-                    intersectMethodList.each { intersectMethod ->
-                        ClusterFitness.IntersectMethod =  intersectMethod
+                    intersectMethodList.each { IntersectMethod intersectMethod ->
+                        ClusterFitness.intersectMethod = intersectMethod
 
-                        queryTypes.each { qt ->
+                        queryTypesList.each { qt ->
                             println "query type $qt"
                             ClusterQueryECJ.queryType = qt
-                            String parameterFilePath = qt in [QueryType.OR1SETK, QueryType.OR2_INTERSECT_SETK, QueryType.ORDNFSETK, QueryType.ORSETK, QueryType.MINSHOULDSETK,
-                                                              QueryType.OR3_INSTERSECT_SETK, QueryType.OR_INTERSECT_MAX] ?
-                                    'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
+
+                            String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
+
                             ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
                             state = initialize(parameters, job)

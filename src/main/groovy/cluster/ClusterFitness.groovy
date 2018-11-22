@@ -7,7 +7,7 @@ import org.apache.lucene.search.*
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1, F1_0
+    SCORE, HITS, PSEUDOF1
 }
 
 @CompileStatic
@@ -19,12 +19,13 @@ enum IntersectMethod {
 public class ClusterFitness extends SimpleFitness {
 
     static FitnessMethod fitnessMethod// = FitnessMethod.SCORE
-    static IntersectMethod// = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
+    static IntersectMethod intersectMethod// = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
+
+    private final int totalDocs = Indexes.indexReader.maxDoc()
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0
     double scorePlus = 0.0
-    int hitsPlus = 0
 
     double positiveScoreTotal = 0.0
     double negativeScoreTotal = 0.0
@@ -33,13 +34,14 @@ public class ClusterFitness extends SimpleFitness {
     double pseudo_recall = 0.0
     double pseudo_f1 = 0.0
 
+    int hitsPlus = 0
     int positiveHits = 0
     int negativeHits = 0
     int hitsOnly = 0
     int totalHits = 0
     int missedDocs = 0
 
-    private int hitsPerPage = Indexes.indexReader.maxDoc()
+    private final int hitsPerPage = totalDocs
 
     double getFitness() {
         return baseFitness;
@@ -72,7 +74,7 @@ public class ClusterFitness extends SimpleFitness {
             Set<Integer> otherDocIdSet = [] as Set<Integer>
             Set<BooleanQuery.Builder> otherQueries = bqbSet - bqb
 
-            // if (otherQueries == null) println "other queries null"
+            // otherQueries should not be null
             assert otherQueries
 
             BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
@@ -88,9 +90,6 @@ public class ClusterFitness extends SimpleFitness {
             //collect docid from other queries
             TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
             ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
-
-           //for loop faster
-           // hitsOthers.each { ScoreDoc otherHit -> otherDocIdSet << otherHit.doc }
 
             for (ScoreDoc otherHit : hitsOthers) {
                 otherDocIdSet << otherHit.doc
@@ -116,14 +115,13 @@ public class ClusterFitness extends SimpleFitness {
             }
         }
 
-
         queryMap = qMap.asImmutable()
 
         totalHits = allHits.size()
-        missedDocs = Indexes.indexReader.maxDoc() - allHits.size()
+        missedDocs = totalDocs - allHits.size()
 
         pseudo_precision = positiveHits / totalHits
-        pseudo_recall = totalHits / Indexes.indexReader.maxDoc()
+        pseudo_recall = totalHits / totalDocs
         pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
 
         final int minScore = -2000;
@@ -141,12 +139,8 @@ public class ClusterFitness extends SimpleFitness {
                 baseFitness = hitsPlus
                 break;
 
-            case fitnessMethod.F1_0:
-                baseFitness = pseudo_f1
-                break
-
             case fitnessMethod.PSEUDOF1:
-                baseFitness = 2 * positiveHits / (2 * positiveHits + negativeHits + missedDocs)
+                baseFitness = pseudo_f1
                 break
         }
     }
@@ -154,7 +148,7 @@ public class ClusterFitness extends SimpleFitness {
     void generationStats(long generation) {
         println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
         println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} pseudo_precision $pseudo_precision pseudo_recall $pseudo_recall pseudo_f1 $pseudo_f1"
-        println "TotalHits: $totalHits TotalDocs: ${Indexes.indexReader.maxDoc()} MissedDocs: $missedDocs hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
+        println "TotalHits: $totalHits TotalDocs: $totalDocs MissedDocs: $missedDocs hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
         println ""
     }
 
