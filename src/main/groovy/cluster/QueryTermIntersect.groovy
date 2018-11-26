@@ -40,7 +40,7 @@ class QueryTermIntersect {
                 wordPairInteresectCountMap.put(new Tuple2(sortedTermQueryList[0], sortedTermQueryList[1]), intersectCount)
             }
         }
-        println "wordPairIntersectCountMap: " + wordPairInteresectCountMap.take(20)
+        println "wordPairIntersectCountMap: " + wordPairInteresectCountMap.sort{-it.value}.take(20)
         return wordPairInteresectCountMap
     }
 
