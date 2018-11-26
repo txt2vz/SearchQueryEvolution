@@ -19,6 +19,10 @@ class QueryListFromChromosome {
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
     private int minIntersectCount = 20
 
+    QueryTermIntersect qti = new QueryTermIntersect()
+  //  List termTuple2List = qti.getIntersectList(termQueryArray, 20)
+
+
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
     }
@@ -217,6 +221,8 @@ class QueryListFromChromosome {
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             Set<Integer> rootqDocIds = [] as Set<Integer>
 
+    //        TermQuery rootTQ = rootq.clauses().first().getQuery() as TermQuery
+
             TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq.clauses().first().getQuery(), hitsPerPage)
             ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
             rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
@@ -274,18 +280,18 @@ class QueryListFromChromosome {
                         BooleanQuery subq = subbqb.build()
 
                         BooleanQuery rootq = bqbArray[clusterNumber].build()
-                        Set<Integer> rootqDocIds = [] as Set<Integer>
+                        Set<Integer> rootqDocID_Set = [] as Set<Integer>
 
                         TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq, hitsPerPage)
                         ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
-                        rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
+                        rootqHits.each { ScoreDoc rootqHit -> rootqDocID_Set << rootqHit.doc }
 
                         TopDocs subqdocs = Indexes.indexSearcher.search(subq, hitsPerPage)
                         ScoreDoc[] subqhits = subqdocs.scoreDocs;
 
                         int intersectCount = 0
                         for (ScoreDoc d : subqhits) {
-                            if (rootqDocIds.contains(d.doc)) {
+                            if (rootqDocID_Set.contains(d.doc)) {
                                 intersectCount++
                             }
                         }
