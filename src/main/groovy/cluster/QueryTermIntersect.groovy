@@ -1,15 +1,17 @@
 package cluster
 
+import groovy.transform.CompileStatic
 import index.Indexes
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
 
+@CompileStatic
 class QueryTermIntersect {
 
-    Map<Tuple2, Integer> getIntersectCountMap(TermQuery[] termQueryArray) {
+    private Map<Tuple2<String, String>, Integer> getIntersectCountMap(TermQuery[] termQueryArray) {
         int hitsPerPage = Indexes.indexReader.maxDoc()
-        Map<Tuple2, Integer> wordPairInteresectCountMap = new HashMap<Tuple2, Integer>()
+        Map<Tuple2<String, String>, Integer> wordPairInteresectCountMap = new HashMap<Tuple2<String, String>, Integer>()
 
         for (int i = 0; i < termQueryArray.size(); i++) {
             for (int j = i + 1; j < termQueryArray.size(); j++) {
@@ -36,20 +38,16 @@ class QueryTermIntersect {
                     }
                 }
 
-                List sortedTermQueryList = [t0, t1].sort { it.term }
-                wordPairInteresectCountMap.put(new Tuple2(sortedTermQueryList[0], sortedTermQueryList[1]), intersectCount)
+                List<String> sortedTermQueryPair = [t0.toString(Indexes.FIELD_CONTENTS), t1.toString(Indexes.FIELD_CONTENTS)].sort { it }
+                wordPairInteresectCountMap.put(new Tuple2(sortedTermQueryPair[0], sortedTermQueryPair[1]), intersectCount)
             }
         }
         println "wordPairIntersectCountMap: " + wordPairInteresectCountMap.sort{-it.value}.take(20)
         return wordPairInteresectCountMap
     }
 
-    List<Tuple2<TermQuery, TermQuery>> getIntersectList(TermQuery[] termQueryArray, int minDocCount) {
+    List<Tuple2<String, String>> getIntersectList(TermQuery[] termQueryArray, int minDocCount) {
 
         return getIntersectCountMap(termQueryArray).findAll { it.value > minDocCount }.keySet() as List
-
     }
 }
-
-
-

@@ -25,8 +25,8 @@ enum ImportantTermsMethod {
 //@groovy.transform.TypeChecked
 public class ImportantTerms {
 
-    public final static int SPAN_FIRST_MAX_END = 300;
-    private final static int MAX_TERMQUERYLIST_SIZE = 300;
+//    public final static int SPAN_FIRST_MAX_END = 300;
+    private final static int MAX_TERMQUERYLIST_SIZE = 200;
 
     private final IndexSearcher indexSearcher = Indexes.indexSearcher;
     private final IndexReader indexReader = indexSearcher.indexReader

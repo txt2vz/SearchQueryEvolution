@@ -17,14 +17,15 @@ class QueryListFromChromosome {
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    private int minIntersectCount = 20
+    private final int minIntersectCount = 20
 
     QueryTermIntersect qti = new QueryTermIntersect()
-  //  List termTuple2List = qti.getIntersectList(termQueryArray, 20)
-
+    final List<Tuple2<String, String>> intersectCountList
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
+        println "term query size " + tq.size()
+        intersectCountList = qti.getIntersectList(termQueryArray, minIntersectCount)
     }
 
     BooleanQuery.Builder[] getSimple(
@@ -204,12 +205,8 @@ class QueryListFromChromosome {
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
         BooleanQuery.Builder[] bqbArray = tuple4.first
         final int k = tuple4.second
-
-        if (ClusterFitness.intersectMethod == IntersectMethod.TEN_PERECENT_TOTAL_DIV_K) {
-            minIntersectCount = ((Indexes.indexReader.maxDoc() / k) * 0.1).round().toInteger()
-        }
-
         assert k == bqbArray.size()
+
         int index = tuple4.third
         Set<Integer> genes = tuple4.fourth
 
@@ -221,23 +218,12 @@ class QueryListFromChromosome {
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             Set<Integer> rootqDocIds = [] as Set<Integer>
 
-    //        TermQuery rootTQ = rootq.clauses().first().getQuery() as TermQuery
+            String rootWord = rootq.clauses().first().getQuery().toString(Indexes.FIELD_CONTENTS)
+            String newWord = termQueryArray[gene].toString(Indexes.FIELD_CONTENTS)
+            List <String> wordPairSorted = [rootWord, newWord].sort()
+            Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
 
-            TopDocs rootqTopDocs = Indexes.indexSearcher.search(rootq.clauses().first().getQuery(), hitsPerPage)
-            ScoreDoc[] rootqHits = rootqTopDocs.scoreDocs;
-            rootqHits.each { ScoreDoc rootqHit -> rootqDocIds << rootqHit.doc }
-
-            TopDocs docs = Indexes.indexSearcher.search(termQueryArray[gene], hitsPerPage)
-            ScoreDoc[] hits = docs.scoreDocs;
-
-            int intersectCount = 0
-            for (ScoreDoc d : hits) {
-                if (rootqDocIds.contains(d.doc)) {
-                    intersectCount++
-                }
-            }
-
-            if (intersectCount > minIntersectCount && genes.add(gene)) {
+            if (intersectCountList.contains(tuple2WordPairSorted) && genes.add(gene)){
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }

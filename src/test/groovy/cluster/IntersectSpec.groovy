@@ -3,37 +3,31 @@ package cluster
 import index.ImportantTerms
 import index.IndexEnum
 import index.Indexes
-import org.apache.lucene.index.Term
 import org.apache.lucene.search.TermQuery
 
 class IntersectSpec extends spock.lang.Specification {
     def "clusterIntersect on 20NG6"() {
         setup:
         Indexes.instance.setIndex(IndexEnum.NG6)
-        int hitsPerPage = Indexes.indexReader.maxDoc()
         TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
         QueryTermIntersect qti = new QueryTermIntersect()
 
         when:
-        Map intersectCountMap = qti.getIntersectCountMap(tqa.take(20))
-        intersectCountMap.sort { -it.value }
+        Map<Tuple2<String, String>, Integer> intersectCountMap = qti.getIntersectCountMap(tqa.take(20))
+        List<Tuple2<String, String>> intersectCountList = qti.getIntersectList(tqa.take(20), 10)
 
-        TermQuery t0 = new TermQuery(new Term(Indexes.FIELD_CONTENTS, "system"))
-        TermQuery t1 = new TermQuery(new Term(Indexes.FIELD_CONTENTS, "key"))
+        String word0 = "system"
+        String word1 = "key"
 
-        List termQueryList = [t0, t1]
-        Tuple2<TermQuery, TermQuery> tuple2Unsorted = new Tuple2<TermQuery, TermQuery>(termQueryList[0], termQueryList[1])
-
-        termQueryList.sort { it.term }
-        Tuple2<TermQuery, TermQuery> tuple2Sorted = new Tuple2<TermQuery, TermQuery>(termQueryList[0], termQueryList[1])
-
-        List termTuple2List = qti.getIntersectList(tqa.take(20), 10)
+        List <String> wordPairSorted = [word0, word1].sort()
+        Tuple2<String, String> tuple2WordPairUnSorted = new Tuple2<String, String>(word0, word1)
+        Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
 
         then:
-        intersectCountMap.containsKey(tuple2Sorted)
-        !intersectCountMap.containsKey(tuple2Unsorted)
-        intersectCountMap[tuple2Sorted]==40
-        termTuple2List.contains(tuple2Sorted)
-        termTuple2List.size() == 129
+        intersectCountMap.containsKey(tuple2WordPairSorted)
+        !intersectCountMap.containsKey(tuple2WordPairUnSorted)
+        intersectCountMap[tuple2WordPairSorted]==40
+        intersectCountList.contains(tuple2WordPairSorted)
+        intersectCountList.size() == 129
     }
 }
