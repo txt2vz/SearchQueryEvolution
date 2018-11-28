@@ -14,6 +14,7 @@ import org.apache.lucene.search.spans.SpanTermQuery
 
 @CompileStatic
 class QueryListFromChromosome {
+    public static boolean intersectTest
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
@@ -220,10 +221,14 @@ class QueryListFromChromosome {
 
             String rootWord = rootq.clauses().first().getQuery().toString(Indexes.FIELD_CONTENTS)
             String newWord = termQueryArray[gene].toString(Indexes.FIELD_CONTENTS)
-            List <String> wordPairSorted = [rootWord, newWord].sort()
+            List<String> wordPairSorted = [rootWord, newWord].sort()
             Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
 
-            if (intersectCountList.contains(tuple2WordPairSorted) && genes.add(gene)){
+            if (intersectTest) {
+                if (intersectCountList.contains(tuple2WordPairSorted) && genes.add(gene)) {
+                    bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+                }
+            } else {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }

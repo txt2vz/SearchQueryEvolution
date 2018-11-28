@@ -18,10 +18,10 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-        //    IndexEnum.NG3,
+         //   IndexEnum.NG3,
           //  IndexEnum.CLASSIC4,
             IndexEnum.R5,
-          //  IndexEnum.NG6
+            //IndexEnum.NG6
 
             //   IndexEnum.CRISIS3,
             //IndexEnum.NG5,
@@ -56,6 +56,8 @@ class ClusterMainECJ extends Evolve {
     List<IntersectMethod> intersectMethodList = [
 
             IntersectMethod.HITS20,
+            // IntersectMethod.HITS30,
+           // IntersectMethod.HITS10,
             //  IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
     ]
 
@@ -78,40 +80,45 @@ class ClusterMainECJ extends Evolve {
                     intersectMethodList.each { IntersectMethod intersectMethod ->
                         ClusterFitness.intersectMethod = intersectMethod
 
-                        queryTypesList.each { qt ->
-                            println "query type $qt"
-                            ClusterQueryECJ.queryType = qt
+                        [true, false].each {intersectBool ->
+                            QueryListFromChromosome.intersectTest = intersectBool
 
-                            String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
-                            ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
+                            queryTypesList.each { qt ->
+                                println "query type $qt"
+                                ClusterQueryECJ.queryType = qt
 
-                            state = initialize(parameters, job)
-                            if (NUMBER_OF_JOBS >= 1) {
-                                final String jobFilePrefix = "job." + job;
-                                state.output.setFilePrefix(jobFilePrefix);
-                                state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                                String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
+
+                                ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
+
+                                state = initialize(parameters, job)
+                                if (NUMBER_OF_JOBS >= 1) {
+                                    final String jobFilePrefix = "job." + job;
+                                    state.output.setFilePrefix(jobFilePrefix);
+                                    state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                                }
+                                //  state.parameters.set(new Parameter("generations"), "7")
+                                state.output.systemMessage("Job: " + job);
+                                state.job = new Object[1]
+                                state.job[0] = new Integer(job)
+
+                                state.run(EvolutionState.C_STARTED_FRESH);
+                                int popSize = 0;
+                                ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
+                                    popSize = popSize + sbp.individuals.size()
+                                    sbp.individuals.max() { ind ->
+                                        ind.fitness.fitness()
+                                    }.fitness
+                                }.max { it.fitness() }
+
+                                final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
+                                final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
+                                final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
+                                println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
+
+                                jobReport.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
                             }
-                            //  state.parameters.set(new Parameter("generations"), "7")
-                            state.output.systemMessage("Job: " + job);
-                            state.job = new Object[1]
-                            state.job[0] = new Integer(job)
-
-                            state.run(EvolutionState.C_STARTED_FRESH);
-                            int popSize = 0;
-                            ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
-                                popSize = popSize + sbp.individuals.size()
-                                sbp.individuals.max() { ind ->
-                                    ind.fitness.fitness()
-                                }.fitness
-                            }.max { it.fitness() }
-
-                            final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
-                            final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
-                            final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
-                            println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
-
-                            jobReport.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
                         }
                     }
                 }
@@ -120,10 +127,11 @@ class ClusterMainECJ extends Evolve {
 
             }
         }
+
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-        jobReport.overallSummary(duration)
+       // jobReport.overallSummary(duration)
     }
 
     static main(args) {

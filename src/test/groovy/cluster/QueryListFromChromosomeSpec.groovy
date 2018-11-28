@@ -3,8 +3,10 @@ package cluster
 import index.ImportantTerms
 import index.IndexEnum
 import index.Indexes
+import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
+import org.apache.lucene.search.TermQuery
 
 class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
@@ -22,6 +24,10 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
         List<BooleanQuery.Builder> bqbL = qlfc.getSimple(genome, false)
         Query q = bqbL[0].build()
+        String s = q.toString(Indexes.FIELD_CONTENTS)
+        println "s $s"
+        TermQuery tq = new TermQuery (new Term(Indexes.FIELD_CONTENTS,s))
+        println "tq $tq"
 
         then:
         //   tfidfList[0].getTerm().text() == 'space'

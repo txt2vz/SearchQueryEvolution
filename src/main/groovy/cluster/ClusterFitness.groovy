@@ -12,7 +12,7 @@ enum FitnessMethod {
 
 @CompileStatic
 enum IntersectMethod {
-    HITS20, TEN_PERECENT_TOTAL_DIV_K, COOCCURRENCE
+     HITS10, HITS20, HITS30, TEN_PERECENT_TOTAL_DIV_K, COOCCURRENCE
 }
 
 @CompileStatic
@@ -163,7 +163,7 @@ public class ClusterFitness extends SimpleFitness {
 
     //sent to stat file in statDump
     public String fitnessToStringForHumans() {
-        return "ClusterQuery Fitness: ${this.fitness()} scorePlus $scorePlus hitsPlus $hitsPlus "// ${queryShort()}"
+        return "ClusterQuery Fitness: ${this.fitness()}" //scorePlus $scorePlus hitsPlus $hitsPlus "// ${queryShort()}"
     }
 
     public String toString(int gen) {
