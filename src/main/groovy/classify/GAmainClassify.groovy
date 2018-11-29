@@ -17,7 +17,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         Indexes.instance.setIndex(IndexEnum.R10)
+         Indexes.instance.setIndex(IndexEnum.NG5)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
