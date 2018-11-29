@@ -228,7 +228,7 @@ class QueryListFromChromosome {
                 if (intersectCountList.contains(tuple2WordPairSorted) && genes.add(gene)) {
                     bqbArray[clusterNumber].add(termQueryArray[gene], bco)
                 }
-            } else {
+            } else if (genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }

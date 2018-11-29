@@ -74,13 +74,13 @@ class IndexCrisisClusterFromCSV {
 					Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
 					doc.add(catNameField)
 
-				//	Field catNumberField = new StringField(IndexInfo.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
-				//	doc.add(catNumberField)
+					Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
+					doc.add(catNumberField)
 
-//					String test_train
-//					if (n%2==0) test_train = 'test' else test_train = 'train'
-//					Field ttField = new StringField(IndexInfo.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
-//					doc.add(ttField)
+					String test_train
+					if (n%2==0) test_train = 'test' else test_train = 'train'
+					Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
+					doc.add(ttField)
 
 					writer.addDocument(doc);
 

@@ -38,7 +38,7 @@ class IndexClassic {
 	// Index files in this directory
 	def docsPath =
 	// /C:\Users\Laurie\Dataset\classic/
-	/C:\Users\Laurie\Dataset\classic4_500/
+	/C:\Users\aceslh\Dataset\classic/
 
 	Path path = Paths.get(indexPath)
 	Directory directory = FSDirectory.open(path)
