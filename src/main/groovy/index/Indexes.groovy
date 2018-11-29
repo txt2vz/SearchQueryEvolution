@@ -20,19 +20,22 @@ import java.nio.file.Paths
 @CompileStatic
 enum IndexEnum {
 
-    NG20('indexes/20NG', 20),
+    CRISIS3('indexes/crisis3FireBombFlood', 3),
+
+    CLASSIC4('indexes/classic4_500', 4),
+
+    NG3('indexes/20NG3', 3),
+    NG5('indexes/20NG5WindowsmiscForsaleHockeySpaceChristian', 5),
     NG6('indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns', 6),
-    NG5('indexes/20NG5WindowsForsaleSpaceHockeyChristian', 5),
-    R10('indexes/R10', 10),
-    R8('indexes/R8', 8),
-    R6('indexes/R6', 6),
+    NG20('indexes/20NG', 20),
+
     R4('indexes/R4', 4),
     R5('indexes/R5', 5),
-    NG3('indexes/20NG3', 3),
-    OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
+    R10('indexes/R10', 10)
 
-    CRISIS3('indexes/crisis3FireBombFlood', 3),
-    CLASSIC4('indexes/classic4_500', 4)
+    //R8('indexes/R8', 8),
+    //R6('indexes/R6', 6),
+    //OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
 
    // private final Similarity similarity = new BM25Similarity()
                               // new ClassicSimilarity()
