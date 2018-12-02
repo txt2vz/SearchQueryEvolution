@@ -13,8 +13,9 @@ class IntersectSpec extends spock.lang.Specification {
         QueryTermIntersect qti = new QueryTermIntersect()
 
         when:
-        Map<Tuple2<String, String>, Integer> intersectCountMap = qti.getIntersectCountMap(tqa.take(100))
-        List<Tuple2<String, String>> intersectCountList = qti.getIntersectList(tqa.take(100), 10)
+       // Map<Tuple2<String, String>, Integer> intersectCountMap = qti.getIntersectCountMap(tqa.take(100))
+        Map<Tuple2<String, String>, Double> intersectRatioMap = qti.getIntersectRatioMap(tqa.take(100))
+        List<Tuple2<String, String>> intersectRatioList = qti.getIntersectList(tqa.take(100), 0.5)
 
         String word0 = "nasa"
         String word1 = "space"
@@ -24,10 +25,10 @@ class IntersectSpec extends spock.lang.Specification {
         Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
 
         then:
-        intersectCountMap.containsKey(tuple2WordPairSorted)
+        intersectRatioMap.containsKey(tuple2WordPairSorted)
       //  !intersectCountMap.containsKey(tuple2WordPairUnSorted)
-        intersectCountMap[tuple2WordPairSorted]==40
-        intersectCountList.contains(tuple2WordPairSorted)
-        intersectCountList.size() == 129
+        intersectRatioMap[tuple2WordPairSorted] > 0.8
+        intersectRatioList.contains(tuple2WordPairSorted)
+        intersectRatioList.size() == 137
     }
 }

@@ -36,13 +36,11 @@ class JobReport {
 
     void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
 
-
-
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        queryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${ClusterFitness.intersectMethod} ************************************************************* \n"
+        queryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
@@ -57,7 +55,7 @@ class JobReport {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest,  gen, job, date \n'
         }
 
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ClusterQueryECJ.queryType}, ${ClusterFitness.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $gen, $job, ${new Date()} \n"
+        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0,${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $gen, $job, ${new Date()} \n"
 
         Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
         resultsF1 << [(indexAndJob): averageF1forJob]
@@ -72,31 +70,27 @@ class JobReport {
             def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
             println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
 
-            if (maxCatName != 'Not_Found') {
-                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
-                TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
-                        maxCatName));
-                Indexes.indexSearcher.search(catQ, totalHitCollector);
-                int categoryTotal = totalHitCollector.getTotalHits();
+            assert maxCatName != 'Not_Found'
 
-                double recall = (double) maxCatHits / categoryTotal;
-                double precision = (double) maxCatHits / totalHits
-                double f1 = (2 * precision * recall) / (precision + recall)
+            TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
+            TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
+                    maxCatName));
+            Indexes.indexSearcher.search(catQ, totalHitCollector);
+            int categoryTotal = totalHitCollector.getTotalHits();
 
-                f1list << f1
-                precisionList << precision
-                recallList << recall
+            double recall = (double) maxCatHits / categoryTotal;
+            double precision = (double) maxCatHits / totalHits
+            double f1 = (2 * precision * recall) / (precision + recall)
 
-                if (queryReport) {
+            f1list << f1
+            precisionList << precision
+            recallList << recall
 
-                    def out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
-                    println out
-                    queryFileOut << out + "\n"
-                }
-            } else {
-                f1list << 0
-                precisionList << 0
-                recallList << 0
+            if (queryReport) {
+
+                String out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                println out
+                queryFileOut << out + "\n"
             }
         }
 

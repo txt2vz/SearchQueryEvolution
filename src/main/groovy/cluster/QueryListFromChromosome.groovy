@@ -13,12 +13,29 @@ import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
 @CompileStatic
+enum IntersectMethod {
+ //   HITS10(10),
+   // HITS20(20),
+  //  HITS30(30),
+   // HITS50(50),
+    RATIO_POINT_5 (0.5d)
+
+    IntersectMethod(double min) {
+        minIntersectCount = min
+    }
+    double minIntersectCount
+}
+
+
+@CompileStatic
 class QueryListFromChromosome {
-    public static boolean intersectTest
+    static boolean intersectTest
+    static IntersectMethod intersectMethod
+
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    private final int minIntersectCount = 20
+    // int minIntersectCount
 
     QueryTermIntersect qti = new QueryTermIntersect()
     final List<Tuple2<String, String>> intersectCountList
@@ -26,7 +43,11 @@ class QueryListFromChromosome {
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
         println "term query size " + tq.size()
-        intersectCountList = qti.getIntersectList(termQueryArray, minIntersectCount)
+
+        // minIntersectCount = intersectMethod.minIntersectCount
+        // intersectCountList = qti.getIntersectList(termQueryArray, minIntersectCount)
+      //  intersectCountList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectCount)
+        intersectCountList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectCount)
     }
 
     BooleanQuery.Builder[] getSimple(
@@ -287,10 +308,10 @@ class QueryListFromChromosome {
                             }
                         }
 
-                        if (intersectCount > minIntersectCount) {
-                            bqbArray[clusterNumber].add(subq, BooleanClause.Occur.SHOULD)
-                            queryNumber++
-                        }
+                        //   if (intersectCount > minIntersectCount) {
+                        bqbArray[clusterNumber].add(subq, BooleanClause.Occur.SHOULD)
+                        queryNumber++
+                        //  }
                     }
                     term0 = null
                 }

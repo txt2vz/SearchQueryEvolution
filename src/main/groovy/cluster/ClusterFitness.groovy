@@ -10,16 +10,13 @@ enum FitnessMethod {
     SCORE, HITS, PSEUDOF1
 }
 
-@CompileStatic
-enum IntersectMethod {
-     HITS10, HITS20, HITS30, TEN_PERECENT_TOTAL_DIV_K, COOCCURRENCE
-}
+
 
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
     static FitnessMethod fitnessMethod// = FitnessMethod.SCORE
-    static IntersectMethod intersectMethod// = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
+    // = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
 
     private final int totalDocs = Indexes.indexReader.maxDoc()
 
