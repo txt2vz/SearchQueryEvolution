@@ -18,7 +18,9 @@ enum IntersectMethod {
    // HITS20(20),
   //  HITS30(30),
    // HITS50(50),
-    RATIO_POINT_5 (0.5d)
+    RATIO_POINT_3(0.3d),
+    RATIO_POINT_5(0.5d),
+    RATIO_POINT_7(0.7d)
 
     IntersectMethod(double min) {
         minIntersectCount = min

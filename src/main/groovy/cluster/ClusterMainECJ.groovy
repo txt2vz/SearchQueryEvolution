@@ -18,14 +18,14 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-          //  IndexEnum.NG3,
-          // IndexEnum.CLASSIC4,
-           // IndexEnum.R5,
+            IndexEnum.NG3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R5,
 
-           IndexEnum.NG5,
+             IndexEnum.NG5,
             IndexEnum.NG6,
 //
-  //            IndexEnum.CRISIS3,
+                        IndexEnum.CRISIS3,
             IndexEnum.R4,
     ]
 
@@ -37,29 +37,31 @@ class ClusterMainECJ extends Evolve {
     ]
 
     List<QueryType> queryTypesList = [
-            //     QueryType.OR,
+            QueryType.OR,
             //       QueryType.OR_WITH_AND_SUBQ,
             //      QueryType.AND_WITH_OR_SUBQ,
             //   QueryType.AND,
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-          //        QueryType.ORSETK,
+            //        QueryType.ORSETK,
             //    QueryType.OR1SETK,
             //   QueryType.OR2_INTERSECT_SETK,
-        //    QueryType.OR3_INSTERSECT_SETK,
+            //    QueryType.OR3_INSTERSECT_SETK,
             ///  QueryType.OR4_INSTERSECT_SETK,
-              QueryType.OR_INTERSECT_MAX_SETK
+            QueryType.OR_INTERSECT_MAX_SETK
             // QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
     ]
 
     List<IntersectMethod> intersectMethodList = [
 
-           // IntersectMethod.HITS10,
-             //IntersectMethod.HITS20,
+            // IntersectMethod.HITS10,
+            //IntersectMethod.HITS20,
             // IntersectMethod.HITS30,
-           IntersectMethod.RATIO_POINT_5
+            IntersectMethod.RATIO_POINT_3,
+            IntersectMethod.RATIO_POINT_5,
+            IntersectMethod.RATIO_POINT_7
             //  IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
     ]
 
@@ -82,9 +84,9 @@ class ClusterMainECJ extends Evolve {
                     intersectMethodList.each { IntersectMethod intersectMethod ->
                         QueryListFromChromosome.intersectMethod = intersectMethod
 
-                   //     [true, false].each { intersectBool ->
-                            [true].each { intersectBool ->
-                      //  [false].each { intersectBool ->
+                        //     [true, false].each { intersectBool ->
+                        [true].each { intersectBool ->
+                            //  [false].each { intersectBool ->
                             QueryListFromChromosome.intersectTest = intersectBool
 
 
