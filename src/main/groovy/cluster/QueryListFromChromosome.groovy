@@ -43,17 +43,18 @@ class QueryListFromChromosome {
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
         println "term query size " + tq.size()
+        println "tq $tq"
 
         // minIntersectCount = intersectMethod.minIntersectCount
         // intersectCountList = qti.getIntersectList(termQueryArray, minIntersectCount)
       //  intersectCountList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectCount)
-        intersectCountList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectCount)
+        intersectCountList = qti.getIntersectList(termQueryArray, 0.5 as double)//, intersectMethod.RATIO_POINT_5)
     }
 
     BooleanQuery.Builder[] getSimple(
-            final int[] intChromosome, boolean setk = false, int minShould = 1, BooleanClause.Occur bco = BooleanClause.Occur.SHOULD) {
+            final int[] intChromosome, int minShould = 1, BooleanClause.Occur bco = BooleanClause.Occur.SHOULD) {
 
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        final int k = Indexes.NUMBER_OF_CLUSTERS
 
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
@@ -63,12 +64,12 @@ class QueryListFromChromosome {
 
         int clusterNumber = 0
         Set<Integer> genes = [] as Set
-        for (int i = (setk) ? 1 : 0; i < intChromosome.size(); i++) {
+        for (int i = 0; i < intChromosome.size(); i++) {
             final int gene = intChromosome[i]
 
             if (gene >= 0 && genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
-                clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : i % k
+                clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : 0
             }
         }
         return bqbArray

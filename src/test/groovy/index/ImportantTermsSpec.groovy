@@ -44,6 +44,6 @@ class ImportantTermsSpec extends spock.lang.Specification {
 		then:
 		tfidfList[0].getTerm().text() == 'god'
 		tfidfList[1].getTerm().text() == 'space'
-		tfidfList[3].getTerm().text() == 'game'
+		tfidfList[2].getTerm().text() == 'nasa'
 	}
 }

@@ -1,13 +1,13 @@
 parent.0		= simple.params
-generations =	400
+generations =	40
 seed=time
 seed.0=time
 seed.1=time
 seed.2=time
 seed.3=time
 #seed.0=4357  
-evalthreads = 				4
-breedthreads = 				4
+evalthreads = 				auto
+breedthreads = 				auto
 eval.problem = classify.query.OR
 #eval.problem = query.AND_ORG
 #eval.problem = query.SpanFirstG

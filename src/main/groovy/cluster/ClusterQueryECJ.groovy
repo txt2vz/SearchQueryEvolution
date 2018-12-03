@@ -84,11 +84,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.AND:
-                bqbArray = qlfc.getSimple(genome, false, 1, BooleanClause.Occur.MUST)
+                bqbArray = qlfc.getSimple(genome, 1, BooleanClause.Occur.MUST)
                 break;
 
             case QueryType.MINSHOULD2:
-                bqbArray = qlfc.getSimple(genome, false, 2, BooleanClause.Occur.SHOULD)
+                bqbArray = qlfc.getSimple(genome,  2, BooleanClause.Occur.SHOULD)
                 break;
 
             case QueryType.OR_WITH_NOT:
@@ -101,9 +101,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
 //*****************set k methods *************************************************************
 
-            case QueryType.ORSETK:
-                bqbArray = qlfc.getSimple(genome, true)
-                break;
+    //        case QueryType.ORSETK:
+      //          bqbArray = qlfc.getSimple(genome, true)
+        //        break;
 
             case QueryType.OR1SETK:
                 bqbArray = qlfc.getOR1QueryList(genome)

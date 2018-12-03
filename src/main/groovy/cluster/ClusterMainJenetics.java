@@ -26,7 +26,7 @@ public class ClusterMainJenetics {
 
     private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
         QueryListFromChromosome qlc = new QueryListFromChromosome(termQueryArray);
-        BooleanQuery.Builder[] bqbArray = qlc.getSimple(((IntegerChromosome) gt.getChromosome(0)).toArray(), false);
+        BooleanQuery.Builder[] bqbArray = qlc.getSimple(((IntegerChromosome) gt.getChromosome(0)).toArray());
                 //QueryListFromChromosome
                // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
 
