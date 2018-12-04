@@ -2,12 +2,19 @@ package cluster
 
 import groovy.transform.CompileStatic
 import index.Indexes
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
 
 @CompileStatic
 class QueryTermIntersect {
+
+
+    static boolean checkIntersectQueryTerm(Query q, TermQuery){
+        boolean b = true
+
+    }
 
     private Map<Tuple2<String, String>, Double> getIntersectRatioMap(TermQuery[] termQueryArray) {
         final int hitsPerPage = Indexes.indexReader.maxDoc()
@@ -52,7 +59,7 @@ class QueryTermIntersect {
                 wordPairIntersectRatioMap.put(new Tuple2(sortedTermQueryPair[0], sortedTermQueryPair[1]), intersectRatio)
             }
         }
-        println "wordPairIntersectRatioMap: " + wordPairIntersectRatioMap.sort { -it.value }.take(100)
+        println "wordPairIntersectRatioMap: " + wordPairIntersectRatioMap.sort { -it.value }.take(200)
         return wordPairIntersectRatioMap
     }
 
