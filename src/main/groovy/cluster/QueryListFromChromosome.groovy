@@ -18,12 +18,14 @@ enum IntersectMethod {
    // HITS20(20),
   //  HITS30(30),
    // HITS50(50),
-    RATIO_POINT_5 (0.5d)
+    RATIO_POINT_3 (0.3d),
+    RATIO_POINT_5 (0.5d),
+    RATIO_POINT_7 (0.7d)
 
-    IntersectMethod(double min) {
-        minIntersectCount = min
+    IntersectMethod(double minVal) {
+        minIntersectValue = minVal
     }
-    double minIntersectCount
+    double minIntersectValue
 }
 
 
@@ -35,20 +37,17 @@ class QueryListFromChromosome {
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
-    // int minIntersectCount
 
     QueryTermIntersect qti = new QueryTermIntersect()
-    final List<Tuple2<String, String>> intersectCountList
+    final List<Tuple2<String, String>> intersectWordPairList
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
         println "term query size " + tq.size()
         println "tq $tq"
 
-        // minIntersectCount = intersectMethod.minIntersectCount
-        // intersectCountList = qti.getIntersectList(termQueryArray, minIntersectCount)
-      //  intersectCountList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectCount)
-        intersectCountList = qti.getIntersectList(termQueryArray, 0.5 as double)//, intersectMethod.RATIO_POINT_5)
+        intersectWordPairList = qti.getIntersectList(termQueryArray,  intersectMethod.minIntersectValue)
+        println "intersectWordPairList.size() " + intersectWordPairList.size() + " method " + intersectMethod
     }
 
     BooleanQuery.Builder[] getSimple(
@@ -247,7 +246,7 @@ class QueryListFromChromosome {
             Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
 
             if (intersectTest) {
-                if (intersectCountList.contains(tuple2WordPairSorted) && genes.add(gene)) {
+                if (intersectWordPairList.contains(tuple2WordPairSorted) && genes.add(gene)) {
                     bqbArray[clusterNumber].add(termQueryArray[gene], bco)
                 }
             } else if (genes.add(gene)) {

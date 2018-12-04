@@ -10,10 +10,8 @@ import org.apache.lucene.search.TopDocs
 class QueryTermIntersect {
 
     private Map<Tuple2<String, String>, Double> getIntersectRatioMap(TermQuery[] termQueryArray) {
-        int hitsPerPage = Indexes.indexReader.maxDoc()
-        Map<Tuple2<String, String>, Integer> wordPairInteresectCountMap = new HashMap<Tuple2<String, String>, Integer>()
+        final int hitsPerPage = Indexes.indexReader.maxDoc()
         Map<Tuple2<String, String>, Double> wordPairIntersectRatioMap = new HashMap<Tuple2<String, String>, Double>()
-
 
         for (int i = 0; i < termQueryArray.size(); i++) {
             for (int j = i + 1; j < termQueryArray.size(); j++) {
@@ -44,8 +42,8 @@ class QueryTermIntersect {
                 }
 
                 final int both = t0DocID_Set.size() + t1DocID_Set.size()
-                final int union = t0DocID_Set.plus(t1DocID_Set).size()
-                final int intersect = both - union
+                Set<Integer> union = t0DocID_Set.plus(t1DocID_Set)
+                final int intersect = both - union.size()
                 assert intersect == intersectCount
 
                 final double intersectRatio = intersect / t1DocID_Set.size()

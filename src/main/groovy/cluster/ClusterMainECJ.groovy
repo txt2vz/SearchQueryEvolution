@@ -18,15 +18,15 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-          //  IndexEnum.NG3,
-          // IndexEnum.CLASSIC4,
-           // IndexEnum.R5,
+            IndexEnum.NG3,
+           IndexEnum.CLASSIC4,
+           IndexEnum.R5,
 
            IndexEnum.NG5,
             IndexEnum.NG6,
 //
   //            IndexEnum.CRISIS3,
-            IndexEnum.R4,
+        //    IndexEnum.R4,
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
@@ -59,7 +59,9 @@ class ClusterMainECJ extends Evolve {
            // IntersectMethod.HITS10,
              //IntersectMethod.HITS20,
             // IntersectMethod.HITS30,
-           IntersectMethod.RATIO_POINT_5
+      //     IntersectMethod.RATIO_POINT_3,
+           IntersectMethod.RATIO_POINT_5,
+        //   IntersectMethod.RATIO_POINT_7
             //  IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
     ]
 
