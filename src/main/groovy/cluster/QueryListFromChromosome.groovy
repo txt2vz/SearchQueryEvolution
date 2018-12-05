@@ -256,7 +256,7 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-    BooleanQuery.Builder[] getORIntersectQ(int[] intChromosome, int maxQueryWordsPerCluster) {
+    BooleanQuery.Builder[] getORIntersectWholeQ(int[] intChromosome, int maxQueryWordsPerCluster) {
 
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
         BooleanQuery.Builder[] bqbArray = tuple4.first
@@ -276,7 +276,6 @@ class QueryListFromChromosome {
             if (QueryTermIntersect.inRange(rootq,tqNew) && genes.add(gene)){
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
-
         }
         return bqbArray
     }
