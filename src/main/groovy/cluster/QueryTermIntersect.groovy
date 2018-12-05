@@ -2,15 +2,46 @@ package cluster
 
 import groovy.transform.CompileStatic
 import index.Indexes
+import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
 
 @CompileStatic
 class QueryTermIntersect {
+    final static int hitsPerPage = Indexes.indexReader.maxDoc()
+
+    static boolean inRange (Query q0, Query q1){
+
+        Set<Integer> t0DocID_Set = [] as Set<Integer>
+        Set<Integer> t1DocID_Set = [] as Set<Integer>
+
+        TopDocs t0TopDocs = Indexes.indexSearcher.search(q0, hitsPerPage)
+        ScoreDoc[] t0Hits = t0TopDocs.scoreDocs;
+
+        for (ScoreDoc d : t0Hits) {
+            t0DocID_Set << d.doc
+        }
+
+        TopDocs t1TopDocs = Indexes.indexSearcher.search(q1, hitsPerPage)
+        ScoreDoc[] t1Hits = t1TopDocs.scoreDocs;
+
+        for (ScoreDoc d : t1Hits) {
+            t1DocID_Set << d.doc
+        }
+
+        final int both = t0DocID_Set.size() + t1DocID_Set.size()
+        Set<Integer> union = t0DocID_Set.plus(t1DocID_Set)
+        final int intersect = both - union.size()
+        final double intersectRatio = intersect / t1DocID_Set.size()
+
+        return intersectRatio > IntersectMethod.RATIO_POINT_5.minIntersectValue
+    }
+
 
     private Map<Tuple2<String, String>, Double> getIntersectRatioMap(TermQuery[] termQueryArray) {
-        final int hitsPerPage = Indexes.indexReader.maxDoc()
+
         Map<Tuple2<String, String>, Double> wordPairIntersectRatioMap = new HashMap<Tuple2<String, String>, Double>()
 
         for (int i = 0; i < termQueryArray.size(); i++) {

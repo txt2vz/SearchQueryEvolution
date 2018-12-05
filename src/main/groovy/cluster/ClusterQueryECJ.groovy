@@ -122,7 +122,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.OR_INTERSECT_MAX_SETK:
-                bqbArray = qlfc.getORIntersect(genome, 100)
+                bqbArray = qlfc.getORIntersectQ(genome, 100)
                 break;
 
             case QueryType.ORDNFSETK:

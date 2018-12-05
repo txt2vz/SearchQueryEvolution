@@ -32,7 +32,7 @@ enum IntersectMethod {
 @CompileStatic
 class QueryListFromChromosome {
     static boolean intersectTest
-    static IntersectMethod intersectMethod
+    static IntersectMethod intersectMethod = IntersectMethod.RATIO_POINT_5
 
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
@@ -255,6 +255,32 @@ class QueryListFromChromosome {
         }
         return bqbArray
     }
+
+    BooleanQuery.Builder[] getORIntersectQ(int[] intChromosome, int maxQueryWordsPerCluster) {
+
+        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
+        BooleanQuery.Builder[] bqbArray = tuple4.first
+        final int k = tuple4.second
+        assert k == bqbArray.size()
+
+        int index = tuple4.third
+        Set<Integer> genes = tuple4.fourth
+
+        for (int i = index; i < intChromosome.size() && i < k * maxQueryWordsPerCluster; i++) {
+
+            final int gene = intChromosome[i]
+            final int clusterNumber = i % k
+
+            BooleanQuery rootq = bqbArray[clusterNumber].build()
+            TermQuery tqNew = termQueryArray[gene]
+            if (QueryTermIntersect.inRange(rootq,tqNew) && genes.add(gene)){
+                bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+            }
+
+        }
+        return bqbArray
+    }
+
 
     //first word is OR_segments followed by DNF clauses
     BooleanQuery.Builder[] getOR1DNF(int[] intChromosome) {
