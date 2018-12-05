@@ -16,6 +16,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         Indexes.instance.setIndexFieldsAndTotals()
         ImportantTerms impTerms = new ImportantTerms()
         TermQuery[] tfidfList = impTerms.getTFIDFTermQueryList()
+        QueryListFromChromosome.intersectMethod = IntersectMethod.RATIO_POINT_5
 
         when:
         int[] genome = [0, 1, 2] as int[]
