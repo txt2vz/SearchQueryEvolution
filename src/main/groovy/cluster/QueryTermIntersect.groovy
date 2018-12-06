@@ -2,7 +2,6 @@ package cluster
 
 import groovy.transform.CompileStatic
 import index.Indexes
-import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
@@ -12,7 +11,7 @@ import org.apache.lucene.search.TopDocs
 class QueryTermIntersect {
     final static int hitsPerPage = Indexes.indexReader.maxDoc()
 
-    static boolean inRange (Query q0, Query q1){
+    static boolean validIntersectRatio(Query q0, Query q1){
 
         Set<Integer> t0DocID_Set = [] as Set<Integer>
         Set<Integer> t1DocID_Set = [] as Set<Integer>
@@ -34,11 +33,10 @@ class QueryTermIntersect {
         final int both = t0DocID_Set.size() + t1DocID_Set.size()
         Set<Integer> union = t0DocID_Set.plus(t1DocID_Set)
         final int intersect = both - union.size()
-        final double intersectRatio = intersect / t1DocID_Set.size()
+        final double intersectRatio = intersect / t0DocID_Set.size()
 
         return intersectRatio > IntersectMethod.RATIO_POINT_5.minIntersectValue
     }
-
 
     private Map<Tuple2<String, String>, Double> getIntersectRatioMap(TermQuery[] termQueryArray) {
 
@@ -77,7 +75,7 @@ class QueryTermIntersect {
                 final int intersect = both - union.size()
                 assert intersect == intersectCount
 
-                final double intersectRatio = intersect / t1DocID_Set.size()
+                final double intersectRatio = intersect / t0DocID_Set.size()
 
                 List<String> sortedTermQueryPair = [t0.toString(Indexes.FIELD_CONTENTS), t1.toString(Indexes.FIELD_CONTENTS)].sort {it}
                 wordPairIntersectRatioMap.put(new Tuple2(sortedTermQueryPair[0], sortedTermQueryPair[1]), intersectRatio)

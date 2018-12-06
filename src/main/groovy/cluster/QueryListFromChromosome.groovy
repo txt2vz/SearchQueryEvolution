@@ -273,7 +273,7 @@ class QueryListFromChromosome {
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             TermQuery tqNew = termQueryArray[gene]
-            if (QueryTermIntersect.inRange(rootq,tqNew) && genes.add(gene)){
+            if (QueryTermIntersect.validIntersectRatio(rootq,tqNew) && genes.add(gene)){
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }

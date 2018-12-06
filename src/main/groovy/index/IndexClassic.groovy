@@ -34,7 +34,7 @@ import java.nio.file.Paths
 class IndexClassic {
 	// Create Lucene index in this directory
 	//def indexPath = 	'indexes/classic4_500L5'
-    def indexPath = 	'indexes/classic4_500'
+    def indexPath = 	'indexes/classic3_300'
 	// Index files in this directory
 	def docsPath =
 	// /C:\Users\Laurie\Dataset\classic/
@@ -118,7 +118,7 @@ class IndexClassic {
 		//for classic dataset
 		def catName = f.getName().substring(0,4)
 		def n = catFreq.get((catName)) ?: 0
-		if (n<500){
+		if (n<300  && catName !="cacm"){
 			catFreq.put((catName), n + 1)
 
 			Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);

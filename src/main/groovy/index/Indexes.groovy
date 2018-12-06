@@ -21,6 +21,7 @@ import java.nio.file.Paths
 enum IndexEnum {
 
     CRISIS3('indexes/crisis3FireBombFlood', 3),
+    CLASSIC3('indexes/classic3_300', 3),
 
     CLASSIC4('indexes/classic4_500', 4),
 
