@@ -238,12 +238,11 @@ class QueryListFromChromosome {
             final int clusterNumber = i % k
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
-            Set<Integer> rootqDocIds = [] as Set<Integer>
 
             String rootWord = rootq.clauses().first().getQuery().toString(Indexes.FIELD_CONTENTS)
             String newWord = termQueryArray[gene].toString(Indexes.FIELD_CONTENTS)
-            List<String> wordPairSorted = [rootWord, newWord].sort()
-            Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(wordPairSorted[0], wordPairSorted[1])
+
+            Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(rootWord, newWord)
 
             if (intersectTest) {
                 if (intersectWordPairList.contains(tuple2WordPairSorted) && genes.add(gene)) {
@@ -273,7 +272,13 @@ class QueryListFromChromosome {
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             TermQuery tqNew = termQueryArray[gene]
-            if (QueryTermIntersect.validIntersectRatio(rootq,tqNew) && genes.add(gene)){
+
+            if (intersectTest) {
+                if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                    bqbArray[clusterNumber].add(tqNew, bco)
+                }
+            }
+            else if (genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }
