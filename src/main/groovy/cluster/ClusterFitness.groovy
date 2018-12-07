@@ -7,10 +7,8 @@ import org.apache.lucene.search.*
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1
+    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3
 }
-
-
 
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
@@ -37,6 +35,7 @@ public class ClusterFitness extends SimpleFitness {
     int hitsOnly = 0
     int totalHits = 0
     int missedDocs = 0
+    int k
 
     private final int hitsPerPage = totalDocs
 
@@ -45,6 +44,8 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void setClusterFitness(Set<BooleanQuery.Builder> bqbSet) {
+
+        k = bqbSet.size()
 
         positiveScoreTotal = 0.0
         negativeScoreTotal = 0.0
@@ -138,6 +139,11 @@ public class ClusterFitness extends SimpleFitness {
 
             case fitnessMethod.PSEUDOF1:
                 baseFitness = pseudo_f1
+                break
+
+            case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
+                double f1WithPenalty = pseudo_f1 - (0.03 * k)
+                baseFitness = f1WithPenalty > 0 ? f1WithPenalty :0
                 break
         }
     }
