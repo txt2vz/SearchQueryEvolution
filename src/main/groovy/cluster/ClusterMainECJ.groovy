@@ -13,20 +13,20 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    private final int NUMBER_OF_JOBS = 11
+    private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-           IndexEnum.NG3,
-           IndexEnum.CLASSIC4,
-           IndexEnum.R5,
+            IndexEnum.NG3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R5,
 
-           IndexEnum.NG5,
+            IndexEnum.NG5,
             IndexEnum.NG6,
 //
-              IndexEnum.CRISIS3,
-            IndexEnum.R4,
+            //     IndexEnum.CRISIS3,
+            // IndexEnum.R4,
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
@@ -44,12 +44,12 @@ class ClusterMainECJ extends Evolve {
             //QueryType.MINSHOULD2,
             //    QueryType.OR_WITH_NOT,
             //   QueryType.SPAN_FIRST
-          //        QueryType.ORSETK,
+            //        QueryType.ORSETK,
             //    QueryType.OR1SETK,
             //   QueryType.OR2_INTERSECT_SETK,
-        //    QueryType.OR3_INSTERSECT_SETK,
+            //    QueryType.OR3_INSTERSECT_SETK,
             ///  QueryType.OR4_INSTERSECT_SETK,
-              QueryType.OR_INTERSECT_MAX_SETK,
+            //    QueryType.OR_INTERSECT_MAX_SETK,
             QueryType.OR_INTERSECT_MAX_WHOLEQ_SETK
             // QueryType.ORDNFSETK,
             //     QueryType.MINSHOULDSETK
@@ -57,12 +57,12 @@ class ClusterMainECJ extends Evolve {
 
     List<IntersectMethod> intersectMethodList = [
 
-           // IntersectMethod.HITS10,
-             //IntersectMethod.HITS20,
+            // IntersectMethod.HITS10,
+            //IntersectMethod.HITS20,
             // IntersectMethod.HITS30,
-      //     IntersectMethod.RATIO_POINT_3,
-           IntersectMethod.RATIO_POINT_5,
-        //   IntersectMethod.RATIO_POINT_7
+            //     IntersectMethod.RATIO_POINT_3,
+            IntersectMethod.RATIO_POINT_5,
+            //   IntersectMethod.RATIO_POINT_7
             //  IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
     ]
 
@@ -85,9 +85,9 @@ class ClusterMainECJ extends Evolve {
                     intersectMethodList.each { IntersectMethod intersectMethod ->
                         QueryListFromChromosome.intersectMethod = intersectMethod
 
-                   //     [true, false].each { intersectBool ->
-                            [true].each { intersectBool ->
-                      //  [false].each { intersectBool ->
+                        //     [true, false].each { intersectBool ->
+                        [true].each { intersectBool ->
+                            //  [false].each { intersectBool ->
                             QueryListFromChromosome.intersectTest = intersectBool
 
 
@@ -138,7 +138,7 @@ class ClusterMainECJ extends Evolve {
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-        // jobReport.overallSummary(duration)
+        jobReport.overallSummary(duration)
     }
 
     static main(args) {
