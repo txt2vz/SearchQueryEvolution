@@ -5,6 +5,7 @@ import index.Indexes
 import org.apache.lucene.search.BooleanClause
 
 import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
@@ -268,10 +269,12 @@ class QueryListFromChromosome {
             final int clusterNumber = i % k
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
+            Query tq0 =rootq.clauses().first().getQuery()
             TermQuery tqNew = termQueryArray[gene]
 
             if (intersectTest) {
-                if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+             //   if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                    if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
                     bqbArray[clusterNumber].add(tqNew, bco)
                 }
             }

@@ -116,7 +116,8 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.OR3_INSTERSECT_SETK:
-                bqbArray = qlfc.getORIntersect(genome, 3)
+             //   bqbArray = qlfc.getORIntersect(genome, 3)
+                bqbArray = qlfc.getORIntersectWholeQ(genome, 3)
                 break;
 
             case QueryType.OR4_INSTERSECT_SETK:
