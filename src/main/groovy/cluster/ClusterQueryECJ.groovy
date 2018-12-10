@@ -21,8 +21,8 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
-    OR (false),
-    AND (false),
+    OR(false),
+    AND(false),
     OR_WITH_AND_SUBQ(false),
     AND_WITH_OR_SUBQ(false),
     OR_WITH_NOT(false),
@@ -31,17 +31,17 @@ enum QueryType {
     ORSETK(true),
     ORDNFSETK(true),
     ORDNF(true),
-    OR1SETK(true),
     MINSHOULDSETK(true),
+
+    OR_INTERSECT_SETK(true),
+    OR1SETK(true),
     OR2_INTERSECT_SETK(true),
     OR3_INSTERSECT_SETK(true),
-    OR4_INSTERSECT_SETK(true),
-    OR_INTERSECT_MAX_SETK(true),
-
-    OR_INTERSECT_MAX_WHOLEQ_SETK(true)
+    OR4_INSTERSECT_SETK(true)
 
     boolean setk
-    QueryType(boolean setk){
+
+    QueryType(boolean setk) {
         this.setk = setk
     }
 }
@@ -68,7 +68,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         ClusterFitness fitness = (ClusterFitness) ind.fitness;
         IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind
-        BooleanQuery.Builder [] bqbArray
+        BooleanQuery.Builder[] bqbArray
         final int[] genome = intVectorIndividual.genome as int[]
 
         switch (queryType) {
@@ -78,11 +78,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.AND_WITH_OR_SUBQ:
-                bqbArray = qlfc.getDNFQueryList(genome,false )
+                bqbArray = qlfc.getDNFQueryList(genome, false)
                 break;
 
             case QueryType.OR_WITH_AND_SUBQ:
-                bqbArray = qlfc.getDNFQueryList(genome,true )
+                bqbArray = qlfc.getDNFQueryList(genome, true)
                 break;
 
             case QueryType.AND:
@@ -90,7 +90,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.MINSHOULD2:
-                bqbArray = qlfc.getSimple(genome,  2, BooleanClause.Occur.SHOULD)
+                bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
                 break;
 
             case QueryType.OR_WITH_NOT:
@@ -103,12 +103,12 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
 //*****************set k methods *************************************************************
 
-    //        case QueryType.ORSETK:
-      //          bqbArray = qlfc.getSimple(genome, true)
-        //        break;
-
             case QueryType.OR1SETK:
                 bqbArray = qlfc.getOR1QueryList(genome)
+                break;
+
+            case QueryType.OR_INTERSECT_SETK:
+                bqbArray = qlfc.getORIntersect(genome, 100)
                 break;
 
             case QueryType.OR2_INTERSECT_SETK:
@@ -116,20 +116,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.OR3_INSTERSECT_SETK:
-             //   bqbArray = qlfc.getORIntersect(genome, 3)
-                bqbArray = qlfc.getORIntersectWholeQ(genome, 3)
+                bqbArray = qlfc.getORIntersect(genome, 3)
                 break;
 
             case QueryType.OR4_INSTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 4)
-                break;
-
-            case QueryType.OR_INTERSECT_MAX_SETK:
-                bqbArray = qlfc.getORIntersect(genome, 100)
-                break;
-
-            case QueryType.OR_INTERSECT_MAX_WHOLEQ_SETK:
-                bqbArray = qlfc.getORIntersectWholeQ(genome, 100)
                 break;
 
             case QueryType.ORDNFSETK:
@@ -137,12 +128,12 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
         }
-        Set<BooleanQuery.Builder> bqbSet = bqbArray as Set <BooleanQuery.Builder>
+        Set<BooleanQuery.Builder> bqbSet = bqbArray as Set<BooleanQuery.Builder>
         assert bqbSet.size() == bqbArray.size()
         fitness.setClusterFitness(bqbSet)//(bqbArray as Set <BooleanQuery.Builder>)
 
 //rawfitness used by ECJ for evaluation
-        def rawfitness = fitness.getFitness()
+        double rawfitness = fitness.getFitness()
 
         ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, rawfitness, false)
         ind.evaluated = true

@@ -16,9 +16,9 @@ import org.apache.lucene.search.spans.SpanTermQuery
 @CompileStatic
 enum IntersectMethod {
 
-    RATIO_POINT_3 (0.3d),
-    RATIO_POINT_5 (0.5d),
-    RATIO_POINT_7 (0.7d)
+    RATIO_POINT_3(0.3d),
+    RATIO_POINT_5(0.5d),
+    RATIO_POINT_7(0.7d)
 
     IntersectMethod(double minVal) {
         minIntersectValue = minVal
@@ -44,7 +44,7 @@ class QueryListFromChromosome {
         println "term query size " + tq.size()
         println "tq $tq"
 
-        intersectWordPairList = qti.getIntersectList(termQueryArray,  intersectMethod.minIntersectValue)
+        intersectWordPairList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectValue)
         println "intersectWordPairList.size() " + intersectWordPairList.size() + " method " + intersectMethod
     }
 
@@ -236,15 +236,13 @@ class QueryListFromChromosome {
             final int clusterNumber = i % k
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
-
-            String rootWord = rootq.clauses().first().getQuery().toString(Indexes.FIELD_CONTENTS)
-            String newWord = termQueryArray[gene].toString(Indexes.FIELD_CONTENTS)
-
-            Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(rootWord, newWord)
+            Query tq0 = rootq.clauses().first().getQuery()
+            TermQuery tqNew = termQueryArray[gene]
 
             if (intersectTest) {
-                if (intersectWordPairList.contains(tuple2WordPairSorted) && genes.add(gene)) {
-                    bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+                //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
+                if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                    bqbArray[clusterNumber].add(tqNew, bco)
                 }
             } else if (genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
@@ -253,7 +251,7 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-    BooleanQuery.Builder[] getORIntersectWholeQ(int[] intChromosome, int maxQueryWordsPerCluster) {
+    BooleanQuery.Builder[] getORIntersectCheckList(int[] intChromosome, int maxQueryWordsPerCluster) {
 
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
         BooleanQuery.Builder[] bqbArray = tuple4.first
@@ -269,16 +267,17 @@ class QueryListFromChromosome {
             final int clusterNumber = i % k
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
-            Query tq0 =rootq.clauses().first().getQuery()
-            TermQuery tqNew = termQueryArray[gene]
+
+            String rootWord = rootq.clauses().first().getQuery().toString(Indexes.FIELD_CONTENTS)
+            String newWord = termQueryArray[gene].toString(Indexes.FIELD_CONTENTS)
+
+            Tuple2<String, String> tuple2WordPairSorted = new Tuple2<String, String>(rootWord, newWord)
 
             if (intersectTest) {
-             //   if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
-                    if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
-                    bqbArray[clusterNumber].add(tqNew, bco)
+                if (intersectWordPairList.contains(tuple2WordPairSorted) && genes.add(gene)) {
+                    bqbArray[clusterNumber].add(termQueryArray[gene], bco)
                 }
-            }
-            else if (genes.add(gene)) {
+            } else if (genes.add(gene)) {
                 bqbArray[clusterNumber].add(termQueryArray[gene], bco)
             }
         }
