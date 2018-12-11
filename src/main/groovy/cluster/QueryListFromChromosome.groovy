@@ -44,8 +44,8 @@ class QueryListFromChromosome {
         println "term query size " + tq.size()
         println "tq $tq"
 
-        intersectWordPairList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectValue)
-        println "intersectWordPairList.size() " + intersectWordPairList.size() + " method " + intersectMethod
+       // intersectWordPairList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectValue)
+       // println "intersectWordPairList.size() " + intersectWordPairList.size() + " method " + intersectMethod
     }
 
     BooleanQuery.Builder[] getSimple(
