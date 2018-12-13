@@ -80,8 +80,10 @@ public class ClusterFitness extends SimpleFitness {
             for (BooleanQuery.Builder obqb : otherQueries) {
 
                 //obqb should not be null
-                assert obqb
-                bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
+              //  assert obqb
+                if (obqb) {
+                    bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
+                }
             }
             Query otherBQ = bqbOthers.build()
 
