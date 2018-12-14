@@ -22,15 +22,14 @@ class JobReport {
 
         File overallResults = new File("results/overallResultsCluster.txt")
 
-        def categoryAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
-        println "categoryAverages: $categoryAverages"
-        categoryAverages.each { print it.key + ' Average: ' + it.value.round(3) + ' ' }
-        categoryAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(3) + " ") }
+        def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
+        indexAverages.each { print it.key + ' Average: ' + it.value.round(3) + ' ' }
+        indexAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(3) + " ") }
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
-        println "\nOverall Average:  ${overallAverage.round(3)} Fitness Method:  ${ClusterFitness.fitnessMethod}  ${new Date()} resultsF1: $resultsF1 \n"
+        println "\nOverall Averages:  ${overallAverage.round(3)} ${new Date()} resultsF1: $resultsF1 \n"
 
-        overallResults << " Duration $duration Fitness Method: ${ClusterFitness.fitnessMethod}  ${new Date()}"
+        overallResults << " Duration $duration ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
     }
 
@@ -63,8 +62,8 @@ class JobReport {
         fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
                 "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $gen, $job, ${new Date()} \n"
 
-        Tuple2 indexAndJob = new Tuple2(Indexes.indexEnum.name(), job)
-        resultsF1 << [(indexAndJob): averageF1forJob]
+        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, job)
+        resultsF1 << [(indexAndParams): averageF1forJob]
     }
 
     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {

@@ -79,7 +79,6 @@ public class ClusterFitness extends SimpleFitness {
 
             for (BooleanQuery.Builder obqb : otherQueries) {
 
-                //obqb should not be null
               //  assert obqb
                 if (obqb) {
                     bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
@@ -151,14 +150,14 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void generationStats(long generation) {
-        println "Gereration $generation BaseFitness: ${baseFitness.round(2)} ${queryShort()}"
-        println "PosHits: $positiveHits NegHits: $negativeHits PosScr: ${positiveScoreTotal.round(2)} NegScr: ${negativeScoreTotal.round(2)} pseudo_precision $pseudo_precision pseudo_recall $pseudo_recall pseudo_f1 $pseudo_f1"
-        println "TotalHits: $totalHits TotalDocs: $totalDocs MissedDocs: $missedDocs hitsOnly: $hitsOnly scoreOnly: ${scoreOnly.round(2)} hitsPlus : $hitsPlus ScorePlus: ${scorePlus.round(2)} "
+        println "${queryShort()}"
+        println "pseudo_precision ${pseudo_precision.round(3)} pseudo_recall ${pseudo_recall.round(3)} pseudo_f1 ${pseudo_f1.round(3)} baseFitness: ${baseFitness.round(3)}"
+        println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs posHits: $positiveHits negHits: $negativeHits  "
         println ""
     }
 
     String queryShort() {
-        def s = "\n"// "queryMap.size ${queryMap.size()} \n"
+        String s = ""
         queryMap.keySet().eachWithIndex { Query q, int index ->
             if (index > 0) s += '\n';
             s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)}"
@@ -168,7 +167,7 @@ public class ClusterFitness extends SimpleFitness {
 
     //sent to stat file in statDump
     public String fitnessToStringForHumans() {
-        return "ClusterQuery Fitness: ${this.fitness()}" //scorePlus $scorePlus hitsPlus $hitsPlus "// ${queryShort()}"
+        return "ClusterQuery Fitness: ${this.fitness()}"
     }
 
     public String toString(int gen) {

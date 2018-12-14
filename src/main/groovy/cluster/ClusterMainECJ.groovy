@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    private final int NUMBER_OF_JOBS = 5
+    private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
@@ -38,20 +38,6 @@ class ClusterMainECJ extends Evolve {
             QueryType.OR3_INSTERSECT_SETK,
             QueryType.OR_INTERSECT_SETK
 
-            ///  QueryType.OR4_INSTERSECT_SETK,
-            //    QueryType.OR_INTERSECT_MAX_SETK,
-            //     QueryType.OR,
-            //       QueryType.OR_WITH_AND_SUBQ,
-            //      QueryType.AND_WITH_OR_SUBQ,
-            //   QueryType.AND,
-            //QueryType.MINSHOULD2,
-            //    QueryType.OR_WITH_NOT,
-            //   QueryType.SPAN_FIRST
-            //        QueryType.ORSETK,
-            //    QueryType.OR1SETK,
-            //   QueryType.OR2_INTERSECT_SETK,
-            // QueryType.ORDNFSETK,
-            //     QueryType.MINSHOULDSETK
     ]
 
     List<IntersectMethod> intersectMethodList = [
