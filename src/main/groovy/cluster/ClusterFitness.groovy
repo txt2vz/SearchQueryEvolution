@@ -151,7 +151,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "${queryShort()}"
-        println "pseudo_precision ${pseudo_precision.round(3)} pseudo_recall ${pseudo_recall.round(3)} pseudo_f1 ${pseudo_f1.round(3)} baseFitness: ${baseFitness.round(3)}"
+        println "pseudo_precision: ${pseudo_precision.round(3)} pseudo_recall: ${pseudo_recall.round(3)} pseudo_f1: ${pseudo_f1.round(3)} baseFitness: ${baseFitness.round(3)}"
         println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs posHits: $positiveHits negHits: $negativeHits  "
         println ""
     }
