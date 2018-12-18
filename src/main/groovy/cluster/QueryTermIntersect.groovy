@@ -15,6 +15,23 @@ import org.apache.lucene.search.TotalHitCountCollector
 class QueryTermIntersect {
     final static int hitsPerPage = Indexes.indexReader.maxDoc()
 
+    static double getTermIntersectRatioUsingAND(Query q0, Query q1){
+        IndexSearcher indexSearcher = Indexes.indexSearcher
+
+        TotalHitCountCollector collector = new TotalHitCountCollector();
+        BooleanQuery.Builder bqbAnd = new BooleanQuery.Builder();
+        bqbAnd.add(q0, BooleanClause.Occur.MUST)
+        bqbAnd.add(q1, BooleanClause.Occur.MUST)
+        indexSearcher.search(bqbAnd.build(), collector);
+        final int andCount = collector.getTotalHits();
+
+        collector = new TotalHitCountCollector();
+        indexSearcher.search(q1, collector)
+        final int q1Count = collector.getTotalHits()
+
+        return andCount / q1Count
+    }
+
 
     static double getIntersectRatio(Query q0, Query q1){
 
@@ -41,23 +58,6 @@ class QueryTermIntersect {
         final double intersectRatio = intersect / t1DocID_Set.size()
 
         return intersectRatio
-    }
-
-    static double getAndIntersectRatio(Query q0, Query q1){
-        IndexSearcher indexSearcher = Indexes.indexSearcher
-        TotalHitCountCollector collector = new TotalHitCountCollector();
-        BooleanQuery.Builder bqbAnd = new BooleanQuery.Builder();
-        bqbAnd.add(q0, BooleanClause.Occur.MUST)
-        bqbAnd.add(q1, BooleanClause.Occur.MUST)
-
-        indexSearcher.search(bqbAnd.build(), collector);
-        final int andCount = collector.getTotalHits();
-
-        collector = new TotalHitCountCollector();
-        indexSearcher.search(q1, collector)
-        final int q1Count = collector.getTotalHits()
-
-        return andCount / q1Count
     }
 
     private Map<Tuple2<String, String>, Double> getIntersectRatioMap(TermQuery[] termQueryArray) {

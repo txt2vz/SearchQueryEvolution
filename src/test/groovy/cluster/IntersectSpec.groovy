@@ -39,9 +39,9 @@ class IntersectSpec extends spock.lang.Specification {
                 QueryTermIntersect.getIntersectRatio(shuttleTermQuery, spaceTermQuery)
 
         intersectRatioMap[tuple2WordShuttleSpace] ==
-                QueryTermIntersect.getAndIntersectRatio(shuttleTermQuery, spaceTermQuery)
+                QueryTermIntersect.getTermIntersectRatioUsingAND(shuttleTermQuery, spaceTermQuery)
 
-        QueryTermIntersect.getAndIntersectRatio(shuttleTermQuery, spaceTermQuery) ==  QueryTermIntersect.getIntersectRatio(shuttleTermQuery, spaceTermQuery)
+        QueryTermIntersect.getTermIntersectRatioUsingAND(shuttleTermQuery, spaceTermQuery) ==  QueryTermIntersect.getIntersectRatio(shuttleTermQuery, spaceTermQuery)
     }
 
     def "clusterIntersect on 20NG5"() {

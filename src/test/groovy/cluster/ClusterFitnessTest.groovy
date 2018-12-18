@@ -57,7 +57,5 @@ class ClusterFitnessTest extends Specification {
 
         then:
         println "base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.positiveHits + " pseudof1 " + cf.pseudo_f1
-
-
     }
 }

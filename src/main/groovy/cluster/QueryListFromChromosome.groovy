@@ -241,7 +241,8 @@ class QueryListFromChromosome {
 
             if (intersectTest) {
                 //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
-                if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+             //   if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
                     bqbArray[clusterNumber].add(tqNew, bco)
                 }
             } else if (genes.add(gene)) {
