@@ -65,6 +65,7 @@ public class ClusterFitness extends SimpleFitness {
         Set<Integer> allHits = [] as Set
         // Set<Integer> negDocs = [] as Set  //to count negDoc only once
 
+        //can this be done using AND?
         for (BooleanQuery.Builder bqb : bqbSet) {
 
             Query q = bqb.build()
@@ -119,9 +120,15 @@ public class ClusterFitness extends SimpleFitness {
         totalHits = allHits.size()
         missedDocs = totalDocs - allHits.size()
 
-        pseudo_precision = positiveHits / totalHits
-        pseudo_recall = totalHits / totalDocs
-        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+        if (totalHits == 0 ){
+            pseudo_precision = 0
+            pseudo_recall = 0
+            pseudo_f1 = 0
+        }else {
+            pseudo_precision =  positiveHits / totalHits
+            pseudo_recall = totalHits / totalDocs
+            pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+        }
 
         final int minScore = -2000;
         switch (fitnessMethod) {
