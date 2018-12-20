@@ -3,7 +3,10 @@ package cluster
 import ec.simple.SimpleFitness
 import groovy.transform.CompileStatic
 import index.Indexes
-import org.apache.lucene.search.*
+import org.apache.lucene.search.BooleanClause
+import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Query
+import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
 enum FitnessMethod {
@@ -13,31 +16,21 @@ enum FitnessMethod {
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
-    static FitnessMethod fitnessMethod// = FitnessMethod.SCORE
-    // = cluster.IntersectMethod.TEN_PERECENT_TOTAL_DIV_K
+    static FitnessMethod fitnessMethod
 
     private final int totalDocs = Indexes.indexReader.maxDoc()
 
     Map<Query, Integer> queryMap = [:]
-    double baseFitness = 0.0
-    double scorePlus = 0.0
-
-    double positiveScoreTotal = 0.0
-    double negativeScoreTotal = 0.0
-    double scoreOnly = 0.0
+    double baseFitness = 0.0  //for ECJ
     double pseudo_precision = 0.0
     double pseudo_recall = 0.0
     double pseudo_f1 = 0.0
 
-    int hitsPlus = 0
     int positiveHits = 0
     int negativeHits = 0
-    int hitsOnly = 0
     int totalHits = 0
     int missedDocs = 0
     int k
-
-    private final int hitsPerPage = totalDocs
 
     double getFitness() {
         return baseFitness;
@@ -47,30 +40,22 @@ public class ClusterFitness extends SimpleFitness {
 
         k = bqbSet.size()
 
-        positiveScoreTotal = 0.0
-        negativeScoreTotal = 0.0
         baseFitness = 0.0
         positiveHits = 0
         negativeHits = 0
         totalHits = 0
         missedDocs = 0
-        scoreOnly = 0.0
-        scorePlus = 0.0
-        hitsOnly = 0
-        hitsPlus = 0
         pseudo_precision = 0.0
         pseudo_recall = 0.0
 
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
-        Set<Integer> allHits = [] as Set
-        // Set<Integer> negDocs = [] as Set  //to count negDoc only once
+        BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 
-        //can this be done using AND?
         for (BooleanQuery.Builder bqb : bqbSet) {
 
             Query q = bqb.build()
+            totalHitsBQB.add(q, BooleanClause.Occur.SHOULD)
 
-            Set<Integer> otherDocIdSet = [] as Set<Integer>
             Set<BooleanQuery.Builder> otherQueries = bqbSet - bqb
 
             // otherQueries should not be null
@@ -80,70 +65,40 @@ public class ClusterFitness extends SimpleFitness {
 
             for (BooleanQuery.Builder obqb : otherQueries) {
 
-              //  assert obqb
+                //  assert obqb - unexplained rare problem where assert fails on R5?
                 if (obqb) {
                     bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
                 }
             }
             Query otherBQ = bqbOthers.build()
 
-            //collect docid from other queries
-            TopDocs otherTopDocs = Indexes.indexSearcher.search(otherBQ, hitsPerPage)
-            ScoreDoc[] hitsOthers = otherTopDocs.scoreDocs;
+            TotalHitCountCollector collector = new TotalHitCountCollector();
+            BooleanQuery.Builder bqbPos = new BooleanQuery.Builder();
+            bqbPos.add(bqb.build(), BooleanClause.Occur.SHOULD)  //positiveHit SHOULD match query
+            bqbPos.add(otherBQ, BooleanClause.Occur.MUST_NOT)  //positiveHits MUST NOT match other queries
+            Indexes.indexSearcher.search(bqbPos.build(), collector);
+            int qPositiveHits = collector.getTotalHits()
+            qMap.put(q, qPositiveHits)
 
-            for (ScoreDoc otherHit : hitsOthers) {
-                otherDocIdSet << otherHit.doc
-            }
-
-            TopDocs docs = Indexes.indexSearcher.search(q, hitsPerPage)
-            ScoreDoc[] hits = docs.scoreDocs;
-            qMap.put(q, hits.size())
-
-            for (ScoreDoc d : hits) {
-
-                allHits << d.doc
-
-                if (otherDocIdSet.contains(d.doc)) {
-                    //if (negDocs.add(d.doc)){  // count negDoc only once
-                    negativeHits++
-                    negativeScoreTotal = negativeScoreTotal + d.score
-
-                } else {
-                    positiveHits++
-                    positiveScoreTotal = positiveScoreTotal + d.score
-                }
-            }
+            positiveHits += qPositiveHits
         }
 
         queryMap = qMap.asImmutable()
 
-        totalHits = allHits.size()
-        missedDocs = totalDocs - allHits.size()
+        TotalHitCountCollector collector = new TotalHitCountCollector();
+        Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
+        totalHits = collector.getTotalHits();
+        negativeHits = totalHits - positiveHits
 
-        if (totalHits == 0 ){
-            pseudo_precision = 0
-            pseudo_recall = 0
-            pseudo_f1 = 0
-        }else {
-            pseudo_precision =  positiveHits / totalHits
-            pseudo_recall = totalHits / totalDocs
-            pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
-        }
+        assert totalHits > 0
 
-        final int minScore = -2000;
+        missedDocs = totalDocs - totalHits
+
+        pseudo_precision = positiveHits / totalHits
+        pseudo_recall = totalHits / totalDocs
+        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+
         switch (fitnessMethod) {
-
-            case fitnessMethod.SCORE:
-                scoreOnly = positiveScoreTotal - negativeScoreTotal
-                scorePlus = (scoreOnly < minScore) ? 0 : scoreOnly + Math.abs(minScore)
-                baseFitness = scorePlus
-                break;
-
-            case fitnessMethod.HITS:
-                hitsOnly = positiveHits - negativeHits
-                hitsPlus = (hitsOnly <= minScore) ? 0 : hitsOnly + Math.abs(minScore)
-                baseFitness = hitsPlus
-                break;
 
             case fitnessMethod.PSEUDOF1:
                 baseFitness = pseudo_f1
@@ -151,7 +106,7 @@ public class ClusterFitness extends SimpleFitness {
 
             case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
                 double f1WithPenalty = pseudo_f1 - (0.03 * k)
-                baseFitness = f1WithPenalty > 0 ? f1WithPenalty :0
+                baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
                 break
         }
     }

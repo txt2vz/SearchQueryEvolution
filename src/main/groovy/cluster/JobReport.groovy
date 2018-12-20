@@ -23,14 +23,14 @@ class JobReport {
         File overallResults = new File("results/overallResultsCluster.txt")
 
         def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
-        indexAverages.each { print it.key + ' Average: ' + it.value.round(3) + ' ' }
-        indexAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(3) + " ") }
+        indexAverages.each { print it.key + ' Average: ' + it.value.round(5) + ' ' }
+        indexAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(5) + " ") }
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
-        println "\nOverall Averages:  ${overallAverage.round(3)} ${new Date()} resultsF1: $resultsF1 \n"
+        println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 \n"
 
         overallResults << " Duration $duration ${new Date()}"
-        overallResults << "\nOverall Average: ${overallAverage.round(3)} resultsF1: $resultsF1 \n"
+        overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
     }
 
     void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
@@ -50,7 +50,7 @@ class JobReport {
         println messageOut
 
         queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        queryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits} PosScore: ${cfit.positiveScoreTotal} NegScore: ${cfit.negativeScoreTotal} Fitness: ${cfit.getFitness().round(2)} \n"
+        queryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits}  Fitness: ${cfit.getFitness().round(5)} \n"
         queryFileOut << messageOut + "\n"
         queryFileOut << "************************************************ \n \n"
 
@@ -59,7 +59,7 @@ class JobReport {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, gen, job, date \n'
         }
 
-        fcsv << "${averageF1forJob.round(2)}, ${averagePrecision.round(2)}, ${averageRecall.round(2)}, ${cfit.getFitness().round(2)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
+        fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
                 "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $gen, $job, ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, job)

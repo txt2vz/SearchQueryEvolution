@@ -38,6 +38,13 @@ class ClusterFitnessTest extends Specification {
         then:
         println "base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.positiveHits + " pseudof1 " + cf.pseudo_f1
         cf.k == 2
+        println "cf.totalHitsFromQ " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
+        cf.totalHits== cf.totalHitsFromQ
+        cf.positiveHits == cf.postiveHitsFromQ
+
+       // def q = cf.totalHitsBQB.build()
+
+     //   println "q " + q.toString()
 
         when:
         bqbL[0] = new BooleanQuery.Builder().add(emptyQuery, BooleanClause.Occur.MUST)
@@ -47,9 +54,25 @@ class ClusterFitnessTest extends Specification {
         bqbL[0].add(orbitQuery, BooleanClause.Occur.MUST)
         Set<BooleanQuery.Builder> bqbSet2 = bqbL as Set<BooleanQuery.Builder>
         cf.setClusterFitness(bqbSet2)
+
         then:
         println "2base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.positiveHits + " pseudof1 " + cf.pseudo_f1
+        println "cf.totalHitsFromQ " + cf.totalHitsFromQ
         cf.pseudo_f1 == 0
+        cf.totalHits== cf.totalHitsFromQ
+
+        when:
+        bqbL[0] = new BooleanQuery.Builder().add(hockeyQuery, BooleanClause.Occur.SHOULD)
+        bqbL[1] = new BooleanQuery.Builder().add(gameQuery, BooleanClause.Occur.SHOULD)
+        Set<BooleanQuery.Builder> bqbSet3 = bqbL as Set<BooleanQuery.Builder>
+        cf.setClusterFitness(bqbSet3)
+
+        then:
+        println "cf.totalHitsFromQ three " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
+        cf.totalHits== cf.totalHitsFromQ
+        cf.positiveHits == cf.postiveHitsFromQ
+        cf.negativeHits == cf.totalHitsFromQ - cf.postiveHitsFromQ
+
 
     }
 }
