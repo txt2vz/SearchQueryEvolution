@@ -6,6 +6,7 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.TermQuery
+import org.apache.lucene.search.TotalHitCountCollector
 import spock.lang.Specification
 
 class ClusterFitnessSpec extends Specification {
@@ -27,51 +28,39 @@ class ClusterFitnessSpec extends Specification {
 
         when:
         bqbL[0] = new BooleanQuery.Builder().add(spaceQuery, BooleanClause.Occur.SHOULD)
-        bqbL[0].add(orbitQuery, BooleanClause.Occur.SHOULD)
+        bqbL[1] = new BooleanQuery.Builder().add(orbitQuery, BooleanClause.Occur.SHOULD)
 
-        bqbL[1] = new BooleanQuery.Builder().add(hockeyQuery, BooleanClause.Occur.SHOULD)
+        TotalHitCountCollector collector = new TotalHitCountCollector();
+        Indexes.indexSearcher.search(bqbL[0].build(), collector);
+        int spaceHits = collector.getTotalHits()
 
-        Set<BooleanQuery.Builder> bqbSet = bqbL as Set<BooleanQuery.Builder>
-        cf.setClusterFitness(bqbSet)
+        collector = new TotalHitCountCollector();
+        Indexes.indexSearcher.search(bqbL[1].build(), collector);
+        int orbitHits = collector.getTotalHits()
 
-        then:
-        println "base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.hitsMatchingOnlyOneQuery + " pseudof1 " + cf.pseudo_f1
-        cf.k == 2
-        println "cf.totalHitsFromQ " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
-        cf.totalHits== cf.totalHitsFromQ
-        cf.hitsMatchingOnlyOneQuery == cf.postiveHitsFromQ
+        collector = new TotalHitCountCollector();
+        def spaceORorbit = new BooleanQuery.Builder().add(spaceQuery, BooleanClause.Occur.SHOULD)
+        spaceORorbit.add(orbitQuery, BooleanClause.Occur.SHOULD)
 
-       // def q = cf.totalHitsBQB.build()
+        Indexes.indexSearcher.search(spaceORorbit.build(), collector);
+        int spaceORorbitHits = collector.getTotalHits()
 
-     //   println "q " + q.toString()
+        def spaceANDorbit = new BooleanQuery.Builder().add(spaceQuery, BooleanClause.Occur.MUST)
+        spaceANDorbit.add(orbitQuery, BooleanClause.Occur.MUST)
+        collector = new TotalHitCountCollector();
+        Indexes.indexSearcher.search(spaceANDorbit.build(), collector);
+        int spaceANDorbitHits = collector.getTotalHits()
 
-        when:
-        bqbL[0] = new BooleanQuery.Builder().add(emptyQuery, BooleanClause.Occur.MUST)
-        bqbL[0].add(hockeyQuery, BooleanClause.Occur.MUST)
-
-        bqbL[1] = new BooleanQuery.Builder().add(emptyQuery, BooleanClause.Occur.MUST)
-        bqbL[0].add(orbitQuery, BooleanClause.Occur.MUST)
-        Set<BooleanQuery.Builder> bqbSet2 = bqbL as Set<BooleanQuery.Builder>
-        cf.setClusterFitness(bqbSet2)
-
-        then:
-        println "2base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.hitsMatchingOnlyOneQuery + " pseudof1 " + cf.pseudo_f1
-        println "cf.totalHitsFromQ " + cf.totalHitsFromQ
-        cf.pseudo_f1 == 0
-        cf.totalHits== cf.totalHitsFromQ
-
-        when:
-        bqbL[0] = new BooleanQuery.Builder().add(hockeyQuery, BooleanClause.Occur.SHOULD)
-        bqbL[1] = new BooleanQuery.Builder().add(gameQuery, BooleanClause.Occur.SHOULD)
-        Set<BooleanQuery.Builder> bqbSet3 = bqbL as Set<BooleanQuery.Builder>
-        cf.setClusterFitness(bqbSet3)
+        cf = new ClusterFitness()
+        Set<BooleanQuery.Builder> bqbSet0 = bqbL as Set<BooleanQuery.Builder>
+        cf.setClusterFitness(bqbSet0)
 
         then:
-        println "cf.totalHitsFromQ three " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
-        cf.totalHits== cf.totalHitsFromQ
-        cf.hitsMatchingOnlyOneQuery == cf.postiveHitsFromQ
-        cf.hitsMatchingTwoOrMoreQueries == cf.totalHitsFromQ - cf.postiveHitsFromQ
 
+        println "spaceHits: $spaceHits orbitHits: $orbitHits spaceORorbit: $spaceORorbitHits spaceANDorbit: $spaceANDorbitHits"
+
+        cf.totalHits == spaceORorbitHits
+        cf.hitsMatchingOnlyOneQuery == spaceORorbitHits - spaceANDorbitHits
 
     }
 }

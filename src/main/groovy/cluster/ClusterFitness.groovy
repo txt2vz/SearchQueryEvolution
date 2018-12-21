@@ -49,10 +49,11 @@ public class ClusterFitness extends SimpleFitness {
         hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
         missedDocs = totalDocs - totalHits
 
-        pseudo_precision = hitsMatchingOnlyOneQuery / totalHits
-        pseudo_recall = totalHits / totalDocs
-        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
-
+        if (totalHits>0) {
+            pseudo_precision = hitsMatchingOnlyOneQuery / totalHits
+            pseudo_recall = totalHits / totalDocs
+            pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+        }
         switch (fitnessMethod) {
 
             case fitnessMethod.PSEUDOF1:
@@ -107,7 +108,7 @@ public class ClusterFitness extends SimpleFitness {
         Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
         int totalHitsAllQueries = collector.getTotalHits();
 
-        assert totalHitsAllQueries > 0
+      //assert totalHitsAllQueries > 0
         return  new Tuple3 (qMap, positiveHits, totalHitsAllQueries)
     }
 

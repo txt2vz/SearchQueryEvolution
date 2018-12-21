@@ -35,7 +35,6 @@ class JobReport {
 
     void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
 
-
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"

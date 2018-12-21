@@ -14,7 +14,7 @@ import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
 @CompileStatic
-enum IntersectMethod {
+enum  IntersectMethod {
 
     RATIO_POINT_3(0.3d),
     RATIO_POINT_5(0.5d),
