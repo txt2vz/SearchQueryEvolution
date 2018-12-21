@@ -322,8 +322,8 @@ public class ImportantTerms {
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
-                //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
-                //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+                //final int hitsMatchingOnlyOneQuery = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+                //final int hitsMatchingTwoOrMoreQueries = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
                 final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
                 final int fn = Indexes.instance.totalTrainDocsInCat - tp
@@ -350,7 +350,7 @@ public class ImportantTerms {
                     IG = eValXY(posClass, negClass) - (probWord * eValXY(tp, fp) + probInvWord * eValXY(fn, tn))
                 }
                 /*
-                def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+                def F1 = classify.Effectiveness.f1(hitsMatchingOnlyOneQuery, hitsMatchingTwoOrMoreQueries,
                         IndexInfo.instance.totalTrainDocsInCat)
                 */
                 if (IG > 0.002) {
@@ -386,8 +386,8 @@ public class ImportantTerms {
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
-                //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
-                //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+                //final int hitsMatchingOnlyOneQuery = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+                //final int hitsMatchingTwoOrMoreQueries = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
                 final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
                 final int fn = Indexes.instance.totalTrainDocsInCat - tp
@@ -413,7 +413,7 @@ public class ImportantTerms {
                     chi = chi_t(tp, ((tp + fp) * probPos)) + chi_t(fn, ((fn + tn) * probPos)) + chi_t(fp, ((tp + fp) * probNeg)) + chi_t(tn, ((fn + tn) * probNeg))
                 }
                 /*
-                def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+                def F1 = classify.Effectiveness.f1(hitsMatchingOnlyOneQuery, hitsMatchingTwoOrMoreQueries,
                         IndexInfo.instance.totalTrainDocsInCat)
                 */
                 if (chi > 100) {
@@ -440,8 +440,8 @@ public class ImportantTerms {
             if (isUsefulTerm(t)) {
 
                 Query tq = new TermQuery(t)
-                //final int positiveHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
-                //final int negativeHits = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
+                //final int hitsMatchingOnlyOneQuery = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.catTrainBQ, tq)
+                //final int hitsMatchingTwoOrMoreQueries = IndexInfo.getQueryHitsWithFilter(indexSearcher,IndexInfo.instance.othersTrainBQ, tq)
 
                 final int tp = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.instance.trainDocsInCategoryFilter, tq)
                 final int fn = Indexes.instance.totalTrainDocsInCat - tp
@@ -469,7 +469,7 @@ public class ImportantTerms {
                 }
 
                 /*
-                def F1 = classify.Effectiveness.f1(positiveHits, negativeHits,
+                def F1 = classify.Effectiveness.f1(hitsMatchingOnlyOneQuery, hitsMatchingTwoOrMoreQueries,
                         IndexInfo.instance.totalTrainDocsInCat)
                 */
 

@@ -5,11 +5,10 @@ import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import spock.lang.Specification
 
-class ClusterFitnessTest extends Specification {
+class ClusterFitnessSpec extends Specification {
 
     def "check psuedo f1 precision recall "(){
         setup:
@@ -36,11 +35,11 @@ class ClusterFitnessTest extends Specification {
         cf.setClusterFitness(bqbSet)
 
         then:
-        println "base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.positiveHits + " pseudof1 " + cf.pseudo_f1
+        println "base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.hitsMatchingOnlyOneQuery + " pseudof1 " + cf.pseudo_f1
         cf.k == 2
         println "cf.totalHitsFromQ " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
         cf.totalHits== cf.totalHitsFromQ
-        cf.positiveHits == cf.postiveHitsFromQ
+        cf.hitsMatchingOnlyOneQuery == cf.postiveHitsFromQ
 
        // def q = cf.totalHitsBQB.build()
 
@@ -56,7 +55,7 @@ class ClusterFitnessTest extends Specification {
         cf.setClusterFitness(bqbSet2)
 
         then:
-        println "2base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.positiveHits + " pseudof1 " + cf.pseudo_f1
+        println "2base "  + cf.getBaseFitness() + "  " + cf.k  + " pos " + cf.hitsMatchingOnlyOneQuery + " pseudof1 " + cf.pseudo_f1
         println "cf.totalHitsFromQ " + cf.totalHitsFromQ
         cf.pseudo_f1 == 0
         cf.totalHits== cf.totalHitsFromQ
@@ -70,8 +69,8 @@ class ClusterFitnessTest extends Specification {
         then:
         println "cf.totalHitsFromQ three " + cf.totalHitsFromQ + " posfromQ " + cf.postiveHitsFromQ
         cf.totalHits== cf.totalHitsFromQ
-        cf.positiveHits == cf.postiveHitsFromQ
-        cf.negativeHits == cf.totalHitsFromQ - cf.postiveHitsFromQ
+        cf.hitsMatchingOnlyOneQuery == cf.postiveHitsFromQ
+        cf.hitsMatchingTwoOrMoreQueries == cf.totalHitsFromQ - cf.postiveHitsFromQ
 
 
     }

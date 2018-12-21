@@ -50,7 +50,7 @@ class JobReport {
         println messageOut
 
         queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        queryFileOut << "PosHits: ${cfit.positiveHits} NegHits: ${cfit.negativeHits}  Fitness: ${cfit.getFitness().round(5)} \n"
+        queryFileOut << "PosHits: ${cfit.hitsMatchingOnlyOneQuery} NegHits: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)} \n"
         queryFileOut << messageOut + "\n"
         queryFileOut << "************************************************ \n \n"
 

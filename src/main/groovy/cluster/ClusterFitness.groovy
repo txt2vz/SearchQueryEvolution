@@ -26,8 +26,8 @@ public class ClusterFitness extends SimpleFitness {
     double pseudo_recall = 0.0
     double pseudo_f1 = 0.0
 
-    int positiveHits = 0
-    int negativeHits = 0
+    int hitsMatchingOnlyOneQuery = 0
+    int hitsMatchingTwoOrMoreQueries = 0
     int totalHits = 0
     int missedDocs = 0
     int k
@@ -39,18 +39,38 @@ public class ClusterFitness extends SimpleFitness {
     void setClusterFitness(Set<BooleanQuery.Builder> bqbSet) {
 
         k = bqbSet.size()
-
         baseFitness = 0.0
-        positiveHits = 0
-        negativeHits = 0
-        totalHits = 0
-        missedDocs = 0
-        pseudo_precision = 0.0
-        pseudo_recall = 0.0
 
+        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbSet)
+        queryMap = t3.first.asImmutable()
+        hitsMatchingOnlyOneQuery = t3.second
+        totalHits = t3.third
+
+        hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
+        missedDocs = totalDocs - totalHits
+
+        pseudo_precision = hitsMatchingOnlyOneQuery / totalHits
+        pseudo_recall = totalHits / totalDocs
+        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
+
+        switch (fitnessMethod) {
+
+            case fitnessMethod.PSEUDOF1:
+                baseFitness = pseudo_f1
+                break
+
+            case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
+                double f1WithPenalty = pseudo_f1 - (0.03 * k)
+                baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
+                break
+        }
+    }
+
+    private  Tuple3 <Map<Query,Integer>, Integer, Integer>  getPositiveHits(Set<BooleanQuery.Builder> bqbSet) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 
+        int positiveHits =0
         for (BooleanQuery.Builder bqb : bqbSet) {
 
             Query q = bqb.build()
@@ -74,7 +94,7 @@ public class ClusterFitness extends SimpleFitness {
 
             TotalHitCountCollector collector = new TotalHitCountCollector();
             BooleanQuery.Builder bqbPos = new BooleanQuery.Builder();
-            bqbPos.add(bqb.build(), BooleanClause.Occur.SHOULD)  //positiveHit SHOULD match query
+            bqbPos.add(bqb.build(), BooleanClause.Occur.SHOULD)  //positiveHits SHOULD match query
             bqbPos.add(otherBQ, BooleanClause.Occur.MUST_NOT)  //positiveHits MUST NOT match other queries
             Indexes.indexSearcher.search(bqbPos.build(), collector);
             int qPositiveHits = collector.getTotalHits()
@@ -83,38 +103,18 @@ public class ClusterFitness extends SimpleFitness {
             positiveHits += qPositiveHits
         }
 
-        queryMap = qMap.asImmutable()
-
         TotalHitCountCollector collector = new TotalHitCountCollector();
         Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
-        totalHits = collector.getTotalHits();
-        negativeHits = totalHits - positiveHits
+        int totalHitsAllQueries = collector.getTotalHits();
 
-        assert totalHits > 0
-
-        missedDocs = totalDocs - totalHits
-
-        pseudo_precision = positiveHits / totalHits
-        pseudo_recall = totalHits / totalDocs
-        pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
-
-        switch (fitnessMethod) {
-
-            case fitnessMethod.PSEUDOF1:
-                baseFitness = pseudo_f1
-                break
-
-            case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
-                double f1WithPenalty = pseudo_f1 - (0.03 * k)
-                baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
-                break
-        }
+        assert totalHitsAllQueries > 0
+        return  new Tuple3 (qMap, positiveHits, totalHitsAllQueries)
     }
 
     void generationStats(long generation) {
         println "${queryShort()}"
         println "pseudo_precision: ${pseudo_precision.round(3)} pseudo_recall: ${pseudo_recall.round(3)} pseudo_f1: ${pseudo_f1.round(3)} baseFitness: ${baseFitness.round(3)}"
-        println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs posHits: $positiveHits negHits: $negativeHits  "
+        println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs posHits: $hitsMatchingOnlyOneQuery negHits: $hitsMatchingTwoOrMoreQueries  "
         println ""
     }
 
