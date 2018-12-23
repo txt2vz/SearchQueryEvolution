@@ -52,12 +52,14 @@ class ClusterFitnessSpec extends Specification {
         int spaceANDorbitHits = collector.getTotalHits()
 
         cf = new ClusterFitness()
-        Set<BooleanQuery.Builder> bqbSet0 = bqbL as Set<BooleanQuery.Builder>
-        cf.setClusterFitness(bqbSet0)
+      //  Set<BooleanQuery.Builder> bqbSet0 = bqbL as Set<BooleanQuery.Builder>
+        cf.setClusterFitness(bqbL)
 
         then:
 
+        println " "
         println "spaceHits: $spaceHits orbitHits: $orbitHits spaceORorbit: $spaceORorbitHits spaceANDorbit: $spaceANDorbitHits"
+        println " "
 
         cf.totalHits == spaceORorbitHits
         cf.hitsMatchingOnlyOneQuery == spaceORorbitHits - spaceANDorbitHits

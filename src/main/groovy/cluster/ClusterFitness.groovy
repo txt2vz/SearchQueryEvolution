@@ -36,12 +36,12 @@ public class ClusterFitness extends SimpleFitness {
         return baseFitness;
     }
 
-    void setClusterFitness(Set<BooleanQuery.Builder> bqbSet) {
+    void setClusterFitness(BooleanQuery.Builder[] bqbArray) {
 
-        k = bqbSet.size()
+        k = bqbArray.size()
         baseFitness = 0.0
 
-        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbSet)
+        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbArray)
         queryMap = t3.first.asImmutable()
         hitsMatchingOnlyOneQuery = t3.second
         totalHits = t3.third
@@ -67,49 +67,37 @@ public class ClusterFitness extends SimpleFitness {
         }
     }
 
-    private  Tuple3 <Map<Query,Integer>, Integer, Integer>  getPositiveHits(Set<BooleanQuery.Builder> bqbSet) {
+    private  Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(BooleanQuery.Builder[] bqbArray) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 
-        int positiveHits =0
-        for (BooleanQuery.Builder bqb : bqbSet) {
-
-            Query q = bqb.build()
+        int oneCategoryOnlyHits = 0
+        for (int i=0; i<bqbArray.size(); i++){
+            Query q = bqbArray[i].build()
             totalHitsBQB.add(q, BooleanClause.Occur.SHOULD)
 
-            Set<BooleanQuery.Builder> otherQueries = bqbSet - bqb
+            BooleanQuery.Builder bqbOneCategoryOnly = new BooleanQuery.Builder()
+            bqbOneCategoryOnly.add(q, BooleanClause.Occur.SHOULD)
 
-            // otherQueries should not be null
-            assert otherQueries
-
-            BooleanQuery.Builder bqbOthers = new BooleanQuery.Builder();
-
-            for (BooleanQuery.Builder obqb : otherQueries) {
-
-                //  assert obqb - unexplained rare problem where assert fails on R5?
-                if (obqb) {
-                    bqbOthers.add(obqb.build(), BooleanClause.Occur.SHOULD)
+            for (int j=0; j<bqbArray.size(); j++) {
+                if (j != i ){
+                    bqbOneCategoryOnly.add(bqbArray[j].build(), BooleanClause.Occur.MUST_NOT)
                 }
             }
-            Query otherBQ = bqbOthers.build()
 
             TotalHitCountCollector collector = new TotalHitCountCollector();
-            BooleanQuery.Builder bqbPos = new BooleanQuery.Builder();
-            bqbPos.add(bqb.build(), BooleanClause.Occur.SHOULD)  //positiveHits SHOULD match query
-            bqbPos.add(otherBQ, BooleanClause.Occur.MUST_NOT)  //positiveHits MUST NOT match other queries
-            Indexes.indexSearcher.search(bqbPos.build(), collector);
+            Indexes.indexSearcher.search(bqbOneCategoryOnly.build(), collector);
             int qPositiveHits = collector.getTotalHits()
-            qMap.put(q, qPositiveHits)
 
-            positiveHits += qPositiveHits
+            qMap.put(q, qPositiveHits)
+            oneCategoryOnlyHits += qPositiveHits
         }
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
         Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
         int totalHitsAllQueries = collector.getTotalHits();
 
-      //assert totalHitsAllQueries > 0
-        return  new Tuple3 (qMap, positiveHits, totalHitsAllQueries)
+        return  new Tuple3 (qMap, oneCategoryOnlyHits, totalHitsAllQueries)
     }
 
     void generationStats(long generation) {

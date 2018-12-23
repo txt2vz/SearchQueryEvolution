@@ -128,9 +128,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
         }
-        Set<BooleanQuery.Builder> bqbSet = bqbArray as Set<BooleanQuery.Builder>
-        assert bqbSet.size() == bqbArray.size()
-        fitness.setClusterFitness(bqbSet)//(bqbArray as Set <BooleanQuery.Builder>)
+      //  Set<BooleanQuery.Builder> bqbSet = bqbArray as Set<BooleanQuery.Builder>
+     //   assert bqbSet.size() == bqbArray.size()
+        fitness.setClusterFitness(bqbArray)
+       // fitness.setClusterFitness(bqbSet)//(bqbArray as Set <BooleanQuery.Builder>)
 
 //rawfitness used by ECJ for evaluation
         double rawfitness = fitness.getFitness()

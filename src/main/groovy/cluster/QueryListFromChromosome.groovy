@@ -285,7 +285,6 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-
     //first word is OR_segments followed by DNF clauses
     BooleanQuery.Builder[] getOR1DNF(int[] intChromosome) {
 

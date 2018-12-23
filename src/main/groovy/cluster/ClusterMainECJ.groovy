@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    private final int NUMBER_OF_JOBS = 10
+    private final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
@@ -29,14 +29,14 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethodsList = [
 
-            FitnessMethod.PSEUDOF1,
+        //    FitnessMethod.PSEUDOF1,
             FitnessMethod.PSEUDOF1_K_PENALTY0_3
     ]
 
     List<QueryType> queryTypesList = [
 
             QueryType.OR3_INSTERSECT_SETK,
-            QueryType.OR_INTERSECT_SETK
+         //   QueryType.OR_INTERSECT_SETK
 
     ]
 
@@ -66,8 +66,8 @@ class ClusterMainECJ extends Evolve {
                     intersectMethodList.each { IntersectMethod intersectMethod ->
                         QueryListFromChromosome.intersectMethod = intersectMethod
 
-                        [true, false].each { intersectBool ->
-                            //[true].each { intersectBool ->
+                    //    [true, false].each { intersectBool ->
+                            [true].each { intersectBool ->
                             //  [false].each { intersectBool ->
                             QueryListFromChromosome.intersectTest = intersectBool
 
