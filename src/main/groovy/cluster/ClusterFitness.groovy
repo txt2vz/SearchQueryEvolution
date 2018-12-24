@@ -36,12 +36,12 @@ public class ClusterFitness extends SimpleFitness {
         return baseFitness;
     }
 
-    void setClusterFitness(BooleanQuery.Builder[] bqbArray) {
+    void setClusterFitness(List <BooleanQuery.Builder> bqbList) {
 
-        k = bqbArray.size()
+        k = bqbList.size()
         baseFitness = 0.0
 
-        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbArray)
+        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbList)
         queryMap = t3.first.asImmutable()
         hitsMatchingOnlyOneQuery = t3.second
         totalHits = t3.third
@@ -67,21 +67,21 @@ public class ClusterFitness extends SimpleFitness {
         }
     }
 
-    private  Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(BooleanQuery.Builder[] bqbArray) {
+    private  Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(List<BooleanQuery.Builder> bqbList) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 
         int oneCategoryOnlyHits = 0
-        for (int i=0; i<bqbArray.size(); i++){
-            Query q = bqbArray[i].build()
+        for (int i=0; i<bqbList.size(); i++){
+            Query q = bqbList[i].build()
             totalHitsBQB.add(q, BooleanClause.Occur.SHOULD)
 
             BooleanQuery.Builder bqbOneCategoryOnly = new BooleanQuery.Builder()
             bqbOneCategoryOnly.add(q, BooleanClause.Occur.SHOULD)
 
-            for (int j=0; j<bqbArray.size(); j++) {
+            for (int j=0; j<bqbList.size(); j++) {
                 if (j != i ){
-                    bqbOneCategoryOnly.add(bqbArray[j].build(), BooleanClause.Occur.MUST_NOT)
+                    bqbOneCategoryOnly.add(bqbList[j].build(), BooleanClause.Occur.MUST_NOT)
                 }
             }
 

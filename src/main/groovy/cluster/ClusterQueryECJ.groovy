@@ -126,15 +126,11 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
             case QueryType.ORDNFSETK:
                 bqbArray = qlfc.getOR1DNF(genome)
                 break;
-
         }
-      //  Set<BooleanQuery.Builder> bqbSet = bqbArray as Set<BooleanQuery.Builder>
-     //   assert bqbSet.size() == bqbArray.size()
-        fitness.setClusterFitness(bqbArray)
-       // fitness.setClusterFitness(bqbSet)//(bqbArray as Set <BooleanQuery.Builder>)
 
-//rawfitness used by ECJ for evaluation
-        double rawfitness = fitness.getFitness()
+        fitness.setClusterFitness(Arrays.asList(bqbArray).asImmutable())
+
+        double rawfitness = fitness.getFitness()  // for ECJ
 
         ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, rawfitness, false)
         ind.evaluated = true

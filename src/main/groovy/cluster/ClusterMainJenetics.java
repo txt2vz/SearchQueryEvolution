@@ -31,7 +31,7 @@ public class ClusterMainJenetics {
                // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
 
         ClusterFitness clusterFitness = new ClusterFitness();
-        clusterFitness.setClusterFitness(bqbArray);
+        clusterFitness.setClusterFitness(Arrays.asList(bqbArray));
        // clusterFitness.setClusterFitness( new HashSet<BooleanQuery.Builder>(Arrays.asList(bqbArray)));  //java 9 Set.of(bqbArray)
 
         return clusterFitness;

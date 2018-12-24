@@ -53,7 +53,7 @@ class ClusterFitnessSpec extends Specification {
 
         cf = new ClusterFitness()
       //  Set<BooleanQuery.Builder> bqbSet0 = bqbL as Set<BooleanQuery.Builder>
-        cf.setClusterFitness(bqbL)
+        cf.setClusterFitness(Arrays.asList(bqbL).asImmutable())
 
         then:
 
