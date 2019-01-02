@@ -18,7 +18,7 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-            IndexEnum.NG3,
+           IndexEnum.NG3,
             IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
             IndexEnum.R4,
@@ -29,7 +29,7 @@ class ClusterMainECJ extends Evolve {
 
     List<FitnessMethod> fitnessMethodsList = [
 
-        //    FitnessMethod.PSEUDOF1,
+          //  FitnessMethod.PSEUDOF1,
             FitnessMethod.PSEUDOF1_K_PENALTY0_3
     ]
 

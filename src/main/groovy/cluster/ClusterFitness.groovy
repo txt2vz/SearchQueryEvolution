@@ -10,7 +10,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3
+    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5
 }
 
 @CompileStatic
@@ -67,7 +67,7 @@ public class ClusterFitness extends SimpleFitness {
         }
     }
 
-    private  Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(List<BooleanQuery.Builder> bqbList) {
+    private Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(List<BooleanQuery.Builder> bqbList) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 

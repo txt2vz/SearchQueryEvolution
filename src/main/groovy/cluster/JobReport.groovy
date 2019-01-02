@@ -41,7 +41,8 @@ class JobReport {
 
         int numberOfClusters = cfit.queryMap.size()
         int numberOfOriginalClasses = Indexes.indexEnum.numberOfCategories
-        int categoryCountError = Math.abs(numberOfOriginalClasses - numberOfClusters)
+        int categoryCountError = numberOfOriginalClasses - numberOfClusters
+        int categoryCountErrorAbs = Math.abs(categoryCountError)
 
         queryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
 
@@ -55,11 +56,11 @@ class JobReport {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, gen, job, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, job, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $gen, $job, ${new Date()} \n"
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs $gen, $job, ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, job)
         resultsF1 << [(indexAndParams): averageF1forJob]

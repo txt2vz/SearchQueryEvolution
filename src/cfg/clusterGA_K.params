@@ -11,7 +11,7 @@ stat = cluster.ClusterStatisticsECJ
 
 evalthreads =  auto
 breedthreads = auto
-generations = 500
+generations = 1000
 
 pop.default-subpop =0
 breed.elite.0 = 2
@@ -26,13 +26,18 @@ pop.subpop.2.size = 128
 pop.subpop.3.species.genome-size = 19
 pop.subpop.3.size = 128
 
-pop.subpop.0.species.min-gene = -1
+pop.subpop.0.species.fitness = cluster.ClusterFitness
+pop.subpop.1.species.fitness = cluster.ClusterFitness
+pop.subpop.2.species.fitness = cluster.ClusterFitness
+pop.subpop.3.species.fitness = cluster.ClusterFitness
+
+pop.subpop.0.species.min-gene = 0
 pop.subpop.0.species.max-gene = 100
-pop.subpop.1.species.min-gene = -1
+pop.subpop.1.species.min-gene = 0
 pop.subpop.1.species.max-gene = 100
-pop.subpop.2.species.min-gene = -1
+pop.subpop.2.species.min-gene = 0
 pop.subpop.2.species.max-gene = 100
-pop.subpop.3.species.min-gene = -1
+pop.subpop.3.species.min-gene = 0
 pop.subpop.3.species.max-gene = 100
 
 pop.subpop.0.species.num-segments = 2
@@ -80,21 +85,21 @@ pop.subpop.6.species.segment.0.max-gene = 9
 pop.subpop.7.species.segment.0.min-gene = 2
 pop.subpop.7.species.segment.0.max-gene = 9
 
-pop.subpop.0.species.segment.1.min-gene = -1
+pop.subpop.0.species.segment.1.min-gene = 0
 pop.subpop.0.species.segment.1.max-gene = 100
-pop.subpop.1.species.segment.1.min-gene = -1
+pop.subpop.1.species.segment.1.min-gene = 0
 pop.subpop.1.species.segment.1.max-gene = 100
-pop.subpop.2.species.segment.1.min-gene = -1
+pop.subpop.2.species.segment.1.min-gene = 0
 pop.subpop.2.species.segment.1.max-gene = 100
-pop.subpop.3.species.segment.1.min-gene = -1
+pop.subpop.3.species.segment.1.min-gene = 0
 pop.subpop.3.species.segment.1.max-gene = 100
 
-pop.subpop.4.species.segment.1.min-gene = -1
+pop.subpop.4.species.segment.1.min-gene = 0
 pop.subpop.4.species.segment.1.max-gene = 100
-pop.subpop.5.species.segment.1.min-gene = -1
+pop.subpop.5.species.segment.1.min-gene = 0
 pop.subpop.5.species.segment.1.max-gene = 100
-pop.subpop.6.species.segment.1.min-gene = -1
+pop.subpop.6.species.segment.1.min-gene = 0
 pop.subpop.6.species.segment.1.max-gene = 100
-pop.subpop.7.species.segment.1.min-gene = -1
+pop.subpop.7.species.segment.1.min-gene = 0
 pop.subpop.7.species.segment.1.max-gene = 100
 
