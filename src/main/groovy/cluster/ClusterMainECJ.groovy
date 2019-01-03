@@ -13,33 +13,31 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_RUNS = 2
-    static final int JOBS_FOR_PSEUDO_F1_SELECTION = 5
+    public static final int NUMBER_OF_JOBS = 5
+    static final int NUMBER_OF_RUNS = 3
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-//           IndexEnum.NG3,
+  //          IndexEnum.NG3,
             IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
-//            IndexEnum.R4,
-//            IndexEnum.R5,
-//            IndexEnum.NG5,
-//            IndexEnum.NG6,
-//              IndexEnum.R6
-
+            IndexEnum.R4,
+            IndexEnum.R5,
+            IndexEnum.NG5,
+            IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
 
-          //  FitnessMethod.PSEUDOF1,
+            //  FitnessMethod.PSEUDOF1,
             FitnessMethod.PSEUDOF1_K_PENALTY0_3
     ]
 
     List<QueryType> queryTypesList = [
 
             QueryType.OR3_INSTERSECT_SETK,
-       //     QueryType.OR_INTERSECT_SETK
+                QueryType.OR_INTERSECT_SETK
 
     ]
 
@@ -53,12 +51,12 @@ class ClusterMainECJ extends Evolve {
     public ClusterMainECJ() {
 
         final Date startRun = new Date()
-
-        NUMBER_OF_RUNS.times { int runNumber ->
+        NUMBER_OF_RUNS.times { runNumber ->
             JobReport jobReport = new JobReport()
+
             clusteringIndexesList.each { IndexEnum ie ->
 
-                JOBS_FOR_PSEUDO_F1_SELECTION.times { jobForPseudoF1Selection ->
+                NUMBER_OF_JOBS.times { job ->
                     EvolutionState state;
 
                     println "Index Enum ie: $ie"
@@ -84,16 +82,16 @@ class ClusterMainECJ extends Evolve {
 
                                     ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
-                                    state = initialize(parameters, jobForPseudoF1Selection)
-                                    if (JOBS_FOR_PSEUDO_F1_SELECTION >= 1) {
-                                        final String jobFilePrefix = "jobForPseudoF1Selection." + jobForPseudoF1Selection;
+                                    state = initialize(parameters, job)
+                                    if (NUMBER_OF_JOBS >= 1) {
+                                        final String jobFilePrefix = "job." + job;
                                         state.output.setFilePrefix(jobFilePrefix);
                                         state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
                                     }
                                     //  state.parameters.set(new Parameter("generations"), "7")
-                                    state.output.systemMessage("Job: " + jobForPseudoF1Selection);
+                                    state.output.systemMessage("Job: " + job);
                                     state.job = new Object[1]
-                                    state.job[0] = new Integer(jobForPseudoF1Selection)
+                                    state.job[0] = new Integer(job)
 
                                     state.run(EvolutionState.C_STARTED_FRESH);
                                     int popSize = 0;
@@ -109,24 +107,20 @@ class ClusterMainECJ extends Evolve {
                                     final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                                     println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                                    jobReport.reportsOut(runNumber, jobForPseudoF1Selection, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                                    jobReport.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                                 }
                             }
                         }
                     }
                     cleanup(state);
-                    println "--------END JOB $jobForPseudoF1Selection  -----------------------------------------------"
+                    println "--------END JOB $job  -----------------------------------------------"
 
                 }
-                jobReport.overallSummary(runNumber)
             }
 
-//            final Date endJob = new Date()
-//            TimeDuration duration = TimeCategory.minus(endJob, startRun)
-//            println "Duration: $duration"
 
+            jobReport.overallSummary(runNumber)
         }
-
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"

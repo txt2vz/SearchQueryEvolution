@@ -19,10 +19,11 @@ class JobReport {
     JobReport() {
     }
 
-    void overallSummary(int runNumber) {
+    void overallSummary(final int runNumber) {
 
         File overallResults = new File("results/overallResultsCluster.txt")
         File overallResultsMaxFit = new File("results/overallResultsClusterMaxFitness.csv")
+        File runsReport = new File("results/runsReport.csv")
 
         def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
         indexAverages.each { print it.key + ' Average: ' + it.value.round(5) + ' ' }
@@ -43,14 +44,19 @@ class JobReport {
             overallResultsMaxFit.append("Index, F1FromMaxFitness, jobsForPseudF1Selection, runNumber, date \n")
         }
         indexAveragesMaxFitness.each {
-            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.JOBS_FOR_PSEUDO_F1_SELECTION}, $runNumber, ${new Date()} \n")
+            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.NUMBER_OF_JOBS}, $runNumber, ${new Date()} \n")
         }
 
         println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
         double overallAverageMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
         overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
-        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)}\n \n"
-        println "overallAverageMaxFit $overallAverageMaxFit"
+        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)} for runNumber $runNumber \n \n"
+        println "overallAverageMaxFit $overallAverageMaxFit for runNumber $runNumber"
+
+        if (!runsReport.exists()){
+            runsReport.append("runNumber, F1fromMaxPseudoF1 \n")
+        }
+        runsReport.append("$runNumber, $overallAverageMaxFit \n")
     }
 
     void reportsOut(int runNumber, int jobNumberForPseudoF1selection, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
