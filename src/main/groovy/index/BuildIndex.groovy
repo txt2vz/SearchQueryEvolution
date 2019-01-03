@@ -29,8 +29,8 @@ class BuildIndex {
     }
 
     BuildIndex() {
-        String indexPath = 'indexes/20NG5WindowsmiscForsaleHockeySpaceChristian'
-        String docsPath = /C:\Users\aceslh\Dataset\20NG5WindowsmiscForsaleHockeySpaceChristian/
+        String indexPath = 'indexes/R6'
+        String docsPath = /C:\Users\aceslh\Dataset\r6/
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)

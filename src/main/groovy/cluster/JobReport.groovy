@@ -19,7 +19,7 @@ class JobReport {
     JobReport() {
     }
 
-    void overallSummary(TimeDuration duration) {
+    void overallSummary(int runNumber) {
 
         File overallResults = new File("results/overallResultsCluster.txt")
         File overallResultsMaxFit = new File("results/overallResultsClusterMaxFitness.csv")
@@ -30,7 +30,7 @@ class JobReport {
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
         println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 \n"
-        overallResults << " Duration $duration ${new Date()}"
+        overallResults << "  ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
 
         println "resultsPseudo_F1WithF1: $resultsPseudo_F1WithF1"
@@ -38,12 +38,12 @@ class JobReport {
         println "maxFitnessF1 $maxFitnessF1"
         println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
 
-        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().second.max()] }
+        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().second.max()] }
         if (!overallResultsMaxFit.exists()) {
-            overallResultsMaxFit.append("Index, F1FromMaxFitness, numberOfJobs \n")
+            overallResultsMaxFit.append("Index, F1FromMaxFitness, jobsForPseudF1Selection, runNumber, date \n")
         }
         indexAveragesMaxFitness.each {
-            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.NUMBER_OF_JOBS} \n")
+            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.JOBS_FOR_PSEUDO_F1_SELECTION}, $runNumber, ${new Date()} \n")
         }
 
         println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
@@ -53,7 +53,7 @@ class JobReport {
         println "overallAverageMaxFit $overallAverageMaxFit"
     }
 
-    void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
+    void reportsOut(int runNumber, int jobNumberForPseudoF1selection, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall, double pseudo_f1) = calculate_F1_p_r(cfit, true)
 
@@ -64,7 +64,7 @@ class JobReport {
         int categoryCountError = numberOfOriginalClasses - numberOfClusters
         int categoryCountErrorAbs = Math.abs(categoryCountError)
 
-        queryFileOut << "${new Date()}  ***** Job: $job Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
+        queryFileOut << "${new Date()}  ***** Job: $jobNumberForPseudoF1selection Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
@@ -76,13 +76,13 @@ class JobReport {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, job, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumberForPseudoF1selection, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs $gen, $job, ${new Date()} \n"
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs $gen, $jobNumberForPseudoF1selection, ${new Date()} \n"
 
-        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, job)
+        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumberForPseudoF1selection)
         resultsF1 << [(indexAndParams): averageF1forJob]
         // Tuple2<double> fitnessAndF1 = new Tuple2(pseudo_f1,averageF1forJob)
         resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
