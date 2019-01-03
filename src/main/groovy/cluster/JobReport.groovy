@@ -12,6 +12,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 class JobReport {
     def resultsF1 = [:]
+    def resultsPseudo_F1WithF1 = [:]
     def resultsDir = new File(/results/).mkdir()
     File queryFileOut = new File('results/Queries.txt')
 
@@ -21,6 +22,7 @@ class JobReport {
     void overallSummary(TimeDuration duration) {
 
         File overallResults = new File("results/overallResultsCluster.txt")
+        File overallResultsMaxFit = new File("results/overallResultsClusterMaxFitness.csv")
 
         def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
         indexAverages.each { print it.key + ' Average: ' + it.value.round(5) + ' ' }
@@ -28,14 +30,32 @@ class JobReport {
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
         println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 \n"
-
         overallResults << " Duration $duration ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
+
+        println "resultsPseudo_F1WithF1: $resultsPseudo_F1WithF1"
+        def maxFitnessF1 = resultsPseudo_F1WithF1.max { it.value.first }
+        println "maxFitnessF1 $maxFitnessF1"
+        println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
+
+        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().second.max()] }
+        if (!overallResultsMaxFit.exists()) {
+            overallResultsMaxFit.append("Index, F1FromMaxFitness, numberOfJobs \n")
+        }
+        indexAveragesMaxFitness.each {
+            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.NUMBER_OF_JOBS} \n")
+        }
+
+        println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
+        double overallAverageMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
+        overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
+        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)}\n \n"
+        println "overallAverageMaxFit $overallAverageMaxFit"
     }
 
-    void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit, String fileName) {
+    void reportsOut(int job, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
-        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
+        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall, double pseudo_f1) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
@@ -56,7 +76,7 @@ class JobReport {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, job, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, job, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
@@ -64,10 +84,12 @@ class JobReport {
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, job)
         resultsF1 << [(indexAndParams): averageF1forJob]
+        // Tuple2<double> fitnessAndF1 = new Tuple2(pseudo_f1,averageF1forJob)
+        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
     }
 
     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
-        List<Double> f1list = [], precisionList = [], recallList = []
+        List<Double> f1list = [], precisionList = [], recallList = [], fitnessList = []
 
         cfit.queryMap.keySet().eachWithIndex { Query q, index ->
 
@@ -99,12 +121,12 @@ class JobReport {
             }
         }
 
-        final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.queryMap.size())  //.numberOfClusters)
+        final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.queryMap.size())
         final double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters : 0
         final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
         final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0
 
-        [f1list, averageF1forJob, averagePrecision, averageRecall]
+        [f1list, averageF1forJob, averagePrecision, averageRecall, cfit.pseudo_f1]
     }
 
     private List findMostFrequentCategoryForQuery(Query q, int index) {

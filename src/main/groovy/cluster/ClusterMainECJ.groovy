@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    private final int NUMBER_OF_JOBS = 2
+    public static final int NUMBER_OF_JOBS = 5
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
@@ -36,7 +36,7 @@ class ClusterMainECJ extends Evolve {
     List<QueryType> queryTypesList = [
 
             QueryType.OR3_INSTERSECT_SETK,
-         //   QueryType.OR_INTERSECT_SETK
+        //    QueryType.OR_INTERSECT_SETK
 
     ]
 
@@ -105,7 +105,7 @@ class ClusterMainECJ extends Evolve {
                                 final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                                 println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                                jobReport.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, 'finalData')
+                                jobReport.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                             }
                         }
                     }
