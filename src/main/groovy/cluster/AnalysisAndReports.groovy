@@ -1,6 +1,6 @@
 package cluster
 
-import groovy.time.TimeDuration
+
 import index.Indexes
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
@@ -37,11 +37,10 @@ class AnalysisAndReports {
         File runsReport = new File("results/runsReport.csv")
 
         println "results Pseudo_F1WithF1: $resultsPseudo_F1WithF1"
-        def maxFitnessF1 = resultsPseudo_F1WithF1.max { it.value.first }
-        println "maxFitnessF1 $maxFitnessF1"
-        println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
+        def maxPseudoF1 = resultsPseudo_F1WithF1.max { it.value.first }
+        println "maxPseudoF1 $maxPseudoF1"
+        println "maxPseudoF1 keyfirst " + maxPseudoF1.key.first + " maxPseudoF1 " + maxPseudoF1.value.second
 
-        //def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Tuple2 t2 -> [t2.first, t2.second().max()] }
         def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().max { pseudoF1 -> pseudoF1.first }.second] }
 
         if (!overallResultsMaxFit.exists()) {

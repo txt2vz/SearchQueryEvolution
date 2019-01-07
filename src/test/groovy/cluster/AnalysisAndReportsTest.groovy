@@ -47,15 +47,16 @@ class AnalysisAndReportsTest extends Specification {
 
         when:
         analysisAndReports = new AnalysisAndReports()
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams0): new Tuple2(0.7, 0.6)]
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams1): new Tuple2(0.2, 0.8)]
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams2): new Tuple2(0.8, 0.4)]
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams3): new Tuple2(0.7, 0.6)]
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams4): new Tuple2(0.2, 0.8)]
-        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams5): new Tuple2(0.8, 0.87)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams0): new Tuple2(0.7, 0.7)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams1): new Tuple2(0.8, 0.4)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams2): new Tuple2(0.7, 0.7)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams3): new Tuple2(0.7, 0.7)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams4): new Tuple2(0.9, 0.2)]
+        analysisAndReports.resultsPseudo_F1WithF1 << [(indexAndParams5): new Tuple2(0.7, 0.7)]
 
         then:
         println analysisAndReports.f1fromMaxPseudoF1(0)
+        analysisAndReports.f1fromMaxPseudoF1(0) == 0.3
 
 
 
