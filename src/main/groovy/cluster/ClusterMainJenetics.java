@@ -8,8 +8,6 @@ import org.jenetics.engine.Engine;
 import org.jenetics.util.Factory;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
@@ -49,7 +47,7 @@ public class ClusterMainJenetics {
         final int popSize = 512;
         final int subpops = 1;
         final long maxGen = 210;
-        JobReport finalReport = new JobReport();
+        AnalysisAndReports finalReport = new AnalysisAndReports();
         int maxGene=100;
         int genomeLength=18;
 

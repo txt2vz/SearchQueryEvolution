@@ -10,22 +10,19 @@ import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
 import org.apache.lucene.search.TotalHitCountCollector
 
-class JobReport {
+class AnalysisAndReports {
     def resultsF1 = [:]
     def resultsPseudo_F1WithF1 = [:]
     def resultsDir = new File(/results/).mkdir()
     File queryFileOut = new File('results/Queries.txt')
+    File overallResults = new File("results/overallResultsCluster.txt")
 
-    JobReport() {
-    }
+    AnalysisAndReports() {
+   }
 
-    double overallSummary(final int runNumber) {
+    double jobSummary() {
 
-        File overallResults = new File("results/overallResultsCluster.txt")
-        File overallResultsMaxFit = new File("results/overallResultsClusterMaxPseudoF1.csv")
-        File runsReport = new File("results/runsReport.csv")
-
-        def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
+        def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum() / m.values().size()] }
         indexAverages.each { print it.key + ' Average: ' + it.value.round(5) + ' ' }
         indexAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(5) + " ") }
 
@@ -34,12 +31,20 @@ class JobReport {
         overallResults << "  ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
 
+    }
+
+     double f1fromMaxPseudoF1(int runNumber) {
+        File overallResultsMaxFit = new File("results/overallResultsClusterMaxPseudoF1.csv")
+        File runsReport = new File("results/runsReport.csv")
+
         println "results Pseudo_F1WithF1: $resultsPseudo_F1WithF1"
         def maxFitnessF1 = resultsPseudo_F1WithF1.max { it.value.first }
         println "maxFitnessF1 $maxFitnessF1"
         println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
 
-        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().second.max()] }
+        //def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Tuple2 t2 -> [t2.first, t2.second().max()] }
+         def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m3 -> [m.keySet()[0].first, m.values().max{pseudoF1 -> pseudoF1.first}.second] }
+
         if (!overallResultsMaxFit.exists()) {
             overallResultsMaxFit.append("Index, F1FromMaxFitness, jobsForPseudF1Selection, runNumber, date \n")
         }
@@ -49,13 +54,16 @@ class JobReport {
 
         println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
         double overallAverageMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
-        overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
-        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)} for runNumber $runNumber \n \n"
+
         println "overallAverageMaxFit $overallAverageMaxFit for runNumber $runNumber"
 
-        if (!runsReport.exists()){
+        if (!runsReport.exists()) {
             runsReport.append("runNumber, F1fromMaxPseudoF1 \n")
         }
+
+        overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
+        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)} for runNumber $runNumber \n \n"
+
         runsReport.append("$runNumber, $overallAverageMaxFit \n")
         return overallAverageMaxFit
     }
@@ -91,8 +99,8 @@ class JobReport {
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumberForPseudoF1selection)
         resultsF1 << [(indexAndParams): averageF1forJob]
-        // Tuple2<double> fitnessAndF1 = new Tuple2(pseudo_f1,averageF1forJob)
-        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
+
+        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>( pseudo_f1, averageF1forJob)]
     }
 
     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {

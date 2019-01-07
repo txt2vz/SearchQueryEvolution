@@ -16,7 +16,7 @@ class EvaluateClustersSpec extends spock.lang.Specification {
         int totalHits
         TermQuery catQ
 
-        def jr = new JobReport()
+        def jr = new AnalysisAndReports()
 
         when:
         catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,

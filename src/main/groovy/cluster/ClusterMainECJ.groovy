@@ -53,7 +53,7 @@ class ClusterMainECJ extends Evolve {
         final Date startRun = new Date()
         List<Double> bestFitForRun = new ArrayList<Double>()
         NUMBER_OF_RUNS.times { runNumber ->
-            JobReport jobReport = new JobReport()
+            AnalysisAndReports analysisAndReports = new AnalysisAndReports()
 
             clusteringIndexesList.each { IndexEnum ie ->
 
@@ -108,7 +108,7 @@ class ClusterMainECJ extends Evolve {
                                     final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                                     println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                                    jobReport.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                                    analysisAndReports.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                                 }
                             }
                         }
@@ -119,7 +119,8 @@ class ClusterMainECJ extends Evolve {
                 }
             }
 
-           bestFitForRun << jobReport.overallSummary(runNumber)
+           bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
+           analysisAndReports.jobSummary()
 
         }
         final Date endRun = new Date()
@@ -127,7 +128,7 @@ class ClusterMainECJ extends Evolve {
         println "Duration: $duration"
         println "Runs from max fitness: $bestFitForRun"
 
-        double average =  (double) bestFitForRun.sum() / bestFitForRun.size() as Double
+        double average =  (double) bestFitForRun.sum() / bestFitForRun.size()
         println  "Average: $average"
 
     }
