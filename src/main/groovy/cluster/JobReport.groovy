@@ -19,10 +19,10 @@ class JobReport {
     JobReport() {
     }
 
-    void overallSummary(final int runNumber) {
+    double overallSummary(final int runNumber) {
 
         File overallResults = new File("results/overallResultsCluster.txt")
-        File overallResultsMaxFit = new File("results/overallResultsClusterMaxFitness.csv")
+        File overallResultsMaxFit = new File("results/overallResultsClusterMaxPseudoF1.csv")
         File runsReport = new File("results/runsReport.csv")
 
         def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map q -> [q.keySet()[0].first, q.values().sum() / q.values().size()] }
@@ -34,7 +34,7 @@ class JobReport {
         overallResults << "  ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
 
-        println "resultsPseudo_F1WithF1: $resultsPseudo_F1WithF1"
+        println "results Pseudo_F1WithF1: $resultsPseudo_F1WithF1"
         def maxFitnessF1 = resultsPseudo_F1WithF1.max { it.value.first }
         println "maxFitnessF1 $maxFitnessF1"
         println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
@@ -57,6 +57,7 @@ class JobReport {
             runsReport.append("runNumber, F1fromMaxPseudoF1 \n")
         }
         runsReport.append("$runNumber, $overallAverageMaxFit \n")
+        return overallAverageMaxFit
     }
 
     void reportsOut(int runNumber, int jobNumberForPseudoF1selection, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
