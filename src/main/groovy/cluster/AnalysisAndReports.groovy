@@ -18,9 +18,9 @@ class AnalysisAndReports {
     File overallResults = new File("results/overallResultsCluster.txt")
 
     AnalysisAndReports() {
-   }
+    }
 
-    double jobSummary() {
+    void jobSummary() {
 
         def indexAverages = resultsF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum() / m.values().size()] }
         indexAverages.each { print it.key + ' Average: ' + it.value.round(5) + ' ' }
@@ -28,12 +28,11 @@ class AnalysisAndReports {
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
         println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 \n"
-        overallResults << "  ${new Date()}"
+        overallResults << " ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
-
     }
 
-     double f1fromMaxPseudoF1(int runNumber) {
+    double f1fromMaxPseudoF1(int runNumber) {
         File overallResultsMaxFit = new File("results/overallResultsClusterMaxPseudoF1.csv")
         File runsReport = new File("results/runsReport.csv")
 
@@ -43,7 +42,7 @@ class AnalysisAndReports {
         println "maxFitnessF1 keyfirst " + maxFitnessF1.key.first + " maxFitnessF1 " + maxFitnessF1.value.second
 
         //def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Tuple2 t2 -> [t2.first, t2.second().max()] }
-         def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m3 -> [m.keySet()[0].first, m.values().max{pseudoF1 -> pseudoF1.first}.second] }
+        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().max { pseudoF1 -> pseudoF1.first }.second] }
 
         if (!overallResultsMaxFit.exists()) {
             overallResultsMaxFit.append("Index, F1FromMaxFitness, jobsForPseudF1Selection, runNumber, date \n")
@@ -100,7 +99,7 @@ class AnalysisAndReports {
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumberForPseudoF1selection)
         resultsF1 << [(indexAndParams): averageF1forJob]
 
-        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>( pseudo_f1, averageF1forJob)]
+        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
     }
 
     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
