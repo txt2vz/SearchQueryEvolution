@@ -36,12 +36,11 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-                QueryType.OR3_INSTERSECT_SETK,
-             QueryType.OR_INTERSECT_SETK,
+            //    QueryType.OR3_INSTERSECT_SETK,
+             //   QueryType.OR_INTERSECT_SETK,
 
                 QueryType.OR_INTERSECT,
-                QueryType.OR3_INTERSECT,
-
+             //   QueryType.OR3_INTERSECT,
     ]
 
     List<IntersectMethod> intersectMethodList = [
@@ -51,7 +50,7 @@ class ClusterMainECJ extends Evolve {
             //   IntersectMethod.RATIO_POINT_7
     ]
 
-    public ClusterMainECJ() {
+    ClusterMainECJ() {
 
         final Date startRun = new Date()
         List<Double> bestFitForRun = new ArrayList<Double>()
@@ -80,7 +79,7 @@ class ClusterMainECJ extends Evolve {
                             intersectMethodList.each { IntersectMethod intersectMethod ->
                                 QueryListFromChromosome.intersectMethod = intersectMethod
 
-                                //   [true, false].each { intersectBool ->
+                               //    [true, false].each { intersectBool ->
                                 [true].each { intersectBool ->
                                     //      [false].each { intersectBool ->
                                     QueryListFromChromosome.intersectTest = intersectBool
@@ -124,17 +123,17 @@ class ClusterMainECJ extends Evolve {
                 }
             }
 
-            bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
+           // bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
             analysisAndReports.jobSummary()
 
         }
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-        println "Runs from max fitness: $bestFitForRun"
+       // println "Runs from max fitness: $bestFitForRun"
 
-        double average = (double) bestFitForRun.sum() / bestFitForRun.size()
-        println "Average: $average"
+       // double average = (double) bestFitForRun.sum() / bestFitForRun.size()
+       // println "Average: $average"
 
     }
 
