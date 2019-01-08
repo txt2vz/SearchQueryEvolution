@@ -66,7 +66,7 @@ class AnalysisAndReports {
         return overallAverageMaxFit
     }
 
-    void reportsOut(int runNumber, int jobNumberForPseudoF1selection, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
+    void reportsOut(int runNumber, int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall, double pseudo_f1) = calculate_F1_p_r(cfit, true)
 
@@ -77,7 +77,7 @@ class AnalysisAndReports {
         int categoryCountError = numberOfOriginalClasses - numberOfClusters
         int categoryCountErrorAbs = Math.abs(categoryCountError)
 
-        queryFileOut << "${new Date()}  ***** Job: $jobNumberForPseudoF1selection Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
+        queryFileOut << "${new Date()}  ***** Job: $jobNumber Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
@@ -89,13 +89,13 @@ class AnalysisAndReports {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumberForPseudoF1selection, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs $gen, $jobNumberForPseudoF1selection, ${new Date()} \n"
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber, ${new Date()} \n"
 
-        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumberForPseudoF1selection)
+        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumber)
         resultsF1 << [(indexAndParams): averageF1forJob]
 
         resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
