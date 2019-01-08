@@ -205,7 +205,8 @@ class QueryListFromChromosome {
         Set<Integer> genes = [] as Set
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
-        int index = 1  //set k at element 0
+       // int index = 1  //set k at element 0
+        int index = (setk) ? 1 : 0;
         int clusterNumber = 0
         while (clusterNumber < k && index < intChromosome.size()) {
             int gene = intChromosome[index]

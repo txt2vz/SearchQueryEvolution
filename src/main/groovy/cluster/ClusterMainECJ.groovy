@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    public static final int NUMBER_OF_JOBS = 3
+    public static final int NUMBER_OF_JOBS = 5
     static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
@@ -40,7 +40,6 @@ class ClusterMainECJ extends Evolve {
              //   QueryType.OR_INTERSECT_SETK,
 
                 QueryType.OR_INTERSECT,
-             //   QueryType.OR3_INTERSECT,
     ]
 
     List<IntersectMethod> intersectMethodList = [
