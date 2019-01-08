@@ -32,6 +32,8 @@ enum QueryType {
     ORDNFSETK(true),
     ORDNF(true),
     MINSHOULDSETK(true),
+    OR_INTERSECT(false),
+    OR3_INTERSECT(false),
 
     OR_INTERSECT_SETK(true),
     OR1SETK(true),
@@ -101,6 +103,14 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
+            case QueryType.OR_INTERSECT:
+                bqbArray = qlfc.getORIntersect(genome, 100, false)
+                break;
+
+            case QueryType.OR3_INTERSECT:
+                bqbArray = qlfc.getORIntersect(genome, 3, false)
+                break;
+
 //*****************set k methods *************************************************************
 
             case QueryType.OR1SETK:
@@ -108,7 +118,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
             case QueryType.OR_INTERSECT_SETK:
-                bqbArray = qlfc.getORIntersect(genome, 100)
+                bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
 
             case QueryType.OR2_INTERSECT_SETK:

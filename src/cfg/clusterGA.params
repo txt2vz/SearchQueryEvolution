@@ -9,7 +9,7 @@ stat.file = statDump/clout.stat
 
 evalthreads = auto
 breedthreads = auto
-generations = 400
+generations = 120
 
 breed.elite.0 = 2
 
@@ -23,7 +23,7 @@ pop.subpop.1.species.max-gene = 100
 pop.subpop.2.species.max-gene = 100
 pop.subpop.3.species.max-gene = 100
 
-pop.subpop.0.species.min-gene = -1
-pop.subpop.1.species.min-gene = -1
-pop.subpop.2.species.min-gene = -1
-pop.subpop.3.species.min-gene = -1
+pop.subpop.0.species.min-gene = 0
+pop.subpop.1.species.min-gene = 0
+pop.subpop.2.species.min-gene = 0
+pop.subpop.3.species.min-gene = 0

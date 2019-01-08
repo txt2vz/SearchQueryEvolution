@@ -196,9 +196,12 @@ class QueryListFromChromosome {
 
     //********************************   set k methods  *******  first gene is k
 
-    private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome) {
+    private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk=true) {
 
-        final int k = intChromosome[0]
+       // final int k = intChromosome[0]
+        //final int k = Indexes.NUMBER_OF_CLUSTERS
+
+        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
         Set<Integer> genes = [] as Set
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
@@ -220,9 +223,9 @@ class QueryListFromChromosome {
         return getOneWordQueryPerCluster(intChromosome).first
     }
 
-    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster) {
+    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster, boolean setk=true) {
 
-        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
+        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
         BooleanQuery.Builder[] bqbArray = tuple4.first
         final int k = tuple4.second
         assert k == bqbArray.size()
