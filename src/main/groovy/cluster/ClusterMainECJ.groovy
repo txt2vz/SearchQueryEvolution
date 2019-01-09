@@ -13,19 +13,20 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 5
+    static final int NUMBER_OF_JOBS = 10
     static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-//                      IndexEnum.NG3,
-        IndexEnum.CRISIS3,
-        IndexEnum.CLASSIC4,
-        IndexEnum.R4,
-        IndexEnum.R5,
-        IndexEnum.NG5,
-        IndexEnum.NG6
+          IndexEnum.NG3,
+          IndexEnum.CRISIS3,
+          IndexEnum.CLASSIC4,
+          IndexEnum.R4,
+          IndexEnum.R5,
+          IndexEnum.NG5,
+          IndexEnum.R6,
+          IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
@@ -36,7 +37,7 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-            //    QueryType.OR3_INSTERSECT_SETK,
+                QueryType.OR3_INSTERSECT_SETK,
              //   QueryType.OR_INTERSECT_SETK,
 
                 QueryType.OR_INTERSECT,

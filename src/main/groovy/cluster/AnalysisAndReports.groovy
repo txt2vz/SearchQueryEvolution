@@ -128,7 +128,7 @@ class AnalysisAndReports {
 
             if (queryReport) {
 
-                String out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ"
+                String out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ hitsInCategory: $maxCatHits "
                 println out
                 queryFileOut << out + "\n"
             }
