@@ -13,20 +13,20 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 10
+    static final int NUMBER_OF_JOBS = 2
     static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-          IndexEnum.NG3,
-          IndexEnum.CRISIS3,
-          IndexEnum.CLASSIC4,
-          IndexEnum.R4,
-          IndexEnum.R5,
-          IndexEnum.NG5,
-          IndexEnum.R6,
-          IndexEnum.NG6
+      IndexEnum.NG3,
+      IndexEnum.CRISIS3,
+      IndexEnum.CLASSIC4,
+      IndexEnum.R4,
+      IndexEnum.R5,
+      IndexEnum.NG5,
+      IndexEnum.R6,
+      IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
@@ -37,10 +37,10 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-                QueryType.OR3_INSTERSECT_SETK,
-             //   QueryType.OR_INTERSECT_SETK,
-
-                QueryType.OR_INTERSECT,
+            QueryType.OR3_INSTERSECT_SETK,
+            QueryType.OR_INTERSECT,
+            //   QueryType.OR_INTERSECT_SETK,
+            //     QueryType.OR3_INTERSECT,
     ]
 
     List<IntersectMethod> intersectMethodList = [
@@ -60,7 +60,7 @@ class ClusterMainECJ extends Evolve {
             clusteringIndexesList.each { IndexEnum ie ->
 
                 NUMBER_OF_JOBS.times { job ->
-                    EvolutionState state;
+                    EvolutionState state = new EvolutionState()
 
                     println "Index Enum ie: $ie"
                     Indexes.instance.setIndex(ie)
@@ -79,9 +79,9 @@ class ClusterMainECJ extends Evolve {
                             intersectMethodList.each { IntersectMethod intersectMethod ->
                                 QueryListFromChromosome.intersectMethod = intersectMethod
 
-                               //    [true, false].each { intersectBool ->
+                                //      [true, false].each { intersectBool ->
                                 [true].each { intersectBool ->
-                                    //      [false].each { intersectBool ->
+                                    //         [false].each { intersectBool ->
                                     QueryListFromChromosome.intersectTest = intersectBool
 
 
@@ -123,17 +123,18 @@ class ClusterMainECJ extends Evolve {
                 }
             }
 
-           // bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
+            bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
             analysisAndReports.jobSummary()
 
         }
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-       // println "Runs from max fitness: $bestFitForRun"
+        println "Runs from max fitness: $bestFitForRun"
 
-       // double average = (double) bestFitForRun.sum() / bestFitForRun.size()
-       // println "Average: $average"
+
+        double average = (double) bestFitForRun.sum() / bestFitForRun.size()
+        println "Average: $average"
 
     }
 

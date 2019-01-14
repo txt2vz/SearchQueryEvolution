@@ -29,8 +29,8 @@ class BuildIndex {
     }
 
     BuildIndex() {
-        String indexPath = 'indexes/R6'
-        String docsPath = /C:\Users\aceslh\Dataset\r6/
+        String indexPath = 'indexes/R5-200'
+        String docsPath = /C:\Users\aceslh\Dataset\r5o/
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
@@ -57,7 +57,7 @@ class BuildIndex {
             int docCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 100) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 200) // && categoryNumber <3)
 
                 {
                     def doc = new Document()

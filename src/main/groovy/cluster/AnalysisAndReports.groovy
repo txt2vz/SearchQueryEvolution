@@ -51,19 +51,19 @@ class AnalysisAndReports {
         }
 
         println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
-        double overallAverageMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
+        double overallAverageForRunUsingMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
 
-        println "overallAverageMaxFit $overallAverageMaxFit for runNumber $runNumber"
+        println "overallAverageForRunUsingMaxFit $overallAverageForRunUsingMaxFit for runNumber $runNumber"
 
         if (!runsReport.exists()) {
-            runsReport.append("runNumber, F1fromMaxPseudoF1 \n")
+            runsReport.append("runNumber, F1fromMaxPseudoF1, Date \n")
         }
 
         overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
-        overallResults << "OverallAverageMaxFit ${overallAverageMaxFit.round(5)} for runNumber $runNumber \n \n"
+        overallResults << "OverallAverageMaxFit ${overallAverageForRunUsingMaxFit.round(5)} for runNumber $runNumber \n \n"
 
-        runsReport.append("$runNumber, $overallAverageMaxFit \n")
-        return overallAverageMaxFit
+        runsReport.append("$runNumber, $overallAverageForRunUsingMaxFit, ${new Date()} \n")
+        return overallAverageForRunUsingMaxFit
     }
 
     void reportsOut(int runNumber, int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
@@ -83,17 +83,17 @@ class AnalysisAndReports {
         println messageOut
 
         queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
-        queryFileOut << "PosHits: ${cfit.hitsMatchingOnlyOneQuery} NegHits: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)} \n"
+        queryFileOut << "PosHits: ${cfit.hitsMatchingOnlyOneQuery} NegHits: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)}  \n"
         queryFileOut << messageOut + "\n"
         queryFileOut << "************************************************ \n \n"
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, intersectTest, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, runNumber, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber, ${new Date()} \n"
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber, $runNumber, ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumber)
         resultsF1 << [(indexAndParams): averageF1forJob]

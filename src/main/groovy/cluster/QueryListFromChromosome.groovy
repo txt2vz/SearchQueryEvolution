@@ -14,7 +14,7 @@ import org.apache.lucene.search.spans.SpanFirstQuery
 import org.apache.lucene.search.spans.SpanTermQuery
 
 @CompileStatic
-enum  IntersectMethod {
+enum IntersectMethod {
 
     RATIO_POINT_3(0.3d),
     RATIO_POINT_5(0.5d),
@@ -43,11 +43,66 @@ class QueryListFromChromosome {
         termQueryArray = tq
         println "term query size " + tq.size()
         println "tq $tq"
-
-       // intersectWordPairList = qti.getIntersectList(termQueryArray, intersectMethod.minIntersectValue)
-       // println "intersectWordPairList.size() " + intersectWordPairList.size() + " method " + intersectMethod
     }
 
+    private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
+
+        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        Set<Integer> genes = [] as Set
+        BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
+
+        //set k at element 0?
+        int index = (setk) ? 1 : 0;
+        int clusterNumber = 0
+        while (clusterNumber < k && index < intChromosome.size()) {
+            int gene = intChromosome[index]
+
+            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                clusterNumber++
+            }
+            index++
+        }
+        return new Tuple4(bqbL, k, index, genes)
+    }
+
+    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
+        return getOneWordQueryPerCluster(intChromosome).first
+    }
+
+    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster, boolean setk = true) {
+
+        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
+        BooleanQuery.Builder[] bqbArray = tuple4.first
+        final int k = tuple4.second
+        assert k == bqbArray.size()
+
+        int index = tuple4.third
+        Set<Integer> genes = tuple4.fourth
+
+        for (int i = index; i < intChromosome.size() && i < k * maxQueryWordsPerCluster; i++) {
+
+            final int gene = intChromosome[i]
+            final int clusterNumber = i % k
+
+            BooleanQuery rootq = bqbArray[clusterNumber].build()
+            Query tq0 = rootq.clauses().first().getQuery()
+            TermQuery tqNew = termQueryArray[gene]
+
+            if (intersectTest) {
+                //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
+                if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                    bqbArray[clusterNumber].add(tqNew, bco)
+                }
+            } else if (genes.add(gene)) {
+                bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+            }
+        }
+        return bqbArray
+    }
+
+
+   //Alternate methods
     BooleanQuery.Builder[] getSimple(
             final int[] intChromosome, int minShould = 1, BooleanClause.Occur bco = BooleanClause.Occur.SHOULD) {
 
@@ -196,65 +251,6 @@ class QueryListFromChromosome {
 
     //********************************   set k methods  *******  first gene is k
 
-    private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk=true) {
-
-       // final int k = intChromosome[0]
-        //final int k = Indexes.NUMBER_OF_CLUSTERS
-
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
-        Set<Integer> genes = [] as Set
-        BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
-
-       // int index = 1  //set k at element 0
-        int index = (setk) ? 1 : 0;
-        int clusterNumber = 0
-        while (clusterNumber < k && index < intChromosome.size()) {
-            int gene = intChromosome[index]
-
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
-                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
-                clusterNumber++
-            }
-            index++
-        }
-        return new Tuple4(bqbL, k, index, genes)
-    }
-
-    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
-        return getOneWordQueryPerCluster(intChromosome).first
-    }
-
-    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster, boolean setk=true) {
-
-        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
-        BooleanQuery.Builder[] bqbArray = tuple4.first
-        final int k = tuple4.second
-        assert k == bqbArray.size()
-
-        int index = tuple4.third
-        Set<Integer> genes = tuple4.fourth
-
-        for (int i = index; i < intChromosome.size() && i < k * maxQueryWordsPerCluster; i++) {
-
-            final int gene = intChromosome[i]
-            final int clusterNumber = i % k
-
-            BooleanQuery rootq = bqbArray[clusterNumber].build()
-            Query tq0 = rootq.clauses().first().getQuery()
-            TermQuery tqNew = termQueryArray[gene]
-
-            if (intersectTest) {
-                //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
-             //   if ((QueryTermIntersect.getIntersectRatio(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
-                if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
-                    bqbArray[clusterNumber].add(tqNew, bco)
-                }
-            } else if (genes.add(gene)) {
-                bqbArray[clusterNumber].add(termQueryArray[gene], bco)
-            }
-        }
-        return bqbArray
-    }
 
     BooleanQuery.Builder[] getORIntersectCheckList(int[] intChromosome, int maxQueryWordsPerCluster) {
 

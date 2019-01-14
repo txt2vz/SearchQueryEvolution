@@ -32,6 +32,7 @@ enum IndexEnum {
 
     R4('indexes/R4', 4),
     R5('indexes/R5', 5),
+    R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
     R10('indexes/R10', 10)
 
