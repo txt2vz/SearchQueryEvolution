@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 2
+    static final int NUMBER_OF_JOBS = 10
     static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
