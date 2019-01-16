@@ -19,14 +19,14 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-      IndexEnum.NG3,
-      IndexEnum.CRISIS3,
-      IndexEnum.CLASSIC4,
-      IndexEnum.R4,
-      IndexEnum.R5,
-      IndexEnum.NG5,
-      IndexEnum.R6,
-      IndexEnum.NG6
+            IndexEnum.NG3,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
+            IndexEnum.R5,
+            IndexEnum.NG5,
+            IndexEnum.R6,
+            IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
@@ -130,12 +130,12 @@ class ClusterMainECJ extends Evolve {
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-        println "Runs from max fitness: $bestFitForRun"
 
-
-        double average = (double) bestFitForRun.sum() / bestFitForRun.size()
-        println "Average: $average"
-
+        if (NUMBER_OF_RUNS > 1) {
+            println "Runs from max fitness: $bestFitForRun"
+            double average = (double) bestFitForRun.sum() / bestFitForRun.size()
+            println "Average: $average"
+        }
     }
 
     static main(args) {
