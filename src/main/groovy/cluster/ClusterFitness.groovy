@@ -10,7 +10,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5
+    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5, UNIQUE_HITS_COUNT
 }
 
 @CompileStatic
@@ -36,12 +36,12 @@ public class ClusterFitness extends SimpleFitness {
         return baseFitness;
     }
 
-    void setClusterFitness(List <BooleanQuery.Builder> bqbList) {
+    void setClusterFitness(List<BooleanQuery.Builder> bqbList) {
 
         k = bqbList.size()
         baseFitness = 0.0
 
-        Tuple3 <Map<Query,Integer>, Integer, Integer> t3 = getPositiveHits(bqbList)
+        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = getUniqueHits(bqbList)
         queryMap = t3.first.asImmutable()
         hitsMatchingOnlyOneQuery = t3.second
         totalHits = t3.third
@@ -49,9 +49,10 @@ public class ClusterFitness extends SimpleFitness {
         hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
         missedDocs = totalDocs - totalHits
 
-        if (totalHits>0) {
+        if (totalHits > 0) {
             pseudo_precision = hitsMatchingOnlyOneQuery / totalHits
-            pseudo_recall = totalHits / totalDocs
+            //  pseudo_recall = totalHits / totalDocs
+            pseudo_recall = hitsMatchingOnlyOneQuery / totalDocs
             pseudo_f1 = 2 * (pseudo_precision * pseudo_recall) / (pseudo_precision + pseudo_recall)
         }
         switch (fitnessMethod) {
@@ -64,46 +65,50 @@ public class ClusterFitness extends SimpleFitness {
                 double f1WithPenalty = pseudo_f1 - (0.03 * k)
                 baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
                 break
+
+            case fitnessMethod.UNIQUE_HITS_COUNT:
+              //  baseFitness = pseudo_recall
+            baseFitness = hitsMatchingOnlyOneQuery
         }
     }
 
-    private Tuple3 <Map<Query,Integer>, Integer, Integer> getPositiveHits(List<BooleanQuery.Builder> bqbList) {
+    private Tuple3<Map<Query, Integer>, Integer, Integer> getUniqueHits(List<BooleanQuery.Builder> bqbList) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
         BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
 
-        int oneCategoryOnlyHits = 0
-        for (int i=0; i<bqbList.size(); i++){
+        int totalUniqueHits = 0
+        for (int i = 0; i < bqbList.size(); i++) {
             Query q = bqbList[i].build()
             totalHitsBQB.add(q, BooleanClause.Occur.SHOULD)
 
             BooleanQuery.Builder bqbOneCategoryOnly = new BooleanQuery.Builder()
             bqbOneCategoryOnly.add(q, BooleanClause.Occur.SHOULD)
 
-            for (int j=0; j<bqbList.size(); j++) {
-                if (j != i ){
+            for (int j = 0; j < bqbList.size(); j++) {
+                if (j != i) {
                     bqbOneCategoryOnly.add(bqbList[j].build(), BooleanClause.Occur.MUST_NOT)
                 }
             }
 
             TotalHitCountCollector collector = new TotalHitCountCollector();
             Indexes.indexSearcher.search(bqbOneCategoryOnly.build(), collector);
-            int qPositiveHits = collector.getTotalHits()
+            int qUniqueHits = collector.getTotalHits()
 
-            qMap.put(q, qPositiveHits)
-            oneCategoryOnlyHits += qPositiveHits
+            qMap.put(q, qUniqueHits)
+            totalUniqueHits += qUniqueHits
         }
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
         Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
         int totalHitsAllQueries = collector.getTotalHits();
 
-        return  new Tuple3 (qMap, oneCategoryOnlyHits, totalHitsAllQueries)
+        return new Tuple3(qMap, totalUniqueHits, totalHitsAllQueries)
     }
 
     void generationStats(long generation) {
         println "${queryShort()}"
         println "pseudo_precision: ${pseudo_precision.round(3)} pseudo_recall: ${pseudo_recall.round(3)} pseudo_f1: ${pseudo_f1.round(3)} baseFitness: ${baseFitness.round(3)}"
-        println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs posHits: $hitsMatchingOnlyOneQuery negHits: $hitsMatchingTwoOrMoreQueries  "
+        println "totalHits: $totalHits totalDocs: $totalDocs missedDocs: $missedDocs uniqueHits: $hitsMatchingOnlyOneQuery hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
         println ""
     }
 
