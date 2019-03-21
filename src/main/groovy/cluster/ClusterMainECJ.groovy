@@ -21,7 +21,7 @@ class ClusterMainECJ extends Evolve {
 
 //            IndexEnum.NG3,
             IndexEnum.CRISIS3,
-//            IndexEnum.CLASSIC4,
+            IndexEnum.CLASSIC4,
 //            IndexEnum.R4,
 //            IndexEnum.R5,
 //            IndexEnum.NG5,
