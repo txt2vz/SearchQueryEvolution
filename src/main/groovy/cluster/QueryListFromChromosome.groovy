@@ -16,11 +16,14 @@ import org.apache.lucene.search.spans.SpanTermQuery
 @CompileStatic
 enum IntersectMethod {
 
+    NONE(0.0d),
+    RATIO_POINT_2(0.2d),
     RATIO_POINT_3(0.3d),
     RATIO_POINT_4(0.4d),
     RATIO_POINT_5(0.5d),
     RATIO_POINT_6(0.6d),
-    RATIO_POINT_7(0.7d)
+    RATIO_POINT_7(0.7d),
+    RATIO_POINT_8(0.8d)
 
     IntersectMethod(double minVal) {
         minIntersectValue = minVal

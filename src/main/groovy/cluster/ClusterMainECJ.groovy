@@ -20,21 +20,19 @@ class ClusterMainECJ extends Evolve {
     def clusteringIndexesList = [
 
             IndexEnum.NG3,
-     //       IndexEnum.CRISIS3,
-      //      IndexEnum.CLASSIC4,
-       //     IndexEnum.R4,
-      //      IndexEnum.R5,
-       //     IndexEnum.NG5,
-        //    IndexEnum.R6,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
+            IndexEnum.R5,
+            IndexEnum.NG5,
+            IndexEnum.R6,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
 
-            //FitnessMethod.PSEUDOF1,
-      //      FitnessMethod.UNIQUE_HITS_COUNT,
-       //     FitnessMethod.UNIQUE_HITS_K_PENALTY_3
-                FitnessMethod.PSEUDOF1_K_PENALTY0_3
+            FitnessMethod.UNIQUE_HITS_K_PENALTY_3,
+         //   FitnessMethod.UNIQUE_HITS_COUNT
     ]
 
     List<QueryType> queryTypesList = [
@@ -47,10 +45,14 @@ class ClusterMainECJ extends Evolve {
 
     List<IntersectMethod> intersectMethodList = [
 
-            //     IntersectMethod.RATIO_POINT_3,
+            IntersectMethod.NONE,
+            IntersectMethod.RATIO_POINT_2,
+            IntersectMethod.RATIO_POINT_3,
+            IntersectMethod.RATIO_POINT_4,
             IntersectMethod.RATIO_POINT_5,
             IntersectMethod.RATIO_POINT_6,
-            //   IntersectMethod.RATIO_POINT_7
+            IntersectMethod.RATIO_POINT_7,
+            IntersectMethod.RATIO_POINT_8,
     ]
 
     ClusterMainECJ() {
@@ -78,16 +80,17 @@ class ClusterMainECJ extends Evolve {
                             //ClusterFitness.fitnessMethod = qt.setk ? fitnessMethod : FitnessMethod.PSEUDOF1
                            // ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.PSEUDOF1_K_PENALTY0_3 : FitnessMethod.PSEUDOF1
                            // ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT
-                            ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_K_PENALTY_3
+                           // ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_K_PENALTY_3
+                            ClusterFitness.fitnessMethod = fitnessMethod
 
 
                             intersectMethodList.each { IntersectMethod intersectMethod ->
                                 QueryListFromChromosome.intersectMethod = intersectMethod
 
                                 //      [true, false].each { intersectBool ->
-                                [true].each { intersectBool ->
+                              //  [true].each { intersectBool ->
                                     //         [false].each { intersectBool ->
-                                    QueryListFromChromosome.intersectTest = intersectBool
+                                    QueryListFromChromosome.intersectTest = intersectMethod != IntersectMethod.NONE
 
 
                                     ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
@@ -118,7 +121,7 @@ class ClusterMainECJ extends Evolve {
                                     println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
                                     analysisAndReports.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
-                                }
+                              //  }
                             }
                         }
                     }
@@ -128,7 +131,7 @@ class ClusterMainECJ extends Evolve {
                 }
             }
 
-            bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
+         //   bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
             analysisAndReports.jobSummary()
 
         }
