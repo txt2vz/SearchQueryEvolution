@@ -10,7 +10,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5, UNIQUE_HITS_COUNT
+    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5, UNIQUE_HITS_COUNT, UNIQUE_HITS_K_PENALTY_3
 }
 
 @CompileStatic
@@ -57,6 +57,17 @@ public class ClusterFitness extends SimpleFitness {
         }
         switch (fitnessMethod) {
 
+            case fitnessMethod.UNIQUE_HITS_COUNT:
+                baseFitness = hitsMatchingOnlyOneQuery
+                break
+
+            case fitnessMethod.UNIQUE_HITS_K_PENALTY_3:
+              //  final double uniqueWithPenalty = hitsMatchingOnlyOneQuery - (0.03 * k)
+
+                baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
+          //      baseFitness = hitsMatchingOnlyOneQuery * Math.pow(0.97d, (double)(k)) //> 0 ? uniqueWithPenalty : 0
+                break
+
             case fitnessMethod.PSEUDOF1:
                 baseFitness = pseudo_f1
                 break
@@ -65,10 +76,6 @@ public class ClusterFitness extends SimpleFitness {
                 double f1WithPenalty = pseudo_f1 - (0.03 * k)
                 baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
                 break
-
-            case fitnessMethod.UNIQUE_HITS_COUNT:
-              //  baseFitness = pseudo_recall
-            baseFitness = hitsMatchingOnlyOneQuery
         }
     }
 

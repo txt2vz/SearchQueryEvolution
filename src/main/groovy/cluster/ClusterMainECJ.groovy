@@ -13,34 +13,35 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 1
+    static final int NUMBER_OF_JOBS = 2
     static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-//            IndexEnum.NG3,
-            IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-//            IndexEnum.R4,
-//            IndexEnum.R5,
-//            IndexEnum.NG5,
-//            IndexEnum.R6,
-//            IndexEnum.NG6
+            IndexEnum.NG3,
+     //       IndexEnum.CRISIS3,
+      //      IndexEnum.CLASSIC4,
+       //     IndexEnum.R4,
+      //      IndexEnum.R5,
+       //     IndexEnum.NG5,
+        //    IndexEnum.R6,
+            IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
 
             //FitnessMethod.PSEUDOF1,
-            FitnessMethod.UNIQUE_HITS_COUNT,
-            //     FitnessMethod.PSEUDOF1_K_PENALTY0_3
+      //      FitnessMethod.UNIQUE_HITS_COUNT,
+       //     FitnessMethod.UNIQUE_HITS_K_PENALTY_3
+                FitnessMethod.PSEUDOF1_K_PENALTY0_3
     ]
 
     List<QueryType> queryTypesList = [
 
-         //   QueryType.OR3_INSTERSECT_SETK,
-            QueryType.OR_INTERSECT,
-           //    QueryType.OR_INTERSECT_SETK,
+    //        QueryType.OR3_INSTERSECT_SETK,
+     //       QueryType.OR_INTERSECT,
+               QueryType.OR_INTERSECT_SETK,
          ///        QueryType.OR3_INTERSECT,
     ]
 
@@ -48,6 +49,7 @@ class ClusterMainECJ extends Evolve {
 
             //     IntersectMethod.RATIO_POINT_3,
             IntersectMethod.RATIO_POINT_5,
+            IntersectMethod.RATIO_POINT_6,
             //   IntersectMethod.RATIO_POINT_7
     ]
 
@@ -75,7 +77,8 @@ class ClusterMainECJ extends Evolve {
 
                             //ClusterFitness.fitnessMethod = qt.setk ? fitnessMethod : FitnessMethod.PSEUDOF1
                            // ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.PSEUDOF1_K_PENALTY0_3 : FitnessMethod.PSEUDOF1
-                            ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT
+                           // ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT
+                            ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_K_PENALTY_3
 
 
                             intersectMethodList.each { IntersectMethod intersectMethod ->

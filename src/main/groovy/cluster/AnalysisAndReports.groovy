@@ -12,6 +12,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 class AnalysisAndReports {
     def resultsF1 = [:]
+    def categoryAccuracy = [:]
     def resultsPseudo_F1WithF1 = [:]
     def resultsDir = new File(/results/).mkdir()
     File queryFileOut = new File('results/Queries.txt')
@@ -27,9 +28,17 @@ class AnalysisAndReports {
         indexAverages.each { overallResults.append(it.key + ' Average: ' + it.value.round(5) + " ") }
 
         double overallAverage = resultsF1.values().sum() / resultsF1.size()
-        println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 \n"
+        println "\nOverall Averages:  ${overallAverage.round(5)} ${new Date()} resultsF1: $resultsF1 "
+        println "CategoryCountError : $categoryAccuracy"
+
+        def categoryErrorTotal = categoryAccuracy.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum()] }
+
+        println "Category Error $categoryErrorTotal"
+        println "Category Error total: " + categoryErrorTotal.values().sum()
+
         overallResults << " ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
+        overallResults << "category Error tototal: " + categoryErrorTotal.values().sum() + " Category Error by cateogry: $categoryErrorTotal \n"
     }
 
     double f1fromMaxPseudoF1(int runNumber) {
@@ -95,8 +104,9 @@ class AnalysisAndReports {
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
                 "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, ${QueryListFromChromosome.intersectTest}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber, $runNumber, ${new Date()} \n"
 
-        Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, jobNumber)
+        Tuple6 indexAndParams = new Tuple6(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectTest, QueryListFromChromosome.intersectMethod, jobNumber)
         resultsF1 << [(indexAndParams): averageF1forJob]
+        categoryAccuracy << [(indexAndParams): categoryCountErrorAbs]
 
         resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
     }
