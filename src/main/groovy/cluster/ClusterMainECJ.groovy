@@ -19,40 +19,40 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-            IndexEnum.NG3,
+            //     IndexEnum.NG3,
             IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.R4,
-            IndexEnum.R5,
-            IndexEnum.NG5,
-            IndexEnum.R6,
+            //    IndexEnum.CLASSIC4,
+            //     IndexEnum.R4,
+            //    IndexEnum.R5,
+            //   IndexEnum.NG5,
+            //   IndexEnum.R6,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
 
-            FitnessMethod.UNIQUE_HITS_K_PENALTY_3,
-         //   FitnessMethod.UNIQUE_HITS_COUNT
+            FitnessMethod.UNIQUE_HITS_K_PENALTY,
+            FitnessMethod.UNIQUE_HITS_COUNT
     ]
 
     List<QueryType> queryTypesList = [
 
-    //        QueryType.OR3_INSTERSECT_SETK,
-     //       QueryType.OR_INTERSECT,
-               QueryType.OR_INTERSECT_SETK,
-         ///        QueryType.OR3_INTERSECT,
+            //        QueryType.OR3_INSTERSECT_SETK,
+            QueryType.OR,
+            QueryType.OR_SETK,
+            ///        QueryType.OR3_INTERSECT,
     ]
 
     List<IntersectMethod> intersectMethodList = [
 
             IntersectMethod.NONE,
-            IntersectMethod.RATIO_POINT_2,
-            IntersectMethod.RATIO_POINT_3,
-            IntersectMethod.RATIO_POINT_4,
+            //   IntersectMethod.RATIO_POINT_2,
+            //  IntersectMethod.RATIO_POINT_3,
+            //  IntersectMethod.RATIO_POINT_4,
             IntersectMethod.RATIO_POINT_5,
-            IntersectMethod.RATIO_POINT_6,
-            IntersectMethod.RATIO_POINT_7,
-            IntersectMethod.RATIO_POINT_8,
+            //  IntersectMethod.RATIO_POINT_6,
+            //   IntersectMethod.RATIO_POINT_7,
+            //  IntersectMethod.RATIO_POINT_8,
     ]
 
     ClusterMainECJ() {
@@ -75,63 +75,51 @@ class ClusterMainECJ extends Evolve {
                         ClusterQueryECJ.queryType = qt
                         String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
-                        fitnessMethodsList.each { FitnessMethod fitnessMethod ->
+                        //  fitnessMethodsList.each { FitnessMethod fitnessMethod ->
 
-                            //ClusterFitness.fitnessMethod = qt.setk ? fitnessMethod : FitnessMethod.PSEUDOF1
-                           // ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.PSEUDOF1_K_PENALTY0_3 : FitnessMethod.PSEUDOF1
-                           // ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT
-                           // ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_K_PENALTY_3
-                            ClusterFitness.fitnessMethod = fitnessMethod
+                        ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.UNIQUE_HITS_K_PENALTY : FitnessMethod.UNIQUE_HITS_COUNT
+                        //   ClusterFitness.fitnessMethod = fitnessMethod
 
 
-                            intersectMethodList.each { IntersectMethod intersectMethod ->
-                                QueryListFromChromosome.intersectMethod = intersectMethod
+                        intersectMethodList.each { IntersectMethod intersectMethod ->
+                            QueryListFromChromosome.intersectMethod = intersectMethod
 
-                                //      [true, false].each { intersectBool ->
-                              //  [true].each { intersectBool ->
-                                    //         [false].each { intersectBool ->
-                                    QueryListFromChromosome.intersectTest = intersectMethod != IntersectMethod.NONE
+                            ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
-
-                                    ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
-
-                                    state = initialize(parameters, job)
-                                    if (NUMBER_OF_JOBS >= 1) {
-                                        final String jobFilePrefix = "job." + job;
-                                        state.output.setFilePrefix(jobFilePrefix);
-                                        state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
-                                    }
-                                    //  state.parameters.set(new Parameter("generations"), "7")
-                                    state.output.systemMessage("Job: " + job);
-                                    state.job = new Object[1]
-                                    state.job[0] = new Integer(job)
-
-                                    state.run(EvolutionState.C_STARTED_FRESH);
-                                    int popSize = 0;
-                                    ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
-                                        popSize = popSize + sbp.individuals.size()
-                                        sbp.individuals.max() { ind ->
-                                            ind.fitness.fitness()
-                                        }.fitness
-                                    }.max { it.fitness() }
-
-                                    final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
-                                    final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
-                                    final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
-                                    println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
-
-                                    analysisAndReports.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
-                              //  }
+                            state = initialize(parameters, job)
+                            if (NUMBER_OF_JOBS >= 1) {
+                                final String jobFilePrefix = "job." + job;
+                                state.output.setFilePrefix(jobFilePrefix);
+                                state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
                             }
+                            //  state.parameters.set(new Parameter("generations"), "7")
+                            state.output.systemMessage("Job: " + job);
+                            state.job = new Object[1]
+                            state.job[0] = new Integer(job)
+
+                            state.run(EvolutionState.C_STARTED_FRESH);
+                            int popSize = 0;
+                            ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
+                                popSize = popSize + sbp.individuals.size()
+                                sbp.individuals.max() { ind ->
+                                    ind.fitness.fitness()
+                                }.fitness
+                            }.max { it.fitness() }
+
+                            final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
+                            final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
+                            final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
+                            println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
+
+                            analysisAndReports.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                         }
                     }
                     cleanup(state);
                     println "--------END JOB $job  -----------------------------------------------"
-
                 }
             }
 
-         //   bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
+            //   bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
             analysisAndReports.jobSummary()
 
         }

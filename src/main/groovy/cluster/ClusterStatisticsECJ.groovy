@@ -36,10 +36,10 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
 
         File fcsv = new File('results/generationReport.csv')
         if (!fcsv.exists()) {
-            fcsv << 'generation, averageF1, averagePrecision, averageRecall, baseFitness, indexName, fitnessMethod, intersectTest, queryType, date \n'
+            fcsv << 'generation, averageF1, averagePrecision, averageRecall, baseFitness, indexName, fitnessMethod, intersectMethod, queryType, date \n'
         }
 
-        fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectTest}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
+        fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectMethod}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
 
     }
 }

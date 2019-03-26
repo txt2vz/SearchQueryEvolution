@@ -21,7 +21,11 @@ import org.apache.lucene.search.TermQuery
 @CompileStatic
 @TypeChecked
 enum QueryType {
+   // OR(false),
+
     OR(false),
+    OR_SETK(true),
+
     AND(false),
     OR_WITH_AND_SUBQ(false),
     AND_WITH_OR_SUBQ(false),
@@ -32,10 +36,10 @@ enum QueryType {
     ORDNFSETK(true),
     ORDNF(true),
     MINSHOULDSETK(true),
-    OR_INTERSECT(false),
+
     OR3_INTERSECT(false),
 
-    OR_INTERSECT_SETK(true),
+
     OR1SETK(true),
     OR2_INTERSECT_SETK(true),
     OR3_INSTERSECT_SETK(true),
@@ -75,10 +79,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
 
-            case QueryType.OR:
-                bqbArray = qlfc.getSimple(genome)
-                break;
-
+       //     case QueryType.OR:
+      //          bqbArray = qlfc.getSimple(genome)
+    //            break;
+//
             case QueryType.AND_WITH_OR_SUBQ:
                 bqbArray = qlfc.getDNFQueryList(genome, false)
                 break;
@@ -103,7 +107,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
-            case QueryType.OR_INTERSECT:
+            case QueryType.OR:
                 bqbArray = qlfc.getORIntersect(genome, 100, false)
                 break;
 
@@ -117,7 +121,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getOR1QueryList(genome)
                 break;
 
-            case QueryType.OR_INTERSECT_SETK:
+            case QueryType.OR_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
 

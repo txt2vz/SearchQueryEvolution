@@ -34,15 +34,16 @@ enum IntersectMethod {
 
 @CompileStatic
 class QueryListFromChromosome {
-    static boolean intersectTest
+
+    // static boolean intersectTest
     static IntersectMethod intersectMethod = IntersectMethod.RATIO_POINT_5
 
     final TermQuery[] termQueryArray
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
 
-  //  QueryTermIntersect qti = new QueryTermIntersect()
-   // final List<Tuple2<String, String>> intersectWordPairList
+    //  QueryTermIntersect qti = new QueryTermIntersect()
+    // final List<Tuple2<String, String>> intersectWordPairList
 
     QueryListFromChromosome(TermQuery[] tq) {
         termQueryArray = tq
@@ -94,20 +95,23 @@ class QueryListFromChromosome {
             Query tq0 = rootq.clauses().first().getQuery()
             TermQuery tqNew = termQueryArray[gene]
 
-            if (intersectTest) {
-                //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
-                if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
-                    bqbArray[clusterNumber].add(tqNew, bco)
+            if (intersectMethod == IntersectMethod.NONE) {
+                if (genes.add(gene)) {
+                    bqbArray[clusterNumber].add(termQueryArray[gene], bco)
                 }
-            } else if (genes.add(gene)) {
-                bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+            }
+
+            //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
+            else if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+                bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
+        // }
+
         return bqbArray
     }
 
-
-   //Alternate methods
+//Alternate methods
     BooleanQuery.Builder[] getSimple(
             final int[] intChromosome, int minShould = 1, BooleanClause.Occur bco = BooleanClause.Occur.SHOULD) {
 
@@ -254,7 +258,7 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
-    //********************************   set k methods  *******  first gene is k
+//********************************   set k methods  *******  first gene is k
 
 
 //    BooleanQuery.Builder[] getORIntersectCheckList(int[] intChromosome, int maxQueryWordsPerCluster) {
@@ -290,7 +294,7 @@ class QueryListFromChromosome {
 //        return bqbArray
 //    }
 
-    //first word is OR_segments followed by DNF clauses
+//first word is OR_segments followed by DNF clauses
     BooleanQuery.Builder[] getOR1DNF(int[] intChromosome) {
 
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome)
@@ -353,4 +357,5 @@ class QueryListFromChromosome {
         }
         return bqbArray
     }
+
 }
