@@ -70,9 +70,9 @@ class AnalysisAndReportsTest extends Specification {
 
 
 then:
-        println  "xx " + analysisAndReports.f1fromMaxPseudoF1(0)
+       // println  "xx " + analysisAndReports.f1fromMaxPseudoF1(0)
         println "   analysisAndReports.resultsPseudo_F1WithF1 " +   analysisAndReports.resultsPseudo_F1WithF1
-analysisAndReports.f1fromMaxPseudoF1(0) == 0.5
+//analysisAndReports.f1fromMaxPseudoF1(0) == 0.5
 
 
 

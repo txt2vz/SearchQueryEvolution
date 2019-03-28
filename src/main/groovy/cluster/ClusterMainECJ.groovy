@@ -14,38 +14,41 @@ import index.Indexes
 class ClusterMainECJ extends Evolve {
 
     static final int NUMBER_OF_JOBS = 2
-    static final int NUMBER_OF_RUNS = 1
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 
-            //     IndexEnum.NG3,
-            IndexEnum.CRISIS3,
-            //    IndexEnum.CLASSIC4,
-            //     IndexEnum.R4,
-            //    IndexEnum.R5,
-            //   IndexEnum.NG5,
-            //   IndexEnum.R6,
+            IndexEnum.NG3,
+//            IndexEnum.CRISIS3,
+//            IndexEnum.CLASSIC4,
+//            IndexEnum.R4,
+//            IndexEnum.R5,
+//            IndexEnum.NG5,
+//            IndexEnum.R6,
             IndexEnum.NG6
     ]
 
     List<FitnessMethod> fitnessMethodsList = [
 
             FitnessMethod.UNIQUE_HITS_K_PENALTY,
-            FitnessMethod.UNIQUE_HITS_COUNT
+            //   FitnessMethod.UNIQUE_HITS_COUNT
     ]
+
+    List<Double> kPenalty = [0.03d]
+            //[0.01d, 0.03d,  0.05d]
+            //[0.01d, 0.02d, 0.03d, 0.04d, 0.05d]
 
     List<QueryType> queryTypesList = [
 
             //        QueryType.OR3_INSTERSECT_SETK,
-            QueryType.OR,
+            //   QueryType.OR,
             QueryType.OR_SETK,
             ///        QueryType.OR3_INTERSECT,
     ]
 
     List<IntersectMethod> intersectMethodList = [
 
-            IntersectMethod.NONE,
+            //    IntersectMethod.NONE,
             //   IntersectMethod.RATIO_POINT_2,
             //  IntersectMethod.RATIO_POINT_3,
             //  IntersectMethod.RATIO_POINT_4,
@@ -59,16 +62,20 @@ class ClusterMainECJ extends Evolve {
 
         final Date startRun = new Date()
         List<Double> bestFitForRun = new ArrayList<Double>()
-        NUMBER_OF_RUNS.times { runNumber ->
-            AnalysisAndReports analysisAndReports = new AnalysisAndReports()
 
-            clusteringIndexesList.each { IndexEnum ie ->
+        AnalysisAndReports analysisAndReports = new AnalysisAndReports()
 
-                NUMBER_OF_JOBS.times { job ->
-                    EvolutionState state = new EvolutionState()
+        clusteringIndexesList.each { IndexEnum ie ->
 
-                    println "Index Enum ie: $ie"
-                    Indexes.instance.setIndex(ie)
+            NUMBER_OF_JOBS.times { job ->
+                EvolutionState state = new EvolutionState()
+
+                println "Index Enum ie: $ie"
+                Indexes.instance.setIndex(ie)
+
+                kPenalty.each { kPenalty ->
+                    ClusterFitness.kPenalty = kPenalty
+
 
                     queryTypesList.each { qt ->
                         println "query type $qt"
@@ -111,27 +118,21 @@ class ClusterMainECJ extends Evolve {
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                            analysisAndReports.reportsOut(runNumber, job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                            analysisAndReports.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                         }
                     }
                     cleanup(state);
                     println "--------END JOB $job  -----------------------------------------------"
                 }
             }
-
-            //   bestFitForRun << analysisAndReports.f1fromMaxPseudoF1(runNumber) //
-            analysisAndReports.jobSummary()
-
         }
+
+        analysisAndReports.jobSummary()
+
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
 
-        if (NUMBER_OF_RUNS > 1) {
-            println "Runs from max fitness: $bestFitForRun"
-            double average = (double) bestFitForRun.sum() / bestFitForRun.size()
-            println "Average: $average"
-        }
     }
 
     static main(args) {

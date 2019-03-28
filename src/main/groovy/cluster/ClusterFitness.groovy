@@ -10,15 +10,18 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
 enum FitnessMethod {
-    SCORE, HITS, PSEUDOF1, PSEUDOF1_K_PENALTY0_3, PSEUDOF1_K_PENALTY0_5, UNIQUE_HITS_COUNT, UNIQUE_HITS_K_PENALTY
+    UNIQUE_HITS_COUNT, UNIQUE_HITS_K_PENALTY
 }
 
 @CompileStatic
 public class ClusterFitness extends SimpleFitness {
 
     static FitnessMethod fitnessMethod
+    static double kPenalty = 0.03d
 
     private final int totalDocs = Indexes.indexReader.maxDoc()
+
+    static Map<Integer, Double> penaltyMap = [2: 1.0d, 3: 0.97d, 4: 0.94d, 5: 0.91d, 6: 0.88d, 7: 0.85d, 8: 0.82d, 9: 0.79d].asImmutable()
 
     Map<Query, Integer> queryMap = [:]
     double baseFitness = 0.0  //for ECJ
@@ -62,20 +65,20 @@ public class ClusterFitness extends SimpleFitness {
                 break
 
             case fitnessMethod.UNIQUE_HITS_K_PENALTY:
-              //  final double uniqueWithPenalty = hitsMatchingOnlyOneQuery - (0.03 * k)
+                //  final double uniqueWithPenalty = hitsMatchingOnlyOneQuery - (0.03 * k)
+
+                //baseFitness = hitsMatchingOnlyOneQuery * penaltyMap[k]
+                // baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
 
                 baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
-          //      baseFitness = hitsMatchingOnlyOneQuery * Math.pow(0.97d, (double)(k)) //> 0 ? uniqueWithPenalty : 0
+                //      baseFitness = hitsMatchingOnlyOneQuery * Math.pow(0.97d, (double)(k)) //> 0 ? uniqueWithPenalty : 0
                 break
 
-            case fitnessMethod.PSEUDOF1:
-                baseFitness = pseudo_f1
-                break
 
-            case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
-                double f1WithPenalty = pseudo_f1 - (0.03 * k)
-                baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
-                break
+        //      case fitnessMethod.PSEUDOF1_K_PENALTY0_3:
+        //        double f1WithPenalty = pseudo_f1 - (0.03 * k)
+        //      baseFitness = f1WithPenalty > 0 ? f1WithPenalty : 0
+        //    break
         }
     }
 

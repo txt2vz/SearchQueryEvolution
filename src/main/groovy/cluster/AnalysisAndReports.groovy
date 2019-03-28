@@ -32,50 +32,17 @@ class AnalysisAndReports {
         println "CategoryCountError : $categoryAccuracy"
 
         def categoryErrorTotal = categoryAccuracy.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum()] }
+        double errorPerJob = (double) categoryErrorTotal.values().sum()/ ClusterMainECJ.NUMBER_OF_JOBS
 
-      //  println "Category Error $categoryErrorTotal"
-      //  println "Category Error total: " + categoryErrorTotal.values().sum()
+        println "Category Error $categoryErrorTotal"
+        println "Catergory Error Average: $errorPerJob Category Error total: " + categoryErrorTotal.values().sum()
 
         overallResults << " ${new Date()}"
         overallResults << "\nOverall Average: ${overallAverage.round(5)} resultsF1: $resultsF1 \n"
-        overallResults << "Category Error tototal: " + categoryErrorTotal.values().sum() + " Category Error by cateogry: $categoryErrorTotal \n"
+        overallResults << "Catergory Error Average: $errorPerJob Category Error tototal: " + categoryErrorTotal.values().sum() + " Category Error by cateogry: $categoryErrorTotal \n"
     }
 
-    double f1fromMaxPseudoF1(int runNumber) {
-        File overallResultsMaxFit = new File("results/overallResultsClusterMaxPseudoF1.csv")
-        File runsReport = new File("results/runsReport.csv")
-
-        println "results Pseudo_F1WithF1: $resultsPseudo_F1WithF1"
-        def maxPseudoF1 = resultsPseudo_F1WithF1.max { it.value.first }
-        println "maxPseudoF1 $maxPseudoF1"
-        println "maxPseudoF1 keyfirst " + maxPseudoF1.key.first + " maxPseudoF1 " + maxPseudoF1.value.second
-
-        def indexAveragesMaxFitness = resultsPseudo_F1WithF1.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().max { pseudoF1 -> pseudoF1.first }.second] }
-
-        if (!overallResultsMaxFit.exists()) {
-            overallResultsMaxFit.append("Index, F1FromMaxFitness, jobsForPseudF1Selection, runNumber, date \n")
-        }
-        indexAveragesMaxFitness.each {
-            overallResultsMaxFit.append("${it.key}, ${it.value}, ${ClusterMainECJ.NUMBER_OF_JOBS}, $runNumber, ${new Date()} \n")
-        }
-
-        println "indexAveragesForMaxFitness  $indexAveragesMaxFitness"
-        double overallAverageForRunUsingMaxFit = indexAveragesMaxFitness.values().sum() / indexAveragesMaxFitness.size()
-
-        println "overallAverageForRunUsingMaxFit $overallAverageForRunUsingMaxFit for runNumber $runNumber"
-
-        if (!runsReport.exists()) {
-            runsReport.append("runNumber, F1fromMaxPseudoF1, Date \n")
-        }
-
-        overallResults << "\nMax Fitness ************* \nindexAveragesMaxFitness $indexAveragesMaxFitness\n"
-        overallResults << "OverallAverageMaxFit ${overallAverageForRunUsingMaxFit.round(5)} for runNumber $runNumber \n \n"
-
-        runsReport.append("$runNumber, $overallAverageForRunUsingMaxFit, ${new Date()} \n")
-        return overallAverageForRunUsingMaxFit
-    }
-
-    void reportsOut(int runNumber, int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
+    void reportsOut(int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
         def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall, double pseudo_f1) = calculate_F1_p_r(cfit, true)
 
@@ -98,11 +65,11 @@ class AnalysisAndReports {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, runNumber, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, kPenalty, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
         }
 
-        fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber, $runNumber, ${new Date()} \n"
+        fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${ClusterFitness.kPenalty}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectMethod, jobNumber)
         resultsF1 << [(indexAndParams): averageF1forJob]

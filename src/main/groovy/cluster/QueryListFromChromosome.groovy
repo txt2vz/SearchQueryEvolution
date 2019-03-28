@@ -54,7 +54,7 @@ class QueryListFromChromosome {
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
 
         final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
-        Set<Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set<Integer>
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
         //set k at element 0?
@@ -76,7 +76,7 @@ class QueryListFromChromosome {
         return getOneWordQueryPerCluster(intChromosome).first
     }
 
-    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster, boolean setk = true) {
+    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster = 100, boolean setk = true) {
 
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
         BooleanQuery.Builder[] bqbArray = tuple4.first
@@ -106,8 +106,6 @@ class QueryListFromChromosome {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
-        // }
-
         return bqbArray
     }
 
@@ -124,7 +122,7 @@ class QueryListFromChromosome {
         }
 
         int clusterNumber = 0
-        Set<Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set<Integer>
         for (int i = 0; i < intChromosome.size(); i++) {
             final int gene = intChromosome[i]
 
@@ -197,7 +195,7 @@ class QueryListFromChromosome {
             bqbArray[i] = new BooleanQuery.Builder()
         }
 
-        Set<Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set<Integer>
         int arrayIndex = 0
 
         for (int index = (setk) ? 1 : 0; index < intChromosome.size(); index++) {
@@ -222,7 +220,7 @@ class QueryListFromChromosome {
         for (int i = 0; i < k; i++) {
             bqbArray[i] = new BooleanQuery.Builder()
         }
-        Set<Integer> genes = [] as Set
+        Set<Integer> genes = [] as Set<Integer>
 
         for (int index = (setk) ? 1 : 0; index < intChromosome.size(); index++) {
             int gene = intChromosome[index]
