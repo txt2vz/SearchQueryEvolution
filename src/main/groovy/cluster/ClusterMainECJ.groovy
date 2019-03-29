@@ -19,29 +19,25 @@ class ClusterMainECJ extends Evolve {
     def clusteringIndexesList = [
 
             IndexEnum.NG3,
-//            IndexEnum.CRISIS3,
-//            IndexEnum.CLASSIC4,
-//            IndexEnum.R4,
-//            IndexEnum.R5,
-//            IndexEnum.NG5,
-//            IndexEnum.R6,
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4,
+            IndexEnum.R4,
+            IndexEnum.R5,
+            IndexEnum.NG5,
+            IndexEnum.R6,
             IndexEnum.NG6
     ]
 
-    List<FitnessMethod> fitnessMethodsList = [
 
-            FitnessMethod.UNIQUE_HITS_K_PENALTY,
-            //   FitnessMethod.UNIQUE_HITS_COUNT
-    ]
-
-    List<Double> kPenalty = [0.03d]
+    List<Double> kPenalty = //[0.0d, 0.03d, 0.07d]
             //[0.01d, 0.03d,  0.05d]
-            //[0.01d, 0.02d, 0.03d, 0.04d, 0.05d]
+          //  [0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+            [0.4d]
 
     List<QueryType> queryTypesList = [
 
             //        QueryType.OR3_INSTERSECT_SETK,
-            //   QueryType.OR,
+            QueryType.OR,
             QueryType.OR_SETK,
             ///        QueryType.OR3_INTERSECT,
     ]
@@ -56,6 +52,7 @@ class ClusterMainECJ extends Evolve {
             //  IntersectMethod.RATIO_POINT_6,
             //   IntersectMethod.RATIO_POINT_7,
             //  IntersectMethod.RATIO_POINT_8,
+         //   IntersectMethod.RATIO_POINT_9
     ]
 
     ClusterMainECJ() {
@@ -76,17 +73,12 @@ class ClusterMainECJ extends Evolve {
                 kPenalty.each { kPenalty ->
                     ClusterFitness.kPenalty = kPenalty
 
-
                     queryTypesList.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
                         String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
-                        //  fitnessMethodsList.each { FitnessMethod fitnessMethod ->
-
                         ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.UNIQUE_HITS_K_PENALTY : FitnessMethod.UNIQUE_HITS_COUNT
-                        //   ClusterFitness.fitnessMethod = fitnessMethod
-
 
                         intersectMethodList.each { IntersectMethod intersectMethod ->
                             QueryListFromChromosome.intersectMethod = intersectMethod

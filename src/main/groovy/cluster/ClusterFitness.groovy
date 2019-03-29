@@ -69,8 +69,9 @@ public class ClusterFitness extends SimpleFitness {
 
                 //baseFitness = hitsMatchingOnlyOneQuery * penaltyMap[k]
                 // baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
-
-                baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
+                double f = hitsMatchingOnlyOneQuery * (1.0 - (kPenalty * k))
+                baseFitness = (f > 0) ? f : 0.0d
+                // baseFitness = hitsMatchingOnlyOneQuery * (1.0 - (0.03 * k))
                 //      baseFitness = hitsMatchingOnlyOneQuery * Math.pow(0.97d, (double)(k)) //> 0 ? uniqueWithPenalty : 0
                 break
 

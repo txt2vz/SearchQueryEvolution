@@ -13,7 +13,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 class AnalysisAndReports {
     def resultsF1 = [:]
     def categoryAccuracy = [:]
-    def resultsPseudo_F1WithF1 = [:]
+    def resultsFitnessWithF1 = [:]
     def resultsDir = new File(/results/).mkdir()
     File queryFileOut = new File('results/Queries.txt')
     File overallResults = new File("results/overallResultsCluster.txt")
@@ -44,7 +44,7 @@ class AnalysisAndReports {
 
     void reportsOut(int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
-        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall, double pseudo_f1) = calculate_F1_p_r(cfit, true)
+        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
@@ -65,7 +65,7 @@ class AnalysisAndReports {
 
         File fcsv = new File("results/resultsClusterByJob.csv")
         if (!fcsv.exists()) {
-            fcsv << 'aveargeF1, averagePrecision, averageRecall, pseudo_f1, indexName, fitnessMethod, kPenalty, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
+            fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, kPenalty, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${ClusterFitness.kPenalty}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
@@ -75,7 +75,7 @@ class AnalysisAndReports {
         resultsF1 << [(indexAndParams): averageF1forJob]
         categoryAccuracy << [(indexAndParams): categoryCountErrorAbs]
 
-        resultsPseudo_F1WithF1 << [(indexAndParams): new Tuple2<Double, Double>(pseudo_f1, averageF1forJob)]
+        resultsFitnessWithF1 << [(indexAndParams): new Tuple2<Double, Double>(cfit.baseFitness, averageF1forJob)]
     }
 
     List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
@@ -116,7 +116,7 @@ class AnalysisAndReports {
         final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
         final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0
 
-        [f1list, averageF1forJob, averagePrecision, averageRecall, cfit.pseudo_f1]
+        [f1list, averageF1forJob, averagePrecision, averageRecall]
     }
 
     private List findMostFrequentCategoryForQuery(Query q, int index) {
