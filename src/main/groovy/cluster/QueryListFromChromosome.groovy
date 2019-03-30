@@ -17,6 +17,7 @@ import org.apache.lucene.search.spans.SpanTermQuery
 enum IntersectMethod {
 
     NONE(-1.0d),
+    RATIO_POINT_1(0.1d),
     RATIO_POINT_2(0.2d),
     RATIO_POINT_3(0.3d),
     RATIO_POINT_4(0.4d),
