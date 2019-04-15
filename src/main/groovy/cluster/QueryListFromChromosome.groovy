@@ -28,9 +28,9 @@ enum IntersectMethod {
     RATIO_POINT_9(0.9d)
 
     IntersectMethod(double minVal) {
-        minIntersectValue = minVal
+        intersectRatio = minVal
     }
-    double minIntersectValue
+    double intersectRatio
 }
 
 
@@ -103,8 +103,8 @@ class QueryListFromChromosome {
                 }
             }
 
-            //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {  //to check whole query rather than first term
-            else if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.minIntersectValue) && genes.add(gene)) {
+            //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {  //to check whole query rather than first term
+            else if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }

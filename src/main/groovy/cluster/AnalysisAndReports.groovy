@@ -53,7 +53,7 @@ class AnalysisAndReports {
         int categoryCountError = numberOfOriginalClasses - numberOfClusters
         int categoryCountErrorAbs = Math.abs(categoryCountError)
 
-        queryFileOut << "${new Date()}  ***** Job: $jobNumber Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod} ************************************************************* \n"
+        queryFileOut << "${new Date()}  ***** Job: $jobNumber Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod.intersectRatio} ************************************************************* \n"
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
@@ -69,7 +69,7 @@ class AnalysisAndReports {
         }
 
         fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${ClusterFitness.kPenalty}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
-                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
+                "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod.intersectRatio}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectMethod, jobNumber)
         resultsF1 << [(indexAndParams): averageF1forJob]
