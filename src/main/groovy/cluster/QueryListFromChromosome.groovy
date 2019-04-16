@@ -97,14 +97,7 @@ class QueryListFromChromosome {
             Query tq0 = rootq.clauses().first().getQuery()
             TermQuery tqNew = termQueryArray[gene]
 
-            if (intersectMethod == IntersectMethod.NONE) {
-                if (genes.add(gene)) {
-                    bqbArray[clusterNumber].add(termQueryArray[gene], bco)
-                }
-            }
-
-            //     if ((QueryTermIntersect.getIntersectRatio(rootq, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {  //to check whole query rather than first term
-            else if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {
+            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }

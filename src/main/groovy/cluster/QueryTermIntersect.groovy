@@ -28,6 +28,8 @@ class QueryTermIntersect {
         indexSearcher.search(q1, collector)
         final int q1Count = collector.getTotalHits()
 
+        assert q1Count > 0
+
         return andCount / q1Count
     }
 }
