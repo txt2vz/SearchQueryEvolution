@@ -1,9 +1,10 @@
-#parent.0 = clusterSubpop8.params
-
-parent.0 = clusterSubpop4.params
+#parent.0 = clusterSinglePop.params
+#parent.0 = clusterSubpop2.params
+parent.0 = clusterSubpop8.params
+#parent.0 = clusterSubpop4.params
 #parent.0 = clusterSubpop.params
 #parent.0 = clusterSubpopTournament.params
-#parent.0 = clusterSinglePop.params
+
 #parent.0		= simple.params
 
 eval.problem = cluster.ClusterQueryECJ
@@ -16,7 +17,7 @@ generations = 300
 pop.default-subpop =0
 breed.elite.0 = 2
 
-pop.subpops = 4
+#pop.subpops = 4
 pop.subpop.0.species.genome-size = 19
 pop.subpop.0.size = 128
 pop.subpop.1.species.genome-size = 19
