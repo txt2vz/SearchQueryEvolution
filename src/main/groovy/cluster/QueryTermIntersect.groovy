@@ -2,14 +2,7 @@ package cluster
 
 import groovy.transform.CompileStatic
 import index.Indexes
-import org.apache.lucene.search.BooleanClause
-import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.IndexSearcher
-import org.apache.lucene.search.Query
-import org.apache.lucene.search.ScoreDoc
-import org.apache.lucene.search.TermQuery
-import org.apache.lucene.search.TopDocs
-import org.apache.lucene.search.TotalHitCountCollector
+import org.apache.lucene.search.*
 
 @CompileStatic
 class QueryTermIntersect {

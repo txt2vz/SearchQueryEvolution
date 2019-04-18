@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 5
+    static final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
@@ -28,12 +28,11 @@ class ClusterMainECJ extends Evolve {
             IndexEnum.NG6
     ]
 
-
     List<Double> kPenalty =
 
-            // [0.0d], [0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+      //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
             [0.04d]
-        //    [0.0d]
+
 
     List<QueryType> queryTypesList = [
 
@@ -44,22 +43,21 @@ class ClusterMainECJ extends Evolve {
 
     List<IntersectMethod> intersectMethodList = [
 
-      //      IntersectMethod.NONE,
-//            IntersectMethod.RATIO_POINT_1,
-//            IntersectMethod.RATIO_POINT_2,
-//            IntersectMethod.RATIO_POINT_3,
-//            IntersectMethod.RATIO_POINT_4,
+            IntersectMethod.NONE,
+            IntersectMethod.RATIO_POINT_1,
+            IntersectMethod.RATIO_POINT_2,
+            IntersectMethod.RATIO_POINT_3,
+            IntersectMethod.RATIO_POINT_4,
             IntersectMethod.RATIO_POINT_5,
-//            IntersectMethod.RATIO_POINT_6,
-//            IntersectMethod.RATIO_POINT_7,
-//            IntersectMethod.RATIO_POINT_8,
-//            IntersectMethod.RATIO_POINT_9
+            IntersectMethod.RATIO_POINT_6,
+            IntersectMethod.RATIO_POINT_7,
+            IntersectMethod.RATIO_POINT_8,
+            IntersectMethod.RATIO_POINT_9
     ]
 
     ClusterMainECJ() {
 
         final Date startRun = new Date()
-        List<Double> bestFitForRun = new ArrayList<Double>()
 
         AnalysisAndReports analysisAndReports = new AnalysisAndReports()
 
