@@ -29,7 +29,7 @@ public class ImportantTerms {
     private final static int MAX_TERMQUERYLIST_SIZE = 200;
 
     private final IndexSearcher indexSearcher = Indexes.indexSearcher;
-    private final IndexReader indexReader = indexSearcher.indexReader
+    private  IndexReader indexReader //= indexSearcher.indexReader
     private TermsEnum termsEnum
     private Set<String> stopSet = StopSet.getStopSetFromFile()
 
@@ -48,6 +48,11 @@ public class ImportantTerms {
         //iw.getIGTermQueryList()
         //iw.getChiTermQueryList()
         // iw.getORTermQueryList()
+    }
+
+    ImportantTerms(IndexReader ir) {
+        indexReader = ir
+        ImportantTerms()
     }
 
     public ImportantTerms() {

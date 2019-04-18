@@ -1,20 +1,36 @@
 package cluster;
 
-import index.ImportantTerms;
+import index.*;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.jenetics.*;
 import org.jenetics.engine.Engine;
 import org.jenetics.util.Factory;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.IntStream;
 
+import index.IndexEnum;
+
+import static index.Indexes.indexSearcher;
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class ClusterMainJenetics {
 
-    private final static TermQuery[] termQueryArray = new ImportantTerms().getTFIDFTermQueryList() ;
+    static IndexEnum indexEnum = IndexEnum.NG3;
+    static int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories();
+    static int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories();
+   // static IndexSearcher indexSearcher = indexEnum.getIndexSearcher();
+    static IndexReader indexReader = indexEnum.getIndexReader();
+
+    static List<TermQuery>  termQueryList = ImportantTermsForClustering.getTFIDFTermQueryList(indexReader);
+
+   // private final static List<TermQuery> termQueryArray = iterms.getTFIDFTermQueryList();
+
 
     private static double evaluate(final Genotype<IntegerGene> gt) {
 
@@ -23,20 +39,22 @@ public class ClusterMainJenetics {
     }
 
     private static ClusterFitness cf(final Genotype<IntegerGene> gt) {
-        QueryListFromChromosome qlc = new QueryListFromChromosome(termQueryArray);
+        QueryListFromChromosome qlc = new QueryListFromChromosome(termQueryList);
         BooleanQuery.Builder[] bqbArray = qlc.getSimple(((IntegerChromosome) gt.getChromosome(0)).toArray());
-                //QueryListFromChromosome
-               // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
+        //QueryListFromChromosome
+        // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
 
         ClusterFitness clusterFitness = new ClusterFitness();
-        clusterFitness.setClusterFitness(Arrays.asList(bqbArray));
-       // clusterFitness.setClusterFitness( new HashSet<BooleanQuery.Builder>(Arrays.asList(bqbArray)));  //java 9 Set.of(bqbArray)
+        clusterFitness.setClusterFitness(Collections.unmodifiableList(Arrays.asList(bqbArray)));
+
+        // clusterFitness.setClusterFitness( new HashSet<BooleanQuery.Builder>(Arrays.asList(bqbArray)));  //java 9 Set.of(bqbArray)
 
         return clusterFitness;
     }
 
     public static void main(String[] args) throws Exception {
         final int numberOfJobs = 2;
+
         IntStream.range(0, numberOfJobs).forEach(job ->
                 new ClusterMainJenetics(job)
         );
@@ -48,8 +66,8 @@ public class ClusterMainJenetics {
         final int subpops = 1;
         final long maxGen = 210;
         AnalysisAndReports finalReport = new AnalysisAndReports();
-        int maxGene=100;
-        int genomeLength=18;
+        int maxGene = 100;
+        int genomeLength = 18;
 
         final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
@@ -73,7 +91,7 @@ public class ClusterMainJenetics {
         Genotype<IntegerGene> g = result.getGenotype();
         ClusterFitness cfResult = cf(g);
         System.out.println("cluster fit result " + cfResult.queryShort());
-      //  finalReport.reportsOut(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
+        //  finalReport.reportsOut(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
         System.out.println();
     }
 }

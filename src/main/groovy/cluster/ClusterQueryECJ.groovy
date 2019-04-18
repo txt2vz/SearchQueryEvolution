@@ -60,8 +60,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
-        TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
-        qlfc = new QueryListFromChromosome(tqa)
+        //TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
+        List <TermQuery>  tql = index.ImportantTermsForClustering.getTFIDFTermQueryList(Indexes.indexReader)
+        qlfc = new QueryListFromChromosome(tql)
     }
 
     public void evaluate(final EvolutionState state, final Individual ind, final int subpopulation,
@@ -84,6 +85,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
             case QueryType.OR_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
+
 
 
             case QueryType.AND_WITH_OR_SUBQ:

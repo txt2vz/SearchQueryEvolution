@@ -54,11 +54,22 @@ enum IndexEnum {
         return "${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
     }
 
+    IndexReader getIndexReader(){
+        Path path = Paths.get(pathString)
+        Directory directory = FSDirectory.open(path)
+        IndexReader ir = DirectoryReader.open(directory)
+        println "indexread $ir"
+        boolean b = ir == null
+        println "b $b"
+        return ir
+    }
+
     IndexSearcher getIndexSearcher() {
         Path path = Paths.get(pathString)
         Directory directory = FSDirectory.open(path)
         IndexReader ir = DirectoryReader.open(directory)
         IndexSearcher is = new IndexSearcher(ir)
+
     //    is.setSimilarity(similarity)
         return is
     }
@@ -131,7 +142,7 @@ class Indexes {
         return categoryName
     }
 
-    //set the filters and totals for the index
+    //set the filters and totals for the index for classification
     void setIndexFieldsAndTotals() {
         println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
         catQ = new TermQuery(new Term(FIELD_CATEGORY_NUMBER,

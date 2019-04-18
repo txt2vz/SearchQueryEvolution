@@ -16,7 +16,7 @@ import org.apache.lucene.search.spans.SpanTermQuery
 @CompileStatic
 enum IntersectMethod {
 
-    NONE(-1.0d),
+    NONE(0.0d),
     RATIO_POINT_1(0.1d),
     RATIO_POINT_2(0.2d),
     RATIO_POINT_3(0.3d),
@@ -39,14 +39,14 @@ class QueryListFromChromosome {
 
     static IntersectMethod intersectMethod = IntersectMethod.RATIO_POINT_5
 
-    final TermQuery[] termQueryArray
+    List <TermQuery> termQueryList
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
 
-    QueryListFromChromosome(TermQuery[] tq) {
-        termQueryArray = tq
-        println "term query size " + tq.size()
-        println "tq $tq"
+    QueryListFromChromosome(List <TermQuery> tql) {
+        termQueryList = tql
+        println "term query list size " + tql.size()
+        println "tql $tql"
     }
 
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
@@ -61,8 +61,8 @@ class QueryListFromChromosome {
         while (clusterNumber < k && index < intChromosome.size()) {
             int gene = intChromosome[index]
 
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
-                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+            if (gene < termQueryList.size() && gene >= 0 && genes.add(gene)) {
+                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[gene], BooleanClause.Occur.SHOULD)
                 clusterNumber++
             }
             index++
@@ -91,9 +91,9 @@ class QueryListFromChromosome {
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             Query tq0 = rootq.clauses().first().getQuery()
-            TermQuery tqNew = termQueryArray[gene]
+            TermQuery tqNew = termQueryList[gene]
 
-            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) > intersectMethod.intersectRatio) && genes.add(gene)) {
+            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) >= intersectMethod.intersectRatio) && genes.add(gene)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
@@ -118,7 +118,7 @@ class QueryListFromChromosome {
             final int gene = intChromosome[i]
 
             if (gene >= 0 && genes.add(gene)) {
-                bqbArray[clusterNumber].add(termQueryArray[gene], bco)
+                bqbArray[clusterNumber].add(termQueryList[gene], bco)
                 clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : 0
             }
         }
@@ -151,11 +151,11 @@ class QueryListFromChromosome {
             int clusterNumber = index % k
             bqbArray[clusterNumber] = bqbArray[clusterNumber]
 
-            if (gene < termQueryArray.size() && gene >= 0) {
+            if (gene < termQueryList.size() && gene >= 0) {
                 if (term0 == null) {
-                    term0 = termQueryArray[gene]
+                    term0 = termQueryList[gene]
                 } else {
-                    term1 = termQueryArray[gene]
+                    term1 = termQueryList[gene]
 
                     Set andPair = [term0, term1] as Set
                     if ((term0 != term1) && andPairSet.add(andPair)) {
@@ -194,9 +194,9 @@ class QueryListFromChromosome {
             final int clusterNumber = index % k
             if (gene >= 0) {
                 if (arrayIndex >= k && arrayIndex < k * 2) {
-                    bqbArray[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.MUST_NOT)
+                    bqbArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.MUST_NOT)
                 } else if (genes.add(gene)) {
-                    bqbArray[clusterNumber].add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
+                    bqbArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.SHOULD)
                 }
             }
             arrayIndex++
@@ -220,7 +220,7 @@ class QueryListFromChromosome {
             if (gene >= 0) {
                 if (term == null) {
                     if (genes.add(gene)) {
-                        term = termQueryArray[gene]
+                        term = termQueryList[gene]
                     }
                 } else {
                     int sfValue
@@ -265,12 +265,12 @@ class QueryListFromChromosome {
 
         for (index; index < intChromosome.size(); index++) {
             final int gene = intChromosome[index]
-            if (gene < termQueryArray.size() && gene >= 0 && !genes.contains(gene)) {
+            if (gene < termQueryList.size() && gene >= 0 && !genes.contains(gene)) {
 
                 if (term0 == null) {
-                    term0 = termQueryArray[gene]
+                    term0 = termQueryList[gene]
                 } else {
-                    term1 = termQueryArray[gene]
+                    term1 = termQueryList[gene]
 
                     Set andPair = [term0, term1] as Set
                     if (term0 != term1 && andPairSet.add(andPair)) {

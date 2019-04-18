@@ -13,7 +13,7 @@ import index.Indexes
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 2
+    static final int NUMBER_OF_JOBS = 3
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
@@ -30,7 +30,7 @@ class ClusterMainECJ extends Evolve {
 
     List<Double> kPenalty =
 
-      //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+            //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
             [0.04d]
 
 
