@@ -40,8 +40,8 @@ enum IndexEnum {
     //R6('indexes/R6', 6),
     //OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
 
-   // private final Similarity similarity = new BM25Similarity()
-                              // new ClassicSimilarity()
+    // private final Similarity similarity = new BM25Similarity()
+    // new ClassicSimilarity()
     String pathString;
     int numberOfCategories
 
@@ -54,13 +54,11 @@ enum IndexEnum {
         return "${this.name()} path: $pathString numberOfCategories: $numberOfCategories "
     }
 
-    IndexReader getIndexReader(){
+    IndexReader getIndexReader() {
         Path path = Paths.get(pathString)
         Directory directory = FSDirectory.open(path)
         IndexReader ir = DirectoryReader.open(directory)
-        println "indexread $ir"
-        boolean b = ir == null
-        println "b $b"
+        println "IndexReader: $ir"
         return ir
     }
 
@@ -70,7 +68,7 @@ enum IndexEnum {
         IndexReader ir = DirectoryReader.open(directory)
         IndexSearcher is = new IndexSearcher(ir)
 
-    //    is.setSimilarity(similarity)
+        //    is.setSimilarity(similarity)
         return is
     }
 }
@@ -93,14 +91,11 @@ class Indexes {
     public static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
     public static IndexReader indexReader// = indexSearcher.getIndexReader()
 
-    public
-    static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
+    public static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
     public static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
 
-    final TermQuery trainQ = new TermQuery(new Term(
-            FIELD_TEST_TRAIN, 'train'));
-    final TermQuery testQ = new TermQuery(new Term(
-            FIELD_TEST_TRAIN, 'test'));
+    final TermQuery trainQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'train'));
+    final TermQuery testQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'test'));
 
     // the categoryNumber of the current category
     static String categoryNumber = '0'

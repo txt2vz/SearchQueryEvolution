@@ -48,7 +48,9 @@ class ClusterMainECJ extends Evolve {
             IntersectMethod.RATIO_POINT_2,
             IntersectMethod.RATIO_POINT_3,
             IntersectMethod.RATIO_POINT_4,
+
             IntersectMethod.RATIO_POINT_5,
+
             IntersectMethod.RATIO_POINT_6,
             IntersectMethod.RATIO_POINT_7,
             IntersectMethod.RATIO_POINT_8,

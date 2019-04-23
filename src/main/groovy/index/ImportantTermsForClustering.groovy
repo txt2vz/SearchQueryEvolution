@@ -18,7 +18,7 @@ class ImportantTermsForClustering {
 
         TermsEnum termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
-        println "getTFIDFTermQueryList Index: " + Indexes.indexEnum
+        println "ImportantTermsForClustering Index: " + Indexes.indexEnum
 
         Map <TermQuery, Double> termQueryMap = [:]
         BytesRef termbr;
