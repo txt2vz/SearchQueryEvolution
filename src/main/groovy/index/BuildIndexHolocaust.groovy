@@ -1,20 +1,12 @@
 package index
 
-import org.apache.lucene.index.DirectoryReader
-import org.apache.lucene.index.IndexReader
-
-import java.nio.file.Path
-import java.nio.file.Paths
-
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
 import org.apache.lucene.document.TextField
-import org.apache.lucene.index.IndexWriter
-import org.apache.lucene.index.IndexWriterConfig
-import org.apache.lucene.index.Term
+import org.apache.lucene.index.*
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
@@ -22,13 +14,16 @@ import org.apache.lucene.search.TotalHitCountCollector
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
-class BuildIndex {
+import java.nio.file.Path
+import java.nio.file.Paths
+
+class BuildIndexHolocaust {
 
     static main(args) {
-        new BuildIndex()
+        new BuildIndexHolocaust()
     }
 
-    BuildIndex() {
+    BuildIndexHolocaust() {
         String indexPath = 'indexes/warCrimes'
         String docsPath =/C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
@@ -51,14 +46,16 @@ class BuildIndex {
         println("Indexing to directory: $indexPath  from: $docsPath ...")
 
         def categoryNumber = -1
+        int docCount = 0
 
-        new File(docsPath).eachDir {
+        new File(docsPath).eachFileRecurse {file ->
 
-            categoryNumber++
-            int docCount = 0
-            it.eachFileRecurse { file ->
+//            categoryNumber++
+//            int docCount = 0
+//            it.eachFileRecurse { file ->
+            boolean german = (file.text.contains(" der ") || file.text.contains(" das ")) //? true : false
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 200) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 200 && !german) // && categoryNumber <3)
 
                 {
                     def doc = new Document()
@@ -73,9 +70,10 @@ class BuildIndex {
                     String parent = file.getParent()
                     String grandParent = file.getParentFile().getParent()
 
-                    def catName
-                 //   catName = file.name.charAt(6)
-                    catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
+
+                    String catName = file.name.charAt(6)
+                    println "catName $catName"
+                 //   catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
 
                     Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
                     doc.add(catNameField)
@@ -96,7 +94,7 @@ class BuildIndex {
                     writer.addDocument(doc)
                     docCount++
                 }
-            }
+           // }
         }
         println "Total docs: " + writer.maxDoc()
         writer.close()
