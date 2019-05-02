@@ -44,18 +44,18 @@ class ClusterMainECJ extends Evolve {
 
     List<IntersectMethod> intersectMethodList = [
 
-            IntersectMethod.NONE,
-            IntersectMethod.RATIO_POINT_1,
-            IntersectMethod.RATIO_POINT_2,
-            IntersectMethod.RATIO_POINT_3,
-            IntersectMethod.RATIO_POINT_4,
+//            IntersectMethod.NONE,
+//            IntersectMethod.RATIO_POINT_1,
+//            IntersectMethod.RATIO_POINT_2,
+//            IntersectMethod.RATIO_POINT_3,
+//            IntersectMethod.RATIO_POINT_4,
 
             IntersectMethod.RATIO_POINT_5,
-
-            IntersectMethod.RATIO_POINT_6,
-            IntersectMethod.RATIO_POINT_7,
-            IntersectMethod.RATIO_POINT_8,
-            IntersectMethod.RATIO_POINT_9
+//
+//            IntersectMethod.RATIO_POINT_6,
+//            IntersectMethod.RATIO_POINT_7,
+//            IntersectMethod.RATIO_POINT_8,
+//            IntersectMethod.RATIO_POINT_9
     ]
 
     ClusterMainECJ() {
