@@ -29,10 +29,10 @@ public class ImportantTerms {
     private final static int MAX_TERMQUERYLIST_SIZE = 200;
 
     private final IndexSearcher indexSearcher = Indexes.indexSearcher;
-    private  IndexReader indexReader //= indexSearcher.indexReader
+    private  IndexReader indexReader = indexSearcher.indexReader
     private TermsEnum termsEnum
-    private Set<String> stopSet = StopSet.getStopSetFromFile()
 
+    private Set<String> stopSet = StopSet.getStopSetFromFile()
     public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
 
     public static void main(String[] args) {

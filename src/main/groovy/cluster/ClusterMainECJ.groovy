@@ -10,7 +10,7 @@ import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
 
-@CompileStatic
+@CompileStatic  
 class ClusterMainECJ extends Evolve {
 
     static final int NUMBER_OF_JOBS = 11
