@@ -13,11 +13,11 @@ import index.Indexes
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 11
+    static final int NUMBER_OF_JOBS = 1
 
     //indexes suitable for clustering.
     def clusteringIndexesList = [
-
+//IndexEnum.HolSec
             IndexEnum.NG3,
             IndexEnum.CRISIS3,
             IndexEnum.CLASSIC4,
@@ -31,14 +31,14 @@ class ClusterMainECJ extends Evolve {
     List<Double> kPenalty =
 
 
-            [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
-    //     [0.04d]
+     //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+         [0.04d]
 
 
     List<QueryType> queryTypesList = [
 
-            //    QueryType.OR,
-            QueryType.OR_SETK,
+                QueryType.OR,
+          //  QueryType.OR_SETK,
 
     ]
 
@@ -62,9 +62,12 @@ class ClusterMainECJ extends Evolve {
 
         final Date startRun = new Date()
 
+        File timingFile = new File("results/timing.txt")
+
         AnalysisAndReports analysisAndReports = new AnalysisAndReports()
 
         clusteringIndexesList.each { IndexEnum ie ->
+            final Date indexTime = new Date()
 
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state = new EvolutionState()
@@ -119,6 +122,13 @@ class ClusterMainECJ extends Evolve {
                     println "--------END JOB $job  -----------------------------------------------"
                 }
             }
+
+            final Date endTime = new Date()
+            TimeDuration durationT = TimeCategory.minus(endTime, indexTime)
+            println "Duration: $durationT"
+
+            String s =  ie.toString() + "  " + durationT + '\n'
+            timingFile << s
         }
 
         analysisAndReports.jobSummary()

@@ -1,0 +1,21 @@
+NG3 path: indexes/20NG3 numberOfCategories: 3   34.096 secondsR4 path: indexes/R4 numberOfCategories: 4   27.901 seconds
+
+NG3 path: indexes/20NG3 numberOfCategories: 3   54.721 seconds
+CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   52.157 seconds
+CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   48.516 seconds
+R4 path: indexes/R4 numberOfCategories: 4   45.875 seconds
+R5 path: indexes/R5 numberOfCategories: 5   38.960 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   48.592 seconds
+R6 path: indexes/R6 numberOfCategories: 6   53.683 seconds
+NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   56.644 seconds
+
+
+
+NG3 path: indexes/20NG3 numberOfCategories: 3   1 minutes, 20.839 seconds
+CRISIS3 path: indexes/crisis3FireBombFlood numberOfCategories: 3   1 minutes, 16.025 seconds
+CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   1 minutes, 10.532 seconds
+R4 path: indexes/R4 numberOfCategories: 4   57.351 seconds
+R5 path: indexes/R5 numberOfCategories: 5   57.822 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   1 minutes, 3.626 seconds
+R6 path: indexes/R6 numberOfCategories: 6   1 minutes, 5.026 seconds
+NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   1 minutes, 6.672 seconds
