@@ -29,6 +29,6 @@ dependencies {
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 
     //compile fileTree(dir: 'lib', include: ['*.jar'])
-    compile fileTree(dir: 'lib', include: 'ecj-26.jar')
+    compile fileTree(dir: 'lib', include: 'ecj-27.jar')
 }
 

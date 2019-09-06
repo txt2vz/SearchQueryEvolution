@@ -29,8 +29,12 @@ class BuildIndex {
     }
 
     BuildIndex() {
-        String indexPath = 'indexes/warCrimes'
-        String docsPath =/C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
+        String indexPath =
+                //'indexes/warCrimes'
+                'indexes/resistance'
+        String docsPath =
+      /C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
+                ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
 
         Path path = Paths.get(indexPath)
