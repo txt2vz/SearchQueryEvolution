@@ -25,11 +25,14 @@ enum QueryType {
     OR(false),
     OR_SETK(true),
 
+    MINSHOULD2(false),
+    OR_WITH_MINSHOULD2(true),
+
     AND(false),
     OR_WITH_AND_SUBQ(false),
     AND_WITH_OR_SUBQ(false),
     OR_WITH_NOT(false),
-    MINSHOULD2(false),
+
     SPAN_FIRST(false),
     ORSETK(true),
     ORDNFSETK(true),
@@ -86,6 +89,13 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
 
+            case QueryType.MINSHOULD2:
+                bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
+                break;
+
+            case QueryType.OR_WITH_MINSHOULD2:
+                bqbArray = qlfc.getOR1wihtMinShould(genome)
+                break;
 
 
             case QueryType.AND_WITH_OR_SUBQ:
@@ -100,9 +110,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, 1, BooleanClause.Occur.MUST)
                 break;
 
-            case QueryType.MINSHOULD2:
-                bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
-                break;
+
 
             case QueryType.OR_WITH_NOT:
                 bqbArray = qlfc.getORwithNOT(genome, false)

@@ -19,13 +19,13 @@ class ClusterMainECJ extends Evolve {
     def clusteringIndexesList = [
 //IndexEnum.HolSec
             IndexEnum.NG3,
-            IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.R4,
-            IndexEnum.R5,
+//            IndexEnum.CRISIS3,
+//            IndexEnum.CLASSIC4,
+//            IndexEnum.R4,
+//            IndexEnum.R5,
             IndexEnum.NG5,
-            IndexEnum.R6,
-            IndexEnum.NG6
+//            IndexEnum.R6,
+//            IndexEnum.NG6
     ]
 
     List<Double> kPenalty =
@@ -37,8 +37,12 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
+                //QueryType.OR,
+
                 QueryType.OR,
           //  QueryType.OR_SETK,
+         //   QueryType.MINSHOULD2
+          //  QueryType.OR_WITH_MINSHOULD2
 
     ]
 

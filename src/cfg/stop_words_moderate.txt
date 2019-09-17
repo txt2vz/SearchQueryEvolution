@@ -4,6 +4,7 @@ all
 also
 another
 any
+am
 are
 as
 at
