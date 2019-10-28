@@ -19,6 +19,18 @@ R5 path: indexes/R5 numberOfCategories: 5   57.822 seconds
 NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   1 minutes, 3.626 seconds
 R6 path: indexes/R6 numberOfCategories: 6   1 minutes, 5.026 seconds
 NG6 path: indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns numberOfCategories: 6   1 minutes, 6.672 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   37.478 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   28.855 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   35.708 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   53.925 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   1 minutes, 29.028 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   2 minutes, 10.816 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   1 minutes, 19.268 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   2 minutes, 0.471 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   35.672 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   29.335 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   1 minutes, 52.106 seconds
+NG5 path: indexes/20NG5WindowsmiscForsaleHockeySpaceChristian numberOfCategories: 5   2 minutes, 26.196 seconds
 
 
 
