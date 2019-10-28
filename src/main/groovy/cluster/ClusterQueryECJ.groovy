@@ -26,7 +26,7 @@ enum QueryType {
     OR_SETK(true),
 
     MINSHOULD2(false),
-    OR_WITH_MINSHOULD2(true),
+    OR_WITH_MINSHOULD2(false),
 
     AND(false),
     OR_WITH_AND_SUBQ(false),

@@ -86,7 +86,8 @@ class Indexes {
                         FIELD_CONTENTS = 'contents',
                         FIELD_PATH = 'path',
                         FIELD_TEST_TRAIN = 'test_train',
-                        FIELD_CATEGORY_NUMBER = 'categoryNumber';
+                        FIELD_CATEGORY_NUMBER = 'categoryNumber',
+                        FIELD_ASSIGNED_CLASS= 'assignedClass'   ;
 
     public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
     public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()

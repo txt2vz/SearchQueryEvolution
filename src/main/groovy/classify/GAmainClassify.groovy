@@ -17,7 +17,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         Indexes.instance.setIndex(IndexEnum.NG5)
+         Indexes.instance.setIndex(IndexEnum.R10)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
@@ -98,7 +98,6 @@
 
              macroF1AllRunsTotal = macroF1AllRunsTotal + macroF1test;
              microF1AllRunsTotal = microF1AllRunsTotal + microF1test;
-			 
 
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);

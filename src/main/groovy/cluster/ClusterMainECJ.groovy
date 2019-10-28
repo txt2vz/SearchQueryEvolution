@@ -20,10 +20,10 @@ class ClusterMainECJ extends Evolve {
 //IndexEnum.HolSec
             IndexEnum.NG3,
 //            IndexEnum.CRISIS3,
-//            IndexEnum.CLASSIC4,
+            IndexEnum.CLASSIC4,
 //            IndexEnum.R4,
 //            IndexEnum.R5,
-            IndexEnum.NG5,
+//            IndexEnum.NG5,
 //            IndexEnum.R6,
 //            IndexEnum.NG6
     ]
@@ -41,8 +41,8 @@ class ClusterMainECJ extends Evolve {
 
                 QueryType.OR,
           //  QueryType.OR_SETK,
-         //   QueryType.MINSHOULD2
-          //  QueryType.OR_WITH_MINSHOULD2
+            QueryType.MINSHOULD2,
+            QueryType.OR_WITH_MINSHOULD2
 
     ]
 

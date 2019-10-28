@@ -94,6 +94,9 @@ class BuildIndex {
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
+                    Field assignedClassField = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'noClassAssigned', Field.Store.YES)
+                    doc.add(assignedClassField)
+
                     def n = catsNameFreq.get((catName)) ?: 0
                     catsNameFreq.put((catName), n + 1)
 
