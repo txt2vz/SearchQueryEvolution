@@ -35,6 +35,7 @@ class ImportantTermsForClustering {
                     df > 10
                     && !stopSet.contains(word)
                     && !word.contains("'")
+                            && !word.contains('.')
                     && word.length() > 1
                     && word.charAt(0).isLetter()
             ) {

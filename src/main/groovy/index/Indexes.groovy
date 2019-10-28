@@ -36,7 +36,8 @@ enum IndexEnum {
     R6('indexes/R6', 6),
     R10('indexes/R10', 10),
     WarCrimes('indexes/warCrimes',8),
-    Secrecy(       'indexes/resistance', 11)
+    Secrecy(       'indexes/resistance', 11),
+   NG3N( 'indexes/ng3N',3)
 
 
     //R8('indexes/R8', 8),

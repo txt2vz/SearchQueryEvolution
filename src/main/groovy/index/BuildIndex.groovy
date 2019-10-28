@@ -31,9 +31,14 @@ class BuildIndex {
     BuildIndex() {
         String indexPath =
                 //'indexes/warCrimes'
-                'indexes/resistance'
+                //'indexes/resistance'
+                'indexes/ng3N'
+
+
         String docsPath =
-      /C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
+
+                /D:\Classify20NG3/
+      ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
 
@@ -62,11 +67,10 @@ class BuildIndex {
             int docCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 200) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 100) // && categoryNumber <3)
 
                 {
                     def doc = new Document()
-
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
@@ -94,7 +98,7 @@ class BuildIndex {
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
-                    Field assignedClassField = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'noClassAssigned', Field.Store.YES)
+                    Field assignedClassField = new StringField(Indexes.FIELD_ASSIGNED_CLASS,  'noClassAssigned', Field.Store.NO)
                     doc.add(assignedClassField)
 
                     def n = catsNameFreq.get((catName)) ?: 0
