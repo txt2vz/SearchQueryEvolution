@@ -37,6 +37,7 @@ enum IndexEnum {
     R10('indexes/R10', 10),
     WarCrimes('indexes/warCrimes',8),
     Secrecy(       'indexes/resistance', 11),
+    Science4(       'indexes/science4', 4),
    NG3N( 'indexes/ng3N',3)
 
 
@@ -99,8 +100,8 @@ class Indexes {
     public static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
     public static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
 
-    final TermQuery trainQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'train'));
-    final TermQuery testQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'test'));
+    final static TermQuery trainQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'train'));
+    final static TermQuery testQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'test'));
 
     // the categoryNumber of the current category
     static String categoryNumber = '0'

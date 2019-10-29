@@ -4,7 +4,10 @@ import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
+import org.apache.lucene.classification.*
 import org.apache.lucene.classification.document.SimpleNaiveBayesDocumentClassifier
+import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
+import org.apache.lucene.classification.utils.*
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
@@ -13,62 +16,62 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
+import org.apache.lucene.util.BytesRef
 
 class LuceneClassifier {
 
     static void main(String[] args) {
-        Indexes.instance.setIndex(IndexEnum.NG3N)
-        BooleanQuery.Builder bqbTrain = new BooleanQuery.Builder()
-        BooleanQuery.Builder bqbTest = new BooleanQuery.Builder();
-        bqbTrain.add(new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, 'train')), BooleanClause.Occur.SHOULD)
-        bqbTest.add(new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, 'test')), BooleanClause.Occur.SHOULD)
+        Indexes.instance.setIndex(IndexEnum.Science4)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
+
+        analyzerPerField.put(Indexes.FIELD_CATEGORY_NAME, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_TEST_TRAIN, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_CONTENTS, new StandardAnalyzer());
-       // analyzerPerField.put(Indexes.FIELD_ASSIGNED_CLASS, new StandardAnalyzer());
 
-        Query trainQ = bqbTrain.build()
-        Query testQ = bqbTest.build()
-
-        TopDocs testTopDocs = Indexes.indexSearcher.search(testQ, 40)
+        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 40)
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
-        SimpleNaiveBayesDocumentClassifier snbdc = new SimpleNaiveBayesDocumentClassifier(Indexes.indexReader,
-                trainQ,
-                Indexes.FIELD_ASSIGNED_CLASS,
-                analyzerPerField,
-                Indexes.FIELD_CONTENTS)
+        SimpleNaiveBayesDocumentClassifier snbdc =
+     //   org.apache.lucene.classification.Classifier<BytesRef> snbdc =
+                new SimpleNaiveBayesDocumentClassifier(Indexes.indexReader,
+                        Indexes.trainQ,// trainQ,
+                        Indexes.FIELD_CATEGORY_NAME,  //.FIELD_ASSIGNED_CLASS,
+                        analyzerPerField,
+                        Indexes.FIELD_CONTENTS)
 
-   //     snbdc.
+        println snbdc
 
-       // snbdc.
-
-        for (ScoreDoc testd: testHits){
+        for (ScoreDoc testd : testHits) {
             Document d = Indexes.indexSearcher.doc(testd.doc)
 
-           def x = snbdc.assignClass(d)
+            def assignedClass = snbdc.assignClass(d)
 
-            println "path " + d.get(Indexes.FIELD_PATH)
-            println "Category " + d.get(Indexes.FIELD_CATEGORY_NAME)
-            println "test train " + d.get(Indexes.FIELD_TEST_TRAIN)
+            def path = d.get(Indexes.FIELD_PATH)
+            def cat = d.get(Indexes.FIELD_CATEGORY_NAME)
 
+            def assignedClassString= assignedClass.getAssignedClass().utf8ToString()
 
-            println "c " + d.get(Indexes.FIELD_ASSIGNED_CLASS)
-            println "x $x"
-            println " z " + x.getAssignedClass().utf8ToString()  //.assignedClass.getClass()
+            if (assignedClassString != cat) {
+                println "classsification error ++++++++++++++++++++ path $path cat $cat assig $assignedClassString"
 
-                   // ConfusionMatrixGenerator.ConfusionMatrix
-       //      def ss = getConfusionMatrix(Indexes.indexReader,
-            //        x,  Indexes.FIELD_ASSIGNED_CLASS, Indexes.FIELD_CONTENTS, 3000)
-
-
-                     // Classifier<T> classifier,
-                  //  String classFieldName,
-                //    String textFieldName,
-                 //   long timeoutMilliseconds)
-
-
+            }
         }
+
+
+        assert snbdc
+        println "snbdc class " + snbdc.class
+
+        ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
+                ConfusionMatrixGenerator.getConfusionMatrix(Indexes.indexReader,
+                        snbdc,
+                        Indexes.FIELD_CATEGORY_NAME,
+                        Indexes.FIELD_CONTENTS,
+                        100000)
+
+        //     double f1Measure = confusionMatrix.getF1Measure();
+
+        //  println "f1 $f1Measure"
+
     }
 }

@@ -32,12 +32,14 @@ class BuildIndex {
         String indexPath =
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-                'indexes/ng3N'
+               // 'indexes/ng3N'
+                'indexes/science4'
 
 
         String docsPath =
 
-                /D:\Classify20NG3/
+        //        /D:\Classify20NG3/
+        /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
@@ -67,7 +69,7 @@ class BuildIndex {
             int docCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 100) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 400) // && categoryNumber <3)
 
                 {
                     def doc = new Document()
