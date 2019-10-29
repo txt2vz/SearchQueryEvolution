@@ -32,14 +32,14 @@ class BuildIndex {
         String indexPath =
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-               // 'indexes/ng3N'
-                'indexes/science4'
+                'indexes/ng3N'
+             //   'indexes/science4'
 
 
         String docsPath =
 
-        //        /D:\Classify20NG3/
-        /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
+                /D:\Classify20NG3/
+       // /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
@@ -57,22 +57,21 @@ class BuildIndex {
 // previously indexed documents:
         iwc.setOpenMode(OpenMode.CREATE)
         IndexWriter writer = new IndexWriter(directory, iwc)
-        //  IndexSearcher indexSearcher = new IndexSearcher(writer.getReader())
         Date start = new Date();
         println("Indexing to directory: $indexPath  from: $docsPath ...")
 
-        def categoryNumber = -1
+        def categoryNumber = 0
 
         new File(docsPath).eachDir {
 
-            categoryNumber++
+
             int docCount = 0
             it.eachFileRecurse { file ->
 
                 if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 400) // && categoryNumber <3)
 
                 {
-                    def doc = new Document()
+                    Document doc = new Document()
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
@@ -100,9 +99,6 @@ class BuildIndex {
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
-                    Field assignedClassField = new StringField(Indexes.FIELD_ASSIGNED_CLASS,  'noClassAssigned', Field.Store.NO)
-                    doc.add(assignedClassField)
-
                     def n = catsNameFreq.get((catName)) ?: 0
                     catsNameFreq.put((catName), n + 1)
 
@@ -110,6 +106,7 @@ class BuildIndex {
                     docCount++
                 }
             }
+            categoryNumber++
         }
         println "Total docs: " + writer.maxDoc()
         writer.close()
@@ -132,6 +129,11 @@ class BuildIndex {
         println "testTotal $testTotal trainTotal $trainTotal"
         println "catsNameFreq $catsNameFreq"
 
+        TotalHitCountCollector cryptCollector = new TotalHitCountCollector();
+        final TermQuery cryptQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME, "sci.crypt"))
+        indexSearcher.search(cryptQ, cryptCollector);
+        def cryptTotal = cryptCollector.getTotalHits()
+        println "cryptTotal $cryptTotal"
 
         println "End ***************************************************************"
     }

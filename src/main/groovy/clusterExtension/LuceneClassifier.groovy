@@ -21,7 +21,7 @@ import org.apache.lucene.util.BytesRef
 class LuceneClassifier {
 
     static void main(String[] args) {
-        Indexes.instance.setIndex(IndexEnum.Science4)
+        Indexes.instance.setIndex(IndexEnum.NG3N)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 
@@ -29,13 +29,13 @@ class LuceneClassifier {
         analyzerPerField.put(Indexes.FIELD_TEST_TRAIN, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_CONTENTS, new StandardAnalyzer());
 
-        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 40)
+        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 400)
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
-        SimpleNaiveBayesDocumentClassifier snbdc =
-     //   org.apache.lucene.classification.Classifier<BytesRef> snbdc =
+     //   SimpleNaiveBayesDocumentClassifier  snbdc =
+        org.apache.lucene.classification.Classifier<BytesRef> snbdc =
                 new SimpleNaiveBayesDocumentClassifier(Indexes.indexReader,
-                        Indexes.trainQ,// trainQ,
+                        Indexes.trainQ,
                         Indexes.FIELD_CATEGORY_NAME,  //.FIELD_ASSIGNED_CLASS,
                         analyzerPerField,
                         Indexes.FIELD_CONTENTS)
@@ -62,9 +62,9 @@ class LuceneClassifier {
         assert snbdc
         println "snbdc class " + snbdc.class
 
-        ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
+       ConfusionMatrixGenerator.ConfusionMatrix  confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(Indexes.indexReader,
-                        snbdc,
+                        snbdc ,
                         Indexes.FIELD_CATEGORY_NAME,
                         Indexes.FIELD_CONTENTS,
                         100000)
