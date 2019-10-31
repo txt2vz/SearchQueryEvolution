@@ -19,6 +19,8 @@ class FileNamesFromQuery {
 
          File outFile = new File ('results/docsMatchingQuery.csv')
          Indexes.instance.setIndex(IndexEnum.NG3)
+
+         //create query 'nasa' OR 'space'
          BooleanQuery.Builder bqb = new BooleanQuery.Builder();
          bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
          bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
