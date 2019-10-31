@@ -24,7 +24,7 @@ public class OR extends Problem implements SimpleProblemForm {
     private final ImportantTerms importantTerms = new ImportantTerms()
     private TermQuery[] termQueryArray
 
-    public void setup(final EvolutionState state, final Parameter base) {
+     void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
 
