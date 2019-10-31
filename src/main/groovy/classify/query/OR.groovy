@@ -16,16 +16,7 @@ import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.TermQuery
 
-//@groovy.transform.CompileStatic
-//@groovy.transform.TypeChecked
-
-/**
- * To generate queries to perform binary text classification using GA string of
- * integer pairs which are translated into OR_segments (lucene SHOULD) queries
- *
- * @author Laurie
- */
-
+@groovy.transform.CompileStatic
 
 public class OR extends Problem implements SimpleProblemForm {
 
@@ -33,7 +24,7 @@ public class OR extends Problem implements SimpleProblemForm {
     private final ImportantTerms importantTerms = new ImportantTerms()
     private TermQuery[] termQueryArray
 
-    public void setup(final EvolutionState state, final Parameter base) {
+     void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
 
@@ -53,14 +44,17 @@ public class OR extends Problem implements SimpleProblemForm {
         ClassifyFit fitness = (ClassifyFit) ind.fitness;
         BooleanQuery.Builder bqb = new BooleanQuery.Builder();
         IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
+        final int[] genome = intVectorIndividual.genome as int[]
 
         def genes = [] as Set
-     //   int duplicateCount = 0;
 
-        intVectorIndividual.genome.each { int gene ->
+        //  intVectorIndividual.genome.each { int gene ->  // slower
+        for (int i = 0; i < genome.size(); i++) {
+            final int gene = genome[i]
+            assert gene < termQueryArray.size() && gene >= 0
 
             //use gene set to prevent duplicates
-            if (gene < termQueryArray.size() && gene >= 0 && genes.add(gene)) {
+            if (genes.add(gene)) {
                 bqb.add(termQueryArray[gene], BooleanClause.Occur.SHOULD)
             }
         }
@@ -72,7 +66,6 @@ public class OR extends Problem implements SimpleProblemForm {
         fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, Indexes.totalTrainDocsInCat);
 
         ((SimpleFitness) intVectorIndividual.fitness).setFitness(state, fitness.f1train, false)
-        ind.evaluated = true;
-        //}
+        ind.evaluated = true
     }
 }

@@ -3,6 +3,8 @@
  import ec.EvolutionState
  import ec.Evolve
  import ec.util.ParameterDatabase
+ import groovy.time.TimeCategory
+ import groovy.time.TimeDuration
  import index.IndexEnum
  import index.Indexes
 
@@ -17,14 +19,14 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         Indexes.instance.setIndex(IndexEnum.Science4)
+         Indexes.instance.setIndex(IndexEnum.NG20)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
 
          ParameterDatabase parameters = null;
-         final Date startRun = new Date();
-         bestResultsOut.format("%s \n", startRun);
+         final Date startTime = new Date();
+         bestResultsOut.format("%s \n", startTime);
          bestResultsOut.format("Term selector: %s  \n", index.ImportantTerms.itm);
          bestResultsOut.format("%s", fileHead);
 
@@ -120,9 +122,10 @@
              println " ---------------------------------END-----------------------------------------------"
          }
 
-         final Date endRun = new Date();
-         def time= endRun.getTime() - startRun.getTime();
-         println "Total time taken: $time"
+         final Date endTime = new Date()
+         TimeDuration duration = TimeCategory.minus(endTime, startTime)
+         println "Duration: $duration"
+
          bestResultsOut.close();
      }
 

@@ -1,5 +1,6 @@
 package index
 
+import groovy.transform.CompileStatic
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.*
 import org.apache.lucene.search.DocIdSetIterator
@@ -33,7 +34,7 @@ public class ImportantTerms {
     private TermsEnum termsEnum
 
     private Set<String> stopSet = StopSet.getStopSetFromFile()
-    public static final ImportantTermsMethod itm = ImportantTermsMethod.TFIDF
+    public static final ImportantTermsMethod itm = ImportantTermsMethod.F1
 
     public static void main(String[] args) {
         Indexes.instance.setIndex(Indexes.indexEnum = IndexEnum.NG3)
@@ -181,11 +182,12 @@ public class ImportantTerms {
     /**
      * create a set of words based on F1 measure of the term when used to classify current category
      */
-    //@TypeChecked(TypeCheckingMode.SKIP)
+
+    @CompileStatic
     private TermQuery[] getF1TermQueryList() {
 
         BytesRef termbr
-        def termQueryMap = [:]
+        Map<TermQuery,Double> termQueryMap = [:]
 
         while ((termbr = termsEnum.next()) != null) {
 
@@ -195,7 +197,7 @@ public class ImportantTerms {
                 Query tq = new TermQuery(t)
                 final int positiveHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
                 final int negativeHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.otherTrainDocsFilter, tq)
-                double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, Indexes.totalTrainDocsInCat)
+                final double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, Indexes.totalTrainDocsInCat)
 
                 if (F1 > 0.02) {
                     termQueryMap += [(tq): F1]
@@ -205,7 +207,7 @@ public class ImportantTerms {
 
         termQueryMap = termQueryMap.sort { -it.value }
         println "termQueryMap: $termQueryMap"
-        TermQuery[] termQueryList = (TermQuery[]) termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable().toArray()
+        TermQuery[] termQueryList =  termQueryMap.keySet().take(MAX_TERMQUERYLIST_SIZE).asImmutable().toArray() as TermQuery[]
         println "f1 map size: ${termQueryMap.size()}  termQuerylist size: ${termQueryList.size()}  termQuerylist: $termQueryList"
         return termQueryList
     }

@@ -130,7 +130,6 @@ class ClusterMainECJ extends Evolve {
             final Date endTime = new Date()
             TimeDuration durationT = TimeCategory.minus(endTime, indexTime)
             println "Duration: $durationT"
-
             String s =  ie.toString() + "  " + durationT + '\n'
             timingFile << s
         }
@@ -140,7 +139,6 @@ class ClusterMainECJ extends Evolve {
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-
     }
 
     static main(args) {
