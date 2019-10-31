@@ -17,21 +17,32 @@ class FileNamesFromQuery {
 
      static void main(String[] args) {
 
+         File outFile = new File ('results/docsMatchingQuery.csv')
          Indexes.instance.setIndex(IndexEnum.NG3)
-         IndexSearcher searcher = Indexes.indexSearcher
+
+         //create query 'nasa' OR 'space'
          BooleanQuery.Builder bqb = new BooleanQuery.Builder();
          bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
-         Query q =bqb.build()
+         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
+         Query q = bqb.build()
 
-         TopDocs t0TopDocs = Indexes.indexSearcher.search(q, 10000)
-         ScoreDoc[] t0Hits = t0TopDocs.scoreDocs;
+         String queryString = q.toString(Indexes.FIELD_CONTENTS)
 
-         for (ScoreDoc sd: t0Hits){
-             Document d = searcher.doc(sd.doc)
-             println "path " + d.get(Indexes.FIELD_PATH)
-             println "Category " + d.get(Indexes.FIELD_CATEGORY_NAME)
-             println "test train " + d.get(Indexes.FIELD_TEST_TRAIN)
-             println ""
+         TopDocs topDocs = Indexes.indexSearcher.search(q, Integer.MAX_VALUE)
+         ScoreDoc[] hits = topDocs.scoreDocs
+
+         outFile.write 'documentPath, category, testTrain, query \n'
+
+         for (ScoreDoc sd: hits){
+             Document d = Indexes.indexSearcher.doc(sd.doc)
+
+             String path = d.get(Indexes.FIELD_PATH)
+             String category = d.get(Indexes.FIELD_CATEGORY_NAME)
+             String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
+
+             println "path $path category: $category testTrain: $testTrain query: $queryString"
+
+             outFile << "$path, $category, $testTrain, $queryString \n"
          }
     }
 }

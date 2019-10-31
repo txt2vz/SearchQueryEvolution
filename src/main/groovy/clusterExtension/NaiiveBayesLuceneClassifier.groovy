@@ -18,10 +18,10 @@ import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
 import org.apache.lucene.util.BytesRef
 
-class LuceneClassifier {
+class NaiiveBayesLuceneClassifier {
 
     static void main(String[] args) {
-        Indexes.instance.setIndex(IndexEnum.NG3N)
+        Indexes.instance.setIndex(IndexEnum.Science4)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 
@@ -29,28 +29,24 @@ class LuceneClassifier {
         analyzerPerField.put(Indexes.FIELD_TEST_TRAIN, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_CONTENTS, new StandardAnalyzer());
 
-        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 400)
+        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 40)
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
-     //   SimpleNaiveBayesDocumentClassifier  snbdc =
-        org.apache.lucene.classification.Classifier<BytesRef> snbdc =
+        SimpleNaiveBayesDocumentClassifier classifier =
                 new SimpleNaiveBayesDocumentClassifier(Indexes.indexReader,
                         Indexes.trainQ,
-                        Indexes.FIELD_CATEGORY_NAME,  //.FIELD_ASSIGNED_CLASS,
+                        Indexes.FIELD_CATEGORY_NAME,
                         analyzerPerField,
                         Indexes.FIELD_CONTENTS)
-
-        println snbdc
 
         for (ScoreDoc testd : testHits) {
             Document d = Indexes.indexSearcher.doc(testd.doc)
 
-            def assignedClass = snbdc.assignClass(d)
-
+            def assignedClass = classifier.assignClass(d)
             def path = d.get(Indexes.FIELD_PATH)
             def cat = d.get(Indexes.FIELD_CATEGORY_NAME)
 
-            def assignedClassString= assignedClass.getAssignedClass().utf8ToString()
+            def assignedClassString = assignedClass.getAssignedClass().utf8ToString()
 
             if (assignedClassString != cat) {
                 println "classsification error ++++++++++++++++++++ path $path cat $cat assig $assignedClassString"
@@ -59,19 +55,17 @@ class LuceneClassifier {
         }
 
 
-        assert snbdc
-        println "snbdc class " + snbdc.class
+        assert classifier
+        println "classifier class " + classifier.class
 
-       ConfusionMatrixGenerator.ConfusionMatrix  confusionMatrix =
+        ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(Indexes.indexReader,
-                        snbdc ,
+                        classifier,
                         Indexes.FIELD_CATEGORY_NAME,
                         Indexes.FIELD_CONTENTS,
-                        100000)
+                        10000)
 
         //     double f1Measure = confusionMatrix.getF1Measure();
-
-        //  println "f1 $f1Measure"
 
     }
 }

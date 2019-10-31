@@ -32,14 +32,14 @@ class BuildIndex {
         String indexPath =
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-                'indexes/ng3N'
-             //   'indexes/science4'
+          //      'indexes/ng3N'
+                'indexes/science4'
 
 
         String docsPath =
 
-                /D:\Classify20NG3/
-       // /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
+        //        /D:\Classify20NG3/
+        /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
                 // /C:\Users\aceslh\Dataset\r5o/
