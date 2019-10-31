@@ -21,6 +21,7 @@ class FileNamesFromQuery {
          Indexes.instance.setIndex(IndexEnum.NG3)
          BooleanQuery.Builder bqb = new BooleanQuery.Builder();
          bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
+         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
          Query q = bqb.build()
 
          String queryString = q.toString(Indexes.FIELD_CONTENTS)
@@ -37,7 +38,7 @@ class FileNamesFromQuery {
              String category = d.get(Indexes.FIELD_CATEGORY_NAME)
              String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
 
-             println "path $path category: $category testTrain: $testTrain"
+             println "path $path category: $category testTrain: $testTrain query: $queryString"
 
              outFile << "$path, $category, $testTrain, $queryString \n"
          }
