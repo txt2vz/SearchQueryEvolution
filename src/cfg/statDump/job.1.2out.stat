@@ -3,284 +3,704 @@ Generation: 0
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.7474747474747474  fitness: 0.7474747474747474
-10 33 14 13 39 2 41 36
+F1train: 0.6097560975609756  fitness: 0.6097560975609756
+23 3 40 5 41 13 31 26
 
 Generation: 1
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.7474747474747474  fitness: 0.7474747474747474
-10 33 14 13 39 2 41 36
+F1train: 0.6535211267605634  fitness: 0.6535211267605634
+2 18 17 4 15 7 40 -1
 
 Generation: 2
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.813953488372093  fitness: 0.813953488372093
-23 14 41 39 41 13 35 0
+F1train: 0.6686046511627907  fitness: 0.6686046511627907
+4 3 41 11 40 5 2 35
 
 Generation: 3
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.813953488372093  fitness: 0.813953488372093
-23 14 41 39 41 13 35 0
+F1train: 0.7195467422096319  fitness: 0.7195467422096319
+15 7 40 26 48 4 2 32
 
 Generation: 4
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8181818181818181  fitness: 0.8181818181818181
-17 23 41 13 39 27 35 0
+F1train: 0.711764705882353  fitness: 0.711764705882353
+15 5 11 17 13 4 2 32
 
 Generation: 5
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8181818181818181  fitness: 0.8181818181818181
-17 23 41 13 39 27 35 0
+F1train: 0.7283582089552239  fitness: 0.7283582089552239
+17 41 13 11 32 35 26 8
 
 Generation: 6
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8181818181818181  fitness: 0.8181818181818181
-26 44 17 39 17 41 13 0
+F1train: 0.7415730337078651  fitness: 0.7415730337078651
+4 26 40 15 32 5 2 32
 
 Generation: 7
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.816326530612245  fitness: 0.816326530612245
-13 38 36 39 41 2 0 4
+F1train: 0.7507002801120448  fitness: 0.7507002801120448
+32 5 40 11 13 35 26 2
 
 Generation: 8
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8314606741573033  fitness: 0.8314606741573033
-4 23 44 13 39 2 41 0
+F1train: 0.7507163323782235  fitness: 0.7507163323782235
+15 32 11 5 40 5 26 2
 
 Generation: 9
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8387096774193548  fitness: 0.8387096774193548
-4 38 44 13 39 6 41 0
+F1train: 0.7570621468926553  fitness: 0.7570621468926553
+15 32 13 11 40 35 26 2
 
 Generation: 10
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8478260869565217  fitness: 0.8478260869565217
-38 23 44 13 39 2 35 4
+F1train: 0.7570621468926553  fitness: 0.7570621468926553
+15 32 13 11 40 35 26 2
 
 Generation: 11
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8599999999999999  fitness: 0.8599999999999999
-13 14 41 39 44 38 35 36
+F1train: 0.7594202898550725  fitness: 0.7594202898550725
+32 0 40 17 13 35 26 3
 
 Generation: 12
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-23 14 41 38 39 44 35 13
+F1train: 0.7613636363636364  fitness: 0.7613636363636364
+1 32 40 26 2 5 15 3
 
 Generation: 13
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-23 14 41 38 39 44 35 13
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 14
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-38 23 41 13 39 44 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 15
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-17 14 41 39 44 38 35 13
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 16
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-30 14 41 39 0 44 38 13
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+32 6 13 15 40 5 26 2
 
 Generation: 17
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-30 14 41 39 0 44 38 13
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 18
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8571428571428571  fitness: 0.8571428571428571
-38 44 41 13 39 44 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 19
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-38 14 41 39 23 44 35 13
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 20
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-13 23 41 39 44 38 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 21
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-39 14 41 13 44 38 35 17
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 22
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-13 23 41 39 44 38 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 23
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-38 14 41 13 39 44 35 17
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 24
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-39 14 41 13 44 38 35 17
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 25
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8695652173913043  fitness: 0.8695652173913043
-38 14 41 13 39 44 35 17
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 26
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 27
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-13 38 41 30 39 44 35 4
+F1train: 0.768361581920904  fitness: 0.768361581920904
+15 32 13 11 40 5 26 2
 
 Generation: 28
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 29
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 30
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 31
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 17
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 32
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-30 38 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 33
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 34
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 35
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 17
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 36
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 37
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 38
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Generation: 39
 Best Individual:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-38 30 41 13 39 44 35 4
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 40
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 41
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 42
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 43
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 44
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 45
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 46
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 47
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 48
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 49
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 50
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 51
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 52
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 53
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 54
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 55
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 56
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 57
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 58
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 59
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 60
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 61
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 62
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 63
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 64
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 65
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 66
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 67
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 68
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 69
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 70
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 71
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 72
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 73
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 74
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 75
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 76
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 77
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 78
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 79
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 80
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 81
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 82
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 83
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 84
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 85
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 86
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 87
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 88
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 89
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 90
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 91
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 92
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 93
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 94
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 95
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 96
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 97
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 98
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
+
+Generation: 99
+Best Individual:
+Subpopulation 0:
+Evaluated: T
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+15 32 13 6 40 5 26 2
 
 Best Individual of Run:
 Subpopulation 0:
 Evaluated: T
-F1train: 0.8723404255319149  fitness: 0.8723404255319149
-30 14 41 39 0 44 38 13
+F1train: 0.7688022284122562  fitness: 0.7688022284122562
+32 6 13 15 40 5 26 2
