@@ -2,9 +2,11 @@ package classify
 
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
+import groovy.transform.CompileStatic
 import index.Indexes
 import org.apache.lucene.search.*
 
+@CompileStatic
 public class ClassifyGAStatistics extends SimpleStatistics {
 
 	public void finalStatistics(final EvolutionState state, final int result) {
@@ -67,8 +69,6 @@ public class ClassifyGAStatistics extends SimpleStatistics {
 				" F1Train: " + gaFit.f1train + " positive match test: " + gaFit.positiveMatchTest +
 				" negative match test: " + gaFit.negativeMatchTest
 
-		//println "Query: " + gaFit.getQuery()
-		//println "QueryMinimal: " + gaFit.getQueryMinimal()
 		println "QueryString: " + gaFit.getQueryString()
 	}
 }
