@@ -1,6 +1,6 @@
-#parent.0		= classifySubpop4.params
-parent.0		= classifySinglePop.params
-generations =	10
+parent.0		= classifySubpop4.params
+#parent.0		= classifySinglePop.params
+generations =	200
 seed=time
 seed.0=time
 seed.1=time
@@ -16,7 +16,7 @@ eval.problem = classify.query.OR
 stat = classify.ClassifyGAStatistics
 stat.file = statDump/out.stat
 select.tournament.size = 5
-#breed.elite.0 = 2
+breed.elite.0 = 2
 
 #pop.subpops = 1
 pop.default-subpop =0
@@ -43,10 +43,10 @@ pop.subpop.1.species.genome-size = 8
 pop.subpop.2.species.genome-size = 8
 pop.subpop.3.species.genome-size = 8
 
-pop.subpop.0.species.max-gene = 50
-pop.subpop.1.species.max-gene = 50
-pop.subpop.2.species.max-gene = 50
-pop.subpop.3.species.max-gene = 50
+pop.subpop.0.species.max-gene = 150
+pop.subpop.1.species.max-gene = 150
+pop.subpop.2.species.max-gene = 150
+pop.subpop.3.species.max-gene = 150
 
 pop.subpop.0.species.min-gene = 0
 pop.subpop.1.species.min-gene = 0
