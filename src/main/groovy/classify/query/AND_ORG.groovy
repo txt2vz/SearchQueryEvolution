@@ -9,7 +9,7 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
-import index.ImportantTerms
+import index.ImportantTermsOld
 import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
@@ -38,7 +38,7 @@ public class AND_ORG extends Problem implements SimpleProblemForm {
 				+ Indexes.instance.totalTrainDocsInCat + " Total test docs for cat "
 				+ Indexes.instance.totalTestDocsInCat);
 
-		ImportantTerms iw = new ImportantTerms();
+		ImportantTermsOld iw = new ImportantTermsOld();
 		//	wordArray = iw.getFreqWordList()
 		wordArray=	iw.getF1TermQueryList(false, true);
 	}

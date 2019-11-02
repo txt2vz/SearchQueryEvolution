@@ -3,7 +3,6 @@ package cluster;
 import index.*;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.jenetics.*;
 import org.jenetics.engine.Engine;
@@ -16,7 +15,6 @@ import java.util.stream.IntStream;
 
 import index.IndexEnum;
 
-import static index.Indexes.indexSearcher;
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class ClusterMainJenetics {
@@ -27,7 +25,7 @@ public class ClusterMainJenetics {
    // static IndexSearcher indexSearcher = indexEnum.getIndexSearcher();
     static IndexReader indexReader = indexEnum.getIndexReader();
 
-    static List<TermQuery>  termQueryList = ImportantTermsForClustering.getTFIDFTermQueryList(indexReader);
+    static List<TermQuery>  termQueryList = ImportantTermQueries.getTFIDFTermQueryList(indexReader);
 
    // private final static List<TermQuery> termQueryArray = iterms.getTFIDFTermQueryList();
 

@@ -9,7 +9,7 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
-import index.ImportantTerms
+import index.ImportantTermQueries
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -21,7 +21,8 @@ import org.apache.lucene.search.TermQuery
 public class OR extends Problem implements SimpleProblemForm {
 
     private IndexSearcher searcher = Indexes.indexSearcher
-    private final ImportantTerms importantTerms = new ImportantTerms()
+    //private final ImportantTerms importantTerms = new ImportantTerms()
+  //  private ImportantTermQueries importantTerms = new ImportantTermQueries()
     private TermQuery[] termQueryArray
 
      void setup(final EvolutionState state, final Parameter base) {
@@ -32,7 +33,10 @@ public class OR extends Problem implements SimpleProblemForm {
                 "Total train docs: ${Indexes.instance.totalTrainDocsInCat} " +
                 "Total test docs: ${Indexes.instance.totalTestDocsInCat}"
 
-        termQueryArray = importantTerms.getImportantTerms() as TermQuery[]
+        termQueryArray = ImportantTermQueries.getF1TermQueryList(searcher)
+
+         println "termQueryArraysizae " + termQueryArray.size()
+                //importantTerms.getImportantTerms() as TermQuery[]
     }
 
     public void evaluate(final EvolutionState state, final Individual ind,

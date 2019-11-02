@@ -5,6 +5,7 @@
  import ec.util.ParameterDatabase
  import groovy.time.TimeCategory
  import groovy.time.TimeDuration
+ import index.ImportantTermsOld
  import index.IndexEnum
  import index.Indexes
 
@@ -19,7 +20,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         Indexes.instance.setIndex(IndexEnum.NG20)
+         Indexes.instance.setIndex(IndexEnum.R10)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
@@ -27,7 +28,7 @@
          ParameterDatabase parameters = null;
          final Date startTime = new Date();
          bestResultsOut.format("%s \n", startTime);
-         bestResultsOut.format("Term selector: %s  \n", index.ImportantTerms.itm);
+         bestResultsOut.format("Term selector: %s  \n", ImportantTermsOld.itm);
          bestResultsOut.format("%s", fileHead);
 
          (1..NUMBER_OF_JOBS).each{job ->
@@ -104,7 +105,7 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println  "${index.ImportantTerms.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
+			 println  "${ImportantTermsOld.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

@@ -9,7 +9,7 @@ import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
-import index.ImportantTerms
+import index.ImportantTermQueries
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -64,7 +64,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
         //TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
-        List <TermQuery>  tql = index.ImportantTermsForClustering.getTFIDFTermQueryList(Indexes.indexReader)
+        List <TermQuery>  tql = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         qlfc = new QueryListFromChromosome(tql)
     }
 

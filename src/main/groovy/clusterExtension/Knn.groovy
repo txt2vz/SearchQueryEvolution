@@ -16,7 +16,7 @@ class Knn {
     //  http://lucene.apache.org/core/7_4_0/classification/index.html
 
     static void main(String[] args) {
-        Indexes.instance.setIndex(IndexEnum.NG20)
+        Indexes.instance.setIndex(IndexEnum.R10)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 

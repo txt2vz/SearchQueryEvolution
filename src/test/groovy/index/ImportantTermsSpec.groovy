@@ -7,10 +7,9 @@ class ImportantTermsSpec extends spock.lang.Specification {
 		Indexes.instance.setIndex(IndexEnum.R10)
 		Indexes.instance.setCategoryNumber('2')
 		Indexes.instance.setIndexFieldsAndTotals()
-		ImportantTerms impTerms = new ImportantTerms()
 
 		when:
-		def oilList = impTerms.getF1TermQueryList ()
+		def oilList = ImportantTermQueries.getF1TermQueryList (Indexes.indexSearcher)
 
 		then:
 		oilList[0].toString((Indexes.FIELD_CONTENTS)) == 'oil'
@@ -22,10 +21,9 @@ class ImportantTermsSpec extends spock.lang.Specification {
 		Indexes.instance.setIndex(IndexEnum.NG20)
 		Indexes.instance.setCategoryNumber('2')
 		Indexes.instance.setIndexFieldsAndTotals()
-		ImportantTerms impTerms = new ImportantTerms()
 
 		when:
-		def graphicsList = impTerms.getF1TermQueryList ()
+		def graphicsList = ImportantTermQueries.getF1TermQueryList (Indexes.indexSearcher)
 
 		then:
 		graphicsList[0].toString((Indexes.FIELD_CONTENTS)) == 'windows'
@@ -36,10 +34,9 @@ class ImportantTermsSpec extends spock.lang.Specification {
 		setup:
 		Indexes.instance.setIndex(IndexEnum.NG3)
 		Indexes.instance.setIndexFieldsAndTotals()
-		ImportantTerms impTerms = new ImportantTerms()
 
 		when:
-		def tfidfList = impTerms.getTFIDFTermQueryList()
+		def tfidfList = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
 
 		then:
 		tfidfList[0].getTerm().text() == 'god'

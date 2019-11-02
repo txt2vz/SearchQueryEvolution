@@ -24,7 +24,7 @@ enum ImportantTermsMethod {
 
 //@groovy.transform.CompileStatic
 //@groovy.transform.TypeChecked
-public class ImportantTerms {
+public class ImportantTermsOld {
 
 //    public final static int SPAN_FIRST_MAX_END = 300;
     private final static int MAX_TERMQUERYLIST_SIZE = 200;
@@ -41,7 +41,7 @@ public class ImportantTerms {
         Indexes.instance.categoryNumber = '2'
         Indexes.instance.setIndexFieldsAndTotals()
 
-        def iw = new ImportantTerms()
+        def iw = new ImportantTermsOld()
         iw.mergeMethods()
         //    iw.getF1TermQueryList()
         //  iw.getTFIDFTermQueryList()
@@ -51,18 +51,18 @@ public class ImportantTerms {
         // iw.getORTermQueryList()
     }
 
-    ImportantTerms(IndexReader ir) {
+    ImportantTermsOld(IndexReader ir) {
         indexReader = ir
-        ImportantTerms()
+        ImportantTermsOld()
     }
 
-    public ImportantTerms() {
+    public ImportantTermsOld() {
 
         Terms terms = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS)
         termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
-        println "Important words terms.getDocCount: ${terms.getDocCount()}"
-        println "Important words terms.size ${terms.size()}"
+       // println "Important words terms.getDocCount: ${terms.getDocCount()}"
+       // println "Important words terms.size ${terms.size()}"
     }
 
     public TermQuery[] getImportantTerms() {

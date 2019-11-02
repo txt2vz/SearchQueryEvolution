@@ -1,6 +1,6 @@
 package cluster
 
-import index.ImportantTerms
+import index.ImportantTermsOld
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.index.Term
@@ -14,7 +14,7 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         setup:
         Indexes.instance.setIndex(IndexEnum.NG3)
         Indexes.instance.setIndexFieldsAndTotals()
-        ImportantTerms impTerms = new ImportantTerms()
+        ImportantTermsOld impTerms = new ImportantTermsOld()
         TermQuery[] tfidfList = impTerms.getTFIDFTermQueryList()
         QueryListFromChromosome.intersectMethod = IntersectMethod.RATIO_POINT_5
 
