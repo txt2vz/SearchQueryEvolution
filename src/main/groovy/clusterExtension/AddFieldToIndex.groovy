@@ -39,8 +39,8 @@ class AddFieldToIndex {
 
          //create query 'nasa' OR 'space'
          BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
          bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
+         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
          Query q = bqb.build()
 
          String queryString = q.toString(Indexes.FIELD_CONTENTS)
@@ -53,18 +53,33 @@ class AddFieldToIndex {
          for (ScoreDoc sd: hits){
              Document d = Indexes.indexSearcher.doc(sd.doc)
 
-             Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(2), Field.Store.YES);
-             d.add(catNumberField)
+             Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'om', Field.Store.YES);
+             d.add(assignedClass)
 
-             writer.updateDocument(d)
+            def p =  d.getField(Indexes.FIELD_PATH)
 
-             String pathN = d.get(Indexes.FIELD_PATH)
-             String category = d.get(Indexes.FIELD_CATEGORY_NAME)
-             String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
+             println "p " + p.stringValue()
 
-             println "pathN $pathN category: $category testTrain: $testTrain query: $queryString"
+           //  def a = d.getField(Indexes.FIELD_ASSIGNED_CLASS)
+           //  println "a $a"
 
-             outFile << "$path, $category, $testTrain, $queryString \n"
+          //   d.add(a)
+
+             writer.updateDocument(new Term(Indexes.FIELD_PATH, p.stringValue()),d)
+//writer.commit()
+        //     writer.close()
+          //   String pathN = d.get(Indexes.FIELD_PATH)
+          //   String category = d.get(Indexes.FIELD_CATEGORY_NAME)
+          //   String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
+
+           //  println "pathN $pathN category: $category testTrain: $testTrain query: $queryString"
+
+             //outFile << "$path, $category, $testTrain, $queryString \n"
+
          }
+         writer.close()
     }
+
+
+
 }
