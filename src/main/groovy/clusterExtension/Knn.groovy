@@ -32,8 +32,8 @@ class Knn {
               //  new ClassicSimilarity(),
                 Indexes.trainQ,
                 Indexes.indexEnum.getNumberOfCategories(),
-                4,
-                4,
+                3,
+                1,
                 Indexes.FIELD_CATEGORY_NAME,
                 analyzerPerField,
                 Indexes.FIELD_CONTENTS)
@@ -65,5 +65,9 @@ class Knn {
         def recall = confusionMatrix.getRecall()
 
         println "f1: $f1 precision: $precisiion recall: $recall"
+
+        def p = confusionMatrix.getLinearizedMatrix()
+
+        println "p $p"
     }
 }

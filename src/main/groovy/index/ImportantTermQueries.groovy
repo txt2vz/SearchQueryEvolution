@@ -99,7 +99,7 @@ class ImportantTermQueries {
     private static boolean isUsefulTerm(int df, String word) {
 
         boolean b =
-                df > 5 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
+                df > 5 && !stopSet.contains(word) //&& !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
 
         return b
     }

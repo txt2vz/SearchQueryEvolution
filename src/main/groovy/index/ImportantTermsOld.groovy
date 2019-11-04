@@ -24,6 +24,7 @@ enum ImportantTermsMethod {
 
 //@groovy.transform.CompileStatic
 //@groovy.transform.TypeChecked
+@Deprecated
 public class ImportantTermsOld {
 
 //    public final static int SPAN_FIRST_MAX_END = 300;

@@ -46,8 +46,8 @@ public class OR extends Problem implements SimpleProblemForm {
             return;
 
         ClassifyFit fitness = (ClassifyFit) ind.fitness;
-        BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-        IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind;
+        BooleanQuery.Builder bqb = new BooleanQuery.Builder()
+        IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind
         final int[] genome = intVectorIndividual.genome as int[]
 
         def genes = [] as Set

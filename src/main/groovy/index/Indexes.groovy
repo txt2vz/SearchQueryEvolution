@@ -121,12 +121,12 @@ class Indexes {
 
     //get hits for a particular query using filter (e.g. a particular category)
     static int getQueryHitsWithFilter(IndexSearcher searcher, Query filter, Query q) {
-        TotalHitCountCollector collector = new TotalHitCountCollector();
-        BooleanQuery.Builder bqb = new BooleanQuery.Builder();
+        TotalHitCountCollector collector = new TotalHitCountCollector()
+        BooleanQuery.Builder bqb = new BooleanQuery.Builder()
         bqb.add(q, BooleanClause.Occur.MUST)
         bqb.add(filter, BooleanClause.Occur.FILTER)
-        searcher.search(bqb.build(), collector);
-        return collector.getTotalHits();
+        searcher.search(bqb.build(), collector)
+        return collector.getTotalHits()
     }
 
     //get the category_name for the current category
@@ -138,6 +138,7 @@ class Indexes {
         String categoryName
         hits.each { ScoreDoc h ->
             Document d = indexSearcher.doc(h.doc)
+
             categoryName = d.get(FIELD_CATEGORY_NAME)
         }
         return categoryName

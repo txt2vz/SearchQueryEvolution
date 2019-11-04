@@ -103,6 +103,7 @@ class BuildIndex {
                     catsNameFreq.put((catName), n + 1)
 
                     writer.addDocument(doc)
+                    writer.up
                     docCount++
                 }
             }
