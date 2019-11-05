@@ -97,3 +97,4 @@ NG3 path: indexes/20NG3 numberOfCategories: 3   2 minutes, 34.377 seconds
 CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   3 minutes, 19.957 seconds
 NG3 path: indexes/20NG3 numberOfCategories: 3   51.679 seconds
 CLASSIC4 path: indexes/classic4_500 numberOfCategories: 4   45.809 seconds
+NG3 path: indexes/20NG3 numberOfCategories: 3   26.555 seconds

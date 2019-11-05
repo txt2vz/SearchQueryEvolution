@@ -19,67 +19,68 @@ import java.nio.file.Paths
 
 class AddFieldToIndex {
 
-     static void main(String[] args) {
+    static void main(String[] args) {
 
-         String indexPath = 'indexes/science4'
+        String indexPath = 'indexes/NG3'
+                //'indexes/science4'
 
-         Path path = Paths.get(indexPath)
-         Directory directory = FSDirectory.open(path)
-         Analyzer analyzer =  new StandardAnalyzer()
-         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
-
+        Path path = Paths.get(indexPath)
+        Directory directory = FSDirectory.open(path)
+        Analyzer analyzer = new StandardAnalyzer()
+        IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
 
 // Create a new index in the directory, removing any
 // previously indexed documents:
-         iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND)
-         IndexWriter writer = new IndexWriter(directory, iwc)
+        iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND)
+        IndexWriter writer = new IndexWriter(directory, iwc)
 
-         File outFile = new File ('results/docsMatchingQuery.csv')
-         Indexes.instance.setIndex(IndexEnum.NG3)
+        File outFile = new File('results/docsMatchingQuery.csv')
+        Indexes.instance.setIndex(IndexEnum.NG3)
 
-         //create query 'nasa' OR 'space'
-         BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
-         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
-         Query q = bqb.build()
+        //create query 'nasa' OR 'space'
+        BooleanQuery.Builder bqb = new BooleanQuery.Builder();
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'god')), BooleanClause.Occur.SHOULD)
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'jesus')), BooleanClause.Occur.SHOULD)
+        Query godQ = bqb.build()
 
-         String queryString = q.toString(Indexes.FIELD_CONTENTS)
+        bqb = new BooleanQuery.Builder();
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'game')), BooleanClause.Occur.SHOULD)
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'hockey')), BooleanClause.Occur.SHOULD)
+        Query gameQ = bqb.build()
 
-         TopDocs topDocs = Indexes.indexSearcher.search(q, Integer.MAX_VALUE)
-         ScoreDoc[] hits = topDocs.scoreDocs
+        bqb = new BooleanQuery.Builder();
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'space')), BooleanClause.Occur.SHOULD)
+        bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'orbit')), BooleanClause.Occur.SHOULD)
+        Query spaceQ = bqb.build()
 
-         outFile.write 'documentPath, category, testTrain, query \n'
+       // String queryString = godQ.toString(Indexes.FIELD_CONTENTS)
 
-         for (ScoreDoc sd: hits){
-             Document d = Indexes.indexSearcher.doc(sd.doc)
+        Query qAll = new MatchAllDocsQuery()
 
-             Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'om', Field.Store.YES);
-             d.add(assignedClass)
+        Map <Query, String> qMap = [(godQ): 'god', (gameQ): 'game', (spaceQ): 'space']
+        int counter = 0
 
-            def p =  d.getField(Indexes.FIELD_PATH)
+        qMap.each { query, name ->
 
-             println "p " + p.stringValue()
+            TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
+            ScoreDoc[] hits = topDocs.scoreDocs
 
-           //  def a = d.getField(Indexes.FIELD_ASSIGNED_CLASS)
-           //  println "a $a"
+            outFile.write 'documentPath, category, testTrain, query \n'
 
-          //   d.add(a)
+            for (ScoreDoc sd : hits) {
+                Document d = Indexes.indexSearcher.doc(sd.doc)
 
-             writer.updateDocument(new Term(Indexes.FIELD_PATH, p.stringValue()),d)
-//writer.commit()
-        //     writer.close()
-          //   String pathN = d.get(Indexes.FIELD_PATH)
-          //   String category = d.get(Indexes.FIELD_CATEGORY_NAME)
-          //   String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
+                Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
+                d.add(assignedClass)
 
-           //  println "pathN $pathN category: $category testTrain: $testTrain query: $queryString"
+                def p = d.getField(Indexes.FIELD_PATH)
 
-             //outFile << "$path, $category, $testTrain, $queryString \n"
+                writer.updateDocument(new Term(Indexes.FIELD_PATH, p.stringValue()), d)
+                counter++
+            }
+        }
+        println "$counter docs updated"
 
-         }
-         writer.close()
+        writer.close()
     }
-
-
-
 }

@@ -25,7 +25,7 @@ enum IndexEnum {
 
     CLASSIC4('indexes/classic4_500', 4),
 
-    NG3('indexes/20NG3', 3),
+    NG3('indexes/NG3', 3),
     NG5('indexes/20NG5WindowsmiscForsaleHockeySpaceChristian', 5),
     NG6('indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns', 6),
     NG20('indexes/20NG', 20),

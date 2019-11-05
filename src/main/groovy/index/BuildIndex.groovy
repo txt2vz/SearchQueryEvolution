@@ -32,17 +32,17 @@ class BuildIndex {
         String indexPath =
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-          //      'indexes/ng3N'
-                'indexes/science4'
+                'indexes/NG3'
+         //       'indexes/science4'
 
 
         String docsPath =
 
         //        /D:\Classify20NG3/
-        /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
+                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+   //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
-                // /C:\Users\aceslh\Dataset\r5o/
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
@@ -63,7 +63,6 @@ class BuildIndex {
         def categoryNumber = 0
 
         new File(docsPath).eachDir {
-
 
             int docCount = 0
             it.eachFileRecurse { file ->
@@ -103,7 +102,7 @@ class BuildIndex {
                     catsNameFreq.put((catName), n + 1)
 
                     writer.addDocument(doc)
-                    writer.up
+               //     writer.up
                     docCount++
                 }
             }

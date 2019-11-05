@@ -3,46 +3,72 @@ package clusterExtension
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.document.Document
+import org.apache.lucene.index.DirectoryReader
+import org.apache.lucene.index.IndexReader
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.MatchAllDocsQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
+import org.apache.lucene.store.Directory
+import org.apache.lucene.store.FSDirectory
 
+import java.nio.file.Path
+import java.nio.file.Paths
 
 class FileNamesFromQuery {
 
-     static void main(String[] args) {
+    static void main(String[] args) {
 
-         File outFile = new File ('results/docsMatchingQuery.csv')
-         Indexes.instance.setIndex(IndexEnum.NG3)
+        File outFile = new File('results/docsMatchingQuery.csv')
+      //Indexes.instance.setIndex(IndexEnum.NG3)
 
-         //create query 'nasa' OR 'space'
-         BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'nasa')), BooleanClause.Occur.SHOULD)
-         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'space')), BooleanClause.Occur.SHOULD)
-         Query q = bqb.build()
+        //create query 'nasa' OR 'space'
+        //    BooleanQuery.Builder bqb = new BooleanQuery.Builder();
+        //  bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'god')), BooleanClause.Occur.SHOULD)
+        // bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'jesus')), BooleanClause.Occur.SHOULD)
+        //  Query q = bqb.build()
 
-         String queryString = q.toString(Indexes.FIELD_CONTENTS)
+        Path path = Paths.get('indexes/NG3')
+        Directory directory = FSDirectory.open(path)
+        IndexReader ir = DirectoryReader.open(directory)
+        IndexSearcher is = new IndexSearcher(ir)
 
-         TopDocs topDocs = Indexes.indexSearcher.search(q, Integer.MAX_VALUE)
-         ScoreDoc[] hits = topDocs.scoreDocs
+        Query qAll = new MatchAllDocsQuery()
 
-         outFile.write 'documentPath, category, testTrain, query \n'
+        //String queryString = q.toString(Indexes.FIELD_CONTENTS)
 
-         for (ScoreDoc sd: hits){
-             Document d = Indexes.indexSearcher.doc(sd.doc)
+        TopDocs topDocs = is.search(qAll, Integer.MAX_VALUE)
+        ScoreDoc[] hits = topDocs.scoreDocs
 
-             String path = d.get(Indexes.FIELD_PATH)
-             String category = d.get(Indexes.FIELD_CATEGORY_NAME)
-             String testTrain =  d.get(Indexes.FIELD_TEST_TRAIN)
+        //  outFile.write 'documentPath, category, testTrain, query \n'
 
-             println "path $path category: $category testTrain: $testTrain query: $queryString"
+        Map<String, Integer> assignedCategoryFrequencies = [:]
 
-             outFile << "$path, $category, $testTrain, $queryString \n"
-         }
+        int counter = 0
+        for (ScoreDoc sd : hits) {
+            Document d = is.doc(sd.doc)
+
+            String pathN = d.get(Indexes.FIELD_PATH)
+            String category = d.get(Indexes.FIELD_CATEGORY_NAME)
+            String testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
+            String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
+
+          //  if (assignedCat!=null)
+           //     println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
+
+            int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
+            assignedCategoryFrequencies.put((assignedCat), n + 1)
+
+            counter++
+            // outFile << "$path, $category, $testTrain, $queryString \n"
+        }
+
+        println "assingedCatFreques $assignedCategoryFrequencies"
+        println "maxdoc " + is.getIndexReader().maxDoc()
     }
 }

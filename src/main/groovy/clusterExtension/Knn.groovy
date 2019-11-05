@@ -30,8 +30,8 @@ class Knn {
                 Indexes.indexReader,
                 new BM25Similarity(),
               //  new ClassicSimilarity(),
-                Indexes.trainQ,
-                Indexes.indexEnum.getNumberOfCategories(),
+                Indexes.trainQ,  //matchAll
+                Indexes.indexEnum.getNumberOfCategories(),  //k from cluster
                 3,
                 1,
                 Indexes.FIELD_CATEGORY_NAME,

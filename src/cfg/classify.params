@@ -38,10 +38,10 @@ pop.subpop.0.species.pipe.source.0 = ec.vector.breed.VectorCrossoverPipeline
 pop.subpop.0.species.pipe.source.0.source.0	= ec.select.TournamentSelection
 pop.subpop.0.species.pipe.source.0.source.1	= ec.select.TournamentSelection
 
-pop.subpop.0.species.genome-size = 16
-pop.subpop.1.species.genome-size = 16
-pop.subpop.2.species.genome-size = 16
-pop.subpop.3.species.genome-size = 16
+pop.subpop.0.species.genome-size = 4
+pop.subpop.1.species.genome-size = 4
+pop.subpop.2.species.genome-size = 4
+pop.subpop.3.species.genome-size = 4
 
 pop.subpop.0.species.max-gene = 200
 pop.subpop.1.species.max-gene = 200
