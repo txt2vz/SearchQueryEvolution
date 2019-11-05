@@ -73,9 +73,11 @@ class AddFieldToIndex {
                 Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
                 d.add(assignedClass)
 
-                def p = d.getField(Indexes.FIELD_PATH)
+                //def p = d.getField(Indexes.FIELD_PATH)
+                def p = d.get(Indexes.FIELD_PATH)
 
-                writer.updateDocument(new Term(Indexes.FIELD_PATH, p.stringValue()), d)
+
+                writer.updateDocument(new Term(Indexes.FIELD_PATH, p), d)
                 counter++
             }
         }

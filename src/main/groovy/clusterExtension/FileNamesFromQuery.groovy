@@ -58,8 +58,8 @@ class FileNamesFromQuery {
             String testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
             String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
 
-          //  if (assignedCat!=null)
-           //     println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
+            if (counter<20)
+                println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
 
             int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
             assignedCategoryFrequencies.put((assignedCat), n + 1)
