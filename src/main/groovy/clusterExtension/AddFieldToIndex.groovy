@@ -68,16 +68,25 @@ class AddFieldToIndex {
             outFile.write 'documentPath, category, testTrain, query \n'
 
             for (ScoreDoc sd : hits) {
+                Document doc = new Document()
+
                 Document d = Indexes.indexSearcher.doc(sd.doc)
+                doc.add(d.getField(Indexes.FIELD_CONTENTS))
+                doc.add(d.getField(Indexes.FIELD_CATEGORY_NAME))
+                doc.add(d.getField(Indexes.FIELD_PATH))
+
 
                 Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
-                d.add(assignedClass)
+                doc.add(assignedClass)
 
                 //def p = d.getField(Indexes.FIELD_PATH)
-                def p = d.get(Indexes.FIELD_PATH)
+                String p = d.get(Indexes.FIELD_PATH)
+                String p2 = p
 
+                Term t = new Term(Indexes.FIELD_PATH, p)
+                writer.updateDocument(t,doc)
 
-                writer.updateDocument(new Term(Indexes.FIELD_PATH, p), d)
+             //   writer.updateDocument(new Term(Indexes.FIELD_PATH, p2), doc)
                 counter++
             }
         }

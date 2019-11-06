@@ -25,7 +25,7 @@ class FileNamesFromQuery {
     static void main(String[] args) {
 
         File outFile = new File('results/docsMatchingQuery.csv')
-      //Indexes.instance.setIndex(IndexEnum.NG3)
+        //Indexes.instance.setIndex(IndexEnum.NG3)
 
         //create query 'nasa' OR 'space'
         //    BooleanQuery.Builder bqb = new BooleanQuery.Builder();
@@ -50,6 +50,7 @@ class FileNamesFromQuery {
         Map<String, Integer> assignedCategoryFrequencies = [:]
 
         int counter = 0
+        String p
         for (ScoreDoc sd : hits) {
             Document d = is.doc(sd.doc)
 
@@ -58,11 +59,13 @@ class FileNamesFromQuery {
             String testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
             String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
 
-            if (counter<20)
+            if (counter < 120)
                 println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
 
             int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
             assignedCategoryFrequencies.put((assignedCat), n + 1)
+
+            p = d.get(Indexes.FIELD_PATH)
 
             counter++
             // outFile << "$path, $category, $testTrain, $queryString \n"
@@ -70,5 +73,22 @@ class FileNamesFromQuery {
 
         println "assingedCatFreques $assignedCategoryFrequencies"
         println "maxdoc " + is.getIndexReader().maxDoc()
+        println "p $p"
+
+
+        String pt = 'C:\\Users\\aceslh\\Dataset\\20NG3SpaceHockeyChristian\\train\\soc.religion.christian\\20581'
+        String pt2 = '52569' //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train\soc.religion.christian\20581/
+        def x = new TermQuery(new Term(Indexes.FIELD_PATH, pt2))
+
+        TopDocs topDocsP = is.search(x, Integer.MAX_VALUE)
+        ScoreDoc[] hitsP = topDocsP.scoreDocs
+
+        for (ScoreDoc sd : hitsP) {
+            Document d = is.doc(sd.doc)
+
+            def z = d.get(Indexes.FIELD_PATH)
+            println "z $z"
+        }
     }
+
 }
