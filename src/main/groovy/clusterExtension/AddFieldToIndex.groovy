@@ -34,7 +34,9 @@ class AddFieldToIndex {
         iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND)
         IndexWriter writer = new IndexWriter(directory, iwc)
 
-        File outFile = new File('results/docsMatchingQuery.csv')
+        println "at start max doc " + writer.maxDoc()
+
+        //File outFile = new File('results/docsMatchingQuery.csv')
         Indexes.instance.setIndex(IndexEnum.NG3)
 
         //create query 'nasa' OR 'space'
@@ -65,7 +67,7 @@ class AddFieldToIndex {
             TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
             ScoreDoc[] hits = topDocs.scoreDocs
 
-            outFile.write 'documentPath, category, testTrain, query \n'
+           // outFile.write 'documentPath, category, testTrain, query \n'
 
             for (ScoreDoc sd : hits) {
                 Document doc = new Document()
@@ -81,8 +83,9 @@ class AddFieldToIndex {
 
                 //def p = d.getField(Indexes.FIELD_PATH)
                 String p = d.get(Indexes.FIELD_PATH)
-                String p2 = p
+            //    String p2 = p
 
+              //  println "p $p"
                 Term t = new Term(Indexes.FIELD_PATH, p)
                 writer.updateDocument(t,doc)
 
@@ -90,8 +93,10 @@ class AddFieldToIndex {
                 counter++
             }
         }
-        println "$counter docs updated"
 
+        writer.commit()
+        println "$counter docs updated"
+        println "Max docs: " + writer.maxDoc()
         writer.close()
     }
 }

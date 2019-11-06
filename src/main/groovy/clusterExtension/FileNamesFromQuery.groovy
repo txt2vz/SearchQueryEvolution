@@ -73,6 +73,7 @@ class FileNamesFromQuery {
 
         println "assingedCatFreques $assignedCategoryFrequencies"
         println "maxdoc " + is.getIndexReader().maxDoc()
+        println "numdoc " + is.getIndexReader().numDocs()
         println "p $p"
 
 
@@ -88,7 +89,18 @@ class FileNamesFromQuery {
 
             def z = d.get(Indexes.FIELD_PATH)
             println "z $z"
-        }
-    }
 
+        }
+
+        Query qall = new MatchAllDocsQuery()
+
+        TopDocs topDocsA = is.search(qAll, Integer.MAX_VALUE)
+        ScoreDoc[] hitsA = topDocsA.scoreDocs
+
+        def cnt = 0
+        for (ScoreDoc sd : hitsA) {
+            cnt++
+        }
+        println "cnt $cnt"
+    }
 }

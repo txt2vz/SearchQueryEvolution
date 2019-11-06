@@ -38,8 +38,8 @@ class BuildIndex {
 
         String docsPath =
 
-            //    /D:\Classify20NG3/
-                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+                /D:\Classify20NG3/
+           //     /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -75,13 +75,16 @@ class BuildIndex {
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
-                    String s = file.getPath()
-                    String p2 = s.replaceAll('\\\\', '-')
+             //       String s = file.getPath()
+               //    String p2 = s.replaceAll('\\\\', '-')
+                   //println "p2 $p2"
 
+                    String name = file.getName()
+                 //   println "name $name"
 
-                    //Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
+                 //  Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
                  //   Field pathField = new StringField(Indexes.FIELD_PATH, p2, Field.Store.YES)
-                    Field pathField = new StringField(Indexes.FIELD_PATH, file.getName(), Field.Store.YES);
+                    Field pathField = new StringField(Indexes.FIELD_PATH, name, Field.Store.YES);
                     doc.add(pathField)
 
                     String parent = file.getParent()
