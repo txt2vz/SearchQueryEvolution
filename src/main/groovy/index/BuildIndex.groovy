@@ -33,13 +33,13 @@ class BuildIndex {
                 //'indexes/warCrimes'
                 //'indexes/resistance'
                 'indexes/NG3'
-         //       'indexes/science4'
+        //       'indexes/science4'
 
 
         String docsPath =
 
-                /D:\Classify20NG3/
-           //     /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+//                /D:\Classify20NG3/
+                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -67,7 +67,7 @@ class BuildIndex {
             int docCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 40) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 100) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -104,6 +104,9 @@ class BuildIndex {
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
+
+                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned', Field.Store.YES);
+                    doc.add(assignedClass)
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
@@ -144,6 +147,7 @@ class BuildIndex {
         def cryptTotal = cryptCollector.getTotalHits()
         println "cryptTotal $cryptTotal"
 
+        println "numDocs " + indexReader.numDocs()
         println "End ***************************************************************"
     }
 }

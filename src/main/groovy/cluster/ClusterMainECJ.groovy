@@ -77,7 +77,7 @@ class ClusterMainECJ extends Evolve {
                 EvolutionState state = new EvolutionState()
 
                 println "Index Enum ie: $ie"
-                Indexes.instance.setIndex(ie)
+                Indexes.setIndex(ie)
 
                 kPenalty.each { kPenalty ->
                     ClusterFitness.kPenalty = kPenalty

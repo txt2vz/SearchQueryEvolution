@@ -58,7 +58,7 @@ class AnalysisAndReports {
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
         println messageOut
 
-        queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.maxDoc()} "
+        queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.numDocs()} "
         queryFileOut << "PosHits: ${cfit.hitsMatchingOnlyOneQuery} NegHits: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)}  \n"
         queryFileOut << messageOut + "\n"
         queryFileOut << "************************************************ \n \n"
@@ -123,7 +123,7 @@ class AnalysisAndReports {
         Map<String, Integer> catsFreq = new HashMap<String, Integer>()
         String qString = q.toString(Indexes.FIELD_CONTENTS)
 
-        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.maxDoc());
+        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
         Indexes.indexSearcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 

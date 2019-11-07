@@ -79,7 +79,7 @@ enum IndexEnum {
 }
 
 @CompileStatic
-@Singleton
+//@Singleton
 class Indexes {
     static IndexEnum indexEnum //= IndexEnum.R8
 
@@ -109,7 +109,7 @@ class Indexes {
     //Query to return documents in the current category based on categoryNumber
     static TermQuery catQ;
 
-    void setIndex(IndexEnum ie) {
+    static void setIndex(IndexEnum ie) {
         indexEnum = ie
         NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
         NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
@@ -145,7 +145,7 @@ class Indexes {
     }
 
     //set the filters and totals for the index for classification
-    void setIndexFieldsAndTotals() {
+    static void setIndexFieldsAndTotals() {
         println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
         catQ = new TermQuery(new Term(FIELD_CATEGORY_NUMBER,
                 categoryNumber));

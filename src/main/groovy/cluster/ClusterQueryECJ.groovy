@@ -62,7 +62,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
-        println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
+        println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.numDocs()
         //TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
         List <TermQuery>  tql = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         qlfc = new QueryListFromChromosome(tql)

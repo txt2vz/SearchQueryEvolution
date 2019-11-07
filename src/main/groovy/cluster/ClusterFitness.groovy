@@ -43,7 +43,7 @@ public class ClusterFitness extends SimpleFitness {
         totalHits = t3.third
 
         hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
-        missedDocs = Indexes.indexReader.maxDoc() - totalHits
+        missedDocs = Indexes.indexReader.numDocs() - totalHits
 
         switch (fitnessMethod) {
 
@@ -95,7 +95,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "${queryShort()}"
-        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $hitsMatchingOnlyOneQuery    totalHits: $totalHits totalDocs: ${Indexes.indexReader.maxDoc()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
+        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $hitsMatchingOnlyOneQuery    totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
         println ""
     }
 
