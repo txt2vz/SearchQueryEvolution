@@ -8,6 +8,7 @@ import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 import groovy.transform.CompileStatic
 import index.IndexEnum
+//import index.IndexEnum
 import index.Indexes
 
 @CompileStatic  
@@ -18,7 +19,7 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 //IndexEnum.HolSec
-            IndexEnum.NG3,
+            Indexes.indexEnum.NG3,
 //            IndexEnum.CRISIS3,
   //          IndexEnum.CLASSIC4,
 //            IndexEnum.R4,

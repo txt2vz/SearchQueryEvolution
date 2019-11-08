@@ -1,7 +1,8 @@
 package clusterExtension
 
-import index.IndexEnum
+
 import index.Indexes
+
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
@@ -21,7 +22,7 @@ class AddFieldToIndex {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(Indexes.indexEnum.NG3)
 
         String indexPath =  Indexes.indexEnum.pathString
 

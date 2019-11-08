@@ -24,7 +24,7 @@ class FileNamesFromQuery {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(Indexes.indexEnum.NG3)
 
      //   File outFile = new File('results/docsMatchingQuery.csv')
         //Indexes.instance.setIndex(IndexEnum.NG3)
