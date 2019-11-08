@@ -23,8 +23,9 @@ class AddFieldToIndex {
 
         Indexes.setIndex(IndexEnum.NG3)
 
-        String indexPath =  Indexes.index
+        String indexPath =  Indexes.indexEnum.pathString
 
+        println "indexPath $indexPath"
                 //'indexes/NG3'
                 //'indexes/science4'
 
@@ -58,10 +59,14 @@ class AddFieldToIndex {
         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'orbit')), BooleanClause.Occur.SHOULD)
         Query spaceQ = bqb.build()
 
-        Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space']
+        Query qAll = new MatchAllDocsQuery()
+       // Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
+        Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
         int counter = 0
 
         println "at start numdocs " + writer.numDocs()
+
+        Query aAll = new MatchAllDocsQuery()
 
         qMap.each { query, name ->
 
@@ -71,7 +76,7 @@ class AddFieldToIndex {
             for (ScoreDoc sd : hits) {
 
                 Document d = Indexes.indexSearcher.doc(sd.doc)
-              //  d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
+                d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
 
                 Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
                 d.add(assignedClass)

@@ -24,7 +24,9 @@ class FileNamesFromQuery {
 
     static void main(String[] args) {
 
-        File outFile = new File('results/docsMatchingQuery.csv')
+        Indexes.setIndex(IndexEnum.NG3)
+
+     //   File outFile = new File('results/docsMatchingQuery.csv')
         //Indexes.instance.setIndex(IndexEnum.NG3)
 
         //create query 'nasa' OR 'space'
@@ -33,10 +35,16 @@ class FileNamesFromQuery {
         // bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'jesus')), BooleanClause.Occur.SHOULD)
         //  Query q = bqb.build()
 
-        Path path = Paths.get('indexes/NG3')
-        Directory directory = FSDirectory.open(path)
-        IndexReader ir = DirectoryReader.open(directory)
+//        Path path = Paths.get('indexes/NG3')
+//        Directory directory = FSDirectory.open(path)
+//        IndexReader ir = DirectoryReader.open(directory)
+//        IndexSearcher is = new IndexSearcher(ir)
+
+        IndexReader ir = Indexes.indexReader
         IndexSearcher is = new IndexSearcher(ir)
+       // IndexSearcher is =
+
+
 
         Query qAll = new MatchAllDocsQuery()
 
