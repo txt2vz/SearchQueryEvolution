@@ -29,7 +29,7 @@ public class ClassifyFit extends SimpleFitness {
 
 	public String toString(int gen) {
 		return "Gen: $gen  F1: $f1train  Positive Match: $positiveMatchTrain Negative Match: $negativeMatchTrain " +
-		" Total positive Docs: " + Indexes.instance.totalTrainDocsInCat +
+		" Total positive Docs: " + Indexes.totalTrainDocsInCat +
 		 '\n' + "QueryString: " + query.toString(Indexes.FIELD_CONTENTS) + '\n';
 	}
 }

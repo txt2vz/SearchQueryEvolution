@@ -60,8 +60,8 @@ class AddFieldToIndex {
         Query spaceQ = bqb.build()
 
         Query qAll = new MatchAllDocsQuery()
-       // Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
-        Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
+       Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
+     //   Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
         int counter = 0
 
         println "at start numdocs " + writer.numDocs()

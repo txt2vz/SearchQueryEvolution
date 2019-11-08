@@ -29,9 +29,9 @@ public class OR extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
 
-        println "Category number: ${Indexes.instance.getCategoryNumber()} Category Name: ${Indexes.instance.getCategoryName()} " +
-                "Total train docs: ${Indexes.instance.totalTrainDocsInCat} " +
-                "Total test docs: ${Indexes.instance.totalTestDocsInCat}"
+        println "Category number: ${Indexes.getCategoryNumber()} Category Name: ${Indexes.getCategoryName()} " +
+                "Total train docs: ${Indexes.totalTrainDocsInCat} " +
+                "Total test docs: ${Indexes.totalTestDocsInCat}"
 
         termQueryArray = ImportantTermQueries.getF1TermQueryList(searcher)
 

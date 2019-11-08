@@ -40,13 +40,13 @@ public class ClassifyGAStatistics extends SimpleStatistics {
 
 		// get test results on best individual
 		Query q = gaFit.query
-		IndexSearcher searcher = Indexes.instance.indexSearcher;
+		IndexSearcher searcher = Indexes.indexSearcher;
 
 		TotalHitCountCollector collector = new TotalHitCountCollector()
 		BooleanQuery.Builder bqb = new BooleanQuery.Builder()
 
 		bqb.add(q, BooleanClause.Occur.MUST);
-		bqb.add(Indexes.instance.testDocsInCategoryFilter, BooleanClause.Occur.FILTER);
+		bqb.add(Indexes.testDocsInCategoryFilter, BooleanClause.Occur.FILTER);
 
 		searcher.search(bqb.build(), collector);
 		gaFit.positiveMatchTest = collector.getTotalHits();
@@ -54,16 +54,16 @@ public class ClassifyGAStatistics extends SimpleStatistics {
 		collector = new TotalHitCountCollector();
 		bqb = new BooleanQuery.Builder();
 		bqb.add(q, BooleanClause.Occur.MUST);
-		bqb.add(Indexes.instance.otherTestDocsFilter, BooleanClause.Occur.FILTER);
+		bqb.add(Indexes.otherTestDocsFilter, BooleanClause.Occur.FILTER);
 		searcher.search(bqb.build(), collector);
 
 		gaFit.negativeMatchTest = collector.getTotalHits();
 
 		gaFit.f1test = Effectiveness.f1(gaFit.positiveMatchTest, gaFit.negativeMatchTest,
-				Indexes.instance.totalTestDocsInCat)
+				Indexes.totalTestDocsInCat)
 
 		gaFit.BEPTest = Effectiveness.bep(gaFit.positiveMatchTest, gaFit.negativeMatchTest,
-				Indexes.instance.totalTestDocsInCat)
+				Indexes.totalTestDocsInCat)
 
 		println "Fitness: " + gaFit.fitness() + " F1Test: " + gaFit.f1test +
 				" F1Train: " + gaFit.f1train + " positive match test: " + gaFit.positiveMatchTest +
