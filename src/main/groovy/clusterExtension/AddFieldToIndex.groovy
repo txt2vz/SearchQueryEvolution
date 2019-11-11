@@ -1,6 +1,7 @@
 package clusterExtension
 
-
+import groovy.transform.CompileStatic
+import index.IndexEnum
 import index.Indexes
 
 import org.apache.lucene.analysis.Analyzer
@@ -8,6 +9,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
+import org.apache.lucene.document.TextField
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.Term
@@ -18,17 +20,15 @@ import org.apache.lucene.store.FSDirectory
 import java.nio.file.Path
 import java.nio.file.Paths
 
+@CompileStatic
+
 class AddFieldToIndex {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(Indexes.indexEnum.NG3)
-
+        Indexes.setIndex(IndexEnum.NG3)
         String indexPath =  Indexes.indexEnum.pathString
-
         println "indexPath $indexPath"
-                //'indexes/NG3'
-                //'indexes/science4'
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
@@ -41,14 +41,13 @@ class AddFieldToIndex {
         IndexWriter writer = new IndexWriter(directory, iwc)
 
         println "at start max doc " + writer.numDocs()
-
         //File outFile = new File('results/docsMatchingQuery.csv')
 
 
         BooleanQuery.Builder bqb = new BooleanQuery.Builder();
         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'god')), BooleanClause.Occur.SHOULD)
         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'jesus')), BooleanClause.Occur.SHOULD)
-        Query godQ = bqb.build()
+        Query godQ = bqb.build() as Query
 
         bqb = new BooleanQuery.Builder();
         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'game')), BooleanClause.Occur.SHOULD)
@@ -69,7 +68,7 @@ class AddFieldToIndex {
 
         Query aAll = new MatchAllDocsQuery()
 
-        qMap.each { query, name ->
+        qMap.each { Query query, String name ->
 
             TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
             ScoreDoc[] hits = topDocs.scoreDocs
@@ -77,17 +76,54 @@ class AddFieldToIndex {
             for (ScoreDoc sd : hits) {
 
                 Document d = Indexes.indexSearcher.doc(sd.doc)
-                d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
+
+                Document newDoc = new Document()
+
+                Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, d.get(Indexes.FIELD_CATEGORY_NAME), Field.Store.YES);
+                newDoc.add(catNameField)
+
+                Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, d.get(Indexes.FIELD_CATEGORY_NUMBER), Field.Store.YES);
+                newDoc.add(catNumberField)
+
+             //   Field contentField =// d.getField(Indexes.FIELD_CONTENTS)
+                //        new TextField(Indexes.FIELD_CONTENTS, d.getField(Indexes.FIELD_CONTENTS) ,Field.Store.YES )
+            //    newDoc.add(new TextField(Indexes.FIELD_CONTENTS, d.get(Indexes.FIELD_CONTENTS), Field.Store.YES))
+                newDoc.add(new TextField(Indexes.FIELD_CONTENTS, d.get(Indexes.FIELD_CONTENTS), Field.Store.YES))
+
+                //newDoc.add(new TextField(Indexes.FIELD_CONTENTS, d.get(Indexes.FIELD_CONTENTS), Field.Store.YES))
+
+              //  d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
 
                 Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
-                d.add(assignedClass)
+                newDoc.add(assignedClass)
+
+             //   d.add(assignedClass)
+
 
               //  String p = d.get(Indexes.FIELD_PATH)
             //    String p2 = p
 
               //  println "p $p"
+               def pathN = d.get(Indexes.FIELD_PATH)
+                println "pathN $pathN"
+
+                Field pathField = new StringField(Indexes.FIELD_PATH, pathN, Field.Store.YES)
+                newDoc.add(pathField)
+
                 Term t = new Term(Indexes.FIELD_PATH, d.get(Indexes.FIELD_PATH))
-                writer.updateDocument(t,d)
+               // Query tq = new TermQuery(t)
+                println "t $t"
+
+
+                writer.updateDocument(t,newDoc)
+          //      writer.updateDocument(t,d)
+
+           //     writer.deleteDocuments(tq)
+           //     writer.flush()
+           //     writer.addDocument(newDoc)
+               // writer.updateDocument(t,d)
+
+
 
              //   writer.updateDocument(new Term(Indexes.FIELD_PATH, p2), doc)
                 counter++

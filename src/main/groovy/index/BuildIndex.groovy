@@ -38,8 +38,8 @@ class BuildIndex {
 
         String docsPath =
 
-                /D:\Classify20NG3/
-     //           /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+      //          /D:\Classify20NG3/
+                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -62,12 +62,14 @@ class BuildIndex {
 
         def categoryNumber = 0
 
+        def dups = [] as Set
+        int docCount = 0
         new File(docsPath).eachDir {
 
-            int docCount = 0
+            int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 100) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -75,16 +77,8 @@ class BuildIndex {
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
-             //       String s = file.getPath()
-               //    String p2 = s.replaceAll('\\\\', '-')
-                   //println "p2 $p2"
-
-                    String name = file.getName()
-                 //   println "name $name"
-
-                 //  Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
-                 //   Field pathField = new StringField(Indexes.FIELD_PATH, p2, Field.Store.YES)
-                    Field pathField = new StringField(Indexes.FIELD_PATH, name, Field.Store.YES);
+                    String pathString = file.getPath().replaceAll(/\W/, '').toLowerCase()
+                    Field pathField = new StringField(Indexes.FIELD_PATH, pathString, Field.Store.YES);
                     doc.add(pathField)
 
                     String parent = file.getParent()
@@ -100,7 +94,7 @@ class BuildIndex {
                     String test_train
                     //   if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
                     //split test train 50 /50
-                    if (docCount % 2 == 0) test_train = "test" else test_train = "train"
+                    if (dirCount % 2 == 0) test_train = "test" else test_train = "train"
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
@@ -114,7 +108,7 @@ class BuildIndex {
                     catsNameFreq.put((catName), n + 1)
 
                     writer.addDocument(doc)
-               //     writer.up
+                    dirCount++
                     docCount++
                 }
             }

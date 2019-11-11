@@ -35,10 +35,10 @@ enum IndexEnum {
     R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
     R10('indexes/R10', 10),
-    WarCrimes('indexes/warCrimes',8),
-    Secrecy(       'indexes/resistance', 11),
-    Science4(       'indexes/science4', 4),
-   NG3N( 'indexes/ng3N',3)
+    WarCrimes('indexes/warCrimes', 8),
+    Secrecy('indexes/resistance', 11),
+    Science4('indexes/science4', 4),
+    NG3N('indexes/ng3N', 3)
 
 
     //R8('indexes/R8', 8),
@@ -89,7 +89,7 @@ class Indexes {
                         FIELD_PATH = 'path',
                         FIELD_TEST_TRAIN = 'test_train',
                         FIELD_CATEGORY_NUMBER = 'categoryNumber',
-                        FIELD_ASSIGNED_CLASS= 'assignedClass'   ;
+                        FIELD_ASSIGNED_CLASS = 'assignedClass';
 
     public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
     public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()

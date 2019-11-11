@@ -24,7 +24,7 @@ class FileNamesFromQuery {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(Indexes.indexEnum.NG3)
+        Indexes.setIndex(IndexEnum.NG3)
 
      //   File outFile = new File('results/docsMatchingQuery.csv')
         //Indexes.instance.setIndex(IndexEnum.NG3)
@@ -57,6 +57,8 @@ class FileNamesFromQuery {
 
         Map<String, Integer> assignedCategoryFrequencies = [:]
 
+        Map<String, Integer> catFrequencies = [:]
+
         int counter = 0
         String p
         for (ScoreDoc sd : hits) {
@@ -66,12 +68,18 @@ class FileNamesFromQuery {
             String category = d.get(Indexes.FIELD_CATEGORY_NAME)
             String testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
             String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
+            String conts = d.get(Indexes.FIELD_CONTENTS).take(420)
 
-            if (counter < 120)
+            if (counter < 20) {
                 println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
+//println "conts $conts"
+            }
 
             int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
             assignedCategoryFrequencies.put((assignedCat), n + 1)
+
+            final int norig = catFrequencies.get(category)?: 0
+            catFrequencies.put((category), norig+ 1)
 
             p = d.get(Indexes.FIELD_PATH)
 
@@ -80,6 +88,7 @@ class FileNamesFromQuery {
         }
 
         println "assingedCatFreques $assignedCategoryFrequencies"
+        println "category freq $catFrequencies"
         println "maxdoc " + is.getIndexReader().maxDoc()
         println "numdoc " + is.getIndexReader().numDocs()
         println "p $p"
