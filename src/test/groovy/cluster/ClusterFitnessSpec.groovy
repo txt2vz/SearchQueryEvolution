@@ -13,7 +13,7 @@ class ClusterFitnessSpec extends Specification {
 
     def "check psuedo f1 precision recall "(){
         setup:
-        Indexes.instance.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.NG3)
         def cf = new ClusterFitness()
         ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT//FitnessMethod.PSEUDOF1
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[2]

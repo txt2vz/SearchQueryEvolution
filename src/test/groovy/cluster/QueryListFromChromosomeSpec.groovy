@@ -1,5 +1,6 @@
 package cluster
 
+import index.ImportantTermQueries
 import index.ImportantTermsOld
 import index.IndexEnum
 import index.Indexes
@@ -12,10 +13,11 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
     def "QueryListFromChromosome OR 20News3 tfidf"() {
         setup:
-        Indexes.instance.setIndex(IndexEnum.NG3)
-        Indexes.instance.setIndexFieldsAndTotals()
-        ImportantTermsOld impTerms = new ImportantTermsOld()
-        TermQuery[] tfidfList = impTerms.getTFIDFTermQueryList()
+        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndexFieldsAndTotals()
+      //  ImportantTermsOld impTermQueries = new ImportantTermsOld()
+        ImportantTermQueries impTermQueries = new ImportantTermQueries()
+        TermQuery[] tfidfList = impTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         QueryListFromChromosome.intersectMethod = IntersectMethod.RATIO_POINT_5
 
         when:
@@ -32,12 +34,12 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         then:
         Indexes.NUMBER_OF_CLUSTERS == 3
 
-        tfidfList[0].getTerm().text() == 'god'
+        tfidfList[0].getTerm().text() == 'nasa'
         tfidfList[1].getTerm().text() == 'space'
-        tfidfList[2].getTerm().text() == 'nasa'
+        tfidfList[2].getTerm().text() == 'god'
 
         bqbL.size() ==  Indexes.NUMBER_OF_CLUSTERS
-        q.toString(Indexes.FIELD_CONTENTS) == 'god'
+        q.toString(Indexes.FIELD_CONTENTS) == 'nasa'
 
         when:
         genome = [2, 1, 4, 8, 3, 7] as int[]
@@ -49,8 +51,8 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         Query q2 = bqbL[2].build()
 
         then:
-        q0.toString(Indexes.FIELD_CONTENTS) == 'nasa christians'
-        q1.toString(Indexes.FIELD_CONTENTS) == 'space jesus'
-        q2.toString(Indexes.FIELD_CONTENTS) == 'hockey team'
+        q0.toString(Indexes.FIELD_CONTENTS) == 'god team'
+        q1.toString(Indexes.FIELD_CONTENTS) == 'space hockey'
+        q2.toString(Indexes.FIELD_CONTENTS) == 'orbit game'
     }
 }

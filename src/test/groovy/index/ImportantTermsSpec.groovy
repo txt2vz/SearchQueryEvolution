@@ -4,9 +4,9 @@ class ImportantTermsSpec extends spock.lang.Specification {
 
 	def "importantTerms F1 oil"() {
 		setup:
-		Indexes.instance.setIndex(IndexEnum.R10)
-		Indexes.instance.setCategoryNumber('2')
-		Indexes.instance.setIndexFieldsAndTotals()
+		Indexes.setIndex(IndexEnum.R10)
+		Indexes.setCategoryNumber('2')
+		Indexes.setIndexFieldsAndTotals()
 
 		when:
 		def oilList = ImportantTermQueries.getF1TermQueryList (Indexes.indexSearcher)
@@ -18,9 +18,9 @@ class ImportantTermsSpec extends spock.lang.Specification {
 	
 	def "importantTerms F1 20NG graphics"() {
 		setup:
-		Indexes.instance.setIndex(IndexEnum.NG20)
-		Indexes.instance.setCategoryNumber('2')
-		Indexes.instance.setIndexFieldsAndTotals()
+		Indexes.setIndex(IndexEnum.NG20)
+		Indexes.setCategoryNumber('2')
+		Indexes.setIndexFieldsAndTotals()
 
 		when:
 		def graphicsList = ImportantTermQueries.getF1TermQueryList (Indexes.indexSearcher)
@@ -32,15 +32,15 @@ class ImportantTermsSpec extends spock.lang.Specification {
 
 	def "ImportantTerms 20News3 tfidf"(){
 		setup:
-		Indexes.instance.setIndex(IndexEnum.NG3)
-		Indexes.instance.setIndexFieldsAndTotals()
+		Indexes.setIndex(IndexEnum.NG3)
+		Indexes.setIndexFieldsAndTotals()
 
 		when:
 		def tfidfList = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
 
 		then:
-		tfidfList[0].getTerm().text() == 'god'
+		tfidfList[0].getTerm().text() == 'nasa'
 		tfidfList[1].getTerm().text() == 'space'
-		tfidfList[2].getTerm().text() == 'nasa'
+		tfidfList[2].getTerm().text() == 'god'
 	}
 }

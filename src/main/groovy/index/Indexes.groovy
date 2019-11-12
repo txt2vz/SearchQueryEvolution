@@ -21,8 +21,8 @@ import java.nio.file.Paths
 enum IndexEnum {
 
     CRISIS3('indexes/crisis3FireBombFlood', 3),
-    CLASSIC3('indexes/classic3_300', 3),
 
+    CLASSIC3('indexes/classic3_300', 3),
     CLASSIC4('indexes/classic4_500', 4),
 
     NG3('indexes/NG3', 3),
@@ -35,6 +35,7 @@ enum IndexEnum {
     R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
     R10('indexes/R10', 10),
+
     WarCrimes('indexes/warCrimes', 8),
     Secrecy('indexes/resistance', 11),
     Science4('indexes/science4', 4),
@@ -89,7 +90,8 @@ class Indexes {
                         FIELD_PATH = 'path',
                         FIELD_TEST_TRAIN = 'test_train',
                         FIELD_CATEGORY_NUMBER = 'categoryNumber',
-                        FIELD_ASSIGNED_CLASS = 'assignedClass';
+                        FIELD_ASSIGNED_CLASS = 'assignedClass',
+                        FIELD_DOCUMENT_ID = 'document_id';
 
     public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
     public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()

@@ -25,31 +25,10 @@ class FileNamesFromQuery {
     static void main(String[] args) {
 
         Indexes.setIndex(IndexEnum.NG3)
-
-     //   File outFile = new File('results/docsMatchingQuery.csv')
-        //Indexes.instance.setIndex(IndexEnum.NG3)
-
-        //create query 'nasa' OR 'space'
-        //    BooleanQuery.Builder bqb = new BooleanQuery.Builder();
-        //  bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'god')), BooleanClause.Occur.SHOULD)
-        // bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'jesus')), BooleanClause.Occur.SHOULD)
-        //  Query q = bqb.build()
-
-//        Path path = Paths.get('indexes/NG3')
-//        Directory directory = FSDirectory.open(path)
-//        IndexReader ir = DirectoryReader.open(directory)
-//        IndexSearcher is = new IndexSearcher(ir)
-
         IndexReader ir = Indexes.indexReader
-        IndexSearcher is = new IndexSearcher(ir)
-       // IndexSearcher is =
-
-
+        IndexSearcher is = Indexes.indexSearcher
 
         Query qAll = new MatchAllDocsQuery()
-
-        //String queryString = q.toString(Indexes.FIELD_CONTENTS)
-
         TopDocs topDocs = is.search(qAll, Integer.MAX_VALUE)
         ScoreDoc[] hits = topDocs.scoreDocs
 
@@ -119,5 +98,9 @@ class FileNamesFromQuery {
             cnt++
         }
         println "cnt $cnt"
+        Term t = new Term(Indexes.FIELD_CONTENTS, 'nasa')
+
+        int df = ir.docFreq(t)
+        println "df $df"
     }
 }

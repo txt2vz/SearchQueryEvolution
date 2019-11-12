@@ -35,9 +35,7 @@ class BuildIndex {
                 'indexes/NG3'
         //       'indexes/science4'
 
-
         String docsPath =
-
       //          /D:\Classify20NG3/
                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
@@ -69,7 +67,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 200) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -77,23 +75,22 @@ class BuildIndex {
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
-                    String pathString = file.getPath().replaceAll(/\W/, '').toLowerCase()
-                    Field pathField = new StringField(Indexes.FIELD_PATH, pathString, Field.Store.YES);
+                    String id = file.getName() + 'id' + docCount
+                    Field documentIDfield = new StringField(Indexes.FIELD_DOCUMENT_ID, id, Field.Store.YES)
+                    doc.add(documentIDfield)
+
+                    Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
                     doc.add(pathField)
 
                     String parent = file.getParent()
                     String grandParent = file.getParentFile().getParent()
 
-                    def catName
-                 //   catName = file.name.charAt(6)
-                    catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
-
+                    String catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
                     Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
                     doc.add(catNameField)
 
                     String test_train
                     //   if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
-                    //split test train 50 /50
                     if (dirCount % 2 == 0) test_train = "test" else test_train = "train"
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
