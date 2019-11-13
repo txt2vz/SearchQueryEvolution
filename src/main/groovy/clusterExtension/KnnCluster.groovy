@@ -86,6 +86,5 @@ class KnnCluster {
         def p = confusionMatrix.getLinearizedMatrix()
 
         println "p $p"
-
     }
 }
