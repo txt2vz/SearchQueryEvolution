@@ -36,8 +36,9 @@ class BuildIndex {
         //       'indexes/science4'
 
         String docsPath =
-      //          /D:\Classify20NG3/
-                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+                // /D:\Classify20NG3/
+                /D:\Datasets\NG3/
+      //          /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -45,7 +46,8 @@ class BuildIndex {
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
         Analyzer analyzer = //new EnglishAnalyzer();  //with stemming
-                new StandardAnalyzer()
+             //   new StandardAnalyzer()
+                Indexes.analyzer
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
 
 //store doc counts for each category

@@ -8,7 +8,6 @@ import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 import groovy.transform.CompileStatic
 import index.IndexEnum
-//import index.IndexEnum
 import index.Indexes
 
 @CompileStatic  
@@ -119,6 +118,10 @@ class ClusterMainECJ extends Evolve {
                             final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
+
+                            cfit.queryMap
+                            Tuple3 xx = cfit.getUniqueHits(cfit.queryMap)
+                            println "xxfirts " + xx.first
 
                             analysisAndReports.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
                         }

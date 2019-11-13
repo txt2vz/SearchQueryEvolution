@@ -62,6 +62,8 @@ class AddFieldToIndex {
 
         println "At start numdocs: " + writer.numDocs()
 
+        //qmap - only if unique hit
+
         qMap.each { Query query, String name ->
 
             TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)

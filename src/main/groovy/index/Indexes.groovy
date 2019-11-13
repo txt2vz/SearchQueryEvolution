@@ -2,6 +2,8 @@ package index
 
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
+import org.apache.lucene.analysis.Analyzer
+import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
@@ -80,9 +82,8 @@ enum IndexEnum {
 }
 
 @CompileStatic
-//@Singleton
 class Indexes {
-    static IndexEnum indexEnum //= IndexEnum.R8
+    static IndexEnum indexEnum
 
     // Lucene field names
     static final String FIELD_CATEGORY_NAME = 'category',
@@ -92,6 +93,8 @@ class Indexes {
                         FIELD_CATEGORY_NUMBER = 'categoryNumber',
                         FIELD_ASSIGNED_CLASS = 'assignedClass',
                         FIELD_DOCUMENT_ID = 'document_id';
+
+    static final Analyzer analyzer = new StandardAnalyzer()  //new EnglishAnalyzer();  //with stemming
 
     public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
     public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()

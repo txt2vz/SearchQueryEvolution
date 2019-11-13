@@ -28,6 +28,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.lucene/lucene-classification
     compile group: 'org.apache.lucene', name: 'lucene-classification', version: '7.4.0'
+    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser
+    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '7.4.0'
+
 
 
 
