@@ -10,7 +10,7 @@ import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopScoreDocCollector
 import org.apache.lucene.search.TotalHitCountCollector
 
-class AnalysisAndReports {
+class Analysis {
     def resultsF1 = [:]
     def categoryAccuracy = [:]
     def resultsFitnessWithF1 = [:]
@@ -18,7 +18,33 @@ class AnalysisAndReports {
     File queryFileOut = new File('results/Queries.txt')
     File overallResults = new File("results/overallResultsCluster.txt")
 
-    AnalysisAndReports() {
+    Analysis() {
+    }
+
+    static Tuple3<String, Integer, Integer>  getMostFrequentCategoryForQuery(Query q) {
+        Map<String, Integer> categoryFrequencyMap = [:]
+        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
+        Indexes.indexSearcher.search(q, collector);
+        ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+        hits.each {ScoreDoc sd ->
+            final int docId = sd.doc;
+            Document d = Indexes.indexSearcher.doc(docId)
+            String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
+            final int n = categoryFrequencyMap.get((catName)) ?: 0
+            categoryFrequencyMap.put((catName), n + 1)
+        }
+
+        Map.Entry<String, Integer> mostFrequentCategory = categoryFrequencyMap?.max { it?.value }
+
+        String maxCategoryName = mostFrequentCategory?.key
+        final int maxCategoryHits = mostFrequentCategory?.value
+        assert maxCategoryName
+        assert maxCategoryHits > 0
+
+        println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory totalHist ${hits.size()} "
+
+        return new Tuple3< String, Integer, Integer> (maxCategoryName, maxCategoryHits, hits.size())
     }
 
     void jobSummary() {
@@ -84,20 +110,21 @@ class AnalysisAndReports {
         cfit.queryMap.keySet().eachWithIndex { Query q, index ->
 
             String qString = q.toString(Indexes.FIELD_CONTENTS)
-            def (String maxCatName, int maxCatHits, int totalHits) = findMostFrequentCategoryForQuery(q, index)
-            println "maxCatName: $maxCatName maxCatHits: $maxCatHits totalHits: $totalHits"
 
-            assert maxCatName != 'Not_Found'
+            def tuple3 = getMostFrequentCategoryForQuery(q)
+            String maxCatName = tuple3.first
+            final int maxCatHits = tuple3.second
+            final int totalHits = tuple3.third
 
             TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
             TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                     maxCatName));
             Indexes.indexSearcher.search(catQ, totalHitCollector);
-            int categoryTotal = totalHitCollector.getTotalHits();
+            final int categoryTotal = totalHitCollector.getTotalHits();
 
-            double recall = (double) maxCatHits / categoryTotal;
-            double precision = (double) maxCatHits / totalHits
-            double f1 = (2 * precision * recall) / (precision + recall)
+            final double recall = (double) maxCatHits / categoryTotal;
+            final double precision = (double) maxCatHits / totalHits
+            final double f1 = (2 * precision * recall) / (precision + recall)
 
             f1list << f1
             precisionList << precision
@@ -119,30 +146,4 @@ class AnalysisAndReports {
         [f1list, averageF1forJob, averagePrecision, averageRecall]
     }
 
-    private List findMostFrequentCategoryForQuery(Query q, int index) {
-        Map<String, Integer> catsFreq = new HashMap<String, Integer>()
-        String qString = q.toString(Indexes.FIELD_CONTENTS)
-
-        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
-        Indexes.indexSearcher.search(q, collector);
-        ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
-        hits.eachWithIndex { ScoreDoc h, int i ->
-            int docId = h.doc;
-            Document d = Indexes.indexSearcher.doc(docId);
-            String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
-            int n = catsFreq.get((catName)) ?: 0
-            catsFreq.put((catName), n + 1)
-        }
-
-        Map.Entry<String, Integer> catMax = catsFreq?.max { it?.value }
-        println '***********************************************************************************'
-        println "ClusterQuery: $index catsFreq: $catsFreq for query: $qString "
-        println "catsFreq: $catsFreq cats max: $catMax "
-
-        String maxCategoryName = catMax?.key ?: 'Not_Found'
-        int maxCategoryHits = catMax?.value ?: -1
-
-        [maxCategoryName, maxCategoryHits, hits.size()]
-    }
 }

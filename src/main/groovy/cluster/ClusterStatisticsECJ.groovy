@@ -8,7 +8,7 @@ import index.Indexes
 public class ClusterStatisticsECJ extends SimpleStatistics {
 
 
-    AnalysisAndReports jr = new AnalysisAndReports()
+    Analysis jr = new Analysis()
 
     public void finalStatistics(final EvolutionState state, final int result) {
         // print out the other statistics

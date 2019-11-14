@@ -108,6 +108,16 @@ public class ClusterFitness extends SimpleFitness {
         return s
     }
 
+    void queriesToFile(){
+
+        File queryData = new File('results/qdata.txt')
+        queryData.text = ''
+
+        queryMap.keySet().each { Query q ->
+            queryData << q.toString(Indexes.FIELD_CONTENTS) + '\n'
+        }
+    }
+
     //sent to stat file in statDump
     public String fitnessToStringForHumans() {
         return "ClusterQuery Fitness: ${this.fitness()}"

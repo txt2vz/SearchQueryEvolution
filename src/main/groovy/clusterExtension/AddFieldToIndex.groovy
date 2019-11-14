@@ -1,5 +1,6 @@
 package clusterExtension
 
+import cluster.Analysis
 import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
@@ -13,6 +14,7 @@ import org.apache.lucene.document.TextField
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.Term
+import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.*
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
@@ -57,13 +59,55 @@ class AddFieldToIndex {
 
         Query qAll = new MatchAllDocsQuery()
     //   Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
-        Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
+        Map <Query, String> qMap =  [:] //[(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
         int counter = 0
 
         println "At start numdocs: " + writer.numDocs()
 
-        //qmap - only if unique hit
+        File queryData = new File('results/qdata.txt')
+        List <Query>queries = []
 
+        QueryParser parser = new QueryParser(Indexes.FIELD_CONTENTS, Indexes.analyzer)
+
+        queryData.eachLine {String line ->
+
+            println "line $line"
+            String word0 = line.substring(0, line.indexOf(' ')).trim();
+            println "word0 $word0"
+            Query qn = parser.parse(line)
+            //queries << qn
+             qMap.put(qn, word0)
+            queries << qn
+            println "qn $qn"
+        }
+
+List <Query> uniqueQueries = []
+        for (int i = 0; i < queries.size(); i++) {
+            Query q = queries[i]
+
+            BooleanQuery.Builder bqbOneCategoryOnly = new BooleanQuery.Builder()
+            bqbOneCategoryOnly.add(q, BooleanClause.Occur.SHOULD)
+
+            for (int j = 0; j < queries.size(); j++) {
+                if (j != i) {
+                    bqbOneCategoryOnly.add(queries[j], BooleanClause.Occur.MUST_NOT)
+                }
+            }
+            uniqueQueries  << bqbOneCategoryOnly.build()
+        }
+
+        println "qmap $qMap"
+        println "queries $queries"
+        println "uniqueries $uniqueQueries"
+
+        uniqueQueries.each{q ->
+            def t3 = Analysis.getMostFrequentCategoryForQuery(q)
+            println "${t3.first}"
+        }
+
+
+        //qmap - only if unique hit
+if (false)
         qMap.each { Query query, String name ->
 
             TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)

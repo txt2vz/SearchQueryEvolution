@@ -63,7 +63,7 @@ public class ClusterMainJenetics {
         final int popSize = 512;
         final int subpops = 1;
         final long maxGen = 210;
-        AnalysisAndReports finalReport = new AnalysisAndReports();
+        Analysis finalReport = new Analysis();
         int maxGene = 100;
         int genomeLength = 18;
 

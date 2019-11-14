@@ -68,7 +68,7 @@ class ClusterMainECJ extends Evolve {
 
         File timingFile = new File("results/timing.txt")
 
-        AnalysisAndReports analysisAndReports = new AnalysisAndReports()
+        Analysis analysis = new Analysis()
 
         clusteringIndexesList.each { IndexEnum ie ->
             final Date indexTime = new Date()
@@ -119,11 +119,8 @@ class ClusterMainECJ extends Evolve {
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                            cfit.queryMap
-                            Tuple3 xx = cfit.getUniqueHits(cfit.queryMap)
-                            println "xxfirts " + xx.first
-
-                            analysisAndReports.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                            analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                            cfit.queriesToFile()
                         }
                     }
                     cleanup(state);
@@ -138,7 +135,7 @@ class ClusterMainECJ extends Evolve {
             timingFile << s
         }
 
-        analysisAndReports.jobSummary()
+        analysis.jobSummary()
 
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)

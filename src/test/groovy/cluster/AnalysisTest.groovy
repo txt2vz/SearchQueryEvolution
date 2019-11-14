@@ -3,11 +3,11 @@ package cluster
 
 import spock.lang.Specification
 
-class AnalysisAndReportsTest extends Specification {
+class AnalysisTest extends Specification {
     def "OverallSummary"() {
         setup:
 
-        def analysisAndReports = new AnalysisAndReports()
+        def analysisAndReports = new Analysis()
 //        Tuple5 indexAndParams0 = new Tuple5(IndexEnum.NG3.name(), FitnessMethod.PSEUDOF1, QueryType.OR3_INSTERSECT_SETK, true, 0)
 //        Tuple5 indexAndParams1 = new Tuple5(IndexEnum.NG3.name(), FitnessMethod.PSEUDOF1_K_PENALTY0_3, QueryType.OR3_INSTERSECT_SETK, true, 1)
 //        Tuple5 indexAndParams2 = new Tuple5(IndexEnum.NG3.name(), FitnessMethod.PSEUDOF1, QueryType.OR3_INSTERSECT_SETK, true, 2)
@@ -62,7 +62,7 @@ class AnalysisAndReportsTest extends Specification {
 
 
         when:
-        analysisAndReports = new AnalysisAndReports()
+        analysisAndReports = new Analysis()
 //        analysisAndReports.resultsFitnessWithF1 << [( new Tuple5(IndexEnum.CRISIS3.name(), FitnessMethod.PSEUDOF1, QueryType.OR3_INSTERSECT_SETK, true, 0)): new Tuple2(0.7, 0.3)]
 //        analysisAndReports.resultsFitnessWithF1 << [(new Tuple5(IndexEnum.CRISIS3.name(), FitnessMethod.PSEUDOF1_K_PENALTY0_3, QueryType.OR3_INSTERSECT_SETK, true, 1)): new Tuple2(0.99, 0.4)]
 //        analysisAndReports.resultsFitnessWithF1 << [(new Tuple5(IndexEnum.CRISIS3.name(), FitnessMethod.PSEUDOF1, QueryType.OR3_INSTERSECT_SETK, true, 2)): new Tuple2(0.9, 0.1)]

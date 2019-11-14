@@ -29,7 +29,7 @@ class KnnCluster {
         analyzerPerField.put(Indexes.FIELD_TEST_TRAIN, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_CONTENTS, new StandardAnalyzer());
 
-        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 440)
+        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 1440)
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
         TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned'))
@@ -52,20 +52,23 @@ class KnnCluster {
                 analyzerPerField,
                 Indexes.FIELD_CONTENTS)
 
+        int cnt = 0
+
         for (ScoreDoc testd : testHits) {
             Document d = Indexes.indexSearcher.doc(testd.doc)
-
+cnt++
             def path = d.get(Indexes.FIELD_PATH)
             def categoryName = d.get(Indexes.FIELD_CATEGORY_NAME)
             def assignedClass = knnClassifier.assignClass(d)
             def assignedClassString = assignedClass.getAssignedClass().utf8ToString()
             def assig = d.get(Indexes.FIELD_ASSIGNED_CLASS)
 
-            if (assignedClassString != categoryName) {
+            if (assignedClassString != categoryName || true) {
                 println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString asssig $assig"
             }
         }
 
+        println "cnt $cnt"
         assert knnClassifier
 
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
