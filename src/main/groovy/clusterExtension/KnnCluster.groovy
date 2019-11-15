@@ -56,15 +56,18 @@ class KnnCluster {
 
         for (ScoreDoc testd : testHits) {
             Document d = Indexes.indexSearcher.doc(testd.doc)
-cnt++
+            cnt++
             def path = d.get(Indexes.FIELD_PATH)
             def categoryName = d.get(Indexes.FIELD_CATEGORY_NAME)
             def assignedClass = knnClassifier.assignClass(d)
             def assignedClassString = assignedClass.getAssignedClass().utf8ToString()
             def assig = d.get(Indexes.FIELD_ASSIGNED_CLASS)
+            def testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
 
             if (assignedClassString != categoryName || true) {
-                println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString asssig $assig"
+                println "classsification error ++++++++++++++++++++ path testTrain $testTrain $path categoryName $categoryName assigned to: $assignedClassString"
+
+                //   println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString asssig $assig"
             }
         }
 

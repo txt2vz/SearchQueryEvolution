@@ -31,7 +31,7 @@ class Knn {
                 new BM25Similarity(),
               //  new ClassicSimilarity(),
                 Indexes.trainQ,  //matchAll
-                Indexes.indexEnum.getNumberOfCategories(),  //k from cluster
+               8,// Indexes.indexEnum.getNumberOfCategories(),  //k from cluster
                 3,
                 1,
                 Indexes.FIELD_CATEGORY_NAME,
@@ -45,9 +45,10 @@ class Knn {
             def categoryName = d.get(Indexes.FIELD_CATEGORY_NAME)
             def assignedClass = knnClassifier.assignClass(d)
             def assignedClassString= assignedClass.getAssignedClass().utf8ToString()
+            def testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
 
             if (assignedClassString != categoryName) {
-                println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString"
+                println "classsification error ++++++++++++++++++++ path testTrain $testTrain $path categoryName $categoryName assigned to: $assignedClassString"
             }
         }
 
