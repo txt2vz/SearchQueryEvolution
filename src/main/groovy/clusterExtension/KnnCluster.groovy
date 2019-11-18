@@ -10,11 +10,13 @@ import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.MatchAllDocsQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
+import org.apache.lucene.search.TotalHitCountCollector
 import org.apache.lucene.search.similarities.BM25Similarity
 
 class KnnCluster {
@@ -29,15 +31,26 @@ class KnnCluster {
         analyzerPerField.put(Indexes.FIELD_TEST_TRAIN, new StandardAnalyzer());
         analyzerPerField.put(Indexes.FIELD_CONTENTS, new StandardAnalyzer());
 
-        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, 1440)
+        Query qAll = new MatchAllDocsQuery()
+
+        TopDocs allTopDocs = Indexes.indexSearcher.search(qAll, Indexes.indexReader.numDocs())
+        ScoreDoc[] allHits = allTopDocs.scoreDocs;
+
+        TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, Indexes.indexReader.numDocs())
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
         TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned'))
         BooleanQuery.Builder bqb = new BooleanQuery.Builder()
-        bqb.add(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD);
+      //  bqb.add(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD);
         //  bqb.add(new BooleanClause(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD));
         bqb.add(assignedTQ, BooleanClause.Occur.MUST_NOT)
+        bqb.add(Indexes.trainQ, BooleanClause.Occur.MUST )
         Query assignedQ = bqb.build()
+
+        TopDocs assigTopDocs = Indexes.indexSearcher.search(assignedQ, Indexes.indexReader.numDocs())
+        ScoreDoc[] assigHits = testTopDocs.scoreDocs;
+
+        println "assignhits  size " + assigHits.size()
 
         KNearestNeighborDocumentClassifier knnClassifier = new KNearestNeighborDocumentClassifier(
                 Indexes.indexReader,
@@ -54,8 +67,9 @@ class KnnCluster {
 
         int cnt = 0
 
-        for (ScoreDoc testd : testHits) {
-            Document d = Indexes.indexSearcher.doc(testd.doc)
+    //    for (ScoreDoc testd : testHits) {
+            for (ScoreDoc alld : allHits) {
+            Document d = Indexes.indexSearcher.doc(alld.doc)
             cnt++
             def path = d.get(Indexes.FIELD_PATH)
             def categoryName = d.get(Indexes.FIELD_CATEGORY_NAME)
@@ -64,7 +78,8 @@ class KnnCluster {
             def assig = d.get(Indexes.FIELD_ASSIGNED_CLASS)
             def testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
 
-            if (assignedClassString != categoryName || true) {
+           // if (assignedClassString != categoryName || true) {
+            if (testTrain != 'testz'){
                 println "classsification error ++++++++++++++++++++ path testTrain $testTrain $path categoryName $categoryName assigned to: $assignedClassString"
 
                 //   println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString asssig $assig"
@@ -87,10 +102,27 @@ class KnnCluster {
         def precisiion = confusionMatrix.getPrecision()
         def recall = confusionMatrix.getRecall()
 
-        println "f1: $f1 precision: $precisiion recall: $recall"
+        def x = confusionMatrix.getNumberOfEvaluatedDocs()
+
+
+        println "f1: $f1 precision: $precisiion recall: $recall x $x"
 
         def p = confusionMatrix.getLinearizedMatrix()
 
         println "p $p"
+
+        TotalHitCountCollector trainCollector = new TotalHitCountCollector();
+        final TermQuery trainQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "train"))
+
+        TotalHitCountCollector testCollector = new TotalHitCountCollector();
+        final TermQuery testQ = new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN, "test"))
+
+        Indexes.indexSearcher.search(Indexes.trainQ, trainCollector);
+        def trainTotal = trainCollector.getTotalHits();
+
+        Indexes.indexSearcher.search(testQ, testCollector);
+        def testTotal = testCollector.getTotalHits();
+
+        println "testTotal $testTotal trainTotal $trainTotal"
     }
 }

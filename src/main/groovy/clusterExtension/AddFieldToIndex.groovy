@@ -29,7 +29,7 @@ class AddFieldToIndex {
     static void main(String[] args) {
 
         Indexes.setIndex(IndexEnum.NG3)
-        String indexPath =  Indexes.indexEnum.pathString
+        String indexPath = Indexes.indexEnum.pathString
         println "indexPath $indexPath"
 
         Path path = Paths.get(indexPath)
@@ -58,30 +58,31 @@ class AddFieldToIndex {
         Query spaceQ = bqb.build()
 
         Query qAll = new MatchAllDocsQuery()
-    //   Map <Query, String> qMap = [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
-        Map <Query, String> qMap =  [:] //[(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space' ]
+           Map <Query, String> qMap = // [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
+       // Map<Query, String> qMap = [:]
+             [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey' , (spaceQ): 'sci.space' ]
         int counter = 0
 
         println "At start numdocs: " + writer.numDocs()
 
         File queryData = new File('results/qdata.txt')
-        List <Query>queries = []
+        List<Query> queries = []
 
         QueryParser parser = new QueryParser(Indexes.FIELD_CONTENTS, Indexes.analyzer)
 
-        queryData.eachLine {String line ->
+        queryData.eachLine { String line ->
 
             println "line $line"
             String word0 = line.substring(0, line.indexOf(' ')).trim();
             println "word0 $word0"
             Query qn = parser.parse(line)
             //queries << qn
-             qMap.put(qn, word0)
+         //   qMap.put(qn, word0)
             queries << qn
             println "qn $qn"
         }
 
-List <Query> uniqueQueries = []
+        List<Query> uniqueQueries = []
         for (int i = 0; i < queries.size(); i++) {
             Query q = queries[i]
 
@@ -93,40 +94,42 @@ List <Query> uniqueQueries = []
                     bqbOneCategoryOnly.add(queries[j], BooleanClause.Occur.MUST_NOT)
                 }
             }
-            uniqueQueries  << bqbOneCategoryOnly.build()
+            uniqueQueries << bqbOneCategoryOnly.build()
         }
 
-        println "qmap $qMap"
+        println "qmap before $qMap"
         println "queries $queries"
         println "uniqueries $uniqueQueries"
 
-        uniqueQueries.each{q ->
+        uniqueQueries.each { q ->
             def t3 = Analysis.getMostFrequentCategoryForQuery(q)
-            println "${t3.first}"
+            String cname = t3.first
+            println "cname $cname"
+         //   qMap.put(q, cname)
         }
 
-
+        println "qmap after $qMap"
         //qmap - only if unique hit
-if (false)
-        qMap.each { Query query, String name ->
+      //  if (false)
+            qMap.each { Query query, String name ->
 
-            TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
-            ScoreDoc[] hits = topDocs.scoreDocs
+                TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
+                ScoreDoc[] hits = topDocs.scoreDocs
 
-            for (ScoreDoc sd : hits) {
+                for (ScoreDoc sd : hits) {
 
-                Document d = Indexes.indexSearcher.doc(sd.doc)
+                    Document d = Indexes.indexSearcher.doc(sd.doc)
 
-                d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
-                Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
-                d.add(assignedClass)
+                    d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
+                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
+                    d.add(assignedClass)
 
-                Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
+                    Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
 
-                writer.updateDocument(t,d)
-                counter++
+                    writer.updateDocument(t, d)
+                    counter++
+                }
             }
-        }
 
         println "$counter docs updated"
         println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()

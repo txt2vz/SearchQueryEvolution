@@ -37,8 +37,8 @@ class BuildIndex {
 
         String docsPath =
                 // /D:\Classify20NG3/
-                /D:\Datasets\NG3/
-      //          /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+       //         /D:\Datasets\NG3/
+                /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -69,7 +69,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 200) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -93,7 +93,8 @@ class BuildIndex {
 
                     String test_train
                     //   if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
-                    if (dirCount % 2 == 0) test_train = "test" else test_train = "train"
+                    //if (dirCount % 20 == 0) test_train = "train" else test_train = "test"
+                    if (dirCount % 2 == 0) test_train = "train" else test_train = "test"
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
