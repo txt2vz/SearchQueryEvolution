@@ -24,7 +24,7 @@ class FileNamesFromQuery {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.CLASSIC4B)
         IndexReader ir = Indexes.indexReader
         IndexSearcher is = Indexes.indexSearcher
 

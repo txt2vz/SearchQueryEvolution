@@ -28,7 +28,7 @@ class AddFieldToIndex {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.CLASSIC4B)
         String indexPath = Indexes.indexEnum.pathString
         println "indexPath $indexPath"
 
@@ -39,8 +39,6 @@ class AddFieldToIndex {
 
         iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND)
         IndexWriter writer = new IndexWriter(directory, iwc)
-
-        //File outFile = new File('results/docsMatchingQuery.csv')
 
         BooleanQuery.Builder bqb = new BooleanQuery.Builder();
         bqb.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'god')), BooleanClause.Occur.SHOULD)
@@ -58,9 +56,31 @@ class AddFieldToIndex {
         Query spaceQ = bqb.build()
 
         Query qAll = new MatchAllDocsQuery()
-           Map <Query, String> qMap = // [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
-       // Map<Query, String> qMap = [:]
-             [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey' , (spaceQ): 'sci.space' ]
+        TopDocs topDocsAll = Indexes.indexSearcher.search(qAll, Integer.MAX_VALUE)
+        ScoreDoc[] hitsAll = topDocsAll.scoreDocs
+
+        for (ScoreDoc sd : hitsAll) {
+
+            Document d = Indexes.indexSearcher.doc(sd.doc)
+
+            d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
+            Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned', Field.Store.YES);
+            d.add(assignedClass)
+
+            Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
+            writer.updateDocument(t, d)
+           // counter++
+        }
+
+        writer.forceMerge(1)
+      //  println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
+        writer.commit()
+
+
+        Map<Query, String> qMap = [:]
+        // [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space', (qAll): 'allD' ]
+        // Map<Query, String> qMap = [:]
+        //   [(godQ): 'soc.religion.christian', (gameQ): 'rec.sport.hockey', (spaceQ): 'sci.space']
         int counter = 0
 
         println "At start numdocs: " + writer.numDocs()
@@ -73,11 +93,11 @@ class AddFieldToIndex {
         queryData.eachLine { String line ->
 
             println "line $line"
-            String word0 = line.substring(0, line.indexOf(' ')).trim();
-            println "word0 $word0"
+            //  String word0 = line.substring(0, line.indexOf(' ')).trim();
+            //    println "word0 $word0"
             Query qn = parser.parse(line)
             //queries << qn
-         //   qMap.put(qn, word0)
+            //   qMap.put(qn, word0)
             queries << qn
             println "qn $qn"
         }
@@ -105,38 +125,41 @@ class AddFieldToIndex {
             def t3 = Analysis.getMostFrequentCategoryForQuery(q)
             String cname = t3.first
             println "cname $cname"
-         //   qMap.put(q, cname)
+            qMap.put(q, cname)
         }
 
         println "qmap after $qMap"
+
+
         //qmap - only if unique hit
-      //  if (false)
-            qMap.each { Query query, String name ->
+        //  if (false)
+        qMap.each { Query query, String name ->
 
-                TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
-                ScoreDoc[] hits = topDocs.scoreDocs
+            TopDocs topDocs = Indexes.indexSearcher.search(query, Integer.MAX_VALUE)
+            ScoreDoc[] hits = topDocs.scoreDocs
 
-                for (ScoreDoc sd : hits) {
+            for (ScoreDoc sd : hits) {
 
-                    Document d = Indexes.indexSearcher.doc(sd.doc)
+                Document d = Indexes.indexSearcher.doc(sd.doc)
 
-                    d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
-                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
-                    d.add(assignedClass)
+                d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
+                Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, name, Field.Store.YES);
+                d.add(assignedClass)
 
-                    Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
+                Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
 
-                    writer.updateDocument(t, d)
-                    counter++
-                }
+                writer.updateDocument(t, d)
+                counter++
             }
+        }
 
         println "$counter docs updated"
         println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
 
         writer.forceMerge(1)
-        println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
         writer.commit()
+        println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
+
         writer.close()
     }
 }

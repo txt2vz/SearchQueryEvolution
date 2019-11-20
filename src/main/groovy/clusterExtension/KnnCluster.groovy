@@ -23,7 +23,8 @@ class KnnCluster {
     //  http://lucene.apache.org/core/7_4_0/classification/index.html
 
     static void main(String[] args) {
-        Indexes.setIndex(IndexEnum.NG3)
+        //Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.CLASSIC4B)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 
@@ -78,8 +79,8 @@ class KnnCluster {
             def assig = d.get(Indexes.FIELD_ASSIGNED_CLASS)
             def testTrain = d.get(Indexes.FIELD_TEST_TRAIN)
 
-           // if (assignedClassString != categoryName || true) {
-            if (testTrain != 'testz'){
+            if (assignedClassString != categoryName ) {
+          //  if (testTrain != 'testz'){
                 println "classsification error ++++++++++++++++++++ path testTrain $testTrain $path categoryName $categoryName assigned to: $assignedClassString"
 
                 //   println "classsification error ++++++++++++++++++++ path $path categoryName $categoryName assigned to: $assignedClassString asssig $assig"

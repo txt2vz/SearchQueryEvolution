@@ -18,9 +18,10 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     def clusteringIndexesList = [
 //IndexEnum.HolSec
-            Indexes.indexEnum.NG3,
+     //       Indexes.indexEnum.NG3,
 //            IndexEnum.CRISIS3,
-  //          IndexEnum.CLASSIC4,
+ //           IndexEnum.CLASSIC4,
+          IndexEnum.CLASSIC4B,
 //            IndexEnum.R4,
 //            IndexEnum.R5,
 //            IndexEnum.NG5,

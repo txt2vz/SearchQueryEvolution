@@ -143,3 +143,10 @@ NG3 path: indexes/NG3 numberOfCategories: 3   7.258 seconds
 NG3 path: indexes/NG3 numberOfCategories: 3   13.502 seconds
 NG3 path: indexes/NG3 numberOfCategories: 3   15.077 seconds
 NG3 path: indexes/NG3 numberOfCategories: 3   15.518 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   12.227 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   11.536 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   21.460 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   12.572 seconds
+NG3 path: indexes/NG3 numberOfCategories: 3   12.017 seconds
+NG3 path: indexes/NG3 numberOfCategories: 3   13.073 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   2.456 seconds
