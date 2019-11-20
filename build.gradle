@@ -23,12 +23,16 @@ dependencies {
     //  compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
     // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.6.0'
 
+
+   // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-classification', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.3.0'
+
+
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '7.4.0'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '7.4.0'
-
-    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-classification
     compile group: 'org.apache.lucene', name: 'lucene-classification', version: '7.4.0'
-    // https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser
     compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '7.4.0'
 
 

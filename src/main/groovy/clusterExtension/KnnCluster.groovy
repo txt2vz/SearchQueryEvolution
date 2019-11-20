@@ -42,10 +42,9 @@ class KnnCluster {
 
         TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned'))
         BooleanQuery.Builder bqb = new BooleanQuery.Builder()
-      //  bqb.add(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD);
-        //  bqb.add(new BooleanClause(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD));
+        bqb.add(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD);
         bqb.add(assignedTQ, BooleanClause.Occur.MUST_NOT)
-        bqb.add(Indexes.trainQ, BooleanClause.Occur.MUST )
+      //  bqb.add(Indexes.trainQ, BooleanClause.Occur.MUST )
         Query assignedQ = bqb.build()
 
         TopDocs assigTopDocs = Indexes.indexSearcher.search(assignedQ, Indexes.indexReader.numDocs())

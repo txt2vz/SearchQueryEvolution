@@ -36,6 +36,7 @@ class Analysis {
         }
 
         Map.Entry<String, Integer> mostFrequentCategory = categoryFrequencyMap?.max { it?.value }
+assert mostFrequentCategory
 
         String maxCategoryName = mostFrequentCategory?.key
         final int maxCategoryHits = mostFrequentCategory?.value

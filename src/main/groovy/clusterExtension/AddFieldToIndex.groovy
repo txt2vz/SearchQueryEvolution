@@ -122,6 +122,7 @@ class AddFieldToIndex {
         println "uniqueries $uniqueQueries"
 
         uniqueQueries.each { q ->
+     //   queries.each { q ->
             def t3 = Analysis.getMostFrequentCategoryForQuery(q)
             String cname = t3.first
             println "cname $cname"

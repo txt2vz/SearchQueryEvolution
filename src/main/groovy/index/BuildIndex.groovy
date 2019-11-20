@@ -39,7 +39,8 @@ class BuildIndex {
         String docsPath =
                 // /D:\Classify20NG3/
        //         /D:\Datasets\NG3/
-           /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
+           // /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
+        /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
     //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
@@ -71,7 +72,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 20) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 500) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -80,7 +81,7 @@ class BuildIndex {
                     doc.add(catNumberField)
 
                    //non-alpha characters cause a problem when identifying a document for delete.
-                    String fileName = file.getName().replaceAll(/\W/, ' ').toLowerCase() + 'id' + docCount
+                    String fileName = file.getName().replaceAll(/\W/, '').toLowerCase() + 'id' + docCount
                     Field documentIDfield = new StringField(Indexes.FIELD_DOCUMENT_ID, fileName, Field.Store.YES)
                     doc.add(documentIDfield)
 
