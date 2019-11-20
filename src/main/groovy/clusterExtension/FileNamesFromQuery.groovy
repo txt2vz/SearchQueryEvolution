@@ -49,7 +49,7 @@ class FileNamesFromQuery {
             String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
             String conts = d.get(Indexes.FIELD_CONTENTS).take(420)
 
-            if (counter < 20) {
+            if (counter < 10) {
                 println "pathN $pathN category: $category testTrain: $testTrain  asssignedCat $assignedCat"
 //println "conts $conts"
             }

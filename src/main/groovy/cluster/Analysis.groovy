@@ -21,13 +21,13 @@ class Analysis {
     Analysis() {
     }
 
-    static Tuple3<String, Integer, Integer>  getMostFrequentCategoryForQuery(Query q) {
+    static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q) {
         Map<String, Integer> categoryFrequencyMap = [:]
         TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
         Indexes.indexSearcher.search(q, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-        hits.each {ScoreDoc sd ->
+        hits.each { ScoreDoc sd ->
             final int docId = sd.doc;
             Document d = Indexes.indexSearcher.doc(docId)
             String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
@@ -36,7 +36,7 @@ class Analysis {
         }
 
         Map.Entry<String, Integer> mostFrequentCategory = categoryFrequencyMap?.max { it?.value }
-assert mostFrequentCategory
+        assert mostFrequentCategory
 
         String maxCategoryName = mostFrequentCategory?.key
         final int maxCategoryHits = mostFrequentCategory?.value
@@ -45,7 +45,7 @@ assert mostFrequentCategory
 
         println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory totalHist ${hits.size()} "
 
-        return new Tuple3< String, Integer, Integer> (maxCategoryName, maxCategoryHits, hits.size())
+        return new Tuple3<String, Integer, Integer>(maxCategoryName, maxCategoryHits, hits.size())
     }
 
     void jobSummary() {
@@ -59,7 +59,7 @@ assert mostFrequentCategory
         println "CategoryCountError : $categoryAccuracy"
 
         def categoryErrorTotal = categoryAccuracy.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum()] }
-        double errorPerJob = (double) categoryErrorTotal.values().sum()/ ClusterMainECJ.NUMBER_OF_JOBS
+        double errorPerJob = (double) categoryErrorTotal.values().sum() / ClusterMainECJ.NUMBER_OF_JOBS
 
         println "Category Error $categoryErrorTotal"
         println "Catergory Error Average: $errorPerJob Category Error total: " + categoryErrorTotal.values().sum()

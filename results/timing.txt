@@ -171,3 +171,8 @@ CLASSIC4B path: indexes/classic4b numberOfCategories: 4   14.437 seconds
 CLASSIC4B path: indexes/classic4b numberOfCategories: 4   15.921 seconds
 CLASSIC4B path: indexes/classic4b numberOfCategories: 4   15.546 seconds
 CLASSIC4B path: indexes/classic4b numberOfCategories: 4   15.545 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   22.935 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   35.169 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   42.915 seconds
+CLASSIC4B path: indexes/classic4b numberOfCategories: 4   42.582 seconds
+NG3 path: indexes/NG3 numberOfCategories: 3   42.306 seconds

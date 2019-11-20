@@ -23,12 +23,11 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 @CompileStatic
-
 class AddFieldToIndex {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.CLASSIC4B)
+        Indexes.setIndex(IndexEnum.NG3)
         String indexPath = Indexes.indexEnum.pathString
         println "indexPath $indexPath"
 
@@ -69,11 +68,9 @@ class AddFieldToIndex {
 
             Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))
             writer.updateDocument(t, d)
-           // counter++
         }
 
         writer.forceMerge(1)
-      //  println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
         writer.commit()
 
 
@@ -157,10 +154,14 @@ class AddFieldToIndex {
         println "$counter docs updated"
         println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
 
+        Indexes.showCategoryFrequenies()
+
         writer.forceMerge(1)
         writer.commit()
         println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
 
+
         writer.close()
+        Indexes.showCategoryFrequenies()
     }
 }

@@ -24,7 +24,7 @@ class KnnCluster {
 
     static void main(String[] args) {
         //Indexes.setIndex(IndexEnum.NG3)
-        Indexes.setIndex(IndexEnum.CLASSIC4B)
+        Indexes.setIndex(IndexEnum.NG3)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 

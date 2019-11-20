@@ -151,6 +151,36 @@ class Indexes {
         return categoryName
     }
 
+    static void showCategoryFrequenies(){
+
+        setIndex(indexEnum)
+
+        Query qAll = new MatchAllDocsQuery()
+        TopDocs topDocs = indexSearcher.search(qAll, Integer.MAX_VALUE)
+        ScoreDoc[] allHits = topDocs.scoreDocs
+
+        Map<String, Integer> assignedCategoryFrequencies = [:]
+        Map<String, Integer> catFrequencies = [:]
+
+        int counter = 0
+        String p
+        for (ScoreDoc sd : allHits) {
+            Document d = indexSearcher.doc(sd.doc)
+
+            String category = d.get(Indexes.FIELD_CATEGORY_NAME)
+            String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
+
+            int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
+            assignedCategoryFrequencies.put((assignedCat), n + 1)
+
+            final int norig = catFrequencies.get(category)?: 0
+            catFrequencies.put((category), norig+ 1)
+        }
+
+        println "assingedCatFreques $assignedCategoryFrequencies"
+        println "category freq $catFrequencies"
+    }
+
     //set the filters and totals for the index for classification
     static void setIndexFieldsAndTotals() {
         println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"

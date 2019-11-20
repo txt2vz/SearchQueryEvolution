@@ -29,19 +29,22 @@ class BuildIndex {
     }
 
     BuildIndex() {
+        Indexes.setIndex(IndexEnum.NG3)
+
         String indexPath =
+                 Indexes.indexEnum.pathString
                 //'indexes/warCrimes'
                 //'indexes/resistance'
       //         'indexes/NG3'
-        'indexes/classic4b'
+      //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
                 // /D:\Classify20NG3/
        //         /D:\Datasets\NG3/
-           // /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
-        /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
-    //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+         //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
+    //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
+                     /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -72,7 +75,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 500) // && categoryNumber <3)
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) // && categoryNumber <3)
 
                 {
                     Document doc = new Document()
@@ -119,6 +122,7 @@ class BuildIndex {
             categoryNumber++
         }
         println "Total docs: " + writer.maxDoc()
+       writer.commit()
         writer.close()
         IndexReader indexReader = DirectoryReader.open(directory)
         IndexSearcher indexSearcher = new IndexSearcher(indexReader)
@@ -144,6 +148,8 @@ class BuildIndex {
         indexSearcher.search(cryptQ, cryptCollector);
         def cryptTotal = cryptCollector.getTotalHits()
         println "cryptTotal $cryptTotal"
+
+        Indexes.showCategoryFrequenies()
 
         println "numDocs " + indexReader.numDocs()
         println "End ***************************************************************"
