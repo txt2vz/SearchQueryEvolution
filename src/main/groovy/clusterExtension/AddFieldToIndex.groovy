@@ -27,7 +27,7 @@ class AddFieldToIndex {
 
     static void main(String[] args) {
 
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.R4Train)
         String indexPath = Indexes.indexEnum.pathString
         println "indexPath $indexPath"
 

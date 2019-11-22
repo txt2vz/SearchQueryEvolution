@@ -29,12 +29,14 @@ class BuildIndex {
     }
 
     BuildIndex() {
-        Indexes.setIndex(IndexEnum.NG3)
+    //    Indexes.setIndex(IndexEnum.R4Train)
 
         String indexPath =
-                 Indexes.indexEnum.pathString
+            //     Indexes.indexEnum.pathString
                 //'indexes/warCrimes'
                 //'indexes/resistance'
+       //         'indexes/R4Train'
+        'indexes/R4Test'
       //         'indexes/NG3'
       //  'indexes/classic4b'
         //       'indexes/science4'
@@ -44,7 +46,8 @@ class BuildIndex {
        //         /D:\Datasets\NG3/
          //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
     //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
-                     /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+    //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
                 ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
@@ -149,6 +152,7 @@ class BuildIndex {
         def cryptTotal = cryptCollector.getTotalHits()
         println "cryptTotal $cryptTotal"
 
+        Indexes.setIndex(IndexEnum.R4Test)
         Indexes.showCategoryFrequenies()
 
         println "numDocs " + indexReader.numDocs()

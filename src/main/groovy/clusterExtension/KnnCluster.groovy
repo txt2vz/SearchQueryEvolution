@@ -24,7 +24,7 @@ class KnnCluster {
 
     static void main(String[] args) {
         //Indexes.setIndex(IndexEnum.NG3)
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.R4Train)
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
 
@@ -88,6 +88,8 @@ class KnnCluster {
 
         println "cnt $cnt"
         assert knnClassifier
+
+        Indexes.setIndex(Indexes.indexEnum.R4Test)
 
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(

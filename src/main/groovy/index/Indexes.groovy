@@ -35,6 +35,10 @@ enum IndexEnum {
     NG20('indexes/20NG', 20),
 
     R4('indexes/R4', 4),
+
+    R4Train('indexes/R4Train', 4),
+    R4Test('indexes/R4Test', 4),
+
     R5('indexes/R5', 5),
     R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
