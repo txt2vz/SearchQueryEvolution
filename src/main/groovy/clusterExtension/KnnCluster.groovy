@@ -89,7 +89,9 @@ class KnnCluster {
         println "cnt $cnt"
         assert knnClassifier
 
-        Indexes.setIndex(Indexes.indexEnum.R4Test)
+        ConfusionMatrix.checkClassifier(knnClassifier, Indexes.indexEnum.R4Test )
+
+      /*  Indexes.setIndex(Indexes.indexEnum.R4Test)
 
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(
@@ -126,5 +128,7 @@ class KnnCluster {
         def testTotal = testCollector.getTotalHits();
 
         println "testTotal $testTotal trainTotal $trainTotal"
+
+       */
     }
 }

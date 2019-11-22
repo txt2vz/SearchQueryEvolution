@@ -160,7 +160,6 @@ class AddFieldToIndex {
         writer.commit()
         println "Max docs: " + writer.maxDoc() + " numDocs: " + writer.numDocs()
 
-
         writer.close()
         Indexes.showCategoryFrequenies()
     }

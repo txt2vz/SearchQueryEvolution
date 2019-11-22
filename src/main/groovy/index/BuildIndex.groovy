@@ -35,20 +35,21 @@ class BuildIndex {
             //     Indexes.indexEnum.pathString
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-                'indexes/R4Train'
-     //   'indexes/R4Test'
+        //        'indexes/R4Train'
+        'indexes/R4Test'
       //         'indexes/NG3'
       //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
-                /D:\Datasets\R4Train/
+       //         /D:\Datasets\R4Train/
                 // /D:\Classify20NG3/
        //         /D:\Datasets\NG3/
          //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
     //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
        //         /D:\Datasets\R4Test/
-       //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+       //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Train/
     //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/

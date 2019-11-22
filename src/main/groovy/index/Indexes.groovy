@@ -126,7 +126,7 @@ class Indexes {
         NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
         indexSearcher = indexEnum.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
-        setIndexFieldsAndTotals()
+      //  setIndexFieldsAndTotals()
         println "indexEnum $indexEnum"
     }
 
