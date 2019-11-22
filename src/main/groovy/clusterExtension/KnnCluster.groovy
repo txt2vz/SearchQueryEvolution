@@ -40,7 +40,7 @@ class KnnCluster {
         TopDocs testTopDocs = Indexes.indexSearcher.search(Indexes.testQ, Indexes.indexReader.numDocs())
         ScoreDoc[] testHits = testTopDocs.scoreDocs;
 
-        TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned'))
+        TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned'))
         BooleanQuery.Builder bqb = new BooleanQuery.Builder()
         bqb.add(new MatchAllDocsQuery(), BooleanClause.Occur.SHOULD);
         bqb.add(assignedTQ, BooleanClause.Occur.MUST_NOT)
@@ -48,7 +48,7 @@ class KnnCluster {
         Query assignedQ = bqb.build()
 
         TopDocs assigTopDocs = Indexes.indexSearcher.search(assignedQ, Indexes.indexReader.numDocs())
-        ScoreDoc[] assigHits = testTopDocs.scoreDocs;
+        ScoreDoc[] assigHits = assigTopDocs.scoreDocs;
 
         println "assignhits  size " + assigHits.size()
 
@@ -57,7 +57,7 @@ class KnnCluster {
                 new BM25Similarity(),
                 //  new ClassicSimilarity(),
                 assignedQ,//   Indexes.trainQ,  //matchAll
-                3,//Indexes.indexEnum.getNumberOfCategories(),  //k from cluster
+                5,//Indexes.indexEnum.getNumberOfCategories(),  //k from cluster
                 3,
                 1,
                 // Indexes.FIELD_CATEGORY_NAME,

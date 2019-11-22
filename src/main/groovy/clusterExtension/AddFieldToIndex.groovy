@@ -63,7 +63,7 @@ class AddFieldToIndex {
             Document d = Indexes.indexSearcher.doc(sd.doc)
 
             d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
-            Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned', Field.Store.YES);
+            Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned', Field.Store.YES);
             d.add(assignedClass)
 
             Term t = new Term(Indexes.FIELD_DOCUMENT_ID, d.get(Indexes.FIELD_DOCUMENT_ID))

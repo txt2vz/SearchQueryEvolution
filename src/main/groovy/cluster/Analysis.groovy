@@ -117,15 +117,23 @@ class Analysis {
             final int maxCatHits = tuple3.second
             final int totalHits = tuple3.third
 
+            assert maxCatHits
+            assert totalHits
+
             TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
             TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                     maxCatName));
             Indexes.indexSearcher.search(catQ, totalHitCollector);
             final int categoryTotal = totalHitCollector.getTotalHits();
 
+            assert categoryTotal
+
             final double recall = (double) maxCatHits / categoryTotal;
             final double precision = (double) maxCatHits / totalHits
             final double f1 = (2 * precision * recall) / (precision + recall)
+
+            assert f1
+            assert f1 > 0
 
             f1list << f1
             precisionList << precision
@@ -144,7 +152,9 @@ class Analysis {
         final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
         final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0
 
+        assert averageF1forJob
+        assert averageF1forJob > 0
+
         [f1list, averageF1forJob, averagePrecision, averageRecall]
     }
-
 }

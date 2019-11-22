@@ -35,18 +35,20 @@ class BuildIndex {
             //     Indexes.indexEnum.pathString
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-       //         'indexes/R4Train'
-        'indexes/R4Test'
+                'indexes/R4Train'
+     //   'indexes/R4Test'
       //         'indexes/NG3'
       //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
+                /D:\Datasets\R4Train/
                 // /D:\Classify20NG3/
        //         /D:\Datasets\NG3/
          //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
     //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+       //         /D:\Datasets\R4Test/
+       //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
     //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
    //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
       ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
@@ -98,7 +100,7 @@ class BuildIndex {
                     String grandParent = file.getParentFile().getParent()
 
                     String catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
-                    Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+                    Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName.replaceAll(/\W/, '').toLowerCase(), Field.Store.YES);
                     doc.add(catNameField)
 
                     String test_train
@@ -109,7 +111,7 @@ class BuildIndex {
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
 
-                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unAssigned', Field.Store.YES);
+                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned', Field.Store.YES);
                     doc.add(assignedClass)
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))

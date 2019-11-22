@@ -176,4 +176,10 @@ CLASSIC4B path: indexes/classic4b numberOfCategories: 4   35.169 seconds
 CLASSIC4B path: indexes/classic4b numberOfCategories: 4   42.915 seconds
 CLASSIC4B path: indexes/classic4b numberOfCategories: 4   42.582 seconds
 NG3 path: indexes/NG3 numberOfCategories: 3   42.306 seconds
+NG3 path: indexes/NG3 numberOfCategories: 3   28.046 seconds
 R4Train path: indexes/R4Train numberOfCategories: 4   46.563 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   30.617 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   31.067 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   11.514 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   13.040 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   12.445 seconds
