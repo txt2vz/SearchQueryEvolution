@@ -4,6 +4,7 @@ import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.classification.BM25NBClassifier
+import org.apache.lucene.classification.Classifier
 import org.apache.lucene.classification.KNearestNeighborClassifier
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
@@ -15,11 +16,21 @@ import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
 import org.apache.lucene.search.similarities.BM25Similarity
 
+enum LuceneClassifyMethod {
+    KNN,
+    NB
+}
+
 class ClassifyUnassigned {
 
     static void main(String[] args) {
-        //Indexes.setIndex(IndexEnum.NG3)
-        Indexes.setIndex(IndexEnum.R4Train)
+        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4TRAIN, LuceneClassifyMethod.KNN)
+        Effectiveness.classifierEffectiveness(classifier, IndexEnum.CLASSIC4TEST)
+    }
+
+    static Classifier classifyUnassigned(IndexEnum trainIndex, LuceneClassifyMethod luceneClassifyMethod) {
+
+        Indexes.setIndex(trainIndex)
 
         TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned'))
         BooleanQuery.Builder bqb = new BooleanQuery.Builder()
@@ -32,27 +43,37 @@ class ClassifyUnassigned {
 
         println "unAssignedHits size " + unAssignedHits.size()
 
-//        BM25NBClassifier bm25NBClassifier = new BM25NBClassifier(
-//                Indexes.indexReader,
-//                new StandardAnalyzer(),
-//                unassignedQ,
-//                Indexes.FIELD_ASSIGNED_CLASS,
-//                Indexes.FIELD_CONTENTS
-//        )
+        Classifier classifier
 
-        KNearestNeighborClassifier kNearestNeighborClassifier = new KNearestNeighborClassifier(
-                Indexes.indexReader,
-                new BM25Similarity(),
-                new StandardAnalyzer(),
-                unassignedQ,
-                20,
-                3,
-                1,
-                Indexes.FIELD_ASSIGNED_CLASS,
-                Indexes.FIELD_CONTENTS
-        )
+        switch (luceneClassifyMethod) {
 
-     //   ConfusionMatrix.checkClassifier(bm25NBClassifier, Indexes.indexEnum.R4Test )
-        ConfusionMatrix.checkClassifier(kNearestNeighborClassifier, Indexes.indexEnum.R4Test )
+            case LuceneClassifyMethod.KNN:
+                classifier = new KNearestNeighborClassifier(
+                        Indexes.indexReader,
+                        new BM25Similarity(),
+                        new StandardAnalyzer(),
+                        unassignedQ,
+                        20,
+                        3,
+                        1,
+                        Indexes.FIELD_ASSIGNED_CLASS,
+                        Indexes.FIELD_CONTENTS
+                )
+                break;
+
+            case LuceneClassifyMethod.NB:
+                classifier = new BM25NBClassifier(
+                        Indexes.indexReader,
+                        new StandardAnalyzer(),
+                        unassignedQ,
+                        Indexes.FIELD_ASSIGNED_CLASS,
+                        Indexes.FIELD_CONTENTS
+                )
+                break;
+        }
+
+        return classifier
+
+        //ConfusionMatrix.checkClassifier(classifier, testIndex)
     }
 }

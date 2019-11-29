@@ -9,7 +9,7 @@ import ec.simple.SimpleFitness
 import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
-import index.ImportantTermsOld
+import index.ImportantTermQueries
 import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
@@ -38,7 +38,7 @@ public class SpanFirstG extends Problem implements SimpleProblemForm {
 				+ Indexes.instance.totalTrainDocsInCat + " Total test docs for cat "
 				+ Indexes.instance.totalTestDocsInCat);
 
-		ImportantTermsOld iw = new ImportantTermsOld();
+		ImportantTermQueries iw = new ImportantTermQueries();
 		wordArray = iw.getF1TermQueryList(false, true);
 	}
 

@@ -183,3 +183,64 @@ R4Train path: indexes/R4Train numberOfCategories: 4   31.067 seconds
 R4Train path: indexes/R4Train numberOfCategories: 4   11.514 seconds
 R4Train path: indexes/R4Train numberOfCategories: 4   13.040 seconds
 R4Train path: indexes/R4Train numberOfCategories: 4   12.445 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   23.535 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   20.683 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   6.619 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   6.563 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   15.998 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   24.090 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   17.009 seconds
+R4Train path: indexes/R4Train numberOfCategories: 4   11.706 seconds
+NG5Train path: indexes/NG5Train numberOfCategories: 5   20.858 seconds
+NG5Train path: indexes/NG5Train numberOfCategories: 5   46.213 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  17.221 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  9.625 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  9.627 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  1 minutes, 27.018 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  18.820 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  10.206 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  9.406 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  9.407 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  15.809 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  35.281 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  13.984 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  19.030 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  13.549 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  14.381 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  13.239 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  12.908 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  1 minutes, 27.578 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  2 minutes, 36.868 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  2 minutes, 38.619 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  3 minutes, 54.210 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  17.154 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  17.396 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  17.296 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  41.516 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  1 minutes, 53.251 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  1 minutes, 57.300 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  44.327 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  1 minutes, 0.577 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  38.266 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  38.618 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  13.159 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  15.839 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  28.421 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  37.889 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  37.572 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  37.746 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  35.479 seconds
+[CLASSIC3TRAIN path: indexes/classic3Train numberOfCategories: 3 , CLASSIC3TEST path: indexes/classic3Test numberOfCategories: 3 ]  47.739 seconds
+[NG5Train path: indexes/NG5Train numberOfCategories: 5 , NG5Test path: indexes/NG5Test numberOfCategories: 5 ]  45.183 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  54.248 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  21.151 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  20.174 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  12.880 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  10.872 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  38.986 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  46.771 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  22.225 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  25.244 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  40.903 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  2 minutes, 58.102 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  27.383 seconds

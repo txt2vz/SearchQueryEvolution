@@ -34,11 +34,12 @@ enum QueryType {
     OR_WITH_NOT(false),
 
     SPAN_FIRST(false),
-    ORSETK(true),
+
     ORDNFSETK(true),
     ORDNF(true),
     MINSHOULDSETK(true),
 
+    OR1(false),
     OR3_INTERSECT(false),
 
     OR1SETK(true),
@@ -110,8 +111,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, 1, BooleanClause.Occur.MUST)
                 break;
 
-
-
             case QueryType.OR_WITH_NOT:
                 bqbArray = qlfc.getORwithNOT(genome, false)
                 break;
@@ -120,16 +119,18 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
-
-
             case QueryType.OR3_INTERSECT:
                 bqbArray = qlfc.getORIntersect(genome, 3, false)
+                break;
+
+            case QueryType.OR1:
+                bqbArray = qlfc.getOR1QueryList(genome, false)
                 break;
 
 //*****************set k methods *************************************************************
 
             case QueryType.OR1SETK:
-                bqbArray = qlfc.getOR1QueryList(genome)
+                bqbArray = qlfc.getOR1QueryList(genome, true)
                 break;
 
 

@@ -48,7 +48,8 @@ public class ClusterFitness extends SimpleFitness {
         switch (fitnessMethod) {
 
             case fitnessMethod.UNIQUE_HITS_COUNT:
-                baseFitness = hitsMatchingOnlyOneQuery
+                baseFitness = hitsMatchingOnlyOneQuery// - (hitsMatchingTwoOrMoreQueries *2)
+              //  baseFitness = (baseFitness > 0)? baseFitness : 0
                 break
 
             case fitnessMethod.UNIQUE_HITS_K_PENALTY:
@@ -108,13 +109,9 @@ public class ClusterFitness extends SimpleFitness {
         return s
     }
 
-    void queriesToFile(){
-
-        File queryData = new File('results/qdata.txt')
-        queryData.text = ''
-
+    void queriesToFile(File qFile){
         queryMap.keySet().each { Query q ->
-            queryData << q.toString(Indexes.FIELD_CONTENTS) + '\n'
+            qFile << q.toString(Indexes.FIELD_CONTENTS) + '\n'
         }
     }
 

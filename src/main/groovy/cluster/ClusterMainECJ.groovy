@@ -1,5 +1,9 @@
 package cluster
 
+import clusterExtension.ClassifyUnassigned
+import clusterExtension.Effectiveness
+import clusterExtension.LuceneClassifyMethod
+import clusterExtension.UpdateAssignedFieldInIndex
 import ec.EvolutionState
 import ec.Evolve
 import ec.util.ParameterDatabase
@@ -9,6 +13,7 @@ import groovy.time.TimeDuration
 import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
+import org.apache.lucene.classification.Classifier
 
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
@@ -16,10 +21,18 @@ class ClusterMainECJ extends Evolve {
     static final int NUMBER_OF_JOBS = 1
 
     //indexes suitable for clustering.
-    def clusteringIndexesList = [
+    List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
+
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+
+         //   new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5Train, IndexEnum.NG5Test),
+     //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+      // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC3TRAIN, IndexEnum.CLASSIC3TEST),
+      //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4Train, IndexEnum.R4Test)
 //IndexEnum.HolSec
  //           Indexes.indexEnum.NG3,
-              Indexes.indexEnum.R4Train,
+  //            Indexes.indexEnum.R4Train,
+      //      IndexEnum.NG5Train: IndexEnum.NG5Test,
 //            IndexEnum.CRISIS3,
  //           IndexEnum.CLASSIC4,
  //         IndexEnum.CLASSIC4B,
@@ -39,11 +52,13 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-                QueryType.OR,
+//           QueryType.OR1
 
-   //             QueryType.OR,
-     //       QueryType.OR_SETK,
-     //       QueryType.MINSHOULD2,
+     //         QueryType.OR,
+      //      QueryType.OR1SETK
+            QueryType.OR_SETK
+          //  QueryType.MINSHOULD2,
+     //       QueryType.AND
        //     QueryType.OR_WITH_MINSHOULD2
 
     ]
@@ -69,17 +84,21 @@ class ClusterMainECJ extends Evolve {
         final Date startRun = new Date()
 
         File timingFile = new File("results/timing.txt")
+        File queryFile = new File('results/qFile.txt')
+        queryFile.text = ''
 
         Analysis analysis = new Analysis()
+        ClusterFitness cfitBestForIndex
+        int k=0
 
-        clusteringIndexesList.each { IndexEnum ie ->
+        clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> ie ->
             final Date indexTime = new Date()
-
+            cfitBestForIndex = new ClusterFitness()
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state = new EvolutionState()
 
                 println "Index Enum ie: $ie"
-                Indexes.setIndex(ie)
+                Indexes.setIndex(ie.first)
 
                 kPenalty.each { kPenalty ->
                     ClusterFitness.kPenalty = kPenalty
@@ -116,19 +135,39 @@ class ClusterMainECJ extends Evolve {
                                 }.fitness
                             }.max { it.fitness() }
 
+                            if (cfitBestForIndex == null){
+                                cfitBestForIndex = cfit
+                            } else
+                            {
+                                if (cfit.fitness() > cfitBestForIndex.fitness){
+                                    cfitBestForIndex = cfit
+                               }
+                            }
+
                             final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
                             final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
                             analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
-                            cfit.queriesToFile()
+                            k = cfitBestForIndex.k
+
                         }
                     }
                     cleanup(state);
                     println "--------END JOB $job  -----------------------------------------------"
                 }
             }
+            cfitBestForIndex.queriesToFile(queryFile)
+
+            Tuple4 t4GAresult = Analysis.calculate_F1_p_r(cfitBestForIndex, false)
+
+            //if.first is train index ie.second is test index
+            UpdateAssignedFieldInIndex.updateAssignedField(ie.first, queryFile )
+            Classifier classifier = ClassifyUnassigned.classifyUnassigned(ie.first, LuceneClassifyMethod.KNN)
+            Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, ie.second, k)
+
+            println "GA F1 ${t4GAresult.first} GA p ${t4GAresult.second}  GA r  ${t4GAresult.third} Classifer F1 ${t3ClassiferResult.first}  Classifer p ${t3ClassiferResult.second}  Classifer r ${t3ClassiferResult.third}"
 
             final Date endTime = new Date()
             TimeDuration durationT = TimeCategory.minus(endTime, indexTime)

@@ -5,18 +5,15 @@ import index.Indexes
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.classification.document.KNearestNeighborDocumentClassifier
-import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.MatchAllDocsQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.ScoreDoc
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TopDocs
-import org.apache.lucene.search.TotalHitCountCollector
 import org.apache.lucene.search.similarities.BM25Similarity
 
 class KnnCluster {
@@ -89,7 +86,7 @@ class KnnCluster {
         println "cnt $cnt"
         assert knnClassifier
 
-        ConfusionMatrix.checkClassifier(knnClassifier, Indexes.indexEnum.R4Test )
+        Effectiveness.classifierEffectiveness(knnClassifier, Indexes.indexEnum.R4Test )
 
       /*  Indexes.setIndex(Indexes.indexEnum.R4Test)
 

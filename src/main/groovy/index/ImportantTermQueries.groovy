@@ -14,7 +14,7 @@ import org.apache.lucene.util.BytesRef
 class ImportantTermQueries {
 
     private static Set<String> stopSet = StopSet.getStopSetFromFile()
-    private final static int MAX_TERMQUERYLIST_SIZE = 250
+    private final static int MAX_TERMQUERYLIST_SIZE = 200
 
     static List<TermQuery> getTFIDFTermQueryList(IndexReader indexReader) {
 
@@ -30,7 +30,7 @@ class ImportantTermQueries {
         while ((termbr = termsEnum.next()) != null) {
 
             Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
-            int df = indexReader.docFreq(t)
+            final int df = indexReader.docFreq(t)
             String word = t.text()
 
             if (isUsefulTerm(df, word)) {
@@ -77,8 +77,8 @@ class ImportantTermQueries {
             if (isUsefulTerm(df, word)) {
 
                 Query tq = new TermQuery(t)
-                final int positiveHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
-                final int negativeHits = Indexes.getQueryHitsWithFilter(indexSearcher, Indexes.otherTrainDocsFilter, tq)
+                final int positiveHits = IndexUtils.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
+                final int negativeHits = IndexUtils.getQueryHitsWithFilter(indexSearcher, Indexes.otherTrainDocsFilter, tq)
                 final double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, Indexes.totalTrainDocsInCat)
 
                 if (F1 > 0.02) {
@@ -99,7 +99,7 @@ class ImportantTermQueries {
     private static boolean isUsefulTerm(int df, String word) {
 
         boolean b =
-                df > 5 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
+                df > 3 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
 
         return b
     }

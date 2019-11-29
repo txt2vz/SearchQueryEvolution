@@ -22,6 +22,14 @@ import java.nio.file.Paths
 @CompileStatic
 enum IndexEnum {
 
+    NG5Train('indexes/NG5Train', 5),
+    NG5Test('indexes/NG5Test', 5),
+    R4Train('indexes/R4Train', 4),
+    R4Test('indexes/R4Test', 4),
+    CLASSIC4TRAIN('indexes/classic4Train', 4),
+    CLASSIC4TEST('indexes/classic4Test', 4),
+
+
     CRISIS3('indexes/crisis3FireBombFlood', 3),
 
     CLASSIC3('indexes/classic3_300', 3),
@@ -35,10 +43,6 @@ enum IndexEnum {
     NG20('indexes/20NG', 20),
 
     R4('indexes/R4', 4),
-
-    R4Train('indexes/R4Train', 4),
-    R4Test('indexes/R4Test', 4),
-
     R5('indexes/R5', 5),
     R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
@@ -102,20 +106,17 @@ class Indexes {
 
     static final Analyzer analyzer = new StandardAnalyzer()  //new EnglishAnalyzer();  //with stemming
 
-    public static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
-    public static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()
+    static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
+    static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()
 
-    public static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
-    public static IndexReader indexReader// = indexSearcher.getIndexReader()
+    static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
+    static IndexReader indexReader// = indexSearcher.getIndexReader()
 
-    public static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
-    public static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
+    static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
+    static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
 
     final static TermQuery trainQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'train'));
     final static TermQuery testQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'test'));
-
-    // the categoryNumber of the current category
-    static String categoryNumber = '0'
 
     //Query to return documents in the current category based on categoryNumber
     static TermQuery catQ;
@@ -130,15 +131,7 @@ class Indexes {
         println "indexEnum $indexEnum"
     }
 
-    //get hits for a particular query using filter (e.g. a particular category)
-    static int getQueryHitsWithFilter(IndexSearcher searcher, Query filter, Query q) {
-        TotalHitCountCollector collector = new TotalHitCountCollector()
-        BooleanQuery.Builder bqb = new BooleanQuery.Builder()
-        bqb.add(q, BooleanClause.Occur.MUST)
-        bqb.add(filter, BooleanClause.Occur.FILTER)
-        searcher.search(bqb.build(), collector)
-        return collector.getTotalHits()
-    }
+
 
     //get the category_name for the current category
     static String getCategoryName() {
@@ -149,44 +142,15 @@ class Indexes {
         String categoryName
         hits.each { ScoreDoc h ->
             Document d = indexSearcher.doc(h.doc)
-
             categoryName = d.get(FIELD_CATEGORY_NAME)
         }
+
         return categoryName
     }
 
-    static void showCategoryFrequenies(){
-
-        setIndex(indexEnum)
-
-        Query qAll = new MatchAllDocsQuery()
-        TopDocs topDocs = indexSearcher.search(qAll, Integer.MAX_VALUE)
-        ScoreDoc[] allHits = topDocs.scoreDocs
-
-        Map<String, Integer> assignedCategoryFrequencies = [:]
-        Map<String, Integer> catFrequencies = [:]
-
-        int counter = 0
-        String p
-        for (ScoreDoc sd : allHits) {
-            Document d = indexSearcher.doc(sd.doc)
-
-            String category = d.get(Indexes.FIELD_CATEGORY_NAME)
-            String assignedCat = d.get(Indexes.FIELD_ASSIGNED_CLASS)
-
-            int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
-            assignedCategoryFrequencies.put((assignedCat), n + 1)
-
-            final int norig = catFrequencies.get(category)?: 0
-            catFrequencies.put((category), norig+ 1)
-        }
-
-        println "assingedCatFreques $assignedCategoryFrequencies"
-        println "category freq $catFrequencies"
-    }
 
     //set the filters and totals for the index for classification
-    static void setIndexFieldsAndTotals() {
+    static void setIndexFieldsAndTotals(String categoryNumber) {
         println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
         catQ = new TermQuery(new Term(FIELD_CATEGORY_NUMBER,
                 categoryNumber));

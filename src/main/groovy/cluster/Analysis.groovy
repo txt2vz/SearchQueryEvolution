@@ -2,6 +2,7 @@ package cluster
 
 
 import index.Indexes
+import index.IndexUtils
 import org.apache.lucene.document.Document
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.Query
@@ -14,38 +15,12 @@ class Analysis {
     def resultsF1 = [:]
     def categoryAccuracy = [:]
     def resultsFitnessWithF1 = [:]
-    def resultsDir = new File(/results/).mkdir()
+   // def resultsDir = new File(/results/).mkdir()
+
     File queryFileOut = new File('results/Queries.txt')
     File overallResults = new File("results/overallResultsCluster.txt")
 
     Analysis() {
-    }
-
-    static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q) {
-        Map<String, Integer> categoryFrequencyMap = [:]
-        TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
-        Indexes.indexSearcher.search(q, collector);
-        ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
-        hits.each { ScoreDoc sd ->
-            final int docId = sd.doc;
-            Document d = Indexes.indexSearcher.doc(docId)
-            String catName = d.get(Indexes.FIELD_CATEGORY_NAME)
-            final int n = categoryFrequencyMap.get((catName)) ?: 0
-            categoryFrequencyMap.put((catName), n + 1)
-        }
-
-        Map.Entry<String, Integer> mostFrequentCategory = categoryFrequencyMap?.max { it?.value }
-        assert mostFrequentCategory
-
-        String maxCategoryName = mostFrequentCategory?.key
-        final int maxCategoryHits = mostFrequentCategory?.value
-        assert maxCategoryName
-        assert maxCategoryHits > 0
-
-        println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory totalHist ${hits.size()} "
-
-        return new Tuple3<String, Integer, Integer>(maxCategoryName, maxCategoryHits, hits.size())
     }
 
     void jobSummary() {
@@ -71,18 +46,25 @@ class Analysis {
 
     void reportsOut(int jobNumber, int gen, int popSize, int numberOfSubpops, int genomeSizePop0, int maxGenePop0, ClusterFitness cfit) {
 
-        def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
+       // def (ArrayList<Double> f1list, double averageF1forJob, double averagePrecision, double averageRecall) = calculate_F1_p_r(cfit, true)
+
+        Tuple4 t4 = calculate_F1_p_r(cfit, true)
+        final double averageF1ForJob = t4.first
+        final double averagePrecisionForJob = t4.second
+        final double averageRecallForJoab  = t4.third
+        List<Double> f1list = t4.fourth
 
         println "Queries Report qmap: ${cfit.queryMap}"
 
-        int numberOfClusters = cfit.queryMap.size()
-        int numberOfOriginalClasses = Indexes.indexEnum.numberOfCategories
-        int categoryCountError = numberOfOriginalClasses - numberOfClusters
-        int categoryCountErrorAbs = Math.abs(categoryCountError)
+        final int numberOfClusters = cfit.queryMap.size()
+        final int numberOfOriginalClasses = Indexes.indexEnum.numberOfCategories
+        final int categoryCountError = numberOfOriginalClasses - numberOfClusters
+        final int categoryCountErrorAbs = Math.abs(categoryCountError)
 
-        queryFileOut << "${new Date()}  ***** Job: $jobNumber Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod.intersectRatio} ************************************************************* \n"
+      //  queryFileOut << "${new Date()}  ***** Job: $jobNumber Query Type: ${ClusterQueryECJ.queryType}  Fitness Method: ${ClusterFitness.fitnessMethod}  Gen: $gen PopSize: $popSize Index: ${Indexes.indexEnum} Intersect Method: ${QueryListFromChromosome.intersectMethod.intersectRatio} ************************************************************* \n"
 
-        String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
+      //  String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1forJob  ** average precision: $averagePrecision average recall: $averageRecall"
+        String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1ForJob  ** average precision: $averagePrecisionForJob average recall: $averageRecallForJoab"
         println messageOut
 
         queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.numDocs()} "
@@ -95,66 +77,65 @@ class Analysis {
             fcsv << 'aveargeF1, averagePrecision, averageRecall, fitness, indexName, fitnessMethod, kPenalty, sub-populations, popSize, genomeSize, wordListSize, queryType, intersectMethod, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
         }
 
-        fcsv << "${averageF1forJob.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${ClusterFitness.kPenalty}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
+        fcsv << "${averageF1ForJob.round(5)}, ${averagePrecisionForJob.round(5)}, ${averageRecallForJoab.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${ClusterFitness.kPenalty}, $numberOfSubpops, $popSize, $genomeSizePop0, $maxGenePop0, " +
                 "${ClusterQueryECJ.queryType}, ${QueryListFromChromosome.intersectMethod.intersectRatio}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
 
         Tuple5 indexAndParams = new Tuple5(Indexes.indexEnum.name(), ClusterFitness.fitnessMethod, ClusterQueryECJ.queryType, QueryListFromChromosome.intersectMethod, jobNumber)
-        resultsF1 << [(indexAndParams): averageF1forJob]
+        resultsF1 << [(indexAndParams): averageF1ForJob]
         categoryAccuracy << [(indexAndParams): categoryCountErrorAbs]
 
-        resultsFitnessWithF1 << [(indexAndParams): new Tuple2<Double, Double>(cfit.baseFitness, averageF1forJob)]
+        resultsFitnessWithF1 << [(indexAndParams): new Tuple2<Double, Double>(cfit.baseFitness, averageF1ForJob)]
     }
 
-    List calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
+    static Tuple4 calculate_F1_p_r(ClusterFitness cfit, boolean queryReport) {
+
         List<Double> f1list = [], precisionList = [], recallList = [], fitnessList = []
 
         cfit.queryMap.keySet().eachWithIndex { Query q, index ->
 
             String qString = q.toString(Indexes.FIELD_CONTENTS)
 
-            def tuple3 = getMostFrequentCategoryForQuery(q)
+            def tuple3 = IndexUtils.getMostFrequentCategoryForQuery(q)
             String maxCatName = tuple3.first
             final int maxCatHits = tuple3.second
             final int totalHits = tuple3.third
 
-            assert maxCatHits
-            assert totalHits
-
-            TotalHitCountCollector totalHitCollector = new TotalHitCountCollector();
+            double recall = 0
+            double precision = 0
+            double f1 = 0
+            int categoryTotal = 0
             TermQuery catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                     maxCatName));
-            Indexes.indexSearcher.search(catQ, totalHitCollector);
-            final int categoryTotal = totalHitCollector.getTotalHits();
 
-            assert categoryTotal
+            if (maxCatHits && totalHits && catQ) {
+                TotalHitCountCollector totalHitCollector = new TotalHitCountCollector()
+                Indexes.indexSearcher.search(catQ, totalHitCollector);
+                categoryTotal = totalHitCollector.getTotalHits()
 
-            final double recall = (double) maxCatHits / categoryTotal;
-            final double precision = (double) maxCatHits / totalHits
-            final double f1 = (2 * precision * recall) / (precision + recall)
-
-            assert f1
-            assert f1 > 0
+                recall = (double) maxCatHits / categoryTotal
+                precision = (double) maxCatHits / totalHits
+                f1 = (2 * precision * recall) / (precision + recall)
+            }
 
             f1list << f1
             precisionList << precision
             recallList << recall
 
-            if (queryReport) {
-
-                String out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ hitsInCategory: $maxCatHits "
-                println out
-                queryFileOut << out + "\n"
-            }
+//            if (queryReport) {
+//                String out = "Query $index :  $qString ## f1: $f1 recall: $recall precision: $precision categoryTotal: $categoryTotal for category: $catQ hitsInCategory: $maxCatHits "
+//                println out
+//                queryFileOut << out + "\n"
+//            }
         }
 
         final int numClusters = Math.max(Indexes.NUMBER_OF_CLUSTERS, cfit.queryMap.size())
-        final double averageF1forJob = (f1list) ? (double) f1list.sum() / numClusters : 0
-        final double averageRecall = (recallList) ? (double) recallList.sum() / numClusters : 0
-        final double averagePrecision = (precisionList) ? (double) precisionList.sum() / numClusters : 0
+        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / numClusters : 0
+        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / numClusters : 0
+        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / numClusters : 0
 
-        assert averageF1forJob
-        assert averageF1forJob > 0
+        assert averageF1ForJob
+        assert averageF1ForJob > 0
 
-        [f1list, averageF1forJob, averagePrecision, averageRecall]
+        return  new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob,averagePrecisionForJob,averageRecallForJob, f1list)
     }
 }

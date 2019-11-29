@@ -10,6 +10,7 @@ import ec.simple.SimpleProblemForm
 import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
 import index.ImportantTermQueries
+import index.IndexUtils
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -29,7 +30,7 @@ public class OR extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
 
-        println "Category number: ${Indexes.getCategoryNumber()} Category Name: ${Indexes.getCategoryName()} " +
+        println "Category Name: ${Indexes.getCategoryName()} " +
                 "Total train docs: ${Indexes.totalTrainDocsInCat} " +
                 "Total test docs: ${Indexes.totalTestDocsInCat}"
 
@@ -64,8 +65,8 @@ public class OR extends Problem implements SimpleProblemForm {
         }
 
         fitness.query = bqb.build()
-        fitness.positiveMatchTrain = Indexes.getQueryHitsWithFilter(searcher, Indexes.trainDocsInCategoryFilter, fitness.query)
-        fitness.negativeMatchTrain = Indexes.getQueryHitsWithFilter(searcher, Indexes.otherTrainDocsFilter, fitness.query)
+        fitness.positiveMatchTrain = IndexUtils.getQueryHitsWithFilter(searcher, Indexes.trainDocsInCategoryFilter, fitness.query)
+        fitness.negativeMatchTrain = IndexUtils.getQueryHitsWithFilter(searcher, Indexes.otherTrainDocsFilter, fitness.query)
 
         fitness.f1train = Effectiveness.f1(fitness.positiveMatchTrain, fitness.negativeMatchTrain, Indexes.totalTrainDocsInCat);
 

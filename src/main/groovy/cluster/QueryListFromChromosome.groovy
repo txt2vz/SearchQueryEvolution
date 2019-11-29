@@ -72,8 +72,8 @@ class QueryListFromChromosome {
         return new Tuple4(bqbL, k, index, genes)
     }
 
-    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
-        return getOneWordQueryPerCluster(intChromosome).first
+    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome, boolean setk) {
+        return getOneWordQueryPerCluster(intChromosome, setk).first
     }
 
     BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster = 100, boolean setk = true) {

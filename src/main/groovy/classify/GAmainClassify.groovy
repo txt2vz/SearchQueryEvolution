@@ -5,7 +5,7 @@
  import ec.util.ParameterDatabase
  import groovy.time.TimeCategory
  import groovy.time.TimeDuration
- import index.ImportantTermsOld
+ import index.ImportantTermQueries
  import index.IndexEnum
  import index.Indexes
 
@@ -20,7 +20,7 @@
      public GAmainClassify(){
          println "Start..."
          EvolutionState state;
-         Indexes.instance.setIndex(IndexEnum.Science4)
+         Indexes.setIndex(IndexEnum.NG20)
 
          Formatter bestResultsOut = new Formatter('results/resultsClassify.csv');
          final String fileHead = "categoryName, categoryNumber, f1train, f1test, totPositiveTest, totNegativeTest, totTestDocsInCat, query" + '\n';
@@ -28,8 +28,11 @@
          ParameterDatabase parameters = null;
          final Date startTime = new Date();
          bestResultsOut.format("%s \n", startTime);
-         bestResultsOut.format("Term selector: %s  \n", ImportantTermsOld.itm);
+//         bestResultsOut.format("Term selector: %s  \n", ImportantTermsOld.itm);
          bestResultsOut.format("%s", fileHead);
+
+         File classifyQueries = new File('results/classifyQueries')
+         classifyQueries.text = ''
 
          (1..NUMBER_OF_JOBS).each{job ->
              parameters = new ParameterDatabase(new File(parameterFilePath));
@@ -38,8 +41,7 @@
 
              Indexes.NUMBER_OF_CATEGORIES.times{ categoryNumber ->
 
-                 Indexes.instance.setCategoryNumber(String.valueOf(categoryNumber))
-                 Indexes.instance.setIndexFieldsAndTotals()
+                 Indexes.setIndexFieldsAndTotals(String.valueOf(categoryNumber))
 
                  state = initialize(parameters, job);
 
@@ -69,18 +71,19 @@
 
                  totPosMatchedTest += cfit.positiveMatchTest
                  totNegMatchTest += cfit.negativeMatchTest
-                 totTest += Indexes.instance.totalTestDocsInCat;
+                 totTest += Indexes.totalTestDocsInCat;
 
                  println "cfit.getQueryMinimal: ${cfit.getQueryMinimal()}"
 
                  bestResultsOut.format(
                          "%s, %d, %.3f, %.3f, %d, %d, %d, %s \n",
-                         Indexes.instance.getCategoryName(), categoryNumber, trainF1, testF1,
+                         Indexes.getCategoryName(), categoryNumber, trainF1, testF1,
                          cfit.positiveMatchTest,
                          cfit.negativeMatchTest,
-                         Indexes.instance.totalTestDocsInCat,
+                         Indexes.totalTestDocsInCat,
                          cfit.getQueryString() )
                  bestResultsOut.flush();
+                 classifyQueries  << cfit.getQueryString() + '\n'
                  println "Test F1 for cat $categoryNumber : $testF1 *******************************"
                  cleanup(state);
              }
@@ -105,7 +108,8 @@
              final double microAverageF1AllRuns = microF1AllRunsTotal / (job);
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
-			 println  "${ImportantTermsOld.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
+		//	 println  "${ImportantTermsOld.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
+             println  "ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

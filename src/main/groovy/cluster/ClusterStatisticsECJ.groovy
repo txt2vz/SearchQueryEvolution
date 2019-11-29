@@ -32,7 +32,11 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
 
     private void generationReport(EvolutionState state, ClusterFitness cfit) {
 
-        def (ArrayList<Double> f1list, double averageF1, double averagePrecision, double averageRecall) = jr.calculate_F1_p_r(cfit, false)
+      //  def (ArrayList<Double> f1list, double averageF1, double averagePrecision, double averageRecall) = jr.calculate_F1_p_r(cfit, false)
+        Tuple4 t4 = jr.calculate_F1_p_r(cfit, true)
+        final double averageF1 = t4.first
+        final double averagePrecision = t4.second
+        final double averageRecall  = t4.third
 
         File fcsv = new File('results/generationReport.csv')
         if (!fcsv.exists()) {

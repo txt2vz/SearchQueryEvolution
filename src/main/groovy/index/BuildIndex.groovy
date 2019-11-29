@@ -7,7 +7,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.apache.lucene.analysis.Analyzer
-import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
@@ -29,37 +28,42 @@ class BuildIndex {
     }
 
     BuildIndex() {
-    //    Indexes.setIndex(IndexEnum.R4Train)
+        //    Indexes.setIndex(IndexEnum.R4Train)
 
         String indexPath =
-            //     Indexes.indexEnum.pathString
+                //     Indexes.indexEnum.pathString
                 //'indexes/warCrimes'
                 //'indexes/resistance'
-        //        'indexes/R4Train'
-        'indexes/R4Test'
-      //         'indexes/NG3'
-      //  'indexes/classic4b'
+                //        'indexes/R4Train'
+                //    'indexes/R4Test'
+                'indexes/classic4Test'
+
+                //   'indexes/NG5Test'
+               // 'indexes/NG5Test'
+        //         'indexes/NG3'
+        //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
-       //         /D:\Datasets\R4Train/
+                //         /D:\Datasets\R4Train/
                 // /D:\Classify20NG3/
-       //         /D:\Datasets\NG3/
-         //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
-    //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
-       //         /D:\Datasets\R4Test/
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
-       //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Train/
-    //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
-   //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
-      ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
-                ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
+                //         /D:\Datasets\NG3/
+                //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
+                //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
+                //         /D:\Datasets\R4Test/
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Classic\Classic4Test/
+             //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NG5Test/
+
+        //      /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+        //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Train/
+        //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+        //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
+        ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
+        ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
-        Analyzer analyzer = //new EnglishAnalyzer();  //with stemming
-             //   new StandardAnalyzer()
-                Indexes.analyzer
+        Analyzer analyzer = Indexes.analyzer
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
 
 //store doc counts for each category
@@ -81,15 +85,13 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) // && categoryNumber <3)
-
-                {
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 600) {
                     Document doc = new Document()
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
-                   //non-alpha characters cause a problem when identifying a document for delete.
+                    //non-alpha characters cause a problem when identifying a document for delete.
                     String fileName = file.getName().replaceAll(/\W/, '').toLowerCase() + 'id' + docCount
                     Field documentIDfield = new StringField(Indexes.FIELD_DOCUMENT_ID, fileName, Field.Store.YES)
                     doc.add(documentIDfield)
@@ -106,7 +108,6 @@ class BuildIndex {
 
                     String test_train
                     //   if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
-                    //if (dirCount % 20 == 0) test_train = "train" else test_train = "test"
                     if (dirCount % 2 == 0) test_train = "train" else test_train = "test"
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
@@ -128,7 +129,7 @@ class BuildIndex {
             categoryNumber++
         }
         println "Total docs: " + writer.maxDoc()
-       writer.commit()
+        writer.commit()
         writer.close()
         IndexReader indexReader = DirectoryReader.open(directory)
         IndexSearcher indexSearcher = new IndexSearcher(indexReader)
@@ -149,14 +150,8 @@ class BuildIndex {
         println "testTotal $testTotal trainTotal $trainTotal"
         println "catsNameFreq $catsNameFreq"
 
-        TotalHitCountCollector cryptCollector = new TotalHitCountCollector();
-        final TermQuery cryptQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME, "sci.crypt"))
-        indexSearcher.search(cryptQ, cryptCollector);
-        def cryptTotal = cryptCollector.getTotalHits()
-        println "cryptTotal $cryptTotal"
-
-        Indexes.setIndex(IndexEnum.R4Test)
-        Indexes.showCategoryFrequenies()
+       // Indexes.setIndex(IndexEnum.NG5Train)
+      //  IndexUtils.showCategoryFrequencies(Indexes.indexSearcher)
 
         println "numDocs " + indexReader.numDocs()
         println "End ***************************************************************"
