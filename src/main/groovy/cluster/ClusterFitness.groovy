@@ -110,6 +110,7 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     void queriesToFile(File qFile){
+        qFile.text = ''
         queryMap.keySet().each { Query q ->
             qFile << q.toString(Indexes.FIELD_CONTENTS) + '\n'
         }

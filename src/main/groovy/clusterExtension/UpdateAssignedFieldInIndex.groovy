@@ -25,13 +25,13 @@ class UpdateAssignedFieldInIndex {
 
     static void main(String[] args) {
         File queryData = new File('results/qFile.txt')
-        new UpdateAssignedFieldInIndex().updateAssignedField(IndexEnum.CLASSIC4TRAIN, queryData)
+        new UpdateAssignedFieldInIndex().updateAssignedField(IndexEnum.CRISIS3TRAIN, queryData)
     }
 
     static void updateAssignedField(IndexEnum trainIndex, File queryFile){
 
         Indexes.setIndex(trainIndex)
-        String indexPath = Indexes.indexEnum.pathString
+        String indexPath = Indexes.index.pathString
         println "indexPath $indexPath"
 
         Path path = Paths.get(indexPath)
@@ -71,7 +71,7 @@ class UpdateAssignedFieldInIndex {
             queries << qn
         }
 
-        boolean uniqueQs = true
+        boolean uniqueQs = false
         if (uniqueQs) {
             List<Query> uniqueQueries = []
             for (int i = 0; i < queries.size(); i++) {
@@ -91,7 +91,7 @@ class UpdateAssignedFieldInIndex {
             queries = uniqueQueries
         }
 
-        println "queries $queries"
+      //  println "Queries in updateAssignedFieldIndex: $queries"
 
         queries.each { q ->
             Tuple3 t3 = IndexUtils.getMostFrequentCategoryForQuery(q)
@@ -99,7 +99,7 @@ class UpdateAssignedFieldInIndex {
             qMap.put(q, cname)
         }
 
-        println "qmap after $qMap"
+    //    println "qmap after $qMap"
 
         int counter = 0
         qMap.each { Query query, String name ->
@@ -122,13 +122,14 @@ class UpdateAssignedFieldInIndex {
             }
         }
 
-        println "$counter docs updated"
+        println "$counter docs updated in UpdateAssignedFieldIndex"
 
         indexWriter.forceMerge(1)
         indexWriter.commit()
         println "Max docs: " + indexWriter.maxDoc() + " numDocs: " + indexWriter.numDocs()
 
         indexWriter.close()
+        Indexes.setIndex(trainIndex)
         IndexUtils.categoryFrequencies(Indexes.indexSearcher)
     }
 }

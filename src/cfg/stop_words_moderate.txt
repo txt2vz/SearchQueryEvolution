@@ -2,6 +2,7 @@ about
 after
 all
 also
+and
 another
 any
 am
@@ -93,7 +94,6 @@ those
 through
 to
 too
-under
 up
 use
 very

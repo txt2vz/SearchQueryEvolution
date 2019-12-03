@@ -1,7 +1,6 @@
 package index
 
 import groovy.transform.CompileStatic
-import groovy.transform.TypeChecked
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
@@ -9,9 +8,6 @@ import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.*
-import org.apache.lucene.search.similarities.BM25Similarity
-import org.apache.lucene.search.similarities.ClassicSimilarity
-import org.apache.lucene.search.similarities.Similarity
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 
@@ -31,6 +27,8 @@ enum IndexEnum {
 
 
     CRISIS3('indexes/crisis3FireBombFlood', 3),
+    CRISIS3TRAIN('indexes/crisis3FireBombFloodTrain', 3),
+    CRISIS3TEST('indexes/crisis3FireBombFloodTest', 3),
 
     CLASSIC3('indexes/classic3_300', 3),
     CLASSIC4('indexes/classic4_500', 4),
@@ -93,7 +91,7 @@ enum IndexEnum {
 
 @CompileStatic
 class Indexes {
-    static IndexEnum indexEnum
+    static IndexEnum index
 
     // Lucene field names
     static final String FIELD_CATEGORY_NAME = 'category',
@@ -104,13 +102,10 @@ class Indexes {
                         FIELD_ASSIGNED_CLASS = 'assignedClass',
                         FIELD_DOCUMENT_ID = 'document_id';
 
-    static final Analyzer analyzer = new StandardAnalyzer()  //new EnglishAnalyzer();  //with stemming
+    static final Analyzer analyzer = new StandardAnalyzer()  //new EnglishAnalyzer();  //with stemming  new WhitespaceAnalyzer()
 
-    static int NUMBER_OF_CATEGORIES// = indexEnum.getNumberOfCategories()
-    static int NUMBER_OF_CLUSTERS// = indexEnum.getNumberOfCategories()
-
-    static IndexSearcher indexSearcher// = indexEnum.getIndexSearcher()
-    static IndexReader indexReader// = indexSearcher.getIndexReader()
+    static IndexSearcher indexSearcher
+    static IndexReader indexReader
 
     static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
     static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
@@ -122,16 +117,12 @@ class Indexes {
     static TermQuery catQ;
 
     static void setIndex(IndexEnum ie) {
-        indexEnum = ie
-        NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories()
-        NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories()
-        indexSearcher = indexEnum.getIndexSearcher()
+        index = ie
+        indexSearcher = index.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
       //  setIndexFieldsAndTotals()
-        println "indexEnum $indexEnum"
+        println "indexEnum $index"
     }
-
-
 
     //get the category_name for the current category
     static String getCategoryName() {
@@ -151,7 +142,6 @@ class Indexes {
 
     //set the filters and totals for the index for classification
     static void setIndexFieldsAndTotals(String categoryNumber) {
-        println "NUBMER_OF_CATEGORIES: $NUMBER_OF_CATEGORIES"
         catQ = new TermQuery(new Term(FIELD_CATEGORY_NUMBER,
                 categoryNumber));
         println "Index info catQ: $catQ"

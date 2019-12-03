@@ -5,7 +5,6 @@
  import ec.util.ParameterDatabase
  import groovy.time.TimeCategory
  import groovy.time.TimeDuration
- import index.ImportantTermQueries
  import index.IndexEnum
  import index.Indexes
 
@@ -109,7 +108,7 @@
              final double macroAverageF1AllRuns = macroF1AllRunsTotal / (job);
 			 
 		//	 println  "${ImportantTermsOld.itm}  ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
-             println  "ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.indexEnum.toString()}"
+             println  "ALL Runs Micro: $microAverageF1AllRuns Macro: $macroAverageF1AllRuns ${Indexes.index.toString()}"
 
              bestResultsOut
                      .format(",, Overall Test Micro F1 , %.4f, Macro F1, %.4f",

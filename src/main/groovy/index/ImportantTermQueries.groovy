@@ -20,7 +20,7 @@ class ImportantTermQueries {
 
         TermsEnum termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
 
-        println "ImportantTermQueries TFIDF:  Index: " + Indexes.indexEnum
+        println "ImportantTermQueries TFIDF:  Index: " + Indexes.index
 
         Map<TermQuery, Double> termQueryMap = [:]
         BytesRef termbr;
@@ -66,7 +66,7 @@ class ImportantTermQueries {
         BytesRef termbr
         Map<TermQuery, Double> termQueryMap = [:]
 
-        println "ImportantTermQueries F1:  Index: " + Indexes.indexEnum
+        println "ImportantTermQueries F1:  Index: " + Indexes.index
 
         while ((termbr = termsEnum.next()) != null) {
 
@@ -99,7 +99,8 @@ class ImportantTermQueries {
     private static boolean isUsefulTerm(int df, String word) {
 
         boolean b =
-                df > 3 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
+                df > 3 && !stopSet.contains(word)
+        //&& !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
 
         return b
     }

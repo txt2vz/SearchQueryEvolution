@@ -86,7 +86,7 @@ class KnnCluster {
         println "cnt $cnt"
         assert knnClassifier
 
-        Effectiveness.classifierEffectiveness(knnClassifier, Indexes.indexEnum.R4Test )
+        Effectiveness.classifierEffectiveness(knnClassifier, Indexes.index.R4Test )
 
       /*  Indexes.setIndex(Indexes.indexEnum.R4Test)
 

@@ -9,7 +9,7 @@ stat.file = statDump/clout.stat
 
 evalthreads = auto
 breedthreads = auto
-generations = 280
+generations = 30
 
 breed.elite.0 = 2
 

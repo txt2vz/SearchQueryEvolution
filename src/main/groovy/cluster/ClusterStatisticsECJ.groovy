@@ -1,5 +1,6 @@
 package cluster
 
+import clusterExtension.Effectiveness
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
 import index.Indexes
@@ -32,18 +33,15 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
 
     private void generationReport(EvolutionState state, ClusterFitness cfit) {
 
-      //  def (ArrayList<Double> f1list, double averageF1, double averagePrecision, double averageRecall) = jr.calculate_F1_p_r(cfit, false)
-        Tuple4 t4 = jr.calculate_F1_p_r(cfit, true)
-        final double averageF1 = t4.first
-        final double averagePrecision = t4.second
-        final double averageRecall  = t4.third
+        Tuple4 tuple4 = Effectiveness.querySetEffectiveness(cfit.queryMap.keySet())
+        final double averageF1 = tuple4.first
+        final double averagePrecision = tuple4.second
+        final double averageRecall  = tuple4.third
 
         File fcsv = new File('results/generationReport.csv')
         if (!fcsv.exists()) {
             fcsv << 'generation, averageF1, averagePrecision, averageRecall, baseFitness, indexName, fitnessMethod, intersectMethod, queryType, date \n'
         }
-
-        fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.indexEnum.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectMethod}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
-
+        fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.index.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectMethod}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
     }
 }

@@ -20,7 +20,7 @@ class IndexUtils {
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
         hits.each { ScoreDoc sd ->
-            final int docId = sd.doc;
+            final int docId = sd.doc
             Document d = Indexes.indexSearcher.doc(docId)
             String categoryName = d.get(Indexes.FIELD_CATEGORY_NAME)
             final int n = categoryFrequencyMap.get((categoryName)) ?: 0
@@ -38,7 +38,7 @@ class IndexUtils {
              mostFrequentCategoryHits = mostFrequentCategory?.value
         }
 
-        println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory totalHist ${hits.size()} "
+        println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory queryHits ${hits.size()} "
 
         return new Tuple3<String, Integer, Integer>(mostFrequentCategoryName, mostFrequentCategoryHits, hits.size())
     }
@@ -65,7 +65,7 @@ class IndexUtils {
             categoryFrequencies.put((category), norig+ 1)
         }
 
-        println "assingedCatFreques $assignedCategoryFrequencies"
+        println "Index Utils assingedCatFrequency $assignedCategoryFrequencies"
         println "category freq $categoryFrequencies"
 
         return categoryFrequencies

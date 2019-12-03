@@ -6,6 +6,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.classification.BM25NBClassifier
 import org.apache.lucene.classification.Classifier
 import org.apache.lucene.classification.KNearestNeighborClassifier
+import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -24,8 +25,8 @@ enum LuceneClassifyMethod {
 class ClassifyUnassigned {
 
     static void main(String[] args) {
-        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4TRAIN, LuceneClassifyMethod.KNN)
-        Effectiveness.classifierEffectiveness(classifier, IndexEnum.CLASSIC4TEST)
+        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CRISIS3TRAIN, LuceneClassifyMethod.KNN)
+        Effectiveness.classifierEffectiveness(classifier, IndexEnum.CRISIS3TEST, IndexEnum.CRISIS3TEST.numberOfCategories)
     }
 
     static Classifier classifyUnassigned(IndexEnum trainIndex, LuceneClassifyMethod luceneClassifyMethod) {
@@ -73,7 +74,5 @@ class ClassifyUnassigned {
         }
 
         return classifier
-
-        //ConfusionMatrix.checkClassifier(classifier, testIndex)
     }
 }
