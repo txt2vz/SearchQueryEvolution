@@ -19,7 +19,7 @@ import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class ClusterMainJenetics {
 
-    static IndexEnum indexEnum = IndexEnum.NG3;
+    static IndexEnum indexEnum = IndexEnum.NG3TRAIN;
     static int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories();
     static int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories();
    // static IndexSearcher indexSearcher = indexEnum.getIndexSearcher();

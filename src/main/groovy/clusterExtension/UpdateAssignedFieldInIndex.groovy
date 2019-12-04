@@ -32,18 +32,14 @@ class UpdateAssignedFieldInIndex {
 
         Indexes.setIndex(trainIndex)
         String indexPath = Indexes.index.pathString
-        println "indexPath $indexPath"
-
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
         Analyzer analyzer = new StandardAnalyzer()
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
-
         iwc.setOpenMode(IndexWriterConfig.OpenMode.APPEND)
         IndexWriter indexWriter = new IndexWriter(directory, iwc)
 
-        Query qAll = new MatchAllDocsQuery()
-        TopDocs topDocsAll = Indexes.indexSearcher.search(qAll, Integer.MAX_VALUE)
+        TopDocs topDocsAll = Indexes.indexSearcher.search(new MatchAllDocsQuery(), Integer.MAX_VALUE)
         ScoreDoc[] hitsAll = topDocsAll.scoreDocs
 
         for (ScoreDoc sd : hitsAll) {
@@ -91,15 +87,10 @@ class UpdateAssignedFieldInIndex {
             queries = uniqueQueries
         }
 
-      //  println "Queries in updateAssignedFieldIndex: $queries"
-
         queries.each { q ->
-            Tuple3 t3 = IndexUtils.getMostFrequentCategoryForQuery(q)
-            String cname = t3.first
-            qMap.put(q, cname)
+            String categoryName = IndexUtils.getMostFrequentCategoryForQuery(q).first
+            qMap.put(q, categoryName)
         }
-
-    //    println "qmap after $qMap"
 
         int counter = 0
         qMap.each { Query query, String name ->

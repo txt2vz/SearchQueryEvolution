@@ -1,12 +1,12 @@
 package clusterExtension
 
+import index.Effectiveness
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.classification.BM25NBClassifier
 import org.apache.lucene.classification.Classifier
 import org.apache.lucene.classification.KNearestNeighborClassifier
-import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery

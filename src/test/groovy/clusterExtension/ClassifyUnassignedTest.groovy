@@ -1,5 +1,6 @@
 package clusterExtension
 
+import index.Effectiveness
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier

@@ -58,49 +58,10 @@ class ImportantTermQueries {
         return tql.asImmutable()
     }
 
-    static List<TermQuery> getF1TermQueryList(IndexSearcher indexSearcher) {
-
-        IndexReader indexReader = indexSearcher.getIndexReader()
-        TermsEnum termsEnum = MultiFields.getTerms(indexReader, Indexes.FIELD_CONTENTS).iterator()
-
-        BytesRef termbr
-        Map<TermQuery, Double> termQueryMap = [:]
-
-        println "ImportantTermQueries F1:  Index: " + Indexes.index
-
-        while ((termbr = termsEnum.next()) != null) {
-
-            Term t = new Term(Indexes.FIELD_CONTENTS, termbr);
-            final int df = indexReader.docFreq(t)
-            String word = t.text()
-
-            if (isUsefulTerm(df, word)) {
-
-                Query tq = new TermQuery(t)
-                final int positiveHits = IndexUtils.getQueryHitsWithFilter(indexSearcher, Indexes.trainDocsInCategoryFilter, tq)
-                final int negativeHits = IndexUtils.getQueryHitsWithFilter(indexSearcher, Indexes.otherTrainDocsFilter, tq)
-                final double F1 = classify.Effectiveness.f1(positiveHits, negativeHits, Indexes.totalTrainDocsInCat)
-
-                if (F1 > 0.02) {
-                    termQueryMap += [(tq): F1]
-                }
-            }
-        }
-
-        List<TermQuery> tql = new ArrayList<TermQuery>(termQueryMap.sort {
-            -it.value
-        }.keySet().take(MAX_TERMQUERYLIST_SIZE))
-
-        println "termQueryMap size: ${termQueryMap.size()}  termQuerylist size: ${tql.size()}  termQuerylist: $tql"
-        println "termQueryMap ${termQueryMap.take(50)}"
-        return tql.asImmutable()
-    }
-
     private static boolean isUsefulTerm(int df, String word) {
 
         boolean b =
-                df > 3 && !stopSet.contains(word)
-        //&& !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
+                df > 3 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
 
         return b
     }

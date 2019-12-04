@@ -1,7 +1,7 @@
 package cluster
 
 import clusterExtension.ClassifyUnassigned
-import clusterExtension.Effectiveness
+import index.Effectiveness
 import clusterExtension.LuceneClassifyMethod
 import clusterExtension.UpdateAssignedFieldInIndex
 import ec.EvolutionState
@@ -18,29 +18,23 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 1
+    static final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
 
+        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6Train, IndexEnum.R6Test),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5Train, IndexEnum.R5Test),
+   //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6Train, IndexEnum.NG6Test),
     //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
-      //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5Train, IndexEnum.NG5Test),
+      //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
+   // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
+  //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAINSKEWED, IndexEnum.NG3TEST),
+    //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5Train, IndexEnum.NG5Test),
      //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
       // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC3TRAIN, IndexEnum.CLASSIC3TEST),
         //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4Train, IndexEnum.R4Test)
-//IndexEnum.HolSec
- //           Indexes.indexEnum.NG3,
-  //            Indexes.indexEnum.R4Train,
-      //      IndexEnum.NG5Train: IndexEnum.NG5Test,
-//            IndexEnum.CRISIS3,
- //           IndexEnum.CLASSIC4,
- //         IndexEnum.CLASSIC4B,
-//            IndexEnum.R4,
-//            IndexEnum.R5,
-//            IndexEnum.NG5,
-//            IndexEnum.R6,
-//            IndexEnum.NG6
+
     ]
 
     List<Double> kPenalty =
@@ -52,11 +46,11 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-          QueryType.OR1,
+         QueryType.OR1,
 
-      //        QueryType.OR,
-        //    QueryType.OR1SETK,
-          //  QueryType.OR_SETK
+              QueryType.OR,
+      //      QueryType.OR1SETK,
+        //    QueryType.OR_SETK
           //  QueryType.MINSHOULD2,
      //       QueryType.AND
        //     QueryType.OR_WITH_MINSHOULD2
@@ -65,6 +59,11 @@ class ClusterMainECJ extends Evolve {
 
     List<IntersectMethod> intersectMethodList = [
             IntersectMethod.RATIO_POINT_5
+    ]
+
+    List <LuceneClassifyMethod> classifyMethodList = [
+            LuceneClassifyMethod.KNN,
+          LuceneClassifyMethod.NB
     ]
     boolean luceneClassify = true
 
@@ -76,7 +75,6 @@ class ClusterMainECJ extends Evolve {
         File queryFile = new File('results/qFile.txt')
 
         Analysis analysis = new Analysis()
-
 
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
             final Date indexTime = new Date()
@@ -114,7 +112,7 @@ class ClusterMainECJ extends Evolve {
 
                             state.run(EvolutionState.C_STARTED_FRESH);
                             int popSize = 0;
-                            ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
+                            ClusterFitness clusterFitness = (ClusterFitness) state.population.subpops.collect { sbp ->
                                 popSize = popSize + sbp.individuals.size()
                                 sbp.individuals.max() { ind ->
                                     ind.fitness.fitness()
@@ -126,22 +124,21 @@ class ClusterMainECJ extends Evolve {
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-
                             if (luceneClassify) {
 
-                                cfit.queriesToFile(queryFile)
+                                clusterFitness.queriesToFile(queryFile)
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queryFile)
 
-                                List <LuceneClassifyMethod> classifyMethodList = [LuceneClassifyMethod.KNN, LuceneClassifyMethod.NB]
-
                                 classifyMethodList.each { classifyMethod ->
+                                    println " "
+                                    println "Lucene Classify Method: $classifyMethod"
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
-                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, cfit.k)
-                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit, t3ClassiferResult, classifyMethod)
+                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
+                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)
                                 }
                             } else {
 
-                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit,null,null)
+                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness,null,null)
                             }
                         }
                     }
