@@ -23,24 +23,23 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
 
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN100, IndexEnum.R6TRAIN100),
+       //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN100, IndexEnum.R6TRAIN100),
 
-            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6Train, IndexEnum.R6Test),
-        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5Train, IndexEnum.R5Test),
-   //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6Train, IndexEnum.NG6Test),
-    //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
-      //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
-   // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
+    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
   //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAINSKEWED, IndexEnum.NG3TEST),
-    //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5Train, IndexEnum.NG5Test),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TEST, IndexEnum.NG5TRAIN),
      //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
       // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC3TRAIN, IndexEnum.CLASSIC3TEST),
-        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4Train, IndexEnum.R4Test)
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST)
 
     ]
 
     List<Double> kPenalty =
-
 
      //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
          [0.04d]
