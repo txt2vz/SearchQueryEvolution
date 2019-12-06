@@ -22,19 +22,20 @@ enum IndexEnum {
     NG3TRAIN('indexes/NG3Train', 3),
     NG3TRAINSKEWED('indexes/NG3TrainSkewed', 3),
 
-    NG5Train('indexes/NG5Train', 5),
-    NG5Test('indexes/NG5Test', 5),
+    NG5TRAIN('indexes/NG5Train', 5),
+    NG5TEST('indexes/NG5Test', 5),
 
-    NG6Train('indexes/NG6Train', 6),
-    NG6Test('indexes/NG6Test', 6),
+    NG6TRAIN('indexes/NG6Train', 6),
+    NG6TEST('indexes/NG6Test', 6),
 
-    R4Train('indexes/R4Train', 4),
-    R4Test('indexes/R4Test', 4),
-    R5Train('indexes/R5Train', 5),
-    R5Test('indexes/R5Test', 5),
+    R4TRAIN('indexes/R4Train', 4),
+    R4TEST('indexes/R4Test', 4),
+    R5TRAIN('indexes/R5Train', 5),
+    R5TEST('indexes/R5Test', 5),
 
-    R6Train('indexes/R6Train', 6),
-    R6Test('indexes/R6Test', 6),
+    R6TRAIN('indexes/R6Train', 6),
+    R6TEST('indexes/R6Test', 6),
+    R6TRAIN100('indexes/R6Train100', 6),
 
     CLASSIC4TRAIN('indexes/classic4Train', 4),
     CLASSIC4TEST('indexes/classic4Test', 4),
@@ -51,12 +52,12 @@ enum IndexEnum {
     R5('indexes/R5', 5),
     R5_200('indexes/R5-200', 5),
     R6('indexes/R6', 6),
-    R10('indexes/R10', 10),
+    R10('indexes/R10', 10)
 
-    WarCrimes('indexes/warCrimes', 8),
-    Secrecy('indexes/resistance', 11),
-    Science4('indexes/science4', 4),
-    NG3N('indexes/ng3N', 3)
+//    WarCrimes('indexes/warCrimes', 8),
+ //   Secrecy('indexes/resistance', 11),
+  //  Science4('indexes/science4', 4),
+   // NG3N('indexes/ng3N', 3)
 
 
     //R8('indexes/R8', 8),

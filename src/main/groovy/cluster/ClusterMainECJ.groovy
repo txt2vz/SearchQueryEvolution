@@ -23,8 +23,10 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
 
-        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6Train, IndexEnum.R6Test),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5Train, IndexEnum.R5Test),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN100, IndexEnum.R6TRAIN100),
+
+            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6Train, IndexEnum.R6Test),
+        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5Train, IndexEnum.R5Test),
    //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6Train, IndexEnum.NG6Test),
     //        new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
       //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
