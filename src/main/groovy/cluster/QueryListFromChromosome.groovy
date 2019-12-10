@@ -39,11 +39,11 @@ class QueryListFromChromosome {
 
     static IntersectMethod intersectMethod = IntersectMethod.RATIO_POINT_5
 
-    List <TermQuery> termQueryList
+    List<TermQuery> termQueryList
     BooleanClause.Occur bco = BooleanClause.Occur.SHOULD
     private final int hitsPerPage = Indexes.indexReader.maxDoc()
 
-    QueryListFromChromosome(List <TermQuery> tql) {
+    QueryListFromChromosome(List<TermQuery> tql) {
         termQueryList = tql
         println "term query list size " + tql.size()
         println "tql $tql"
@@ -51,7 +51,7 @@ class QueryListFromChromosome {
 
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
 
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories //Indexes.NUMBER_OF_CATEGORIES
         Set<Integer> genes = [] as Set<Integer>
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
@@ -61,7 +61,9 @@ class QueryListFromChromosome {
         while (clusterNumber < k && index < intChromosome.size()) {
             int gene = intChromosome[index]
 
-            if (gene < termQueryList.size() && gene >= 0 && genes.add(gene)) {
+            //  assert gene < termQueryList.size() && gene >= 0
+
+            if (genes.add(gene) && gene < termQueryList.size()) {
                 bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[gene], BooleanClause.Occur.SHOULD)
                 clusterNumber++
             }
@@ -70,8 +72,8 @@ class QueryListFromChromosome {
         return new Tuple4(bqbL, k, index, genes)
     }
 
-    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome) {
-        return getOneWordQueryPerCluster(intChromosome).first
+    BooleanQuery.Builder[] getOR1QueryList(int[] intChromosome, boolean setk) {
+        return getOneWordQueryPerCluster(intChromosome, setk).first
     }
 
     BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster = 100, boolean setk = true) {
@@ -104,7 +106,7 @@ class QueryListFromChromosome {
     BooleanQuery.Builder[] getSimple(
             final int[] intChromosome, int minShould = 1, BooleanClause.Occur bco = BooleanClause.Occur.SHOULD) {
 
-        final int k = Indexes.NUMBER_OF_CLUSTERS
+        final int k = Indexes.index.numberOfCategories
 
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
@@ -125,9 +127,43 @@ class QueryListFromChromosome {
         return bqbArray
     }
 
+    BooleanQuery.Builder[] getOR1wihtMinShould(final int[] intChromosome, boolean setk = false) {
+
+        Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
+        BooleanQuery.Builder[] bqbArray = tuple4.first
+        final int k = tuple4.second
+        assert k == bqbArray.size()
+
+        final int index = tuple4.third
+        Set<Integer> genes = tuple4.fourth
+
+        BooleanQuery.Builder[] bqbMinShouldArray = new BooleanQuery.Builder[k]
+
+        int clusterNumber = 0
+
+        for (int i = index; i < intChromosome.size(); i++) {
+            final int gene = intChromosome[i]
+            assert gene >= 0
+
+            if (genes.add(gene)) {
+                if (bqbMinShouldArray[clusterNumber] == null) {
+                    bqbMinShouldArray[clusterNumber] = new BooleanQuery.Builder().setMinimumNumberShouldMatch(2)
+                }
+                bqbMinShouldArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.SHOULD)
+                clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : 0
+            }
+        }
+
+        for (int i = 0; i < k; i++) {
+            bqbArray[i].add(bqbMinShouldArray[i].build(), BooleanClause.Occur.SHOULD)
+        }
+
+        return bqbArray
+    }
+
     BooleanQuery.Builder[] getDNFQueryList(final int[] intChromosome, boolean ORAND, boolean setk = false) {
 
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
             bqbArray[i] = new BooleanQuery.Builder()
@@ -180,7 +216,7 @@ class QueryListFromChromosome {
 
     BooleanQuery.Builder[] getORwithNOT(final int[] intChromosome, boolean setk = false) {
 
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
             bqbArray[i] = new BooleanQuery.Builder()
@@ -205,7 +241,7 @@ class QueryListFromChromosome {
     }
 
     BooleanQuery.Builder[] getSpanFirstQueryList(int[] intChromosome, boolean setk) {
-        final int k = (setk) ? intChromosome[0] : Indexes.NUMBER_OF_CLUSTERS
+        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories
         TermQuery term
         BooleanQuery.Builder[] bqbArray = new BooleanQuery.Builder[k]
         for (int i = 0; i < k; i++) {
@@ -260,8 +296,7 @@ class QueryListFromChromosome {
 
         Set andPairSet = [] as Set
         TermQuery term0, term1
-        int queryNumber = 0;
-
+        int queryNumber = 0
 
         for (index; index < intChromosome.size(); index++) {
             final int gene = intChromosome[index]

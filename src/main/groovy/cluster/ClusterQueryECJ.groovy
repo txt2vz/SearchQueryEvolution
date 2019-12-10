@@ -9,7 +9,7 @@ import ec.util.Parameter
 import ec.vector.IntegerVectorIndividual
 import groovy.transform.CompileStatic
 import groovy.transform.TypeChecked
-import index.ImportantTerms
+import index.ImportantTermQueries
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
@@ -25,17 +25,21 @@ enum QueryType {
     OR(false),
     OR_SETK(true),
 
+    MINSHOULD2(false),
+    OR_WITH_MINSHOULD2(false),
+
     AND(false),
     OR_WITH_AND_SUBQ(false),
     AND_WITH_OR_SUBQ(false),
     OR_WITH_NOT(false),
-    MINSHOULD2(false),
+
     SPAN_FIRST(false),
-    ORSETK(true),
+
     ORDNFSETK(true),
     ORDNF(true),
     MINSHOULDSETK(true),
 
+    OR1(false),
     OR3_INTERSECT(false),
 
     OR1SETK(true),
@@ -59,9 +63,9 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
     public void setup(final EvolutionState state, final Parameter base) {
 
         super.setup(state, base);
-        println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.maxDoc()
+        println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.numDocs()
         //TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
-        List <TermQuery>  tql = index.ImportantTermsForClustering.getTFIDFTermQueryList(Indexes.indexReader)
+        List <TermQuery>  tql = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         qlfc = new QueryListFromChromosome(tql)
     }
 
@@ -86,6 +90,13 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
 
+            case QueryType.MINSHOULD2:
+                bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
+                break;
+
+            case QueryType.OR_WITH_MINSHOULD2:
+                bqbArray = qlfc.getOR1wihtMinShould(genome)
+                break;
 
 
             case QueryType.AND_WITH_OR_SUBQ:
@@ -100,10 +111,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, 1, BooleanClause.Occur.MUST)
                 break;
 
-            case QueryType.MINSHOULD2:
-                bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
-                break;
-
             case QueryType.OR_WITH_NOT:
                 bqbArray = qlfc.getORwithNOT(genome, false)
                 break;
@@ -112,16 +119,18 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
-
-
             case QueryType.OR3_INTERSECT:
                 bqbArray = qlfc.getORIntersect(genome, 3, false)
+                break;
+
+            case QueryType.OR1:
+                bqbArray = qlfc.getOR1QueryList(genome, false)
                 break;
 
 //*****************set k methods *************************************************************
 
             case QueryType.OR1SETK:
-                bqbArray = qlfc.getOR1QueryList(genome)
+                bqbArray = qlfc.getOR1QueryList(genome, true)
                 break;
 
 

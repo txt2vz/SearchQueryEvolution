@@ -9,14 +9,14 @@ class EvaluateClustersSpec extends spock.lang.Specification {
 
     def "find most frequent category r4"() {
         setup:
-        Indexes.instance.setIndex(IndexEnum.R4)
-        Indexes.instance.setIndexFieldsAndTotals()
+        Indexes.setIndex(IndexEnum.R4)
+        Indexes.setIndexFieldsAndTotals()
         String maxCatName
         int maxCatHits
         int totalHits
         TermQuery catQ
 
-        def jr = new AnalysisAndReports()
+        def jr = new Analysis()
 
         when:
         catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,

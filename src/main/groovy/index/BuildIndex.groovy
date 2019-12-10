@@ -7,7 +7,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import org.apache.lucene.analysis.Analyzer
-import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
 import org.apache.lucene.document.StringField
@@ -29,14 +28,53 @@ class BuildIndex {
     }
 
     BuildIndex() {
-        String indexPath = 'indexes/warCrimes'
-        String docsPath =/C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
-                // /C:\Users\aceslh\Dataset\r5o/
+        //    Indexes.setIndex(IndexEnum.R4Train)
+
+        String indexPath =
+                //     Indexes.indexEnum.pathString
+                //'indexes/warCrimes'
+                //'indexes/resistance'
+                //        'indexes/R4Train'
+                //    'indexes/R4Test'
+              //  'indexes/classic4Test'
+             //   'indexes/NG3Train'
+              //  'indexes/NG3TrainSkewed'
+                'indexes/R6Train100'
+
+            //       'indexes/NG5Test'
+               // 'indexes/NG5Test'
+        //         'indexes/NG3'
+        //  'indexes/classic4b'
+        //       'indexes/science4'
+
+        String docsPath =
+            //    /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+        //        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R5Train/
+     //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\GAclusterPaper2018\r5/
+        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
+          //      /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
+                //         /D:\Datasets\R4Train/
+                // /D:\Classify20NG3/
+                //         /D:\Datasets\NG3/
+                //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
+                //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
+                //         /D:\Datasets\R4Test/
+      //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTest/
+      //  /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTrainSkewed/
+       //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTrain/
+                //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Classic\Classic4Test/
+             //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NG5Test/
+
+        //      /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Test/
+        //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R4Train/
+        //                 /C:\Users\aceslh\Dataset\20NG3SpaceHockeyChristian\train/
+        //     /C:\Users\aceslh\Dataset\20NG4ScienceTrain/
+        ///C:\Users\aceslh\IdeaProjects\txt2vz\boaData\text\secrecy/
+        ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\BritishOnlineArchive\holocaust\War Crimes Text Files_Combined/
 
         Path path = Paths.get(indexPath)
         Directory directory = FSDirectory.open(path)
-        Analyzer analyzer = //new EnglishAnalyzer();  //with stemming
-                new StandardAnalyzer()
+        Analyzer analyzer = Indexes.analyzer
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer)
 
 //store doc counts for each category
@@ -46,47 +84,48 @@ class BuildIndex {
 // previously indexed documents:
         iwc.setOpenMode(OpenMode.CREATE)
         IndexWriter writer = new IndexWriter(directory, iwc)
-        //  IndexSearcher indexSearcher = new IndexSearcher(writer.getReader())
         Date start = new Date();
         println("Indexing to directory: $indexPath  from: $docsPath ...")
 
-        def categoryNumber = -1
+        def categoryNumber = 0
 
+        def dups = [] as Set
+        int docCount = 0
         new File(docsPath).eachDir {
 
-            categoryNumber++
-            int docCount = 0
+            int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && docCount < 200) // && categoryNumber <3)
-
-                {
-                    def doc = new Document()
-
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) {
+                    Document doc = new Document()
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
                     doc.add(catNumberField)
 
+                    //non-alpha characters cause a problem when identifying a document for delete.
+                    String fileName = file.getName().replaceAll(/\W/, '').toLowerCase() + 'id' + docCount
+                    Field documentIDfield = new StringField(Indexes.FIELD_DOCUMENT_ID, fileName, Field.Store.YES)
+                    doc.add(documentIDfield)
+
                     Field pathField = new StringField(Indexes.FIELD_PATH, file.getPath(), Field.Store.YES);
-                    doc.add(pathField);
+                    doc.add(pathField)
 
                     String parent = file.getParent()
                     String grandParent = file.getParentFile().getParent()
 
-                    def catName
-                 //   catName = file.name.charAt(6)
-                    catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
-
-                    Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+                    String catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
+                    Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName.replaceAll(/\W/, '').toLowerCase(), Field.Store.YES);
                     doc.add(catNameField)
 
                     String test_train
                     //   if (file.canonicalPath.contains("test")) test_train = "test" else test_train = "train"
-                    //split test train 50 /50
-                    if (docCount % 2 == 0) test_train = "test" else test_train = "train"
+                    if (dirCount % 2 == 0) test_train = "train" else test_train = "test"
 
                     Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
                     doc.add(ttField)
+
+                    Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned', Field.Store.YES);
+                    doc.add(assignedClass)
 
                     doc.add(new TextField(Indexes.FIELD_CONTENTS, file.text, Field.Store.YES))
 
@@ -94,11 +133,14 @@ class BuildIndex {
                     catsNameFreq.put((catName), n + 1)
 
                     writer.addDocument(doc)
+                    dirCount++
                     docCount++
                 }
             }
+            categoryNumber++
         }
         println "Total docs: " + writer.maxDoc()
+        writer.commit()
         writer.close()
         IndexReader indexReader = DirectoryReader.open(directory)
         IndexSearcher indexSearcher = new IndexSearcher(indexReader)
@@ -119,7 +161,10 @@ class BuildIndex {
         println "testTotal $testTotal trainTotal $trainTotal"
         println "catsNameFreq $catsNameFreq"
 
+       // Indexes.setIndex(IndexEnum.NG5Train)
+      //  IndexUtils.showCategoryFrequencies(Indexes.indexSearcher)
 
+        println "numDocs " + indexReader.numDocs()
         println "End ***************************************************************"
     }
 }

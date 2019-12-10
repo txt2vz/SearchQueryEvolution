@@ -43,12 +43,13 @@ public class ClusterFitness extends SimpleFitness {
         totalHits = t3.third
 
         hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
-        missedDocs = Indexes.indexReader.maxDoc() - totalHits
+        missedDocs = Indexes.indexReader.numDocs() - totalHits
 
         switch (fitnessMethod) {
 
             case fitnessMethod.UNIQUE_HITS_COUNT:
-                baseFitness = hitsMatchingOnlyOneQuery
+                baseFitness = hitsMatchingOnlyOneQuery// - (hitsMatchingTwoOrMoreQueries *2)
+              //  baseFitness = (baseFitness > 0)? baseFitness : 0
                 break
 
             case fitnessMethod.UNIQUE_HITS_K_PENALTY:
@@ -95,7 +96,7 @@ public class ClusterFitness extends SimpleFitness {
 
     void generationStats(long generation) {
         println "${queryShort()}"
-        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $hitsMatchingOnlyOneQuery    totalHits: $totalHits totalDocs: ${Indexes.indexReader.maxDoc()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
+        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $hitsMatchingOnlyOneQuery    totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
         println ""
     }
 
@@ -106,6 +107,13 @@ public class ClusterFitness extends SimpleFitness {
             s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)}"
         }
         return s
+    }
+
+    void queriesToFile(File qFile){
+        qFile.text = ''
+        queryMap.keySet().each { Query q ->
+            qFile << q.toString(Indexes.FIELD_CONTENTS) + '\n'
+        }
     }
 
     //sent to stat file in statDump

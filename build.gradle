@@ -23,12 +23,27 @@ dependencies {
     //  compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
     // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.6.0'
 
+
+   // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-classification', version: '8.3.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.3.0'
+
+
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '7.4.0'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '7.4.0'
+    compile group: 'org.apache.lucene', name: 'lucene-classification', version: '7.4.0'
+    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '7.4.0'
+
+
+
+
+    // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.2.0'
+   // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.2.0'
 
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 
     //compile fileTree(dir: 'lib', include: ['*.jar'])
-    compile fileTree(dir: 'lib', include: 'ecj-26.jar')
+    compile fileTree(dir: 'lib', include: 'ecj-27.jar')
 }
 

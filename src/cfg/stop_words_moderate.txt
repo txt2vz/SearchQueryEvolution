@@ -2,8 +2,10 @@ about
 after
 all
 also
+and
 another
 any
+am
 are
 as
 at
@@ -92,7 +94,6 @@ those
 through
 to
 too
-under
 up
 use
 very

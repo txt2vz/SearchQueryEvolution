@@ -3,7 +3,6 @@ package cluster;
 import index.*;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.jenetics.*;
 import org.jenetics.engine.Engine;
@@ -16,18 +15,17 @@ import java.util.stream.IntStream;
 
 import index.IndexEnum;
 
-import static index.Indexes.indexSearcher;
 import static org.jenetics.engine.EvolutionResult.toBestPhenotype;
 
 public class ClusterMainJenetics {
 
-    static IndexEnum indexEnum = IndexEnum.NG3;
+    static IndexEnum indexEnum = IndexEnum.NG3TRAIN;
     static int NUMBER_OF_CATEGORIES = indexEnum.getNumberOfCategories();
     static int NUMBER_OF_CLUSTERS = indexEnum.getNumberOfCategories();
    // static IndexSearcher indexSearcher = indexEnum.getIndexSearcher();
     static IndexReader indexReader = indexEnum.getIndexReader();
 
-    static List<TermQuery>  termQueryList = ImportantTermsForClustering.getTFIDFTermQueryList(indexReader);
+    static List<TermQuery>  termQueryList = ImportantTermQueries.getTFIDFTermQueryList(indexReader);
 
    // private final static List<TermQuery> termQueryArray = iterms.getTFIDFTermQueryList();
 
@@ -65,7 +63,7 @@ public class ClusterMainJenetics {
         final int popSize = 512;
         final int subpops = 1;
         final long maxGen = 210;
-        AnalysisAndReports finalReport = new AnalysisAndReports();
+        Analysis finalReport = new Analysis();
         int maxGene = 100;
         int genomeLength = 18;
 

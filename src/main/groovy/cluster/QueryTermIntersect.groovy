@@ -12,6 +12,7 @@ class QueryTermIntersect {
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
         BooleanQuery.Builder bqbAnd = new BooleanQuery.Builder();
+
         bqbAnd.add(q0, BooleanClause.Occur.MUST)
         bqbAnd.add(q1, BooleanClause.Occur.MUST)
         indexSearcher.search(bqbAnd.build(), collector);

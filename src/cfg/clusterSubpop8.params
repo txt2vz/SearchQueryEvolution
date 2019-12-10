@@ -1,6 +1,5 @@
 parent.0		= simple.params
 
-
 select.tournament.size = 3
 
 pop.subpops = 8

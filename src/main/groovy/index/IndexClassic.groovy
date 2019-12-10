@@ -33,10 +33,11 @@ import java.nio.file.Paths
 
 class IndexClassic {
 	// Create Lucene index in this directory
-	//def indexPath = 	'indexes/classic4_500L5'
-    def indexPath = 	'indexes/classic3_300'
+	String indexPath = 	'indexes/classic4Train'
+
+			//'indexes/classic3_300'
 	// Index files in this directory
-	def docsPath =
+	String docsPath =
 	// /C:\Users\Laurie\Dataset\classic/
 	/C:\Users\aceslh\Dataset\classic/
 

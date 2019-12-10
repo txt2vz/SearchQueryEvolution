@@ -11,7 +11,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../lib/ecj-26.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/ecj-27.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -20,7 +20,10 @@
     <orderEntry type="library" name="Gradle: io.jenetics:jenetics:3.9.0" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-json:2.5.2" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:2.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-classification:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-analyzers-common:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-core:7.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-grouping:7.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queries:7.4.0" level="project" />
   </component>
 </module>

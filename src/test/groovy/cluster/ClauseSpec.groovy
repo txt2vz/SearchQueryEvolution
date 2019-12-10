@@ -11,8 +11,8 @@ class ClauseSpec extends spock.lang.Specification {
 
     def "check number of cluases"() {
         setup:
-        Indexes.instance.setIndex(IndexEnum.R4)
-        Indexes.instance.setIndexFieldsAndTotals()
+        Indexes.setIndex(IndexEnum.R4)
+        Indexes.setIndexFieldsAndTotals()
 
         when:
 

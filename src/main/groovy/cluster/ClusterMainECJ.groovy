@@ -1,5 +1,9 @@
 package cluster
 
+import clusterExtension.ClassifyUnassigned
+import index.Effectiveness
+import clusterExtension.LuceneClassifyMethod
+import clusterExtension.UpdateAssignedFieldInIndex
 import ec.EvolutionState
 import ec.Evolve
 import ec.util.ParameterDatabase
@@ -9,68 +13,77 @@ import groovy.time.TimeDuration
 import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
+import org.apache.lucene.classification.Classifier
 
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 11
+    static final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
-    def clusteringIndexesList = [
+    List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
 
-            IndexEnum.NG3,
-            IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4,
-            IndexEnum.R4,
-            IndexEnum.R5,
-            IndexEnum.NG5,
-            IndexEnum.R6,
-            IndexEnum.NG6
+       //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN100, IndexEnum.R6TRAIN100),
+
+       //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
+        //    new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
+        //   new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
+         //   new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST),
+  //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
+  //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAINSKEWED, IndexEnum.NG3TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TEST, IndexEnum.NG5TRAIN),
+     //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+      // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC3TRAIN, IndexEnum.CLASSIC3TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST)
+
     ]
 
     List<Double> kPenalty =
 
-
-            [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
-    //     [0.04d]
+     //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+         [0.04d]
 
 
     List<QueryType> queryTypesList = [
 
-            //    QueryType.OR,
-            QueryType.OR_SETK,
+         QueryType.OR1,
+
+              QueryType.OR,
+      //      QueryType.OR1SETK,
+        //    QueryType.OR_SETK
+          //  QueryType.MINSHOULD2,
+     //       QueryType.AND
+       //     QueryType.OR_WITH_MINSHOULD2
 
     ]
 
     List<IntersectMethod> intersectMethodList = [
-
-//            IntersectMethod.NONE,
-//            IntersectMethod.RATIO_POINT_1,
-//            IntersectMethod.RATIO_POINT_2,
-//            IntersectMethod.RATIO_POINT_3,
-//            IntersectMethod.RATIO_POINT_4,
-
-            IntersectMethod.RATIO_POINT_5,
-//
-//            IntersectMethod.RATIO_POINT_6,
-//            IntersectMethod.RATIO_POINT_7,
-//            IntersectMethod.RATIO_POINT_8,
-//            IntersectMethod.RATIO_POINT_9
+            IntersectMethod.RATIO_POINT_5
     ]
+
+    List <LuceneClassifyMethod> classifyMethodList = [
+            LuceneClassifyMethod.KNN,
+          LuceneClassifyMethod.NB
+    ]
+    boolean luceneClassify = true
 
     ClusterMainECJ() {
 
         final Date startRun = new Date()
 
-        AnalysisAndReports analysisAndReports = new AnalysisAndReports()
+        File timingFile = new File("results/timing.txt")
+        File queryFile = new File('results/qFile.txt')
 
-        clusteringIndexesList.each { IndexEnum ie ->
+        Analysis analysis = new Analysis()
 
+        clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
+            final Date indexTime = new Date()
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state = new EvolutionState()
 
-                println "Index Enum ie: $ie"
-                Indexes.instance.setIndex(ie)
+                println "Index Enum trainTestIndexes: $trainTestIndexes"
+                Indexes.setIndex(trainTestIndexes.first)
 
                 kPenalty.each { kPenalty ->
                     ClusterFitness.kPenalty = kPenalty
@@ -100,7 +113,7 @@ class ClusterMainECJ extends Evolve {
 
                             state.run(EvolutionState.C_STARTED_FRESH);
                             int popSize = 0;
-                            ClusterFitness cfit = (ClusterFitness) state.population.subpops.collect { sbp ->
+                            ClusterFitness clusterFitness = (ClusterFitness) state.population.subpops.collect { sbp ->
                                 popSize = popSize + sbp.individuals.size()
                                 sbp.individuals.max() { ind ->
                                     ind.fitness.fitness()
@@ -112,21 +125,41 @@ class ClusterMainECJ extends Evolve {
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                            analysisAndReports.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, cfit)
+                            if (luceneClassify) {
+
+                                clusterFitness.queriesToFile(queryFile)
+                                UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queryFile)
+
+                                classifyMethodList.each { classifyMethod ->
+                                    println " "
+                                    println "Lucene Classify Method: $classifyMethod"
+                                    Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
+                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
+                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)
+                                }
+                            } else {
+
+                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness,null,null)
+                            }
                         }
                     }
                     cleanup(state);
                     println "--------END JOB $job  -----------------------------------------------"
                 }
             }
+
+            final Date endTime = new Date()
+            TimeDuration durationT = TimeCategory.minus(endTime, indexTime)
+            println "Duration: $durationT"
+            String s =  trainTestIndexes.toString() + "  " + durationT + '\n'
+            timingFile << s
         }
 
-        analysisAndReports.jobSummary()
+        analysis.jobSummary()
 
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)
         println "Duration: $duration"
-
     }
 
     static main(args) {

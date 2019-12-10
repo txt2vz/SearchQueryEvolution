@@ -94,4 +94,60 @@
          cleanup:
          ireader.close()
      }
+
+     def "total negative for corn maize"(){
+
+         setup:
+         TotalHitCountCollector collector  = new TotalHitCountCollector();
+        // TotalHitCountCollector cornCatCollector  = new TotalHitCountCollector();
+
+
+         BooleanQuery.Builder bqbTestFilter = new BooleanQuery.Builder();
+         bqbTestFilter.add(new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,'test')), BooleanClause.Occur.FILTER)
+         Query testQ = bqbTestFilter.build()
+
+         BooleanQuery.Builder bqbCornCategoryTestFilter = new BooleanQuery.Builder();
+         bqbCornCategoryTestFilter.add(new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,'corn')), BooleanClause.Occur.FILTER)
+         bqbCornCategoryTestFilter.add(new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,'test')), BooleanClause.Occur.FILTER)
+         Query cornCategoryTestQ = bqbCornCategoryTestFilter.build()
+
+         BooleanQuery.Builder bqbCornMaize = new BooleanQuery.Builder()
+         bqbCornMaize.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'corn')), BooleanClause.Occur.SHOULD)
+         bqbCornMaize.add(new TermQuery(new Term(Indexes.FIELD_CONTENTS,'maize')), BooleanClause.Occur.SHOULD)
+         Query bqbCornMaizeQ = bqbCornMaize.build()
+
+         BooleanQuery.Builder bqbCornMaizeTest = new BooleanQuery.Builder()
+         bqbCornMaizeTest.add(testQ, BooleanClause.Occur.FILTER)
+         bqbCornMaizeTest.add(bqbCornMaizeQ, BooleanClause.Occur.FILTER)
+
+         Query cornMaizeTestQuery = bqbCornMaizeTest.build()
+
+        // bqbTestFilter.add(CornMaizeQuery, BooleanClause.Occur.MUST)
+       //  Query cornTestQ = bqbTestFilter.build()
+
+//
+    //     BooleanQuery.Builder bqbCornCat = new BooleanQuery.Builder();
+       //  bqbCornCat.add(new TermQuery(new Term(Indexes.FIELD_TEST_TRAIN,'test')), BooleanClause.Occur.MUST)
+      //   bqbCornCat.add(new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,'corn')), BooleanClause.Occur.MUST)
+     //    bqbCornCat.add(cornTestQ, BooleanClause.Occur.MUST)
+
+       //  Query cornCat = bqbCornCat.build()
+
+         when:
+         isearcher.search(testQ, collector);
+         def testTotal = collector.getTotalHits();
+
+         collector  = new TotalHitCountCollector()
+         isearcher.search(cornCategoryTestQ, collector)
+         def cornCatTestTotal = collector.getTotalHits()
+
+         collector  = new TotalHitCountCollector()
+         isearcher.search(cornMaizeTestQuery, collector)
+         def cornMaizeTestTotal = collector.getTotalHits()
+
+         then:
+         testTotal == 2787
+         cornCatTestTotal == 56
+         cornMaizeTestTotal == 150
+     }
  }
