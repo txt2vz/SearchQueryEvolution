@@ -26,7 +26,7 @@ import java.nio.file.Paths
 class IndexCrisisClusterFromCSV {
 
     // Create Lucene index in this directory
-    Path indexPath = Paths.get('indexes/crisis3FireBombFloodTest')
+    Path indexPath = Paths.get('indexes/crisis3FireBombFloodTrain')
     Path docsPath = Paths.get(/C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\crisisData3/)
     Directory directory = FSDirectory.open(indexPath)
     Analyzer analyzer = //new EnglishAnalyzer();  //with stemming  //new WhitespaceAnalyzer()
@@ -66,7 +66,7 @@ class IndexCrisisClusterFromCSV {
          //   catName.replaceAll(/\W/, '').toLowerCase()
             file.splitEachLine(',') { fields ->
 
-                if (tweetCountPerFile > 500) {
+                if (tweetCountPerFile < 500) {
 
 
                     def n = catsFreq.get((catName)) ?: 0
