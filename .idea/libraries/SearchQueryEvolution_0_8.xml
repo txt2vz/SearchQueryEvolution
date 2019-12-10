@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SearchQueryEvolution-0.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/libs/SearchQueryEvolution-0.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

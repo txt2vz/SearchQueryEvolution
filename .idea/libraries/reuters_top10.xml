@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="reuters-top10">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Datasets/reuters-top10.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
