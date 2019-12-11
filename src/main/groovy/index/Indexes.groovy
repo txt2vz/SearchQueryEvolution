@@ -54,15 +54,6 @@ enum IndexEnum {
     R6('indexes/R6', 6),
     R10('indexes/R10', 10)
 
-//    WarCrimes('indexes/warCrimes', 8),
- //   Secrecy('indexes/resistance', 11),
-  //  Science4('indexes/science4', 4),
-   // NG3N('indexes/ng3N', 3)
-
-
-    //R8('indexes/R8', 8),
-    //R6('indexes/R6', 6),
-    //OHS3('indexes/Ohsc06MuscC08RespC11Eye', 3),
 
     // private final Similarity similarity = new BM25Similarity()
     // new ClassicSimilarity()
@@ -115,35 +106,11 @@ class Indexes {
     static IndexSearcher indexSearcher
     static IndexReader indexReader
 
- //   static BooleanQuery trainDocsInCategoryFilter, otherTrainDocsFilter, testDocsInCategoryFilter, otherTestDocsFilter;
- //   static int totalTrainDocsInCat, totalTestDocsInCat, totalOthersTrainDocs, totalTestDocs;
-
- //   final static TermQuery trainQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'train'));
- //   final static TermQuery testQ = new TermQuery(new Term(FIELD_TEST_TRAIN, 'test'));
-
-    //Query to return documents in the current category based on categoryNumber
-  //  static TermQuery catQ;
-
     static void setIndex(IndexEnum ie) {
         index = ie
         indexSearcher = index.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
-      //  setIndexFieldsAndTotals()
+
         println "indexEnum $index maxDocs ${indexReader.maxDoc()}"
     }
-
-//    //get the category_name for the current category
-//    static String getCategoryName() {
-//        TopScoreDocCollector collector = TopScoreDocCollector.create(1)
-//        indexSearcher.search(catQ, collector);
-//        ScoreDoc[] hits = collector.topDocs().scoreDocs
-//
-//        String categoryName
-//        hits.each { ScoreDoc h ->
-//            Document d = indexSearcher.doc(h.doc)
-//            categoryName = d.get(FIELD_CATEGORY_NAME)
-//        }
-//
-//        return categoryName
-//    }
 }
