@@ -18,12 +18,10 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 1
+    static final int NUMBER_OF_JOBS = 7
 
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
-
-
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
@@ -54,10 +52,9 @@ class ClusterMainECJ extends Evolve {
     List<QueryType> queryTypesList = [
 
          QueryType.OR1,
-
-        //      QueryType.OR,
-      //      QueryType.OR1SETK,
-        //    QueryType.OR_SETK
+         QueryType.OR,
+         QueryType.OR1SETK,
+         QueryType.OR_SETK
           //  QueryType.MINSHOULD2,
      //       QueryType.AND
        //     QueryType.OR_WITH_MINSHOULD2
@@ -70,7 +67,7 @@ class ClusterMainECJ extends Evolve {
 
     List <LuceneClassifyMethod> classifyMethodList = [
             LuceneClassifyMethod.KNN,
-          LuceneClassifyMethod.NB
+   //       LuceneClassifyMethod.NB
     ]
     boolean luceneClassify = true
 
