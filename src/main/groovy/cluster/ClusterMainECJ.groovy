@@ -18,7 +18,7 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 1
+    static final int NUMBER_OF_JOBS = 5
 
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
@@ -38,13 +38,6 @@ class ClusterMainECJ extends Evolve {
            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
 
            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST)
-  //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
-  //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAINSKEWED, IndexEnum.NG3TEST),
-          //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TEST, IndexEnum.NG5TRAIN),
-     //     new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
-      // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC3TRAIN, IndexEnum.CLASSIC3TEST),
-
-
     ]
 
     List<Double> kPenalty =
@@ -55,10 +48,10 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-    //     QueryType.OR1,
-     //    QueryType.OR,
+         QueryType.OR1,
+         QueryType.OR,
          QueryType.OR1SETK,
-     //    QueryType.OR_SETK
+         QueryType.OR_SETK
           //  QueryType.MINSHOULD2,
      //       QueryType.AND
        //     QueryType.OR_WITH_MINSHOULD2
@@ -75,6 +68,7 @@ class ClusterMainECJ extends Evolve {
     ]
 
     final static boolean luceneClassify = true
+    final static boolean useTestIndexForEffectivenessMeasure = true
 
     ClusterMainECJ() {
 
@@ -143,7 +137,9 @@ class ClusterMainECJ extends Evolve {
                                     println "Lucene Classify Method: $classifyMethod"
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
 
-                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.first, clusterFitness.k)
+                                    IndexEnum checkEffectifnessIndex = (useTestIndexForEffectivenessMeasure) ? trainTestIndexes.first : trainTestIndexes.second
+
+                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, clusterFitness.k)
                                 //    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
                                    // Indexes.setIndex(trainTestIndexes.first)  //GA evaluation on train index
                                     analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)

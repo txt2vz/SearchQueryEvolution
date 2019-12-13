@@ -47,7 +47,6 @@ enum IndexEnum {
     NG5('indexes/20NG5WindowsmiscForsaleHockeySpaceChristian', 5),
     NG6('indexes/20NG6GraphicsHockeyCryptSpaceChristianGuns', 6),
     NG20('indexes/20NG', 20),
-
     R4('indexes/R4', 4),
     R5('indexes/R5', 5),
     R5_200('indexes/R5-200', 5),
@@ -57,7 +56,7 @@ enum IndexEnum {
 
     // private final Similarity similarity = new BM25Similarity()
     // new ClassicSimilarity()
-    String pathString;
+    String pathString
     int numberOfCategories
 
     IndexEnum(String pathString, int numberOfCategories) {

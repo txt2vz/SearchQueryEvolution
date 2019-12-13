@@ -61,8 +61,8 @@ class IndexUtils {
             int n = assignedCategoryFrequencies.get(assignedCat) ?: 0
             assignedCategoryFrequencies.put((assignedCat), n + 1)
 
-            final int norig = categoryFrequencies.get(category)?: 0
-            categoryFrequencies.put((category), norig+ 1)
+            n = categoryFrequencies.get(category)?: 0
+            categoryFrequencies.put((category), n + 1)
         }
 
         println "Index Utils assingedCatFrequency $assignedCategoryFrequencies"
