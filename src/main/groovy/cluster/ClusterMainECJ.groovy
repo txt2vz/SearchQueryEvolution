@@ -1,9 +1,9 @@
 package cluster
 
-import clusterExtension.ClassifyUnassigned
+import classify.ClassifyUnassigned
 import index.Effectiveness
-import clusterExtension.LuceneClassifyMethod
-import clusterExtension.UpdateAssignedFieldInIndex
+import classify.LuceneClassifyMethod
+import classify.UpdateAssignedFieldInIndex
 import ec.EvolutionState
 import ec.Evolve
 import ec.util.ParameterDatabase
@@ -18,22 +18,26 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic  
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 7
+    static final int NUMBER_OF_JOBS = 1
 
     //indexes suitable for clustering.
     List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
 
+          //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
+      //      new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TRAIN),
+       //   new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
+
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
-     //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN100, IndexEnum.R6TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
+
+             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
 
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
 
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST)
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST)
   //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
   //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAINSKEWED, IndexEnum.NG3TEST),
           //  new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TEST, IndexEnum.NG5TRAIN),
@@ -51,10 +55,10 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-         QueryType.OR1,
-         QueryType.OR,
+    //     QueryType.OR1,
+     //    QueryType.OR,
          QueryType.OR1SETK,
-         QueryType.OR_SETK
+     //    QueryType.OR_SETK
           //  QueryType.MINSHOULD2,
      //       QueryType.AND
        //     QueryType.OR_WITH_MINSHOULD2
@@ -69,7 +73,8 @@ class ClusterMainECJ extends Evolve {
             LuceneClassifyMethod.KNN,
    //       LuceneClassifyMethod.NB
     ]
-    boolean luceneClassify = true
+
+    final static boolean luceneClassify = true
 
     ClusterMainECJ() {
 
@@ -137,7 +142,10 @@ class ClusterMainECJ extends Evolve {
                                     println " "
                                     println "Lucene Classify Method: $classifyMethod"
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
-                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
+
+                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.first, clusterFitness.k)
+                                //    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
+                                   // Indexes.setIndex(trainTestIndexes.first)  //GA evaluation on train index
                                     analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)
                                 }
                             } else {

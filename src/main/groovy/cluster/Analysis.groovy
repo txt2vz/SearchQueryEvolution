@@ -2,7 +2,7 @@ package cluster
 
 
 import index.Effectiveness
-import clusterExtension.LuceneClassifyMethod
+import classify.LuceneClassifyMethod
 import index.Indexes
 
 class Analysis {

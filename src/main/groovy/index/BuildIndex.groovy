@@ -39,19 +39,20 @@ class BuildIndex {
               //  'indexes/classic4Test'
              //   'indexes/NG3Train'
               //  'indexes/NG3TrainSkewed'
-                'indexes/R6Train100'
+            //    'indexes/R6Train100'
 
-            //       'indexes/NG5Test'
+                   'indexes/NG5Train'
                // 'indexes/NG5Test'
         //         'indexes/NG3'
         //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
             //    /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
         //        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R5Train/
      //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\GAclusterPaper2018\r5/
-        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
+ //       /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
           //      /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
                 //         /D:\Datasets\R4Train/
                 // /D:\Classify20NG3/

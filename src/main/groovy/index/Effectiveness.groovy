@@ -105,6 +105,7 @@ class Effectiveness {
             println "plist $pList rlist $rList"
             println "avaeragepk $averagePk averagrK $averageRk f1k $f1k"
         }
+
         return new Tuple3(f1return, preturn, rreturn)
     }
 }
