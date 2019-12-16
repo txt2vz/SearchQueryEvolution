@@ -55,10 +55,10 @@ class Analysis {
 
             File GAplusLucene = new File("results/GAplusLucene.csv")
             if (!GAplusLucene.exists()) {
-                GAplusLucene << 'GAaveargeF1, GAaveragePrecision, GAaverageRecall, GAfitness, ClassifierF1, ClassifierP, ClassifierR, ClassifierMethod, indexName, queryType, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
+                GAplusLucene << 'GAaveargeF1, GAaveragePrecision, GAaverageRecall, GAfitness, ClassifierF1, ClassifierP, ClassifierR, ClassifierMethod, indexName, queryType, kpenalty, #clusters, #categories, #categoryCountError, #categoryCountErrorAbs, gen, jobNumber, date \n'
             }
             GAplusLucene << "${averageF1ForJob.round(5)}, ${averagePrecisionForJob.round(5)}, ${averageRecallForJoab.round(5)}, ${cfit.getFitness().round(5)}, ${t3ClassiferResult.first}, ${t3ClassiferResult.second}, ${t3ClassiferResult.third},  " +
-                    " ${classifyMethod.name()},  ${Indexes.index.name()}, ${ClusterQueryECJ.queryType},  $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
+                    " ${classifyMethod.name()},  ${Indexes.index.name()}, ${ClusterQueryECJ.queryType}, ${ClusterFitness.kPenalty}, $numberOfClusters, $numberOfOriginalClasses, $categoryCountError, $categoryCountErrorAbs, $gen, $jobNumber , ${new Date()} \n"
         }
 
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1ForJob  ** average precision: $averagePrecisionForJob average recall: $averageRecallForJoab"

@@ -59,11 +59,11 @@ class QueryListFromChromosome {
         int index = (setk) ? 1 : 0;
         int clusterNumber = 0
         while (clusterNumber < k && index < intChromosome.size()) {
-            int gene = intChromosome[index]
 
-            //  assert gene < termQueryList.size() && gene >= 0
+            final int gene = intChromosome[index]
+            assert gene < termQueryList.size() && gene >= 0
 
-            if (genes.add(gene) && gene < termQueryList.size()) {
+            if (genes.add(gene))   {
                 bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[gene], BooleanClause.Occur.SHOULD)
                 clusterNumber++
             }

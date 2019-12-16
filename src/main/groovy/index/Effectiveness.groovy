@@ -96,8 +96,6 @@ class Effectiveness {
             final double averageRk = rList.sum() / maxCats
             final double f1k = 2 * ((averagePk * averageRk) / (averagePk + averageRk))
 
-            assert f1k
-
             f1return = f1k
             preturn = averagePk
             rreturn = averageRk
