@@ -96,8 +96,6 @@ class Effectiveness {
             final double averageRk = rList.sum() / maxCats
             final double f1k = 2 * ((averagePk * averageRk) / (averagePk + averageRk))
 
-            assert f1k
-
             f1return = f1k
             preturn = averagePk
             rreturn = averageRk
@@ -105,6 +103,7 @@ class Effectiveness {
             println "plist $pList rlist $rList"
             println "avaeragepk $averagePk averagrK $averageRk f1k $f1k"
         }
+
         return new Tuple3(f1return, preturn, rreturn)
     }
 }

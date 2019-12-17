@@ -352,3 +352,66 @@ NG5Train path: indexes/NG5Train numberOfCategories: 5   46.213 seconds
 [NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  1 minutes, 35.032 seconds
 [CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  30.717 seconds
 [CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  10.242 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  30.754 seconds
+[R5TRAIN path: indexes/R5Train numberOfCategories: 5 , R5TEST path: indexes/R5Test numberOfCategories: 5 ]  27.291 seconds
+[R6TRAIN100 path: indexes/R6Train100 numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  32.321 seconds
+[NG3TRAIN path: indexes/NG3Train numberOfCategories: 3 , NG3TEST path: indexes/NG3Test numberOfCategories: 3 ]  17.255 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  26.477 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  1 minutes, 44.964 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  30.851 seconds
+[CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  10.271 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  37.843 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  16.371 seconds
+[R5TRAIN path: indexes/R5Train numberOfCategories: 5 , R5TEST path: indexes/R5Test numberOfCategories: 5 ]  20.443 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  30.423 seconds
+[NG3TRAIN path: indexes/NG3Train numberOfCategories: 3 , NG3TEST path: indexes/NG3Test numberOfCategories: 3 ]  16.776 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  24.902 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  1 minutes, 30.951 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  31.991 seconds
+[CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  10.649 seconds
+[R6TRAIN100 path: indexes/R6Train100 numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  3 minutes, 17.615 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  3 minutes, 38.191 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 ]  4 minutes, 25.695 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 ]  4 minutes, 50.180 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  3 minutes, 52.140 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 49.454 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 12.611 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 6.260 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 ]  4 minutes, 18.748 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 4.380 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 ]  4 minutes, 42.202 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 10.650 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 ]  4 minutes, 4.107 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 1.395 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  4 minutes, 24.798 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  1 minutes, 22.643 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  1 minutes, 22.846 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  22.730 seconds
+[R5TRAIN path: indexes/R5Train numberOfCategories: 5 , R5TEST path: indexes/R5Test numberOfCategories: 5 ]  24.977 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  26.567 seconds
+[NG3TRAIN path: indexes/NG3Train numberOfCategories: 3 , NG3TEST path: indexes/NG3Test numberOfCategories: 3 ]  18.651 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  23.955 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  25.993 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  33.733 seconds
+[CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  25.552 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  21.950 seconds
+[R5TRAIN path: indexes/R5Train numberOfCategories: 5 , R5TEST path: indexes/R5Test numberOfCategories: 5 ]  25.320 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  26.079 seconds
+[NG3TRAIN path: indexes/NG3Train numberOfCategories: 3 , NG3TEST path: indexes/NG3Test numberOfCategories: 3 ]  21.425 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  22.676 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  25.265 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  31.026 seconds
+[CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  25.186 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  57 minutes, 48.767 seconds
+[R4TRAIN path: indexes/R4Train numberOfCategories: 4 , R4TEST path: indexes/R4Test numberOfCategories: 4 ]  59 minutes, 16.053 seconds
+[R5TRAIN path: indexes/R5Train numberOfCategories: 5 , R5TEST path: indexes/R5Test numberOfCategories: 5 ]  1 hours, 52 minutes, 48.760 seconds
+[R6TRAIN path: indexes/R6Train numberOfCategories: 6 , R6TEST path: indexes/R6Test numberOfCategories: 6 ]  1 hours, 27 minutes, 30.708 seconds
+[NG3TRAIN path: indexes/NG3Train numberOfCategories: 3 , NG3TEST path: indexes/NG3Test numberOfCategories: 3 ]  49 minutes, 19.895 seconds
+[NG5TRAIN path: indexes/NG5Train numberOfCategories: 5 , NG5TEST path: indexes/NG5Test numberOfCategories: 5 ]  51 minutes, 47.381 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  57 minutes, 7.180 seconds
+[CLASSIC4TRAIN path: indexes/classic4Train numberOfCategories: 4 , CLASSIC4TEST path: indexes/classic4Test numberOfCategories: 4 ]  15 hours, 18 minutes, 46.447 seconds
+[CRISIS3TRAIN path: indexes/crisis3FireBombFloodTrain numberOfCategories: 3 , CRISIS3TEST path: indexes/crisis3FireBombFloodTest numberOfCategories: 3 ]  1 hours, 6 minutes, 45.514 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  5 minutes, 55.776 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  5 minutes, 40.023 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  2 minutes, 16.704 seconds
+[NG6TRAIN path: indexes/NG6Train numberOfCategories: 6 , NG6TEST path: indexes/NG6Test numberOfCategories: 6 ]  2 minutes, 21.880 seconds
