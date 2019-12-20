@@ -56,7 +56,6 @@ class IndexCrisisClusterFromCSV {
 
         int id = 0
 
-
         docsPath.toFile().eachFileRecurse { file ->
 
             String catName = file.getName().take(14).replaceAll(/\W/, '').toLowerCase()
@@ -66,11 +65,11 @@ class IndexCrisisClusterFromCSV {
          //   catName.replaceAll(/\W/, '').toLowerCase()
             file.splitEachLine(',') { fields ->
 
-                if (tweetCountPerFile < 500) {
+                if (tweetCountPerFile < 1000) {
 
 
                     def n = catsFreq.get((catName)) ?: 0
-                    if (n < 500) {
+                    if (n < 1000) {
 
                         catsFreq.put((catName), n + 1)
 
