@@ -39,29 +39,23 @@ class BuildIndex {
               //  'indexes/classic4Test'
              //   'indexes/NG3Train'
               //  'indexes/NG3TrainSkewed'
-            //    'indexes/R6Train100'
+                'indexes/R6'
 
-                   'indexes/NG5Train'
+            //       'indexes/NG5Train'
                // 'indexes/NG5Test'
         //         'indexes/NG3'
         //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
+             //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
             //    /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
         //        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R5Train/
      //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\GAclusterPaper2018\r5/
  //       /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
           //      /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
-                //         /D:\Datasets\R4Train/
-                // /D:\Classify20NG3/
-                //         /D:\Datasets\NG3/
-                //   /C:\Users\aceslh\Dataset\GAclusterPaper2018\classic4_500/
-                //    /D:\Datasets\GAclusterPaper2018\GAclusterPaper2018\classic4_500/
-                //         /D:\Datasets\R4Test/
-      //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTest/
-      //  /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTrainSkewed/
+                 //  /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTrainSkewed/
        //         /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG3BTrain/
                 //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Classic\Classic4Test/
              //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NG5Test/
