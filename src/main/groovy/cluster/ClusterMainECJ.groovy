@@ -33,7 +33,7 @@ class ClusterMainECJ extends Evolve {
 
            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
 
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST)
+           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS31000, IndexEnum.CRISIS3TEST)
     ]
 
     List<Double> kPenalty =     [0.04d]

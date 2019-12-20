@@ -33,7 +33,8 @@ enum IndexEnum {
     R5TRAIN('indexes/R5Train', 5),
     R5TEST('indexes/R5Test', 5),
 
-    R6TRAIN('indexes/R6Train', 6),
+    //R6TRAIN('indexes/R6Train', 6),
+    R6TRAIN('indexes/R6', 6),
     R6TEST('indexes/R6Test', 6),
     R6TRAIN100('indexes/R6Train100', 6),
 
@@ -41,6 +42,8 @@ enum IndexEnum {
     CLASSIC4TEST('indexes/classic4Test', 4),
 
     CRISIS3TRAIN('indexes/crisis3FireBombFloodTrain', 3),
+
+    CRISIS31000('indexes/crisis3FireBombFlood1000', 3),
     CRISIS3TEST('indexes/crisis3FireBombFloodTest', 3),
 
 
