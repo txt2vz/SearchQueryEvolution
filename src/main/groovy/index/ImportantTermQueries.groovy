@@ -3,8 +3,6 @@ package index
 import groovy.transform.CompileStatic
 import org.apache.lucene.index.*
 import org.apache.lucene.search.DocIdSetIterator
-import org.apache.lucene.search.IndexSearcher
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.similarities.ClassicSimilarity
 import org.apache.lucene.search.similarities.TFIDFSimilarity
