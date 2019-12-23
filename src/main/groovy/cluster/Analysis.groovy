@@ -64,9 +64,10 @@ class Analysis {
         String messageOut = "***  TOTALS:   *****   f1list: $f1list averagef1: :$averageF1ForJob  ** average precision: $averagePrecisionForJob average recall: $averageRecallForJoab"
         println messageOut
 
-        queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.numDocs()} "
-        queryFileOut << "PosHits: ${cfit.hitsMatchingOnlyOneQuery} NegHits: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)}  \n"
-        queryFileOut << messageOut + "\n"
+        queryFileOut << "TotalHits: ${cfit.totalHits} Total Docs:  ${Indexes.indexReader.numDocs()} Index: ${Indexes.index}"
+        queryFileOut << "hitsMatchingOnly1Query: ${cfit.hitsMatchingOnlyOneQuery} HitsMatchingTwoOrMoreQueries: ${cfit.hitsMatchingTwoOrMoreQueries}  Fitness: ${cfit.getFitness().round(5)}  \n"
+        queryFileOut << messageOut + '\n'
+        queryFileOut << cfit.queryShort() + '\n'
         queryFileOut << "************************************************ \n \n"
 
         File fcsv = new File("results/resultsClusterByJob.csv")

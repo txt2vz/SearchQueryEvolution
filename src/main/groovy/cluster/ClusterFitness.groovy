@@ -101,12 +101,11 @@ public class ClusterFitness extends SimpleFitness {
     }
 
     String queryShort() {
-        String s = ""
+        StringBuilder sb = new StringBuilder()
         queryMap.keySet().eachWithIndex { Query q, int index ->
-            if (index > 0) s += '\n';
-            s += "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)}"
+            sb << "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)} \n"
         }
-        return s
+        return sb.toString()
     }
 
     void queriesToFile(File qFile){

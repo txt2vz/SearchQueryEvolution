@@ -23,10 +23,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 //import org.apache.lucene.queryparser.classic.QueryParser
-class IndexCrisisClusterFromCSV {
+class IndexCrisisFromCSV {
 
     // Create Lucene index in this directory
-    Path indexPath = Paths.get('indexes/crisis3FireBombFloodTrain')
+    Path indexPath = Paths.get('indexes/crisis3FireBombFloodTest')
     Path docsPath = Paths.get(/C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\crisisData3/)
     Directory directory = FSDirectory.open(indexPath)
     Analyzer analyzer = //new EnglishAnalyzer();  //with stemming  //new WhitespaceAnalyzer()
@@ -35,7 +35,7 @@ class IndexCrisisClusterFromCSV {
     def catsFreq = [:]
 
     static main(args) {
-        def i = new IndexCrisisClusterFromCSV()
+        def i = new IndexCrisisFromCSV()
         i.buildIndex()
     }
 
@@ -67,7 +67,6 @@ class IndexCrisisClusterFromCSV {
             file.splitEachLine(',') { fields ->
 
                 if (tweetCountPerFile < 500) {
-
 
                     def n = catsFreq.get((catName)) ?: 0
                     if (n < 500) {
