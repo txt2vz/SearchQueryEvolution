@@ -32,7 +32,7 @@ enum IndexEnum {
     CLASSIC4TRAIN('indexes/classic4Train', 4),
     CLASSIC4TEST('indexes/classic4Test', 4),
 
-    CRISIS3TRAIN('indexes/crisis3FireBombFlood1000', 3),
+    CRISIS3TRAIN('indexes/crisis3FireBombFloodTrain', 3),
     CRISIS3TEST('indexes/crisis3FireBombFloodTest', 3),
 
     NG3TRAINSKEWED('indexes/NG3TrainSkewed', 3)

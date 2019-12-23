@@ -2,7 +2,6 @@ group 'ga search query'
 version '0.8'
 
 apply plugin: 'groovy'
-//apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
@@ -13,30 +12,20 @@ dependencies {
     compile group: 'io.jenetics', name: 'jenetics', version: '3.9.0'
     //  compile group: 'io.jenetics', name: 'jenetics', version: '4.0.0'
 
-  //  compile 'org.codehaus.groovy:groovy-all:2.4.15'
-    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
-  //  compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.1', ext: 'pom'
-
     compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.2'
     compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.2'
 
     //  compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
     // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.6.0'
-
-
    // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.3.0'
    // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.3.0'
    // compile group: 'org.apache.lucene', name: 'lucene-classification', version: '8.3.0'
    // compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.3.0'
 
-
     compile group: 'org.apache.lucene', name: 'lucene-core', version: '7.4.0'
     compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '7.4.0'
     compile group: 'org.apache.lucene', name: 'lucene-classification', version: '7.4.0'
     compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '7.4.0'
-
-
-
 
     // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.2.0'
    // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.2.0'
