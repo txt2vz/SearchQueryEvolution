@@ -24,6 +24,8 @@ enum QueryType {
 
     OR(false),
     OR_SETK(true),
+    OR1(false),
+    OR1SETK(true),
 
     MINSHOULD2(false),
     OR_WITH_MINSHOULD2(false),
@@ -32,17 +34,11 @@ enum QueryType {
     OR_WITH_AND_SUBQ(false),
     AND_WITH_OR_SUBQ(false),
     OR_WITH_NOT(false),
-
     SPAN_FIRST(false),
-
     ORDNFSETK(true),
     ORDNF(true),
     MINSHOULDSETK(true),
-
-    OR1(false),
     OR3_INTERSECT(false),
-
-    OR1SETK(true),
     OR2_INTERSECT_SETK(true),
     OR3_INSTERSECT_SETK(true),
     OR4_INSTERSECT_SETK(true)
@@ -64,7 +60,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         super.setup(state, base);
         println "Total docs for ClusterQueryECJ.groovy   " + Indexes.indexReader.numDocs()
-        //TermQuery[] tqa = new ImportantTerms().getTFIDFTermQueryList()
         List <TermQuery>  tql = ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         qlfc = new QueryListFromChromosome(tql)
     }

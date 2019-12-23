@@ -15,50 +15,50 @@ import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier
 
-@CompileStatic  
+@CompileStatic
 class ClusterMainECJ extends Evolve {
 
     static final int NUMBER_OF_JOBS = 2
 
     //indexes suitable for clustering.
-    List <Tuple2 <IndexEnum, IndexEnum>> clusteringIndexes = [
-
+    List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
+//
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
+    //   new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
 
-             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
-
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
-
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS31000, IndexEnum.CRISIS3TEST)
+//             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
+//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
+//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
+//
+//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
+//
+//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS31000, IndexEnum.CRISIS3TEST)
     ]
 
-    List<Double> kPenalty =     [0.04d]
-     //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
+    List<Double> kPenalty = [0.04d]
+    //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
 
 
     List<QueryType> queryTypesList = [
 
-         QueryType.OR1,
-         QueryType.OR1SETK,
+            QueryType.OR1,
+            QueryType.OR1SETK,
 
-         //  QueryType.OR,
-    //     QueryType.OR_SETK
-          //  QueryType.MINSHOULD2,
-     //       QueryType.AND
-       //     QueryType.OR_WITH_MINSHOULD2
+            //       QueryType.OR,
+            //     QueryType.OR_SETK
+            //  QueryType.MINSHOULD2,
+            //       QueryType.AND
+            //     QueryType.OR_WITH_MINSHOULD2
     ]
 
     List<IntersectMethod> intersectMethodList = [
             IntersectMethod.RATIO_POINT_5
     ]
 
-    List <LuceneClassifyMethod> classifyMethodList = [
+    List<LuceneClassifyMethod> classifyMethodList = [
             LuceneClassifyMethod.KNN,
-   //       LuceneClassifyMethod.NB
+            //       LuceneClassifyMethod.NB
     ]
 
     final static boolean luceneClassify = true
@@ -74,7 +74,7 @@ class ClusterMainECJ extends Evolve {
         Analysis analysis = new Analysis()
 
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
-            final Date indexTime = new Date()
+
             NUMBER_OF_JOBS.times { job ->
                 EvolutionState state = new EvolutionState()
 
@@ -92,6 +92,7 @@ class ClusterMainECJ extends Evolve {
                         ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.UNIQUE_HITS_K_PENALTY : FitnessMethod.UNIQUE_HITS_COUNT
 
                         intersectMethodList.each { IntersectMethod intersectMethod ->
+                            final Date indexTime = new Date()
                             QueryListFromChromosome.intersectMethod = intersectMethod
 
                             ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
@@ -127,33 +128,27 @@ class ClusterMainECJ extends Evolve {
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queryFile)
 
                                 classifyMethodList.each { classifyMethod ->
-                                    println " "
-                                    println "Lucene Classify Method: $classifyMethod"
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
 
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
 
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, clusterFitness.k)
-                                //    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, trainTestIndexes.second, clusterFitness.k)
-                                   // Indexes.setIndex(trainTestIndexes.first)  //GA evaluation on train index
+
                                     analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)
                                 }
                             } else {
 
-                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness,null,null)
+                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, null, null)
                             }
+
+                            TimeDuration durationT = TimeCategory.minus(new Date(), indexTime)
+                            timingFile << trainTestIndexes.toString() + ",  " + qt + ", " + durationT + '\n'
                         }
                     }
                     cleanup(state);
                     println "--------END JOB $job  -----------------------------------------------"
                 }
             }
-
-            final Date endTime = new Date()
-            TimeDuration durationT = TimeCategory.minus(endTime, indexTime)
-            println "Duration: $durationT"
-            String s =  trainTestIndexes.toString() + "  " + durationT + '\n'
-            timingFile << s
         }
 
         analysis.jobSummary()

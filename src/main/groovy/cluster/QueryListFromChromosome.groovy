@@ -51,7 +51,7 @@ class QueryListFromChromosome {
 
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
 
-        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories //Indexes.NUMBER_OF_CATEGORIES
+        final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories
         Set<Integer> genes = [] as Set<Integer>
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
