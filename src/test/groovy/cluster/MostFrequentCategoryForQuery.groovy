@@ -1,6 +1,7 @@
 package cluster
 
 import index.IndexEnum
+import index.IndexUtils
 import index.Indexes
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.BooleanClause
@@ -12,7 +13,7 @@ class MostFrequentCategoryForQuery extends Specification {
     def "GetMostFrequentCategoryForQuery"() {
 
         setup:
-        Indexes.setIndex(IndexEnum.NG3)
+        Indexes.setIndex(IndexEnum.NG3TEST)
 
         TermQuery spaceQuery = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'space'))
         TermQuery orbitQuery = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'orbit'))
@@ -29,7 +30,7 @@ class MostFrequentCategoryForQuery extends Specification {
         hockeyBQB.add(gameQuery, BooleanClause.Occur.SHOULD)
 
         then:
-        'sci.space' == Analysis.getMostFrequentCategoryForQuery(spaceBQB.build()).first
-        'rec.sport.hockey'  == Analysis.getMostFrequentCategoryForQuery(hockeyBQB.build()).first
+        'scispace' == IndexUtils.getMostFrequentCategoryForQuery(spaceBQB.build()).first
+        'recsporthockey'  == IndexUtils.getMostFrequentCategoryForQuery(hockeyBQB.build()).first
     }
 }

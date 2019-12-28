@@ -58,7 +58,6 @@ class ImportantTermQueries {
 
     private static boolean isUsefulTerm(int df, String word) {
 
-        //remove words
         boolean b =
                 df > 3 && !stopSet.contains(word) && !word.contains("'") && !word.contains('.') && word.length() > 1 && word.charAt(0).isLetter()
 

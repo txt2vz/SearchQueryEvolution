@@ -2,49 +2,42 @@ package cluster
 
 import index.IndexEnum
 import index.Indexes
+import index.IndexUtils
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.TermQuery
 
 class EvaluateClustersSpec extends spock.lang.Specification {
 
-    def "find most frequent category r4"() {
+    def "find most frequent category R4TEST"() {
         setup:
-        Indexes.setIndex(IndexEnum.R4)
-        Indexes.setIndexFieldsAndTotals()
-        String maxCatName
-        int maxCatHits
-        int totalHits
+        Indexes.setIndex(IndexEnum.R4TEST)
         TermQuery catQ
 
-        def jr = new Analysis()
-
         when:
-        catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
-                'grain'));
-        (maxCatName, maxCatHits, totalHits) = jr.findMostFrequentCategoryForQuery(catQ, 0)
+        catQ = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,'grain'))
+        Tuple3 t3 = IndexUtils.getMostFrequentCategoryForQuery(catQ)
 
         then:
-        maxCatName == 'grain'
-        maxCatHits == 100
-        totalHits == 100
+        t3.first == 'grain'
+        t3.second == 70
+        t3.third == 70
 
         when:
-        catQ = new TermQuery(new Term(Indexes.FIELD_CONTENTS,
-                'bpd'));  //barrels per day
-        (maxCatName, maxCatHits, totalHits) = jr.findMostFrequentCategoryForQuery(catQ, 0)
+        catQ = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'bpd'));  //barrels per day
+        t3 = IndexUtils.getMostFrequentCategoryForQuery(catQ)
 
         then:
-        maxCatName == 'crude'
-        maxCatHits == 28
-        totalHits == 28
+        t3.first == 'crude'
+        t3.second == 15
+        t3.third == 15
 
         when:
         catQ = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'oil'))
-        (maxCatName, maxCatHits, totalHits) = jr.findMostFrequentCategoryForQuery(catQ, 0)
+        t3 = IndexUtils.getMostFrequentCategoryForQuery(catQ)
 
         then:
-        maxCatName == 'crude'
-        maxCatHits == 91
-        totalHits == 103
+        t3.first  == 'crude'
+        t3.second == 62
+        t3.third == 75
     }
 }
