@@ -19,7 +19,7 @@ import org.apache.lucene.classification.Classifier
 class ClusterMainECJ extends Evolve {
 
     static final int NUMBER_OF_JOBS = 3
-    static final boolean onlyDocsInOneCluster = false
+    static final boolean onlyDocsInOneCluster = true
 
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
@@ -135,11 +135,11 @@ class ClusterMainECJ extends Evolve {
 
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, clusterFitness.k)
 
-                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod)
+                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod, onlyDocsInOneCluster)
                                 }
                             } else {
 
-                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, null, null)
+                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, null, null, onlyDocsInOneCluster)
                             }
 
                             TimeDuration durationT = TimeCategory.minus(new Date(), indexTime)
