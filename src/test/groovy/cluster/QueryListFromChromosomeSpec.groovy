@@ -1,7 +1,6 @@
 package cluster
 
 import index.ImportantTermQueries
-import index.ImportantTermsOld
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.index.Term
@@ -13,8 +12,8 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
     def "QueryListFromChromosome OR 20News3 tfidf"() {
         setup:
-        Indexes.setIndex(IndexEnum.NG3)
-        Indexes.setIndexFieldsAndTotals()
+        Indexes.setIndex(IndexEnum.NG3TEST)
+     //   Indexes.setIndexFieldsAndTotals()
       //  ImportantTermsOld impTermQueries = new ImportantTermsOld()
         ImportantTermQueries impTermQueries = new ImportantTermQueries()
         TermQuery[] tfidfList = impTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
@@ -32,13 +31,13 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         println "tq $tq"
 
         then:
-        Indexes.NUMBER_OF_CLUSTERS == 3
+        Indexes.index.numberOfCategories == 3
 
         tfidfList[0].getTerm().text() == 'nasa'
         tfidfList[1].getTerm().text() == 'space'
         tfidfList[2].getTerm().text() == 'god'
 
-        bqbL.size() ==  Indexes.NUMBER_OF_CLUSTERS
+        bqbL.size() ==  Indexes.index.numberOfCategories
         q.toString(Indexes.FIELD_CONTENTS) == 'nasa'
 
         when:

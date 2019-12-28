@@ -28,7 +28,7 @@ class UpdateAssignedFieldInIndex {
         new UpdateAssignedFieldInIndex().updateAssignedField(IndexEnum.CRISIS3TRAIN, queryData)
     }
 
-    static void updateAssignedField(IndexEnum trainIndex, File queryFile){
+    static void updateAssignedField(IndexEnum trainIndex, File queryFile, boolean onlyDocsInOneCluster=false){
 
         Indexes.setIndex(trainIndex)
         String indexPath = Indexes.index.pathString
@@ -67,9 +67,8 @@ class UpdateAssignedFieldInIndex {
             queries << qn
         }
 
-        boolean uniqueQs = false
-        if (uniqueQs) {
-            List<Query> uniqueQueries = []
+        if (onlyDocsInOneCluster) {
+            List<Query> docInOneClusterQueries = []
             for (int i = 0; i < queries.size(); i++) {
                 Query q = queries[i]
 
@@ -81,10 +80,10 @@ class UpdateAssignedFieldInIndex {
                         bqbOneCategoryOnly.add(queries[j], BooleanClause.Occur.MUST_NOT)
                     }
                 }
-                uniqueQueries << bqbOneCategoryOnly.build()
+                docInOneClusterQueries << bqbOneCategoryOnly.build()
             }
-            println "uniqueries $uniqueQueries"
-            queries = uniqueQueries
+            println "uniqueries $docInOneClusterQueries"
+            queries = docInOneClusterQueries
         }
 
         queries.each { q ->
