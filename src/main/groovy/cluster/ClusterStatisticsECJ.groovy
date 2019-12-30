@@ -1,6 +1,6 @@
 package cluster
 
-import index.Effectiveness
+
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
 import index.Indexes

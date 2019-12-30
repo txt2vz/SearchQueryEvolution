@@ -1,4 +1,4 @@
-package index
+package cluster
 
 import index.IndexEnum
 import index.IndexUtils

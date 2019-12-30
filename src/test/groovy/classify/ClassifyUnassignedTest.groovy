@@ -1,6 +1,6 @@
 package classify
 
-import index.Effectiveness
+import cluster.Effectiveness
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier
