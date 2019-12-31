@@ -25,7 +25,7 @@ class UpdateAssignedFieldInIndex {
 
     static void main(String[] args) {
         File queryData = new File('results/qFile.txt')
-        updateAssignedField(IndexEnum.CRISIS3TRAIN, queryData)
+        updateAssignedField(IndexEnum.CRISIS3, queryData)
     }
 
     static void updateAssignedField(IndexEnum trainIndex, File queryFile, boolean onlyDocsInOneCluster=false){
