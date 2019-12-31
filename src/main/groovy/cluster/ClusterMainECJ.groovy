@@ -17,7 +17,7 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 3
+    static final int NUMBER_OF_JOBS = 2
     static final boolean onlyDocsInOneCluster = false
 
     //indexes suitable for clustering.
@@ -47,9 +47,6 @@ class ClusterMainECJ extends Evolve {
 
             //       QueryType.OR,
             //     QueryType.OR_SETK
-            //  QueryType.MINSHOULD2,
-            //       QueryType.AND
-            //     QueryType.OR_WITH_MINSHOULD2
     ]
 
     List<IntersectMethod> intersectMethodList = [
