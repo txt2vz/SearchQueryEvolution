@@ -16,10 +16,17 @@ class Effectiveness {
 
         List<Double> f1list = [], precisionList = [], recallList = [], fitnessList = []
 
+        Set <String> categoryNames = []
+        int duplicateCategory = 0
+        int missingCategories = 0
+
         querySet.each { Query q ->
 
             Tuple3 tuple3 = IndexUtils.getMostFrequentCategoryForQuery(q)
             String mostFrequentCategoryName = tuple3.first
+            if (!categoryNames.add(mostFrequentCategoryName)){
+                duplicateCategory++
+            }
             final int mostFrequentCategoryHitsSize = tuple3.second
             final int queryHitsSize = tuple3.third
 
@@ -47,8 +54,20 @@ class Effectiveness {
             recallList << recall
         }
 
+
+        Set <String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet()
+
+        categoryNames.each{categoryName ->
+            if (!originalCategoryNames.contains(categoryName)){
+                missingCategories++
+            }
+        }
+
         final int maxCategoriesClusters = Math.max(Indexes.index.numberOfCategories, querySet.size())
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0
+        final int penaltyForDuplicatingOrMissingCategory = missingCategories + duplicateCategory
+        final int maxCategoriesClustersWithPenalty = maxCategoriesClusters + penaltyForDuplicatingOrMissingCategory
+
+        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0   //maxCategoriesClustersWithPenalty
         final double averageRecallForJob = (recallList) ? (double) recallList.sum() / maxCategoriesClusters : 0
         final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / maxCategoriesClusters : 0
 
@@ -57,7 +76,6 @@ class Effectiveness {
 
         return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob, averagePrecisionForJob, averageRecallForJob, f1list)
     }
-
 
     static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, int k) {
         index.Indexes.setIndex(testIndex)

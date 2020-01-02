@@ -6,7 +6,7 @@ import index.IndexUtils
 import org.apache.lucene.index.Term
 import org.apache.lucene.search.TermQuery
 
-class EvaluateClustersSpec extends spock.lang.Specification {
+class MostFrequentCategorySpec extends spock.lang.Specification {
 
     def "find most frequent category R4TEST"() {
         setup:

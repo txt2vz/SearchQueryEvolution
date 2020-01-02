@@ -17,8 +17,10 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    static final int NUMBER_OF_JOBS = 3
-    static final boolean onlyDocsInOneCluster = false
+    final static int NUMBER_OF_JOBS = 5
+    final static boolean onlyDocsInOneCluster = false
+    final static boolean luceneClassify = true
+    final static boolean useSameIndexForEffectivenessMeasure = true
 
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
@@ -57,9 +59,6 @@ class ClusterMainECJ extends Evolve {
             LuceneClassifyMethod.KNN,
             //       LuceneClassifyMethod.NB
     ]
-
-    final static boolean luceneClassify = true
-    final static boolean useSameIndexForEffectivenessMeasure = true
 
     ClusterMainECJ() {
 
