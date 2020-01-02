@@ -1,6 +1,6 @@
 package classify
 
-import index.Effectiveness
+import cluster.Effectiveness
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.analysis.standard.StandardAnalyzer
@@ -25,7 +25,7 @@ enum LuceneClassifyMethod {
 class ClassifyUnassigned {
 
     static void main(String[] args) {
-        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CRISIS3TRAIN, LuceneClassifyMethod.KNN)
+        Classifier classifier = classifyUnassigned(IndexEnum.CRISIS3, LuceneClassifyMethod.KNN)
         Effectiveness.classifierEffectiveness(classifier, IndexEnum.CRISIS3TEST, IndexEnum.CRISIS3TEST.numberOfCategories)
     }
 

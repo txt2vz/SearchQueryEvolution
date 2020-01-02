@@ -1,6 +1,6 @@
 package cluster
 
-import index.Effectiveness
+
 import classify.LuceneClassifyMethod
 import index.Indexes
 

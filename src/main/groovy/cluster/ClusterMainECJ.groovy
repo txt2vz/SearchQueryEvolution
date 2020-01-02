@@ -1,7 +1,6 @@
 package cluster
 
 import classify.ClassifyUnassigned
-import index.Effectiveness
 import classify.LuceneClassifyMethod
 import classify.UpdateAssignedFieldInIndex
 import ec.EvolutionState
@@ -19,22 +18,22 @@ import org.apache.lucene.classification.Classifier
 class ClusterMainECJ extends Evolve {
 
     static final int NUMBER_OF_JOBS = 3
-    static final boolean onlyDocsInOneCluster = true
+    static final boolean onlyDocsInOneCluster = false
 
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4TRAIN, IndexEnum.R4TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5TRAIN, IndexEnum.R5TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6TRAIN, IndexEnum.R6TEST),
-//
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3TRAIN, IndexEnum.NG3TEST),
-//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5TRAIN, IndexEnum.NG5TEST),
-           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6TRAIN, IndexEnum.NG6TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
 
-//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4TRAIN, IndexEnum.CLASSIC4TEST),
-//
-//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3TRAIN, IndexEnum.CRISIS3TEST)
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
+
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
 
     List<Double> kPenalty = [0.04d]
@@ -44,13 +43,10 @@ class ClusterMainECJ extends Evolve {
     List<QueryType> queryTypesList = [
 
             QueryType.OR1,
-     //       QueryType.OR1SETK,
+            QueryType.OR1SETK,
 
             //       QueryType.OR,
             //     QueryType.OR_SETK
-            //  QueryType.MINSHOULD2,
-            //       QueryType.AND
-            //     QueryType.OR_WITH_MINSHOULD2
     ]
 
     List<IntersectMethod> intersectMethodList = [
@@ -69,8 +65,11 @@ class ClusterMainECJ extends Evolve {
 
         final Date startRun = new Date()
 
-        File timingFile = new File("results/timing.txt")
+        File timingFile = new File("results/timing.csv")
         File queryFile = new File('results/qFile.txt')
+        if (!timingFile.exists()) {
+            timingFile << 'index, queryType, GAtime, KNNtime, overallTime \n'
+        }
 
         Analysis analysis = new Analysis()
 
@@ -123,6 +122,10 @@ class ClusterMainECJ extends Evolve {
                             final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
                             println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
+                            final Date GATime = new Date()
+                            TimeDuration durationGA = TimeCategory.minus(new Date(), indexTime)
+                            timingFile << trainTestIndexes.first.name() + ",  " + qt + ",  " + durationGA.toMilliseconds()
+
                             if (luceneClassify) {
 
                                 clusterFitness.queriesToFile(queryFile)
@@ -131,6 +134,9 @@ class ClusterMainECJ extends Evolve {
                                 classifyMethodList.each { classifyMethod ->
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
 
+                                    TimeDuration durationKNN = TimeCategory.minus(new Date(), GATime)
+                                    TimeDuration overallTime = TimeCategory.minus(new Date(), indexTime)
+                                    timingFile << ",  " + durationKNN.toMilliseconds() + ', ' + overallTime.toMilliseconds() + '\n'
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
 
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, clusterFitness.k)
@@ -141,9 +147,6 @@ class ClusterMainECJ extends Evolve {
 
                                 analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, null, null, onlyDocsInOneCluster)
                             }
-
-                            TimeDuration durationT = TimeCategory.minus(new Date(), indexTime)
-                            timingFile << trainTestIndexes.toString() + ",  " + qt + ", " + durationT + '\n'
                         }
                     }
                     cleanup(state);

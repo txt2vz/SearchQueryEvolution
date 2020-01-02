@@ -1,6 +1,6 @@
 package classify
 
-import index.Effectiveness
+import cluster.Effectiveness
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier
@@ -20,7 +20,7 @@ class ClassifyUnassignedTest extends Specification {
     def "CheckClassification"() {
 
         setup:
-        Indexes.setIndex(IndexEnum.CLASSIC4TRAIN)
+        Indexes.setIndex(IndexEnum.CLASSIC4)
 
         TermQuery assignedTQ = new TermQuery(new Term(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned'))
         BooleanQuery.Builder bqb = new BooleanQuery.Builder()
@@ -40,7 +40,7 @@ class ClassifyUnassignedTest extends Specification {
         // Classifier classifier
 
         when:
-        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4TRAIN, LuceneClassifyMethod.KNN)
+        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4, LuceneClassifyMethod.KNN)
         int cnt = 0
         int error = 0
         Set <String> categories = [] as Set<String>

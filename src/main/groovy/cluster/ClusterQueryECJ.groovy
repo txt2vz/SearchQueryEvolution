@@ -77,6 +77,10 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
         switch (queryType) {
 
+            case QueryType.OR1:
+                bqbArray = qlfc.getOR1QueryList(genome, false)
+                break;
+
             case QueryType.OR:
                 bqbArray = qlfc.getORIntersect(genome, 100, false)
                 break
@@ -92,7 +96,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
             case QueryType.OR_WITH_MINSHOULD2:
                 bqbArray = qlfc.getOR1wihtMinShould(genome)
                 break;
-
 
             case QueryType.AND_WITH_OR_SUBQ:
                 bqbArray = qlfc.getDNFQueryList(genome, false)
@@ -118,16 +121,13 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getORIntersect(genome, 3, false)
                 break;
 
-            case QueryType.OR1:
-                bqbArray = qlfc.getOR1QueryList(genome, false)
-                break;
+
 
 //*****************set k methods *************************************************************
 
             case QueryType.OR1SETK:
                 bqbArray = qlfc.getOR1QueryList(genome, true)
                 break;
-
 
             case QueryType.OR2_INTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 2)

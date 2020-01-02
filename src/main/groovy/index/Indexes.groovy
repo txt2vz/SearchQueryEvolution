@@ -16,23 +16,23 @@ import java.nio.file.Paths
 enum IndexEnum {
 
     NG3TEST('indexes/NG3Test', 3),
-    NG3TRAIN('indexes/NG3Train', 3),
-    NG5TRAIN('indexes/NG5Train', 5),
+    NG3('indexes/NG3Train', 3),
+    NG5('indexes/NG5Train', 5),
     NG5TEST('indexes/NG5Test', 5),
-    NG6TRAIN('indexes/NG6Train', 6),
+    NG6('indexes/NG6Train', 6),
     NG6TEST('indexes/NG6Test', 6),
 
-    R4TRAIN('indexes/R4Train', 4),
+    R4('indexes/R4Train', 4),
     R4TEST('indexes/R4Test', 4),
-    R5TRAIN('indexes/R5Train', 5),
+    R5('indexes/R5Train', 5),
     R5TEST('indexes/R5Test', 5),
-    R6TRAIN('indexes/R6', 6),
+    R6('indexes/R6', 6),
     R6TEST('indexes/R6Test', 6),
 
-    CLASSIC4TRAIN('indexes/classic4Train', 4),
+    CLASSIC4('indexes/classic4Train', 4),
     CLASSIC4TEST('indexes/classic4Test', 4),
 
-    CRISIS3TRAIN('indexes/crisis3FireBombFloodTrain', 3),
+    CRISIS3('indexes/crisis3FireBombFloodTrain', 3),
     CRISIS3TEST('indexes/crisis3FireBombFloodTest', 3),
 
     NG3TRAINSKEWED('indexes/NG3TrainSkewed', 3)
