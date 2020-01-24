@@ -1,15 +1,12 @@
 package cluster
 
-
 import ec.EvolutionState
 import ec.simple.SimpleStatistics
+import groovy.transform.CompileStatic
 import index.Indexes
 
-//@CompileStatic
+@CompileStatic
 public class ClusterStatisticsECJ extends SimpleStatistics {
-
-
-    Analysis jr = new Analysis()
 
     public void finalStatistics(final EvolutionState state, final int result) {
         // print out the other statistics

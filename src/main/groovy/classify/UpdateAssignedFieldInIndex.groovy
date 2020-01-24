@@ -45,7 +45,6 @@ class UpdateAssignedFieldInIndex {
         for (ScoreDoc sd : hitsAll) {
 
             Document d = Indexes.indexSearcher.doc(sd.doc)
-
             d.removeField(Indexes.FIELD_ASSIGNED_CLASS)
             Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned', Field.Store.YES);
             d.add(assignedClass)

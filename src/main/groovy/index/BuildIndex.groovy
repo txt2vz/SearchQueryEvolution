@@ -38,19 +38,26 @@ class BuildIndex {
                 //    'indexes/R4Test'
               //  'indexes/classic4Test'
              //   'indexes/NG3Train'
-              //  'indexes/NG3TrainSkewed'
-                'indexes/R6'
+           //     'indexes/NG6'
+         //       'indexes/R6'
 
-            //       'indexes/NG5Train'
+       //           'indexes/NG5Test'
+              'indexes/NG6Train'
+
                // 'indexes/NG5Test'
         //         'indexes/NG3'
         //  'indexes/classic4b'
         //       'indexes/science4'
 
         String docsPath =
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
+           //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
              //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
-            //    /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+
+         //       /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
+
+
+  //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Test/
         //        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R5Train/
      //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\GAclusterPaper2018\r5/
  //       /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
@@ -91,7 +98,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 100) {
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 300) {
                     Document doc = new Document()
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);

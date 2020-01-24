@@ -54,8 +54,7 @@ class Effectiveness {
             recallList << recall
         }
 
-
-        Set <String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet()
+        Set <String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet().asImmutable()
 
         categoryNames.each{categoryName ->
             if (!originalCategoryNames.contains(categoryName)){
@@ -63,11 +62,11 @@ class Effectiveness {
             }
         }
 
-        final int maxCategoriesClusters = Math.max(Indexes.index.numberOfCategories, querySet.size())
+        int maxCategoriesClusters = Math.max(Indexes.index.numberOfCategories, querySet.size())
         final int penaltyForDuplicatingOrMissingCategory = missingCategories + duplicateCategory
-        final int maxCategoriesClustersWithPenalty = maxCategoriesClusters + penaltyForDuplicatingOrMissingCategory
+        maxCategoriesClusters += penaltyForDuplicatingOrMissingCategory
 
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0   //maxCategoriesClustersWithPenalty
+        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0
         final double averageRecallForJob = (recallList) ? (double) recallList.sum() / maxCategoriesClusters : 0
         final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / maxCategoriesClusters : 0
 
