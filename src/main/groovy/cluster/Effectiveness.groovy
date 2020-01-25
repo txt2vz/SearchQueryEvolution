@@ -62,13 +62,16 @@ class Effectiveness {
             }
         }
 
-        int maxCategoriesClusters = Math.max(Indexes.index.numberOfCategories, querySet.size())
-        final int penaltyForDuplicatingOrMissingCategory = missingCategories + duplicateCategory
-        maxCategoriesClusters += penaltyForDuplicatingOrMissingCategory
+       final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
+                //Math.max(Indexes.index.numberOfCategories, querySet.size())
+       // final int penaltyForDuplicatingOrMissingCategory = missingCategories + duplicateCategory
+      //  categoriesPlusPenalty += penaltyForDuplicatingOrMissingCategory
+                //penaltyForDuplicatingOrMissingCategory
 
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0
-        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / maxCategoriesClusters : 0
-        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / maxCategoriesClusters : 0
+
+        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
+        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
+        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
 
         assert averageF1ForJob
         assert averageF1ForJob > 0
