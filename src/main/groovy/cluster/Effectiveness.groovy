@@ -33,14 +33,14 @@ class Effectiveness {
             double recall = 0
             double precision = 0
             double f1 = 0
-            int categoryTotal = 0
+
             TermQuery mostFrequentCategoryTermQuery = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                     mostFrequentCategoryName))
 
             if (mostFrequentCategoryHitsSize && queryHitsSize && mostFrequentCategoryTermQuery) {
                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector()
                 Indexes.indexSearcher.search(mostFrequentCategoryTermQuery, totalHitCollector);
-                categoryTotal = totalHitCollector.getTotalHits()
+                int categoryTotal = totalHitCollector.getTotalHits()
 
                 assert categoryTotal
 
@@ -63,11 +63,6 @@ class Effectiveness {
         }
 
        final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
-                //Math.max(Indexes.index.numberOfCategories, querySet.size())
-       // final int penaltyForDuplicatingOrMissingCategory = missingCategories + duplicateCategory
-      //  categoriesPlusPenalty += penaltyForDuplicatingOrMissingCategory
-                //penaltyForDuplicatingOrMissingCategory
-
 
         final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
         final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
@@ -79,7 +74,7 @@ class Effectiveness {
         return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob, averagePrecisionForJob, averageRecallForJob, f1list)
     }
 
-    static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, int k) {
+    static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, final int k) {
         index.Indexes.setIndex(testIndex)
 
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
@@ -90,16 +85,16 @@ class Effectiveness {
                         Indexes.FIELD_CONTENTS,
                         -1)
 
-        final double f1Lucene = confusionMatrix.getF1Measure()
-        final double precisionLucene = confusionMatrix.getPrecision()
-        final double recallLucene = confusionMatrix.getRecall()
+        double f1Lucene = confusionMatrix.getF1Measure()
+        double precisionLucene = confusionMatrix.getPrecision()
+        double recallLucene = confusionMatrix.getRecall()
 
-        double f1return = f1Lucene, preturn = precisionLucene, rreturn = recallLucene
         final int numberOfEvaluatedDocs = confusionMatrix.getNumberOfEvaluatedDocs()
 
         println "Lucene classifier f1: $f1Lucene precisionLucene: $precisionLucene recallLucene: $recallLucene numberOfEvaluatedDocs $numberOfEvaluatedDocs"
         println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
 
+        //for setk case where number of categories may not match labelled classes
         if (testIndex.numberOfCategories != k ) {
 
             List<Double> pList = []
@@ -112,18 +107,14 @@ class Effectiveness {
             }
 
             final int maxCats = Math.max(k, testIndex.numberOfCategories)
-            final double averagePk = pList.sum() / maxCats
-            final double averageRk = rList.sum() / maxCats
-            final double f1k = 2 * ((averagePk * averageRk) / (averagePk + averageRk))
-
-            f1return = f1k
-            preturn = averagePk
-            rreturn = averageRk
+            precisionLucene = pList.sum() / maxCats
+            recallLucene = rList.sum() / maxCats
+            f1Lucene = 2 * ((precisionLucene * recallLucene) / (precisionLucene + recallLucene))
 
             println "plist $pList rlist $rList"
-            println "avaeragepk $averagePk averagrK $averageRk f1k $f1k"
+            println "avaeragepk $pList averagrK $rList f1k $f1Lucene"
         }
 
-        return new Tuple3(f1return, preturn, rreturn)
+        return new Tuple3(f1Lucene, precisionLucene, recallLucene)
     }
 }

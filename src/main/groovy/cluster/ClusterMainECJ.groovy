@@ -17,7 +17,7 @@ import org.apache.lucene.classification.Classifier
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 5
+    final static int NUMBER_OF_JOBS = 3
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
