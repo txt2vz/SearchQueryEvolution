@@ -23,7 +23,7 @@ class ImportantTermQueries {
         Map<TermQuery, Double> termQueryMap = [:]
         BytesRef termbr;
         TFIDFSimilarity tfidfSim = new ClassicSimilarity()
-        int docCount = indexReader.numDocs()
+        final int totalDocs = indexReader.numDocs()
 
         while ((termbr = termsEnum.next()) != null) {
 
@@ -33,14 +33,14 @@ class ImportantTermQueries {
 
             if (isUsefulTerm(df, word)) {
 
-                long docFreq = indexReader.docFreq(t);
+                final long docFreq = indexReader.docFreq(t);
                 double tfidfTotal = 0
 
                 PostingsEnum docsEnum = termsEnum.postings(MultiFields.getTermDocsEnum(indexReader, Indexes.FIELD_CONTENTS, termbr))
                 if (docsEnum != null) {
                     while (docsEnum.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {
 
-                        double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(docCount, docFreq)
+                        final double tfidf = tfidfSim.tf(docsEnum.freq()) * tfidfSim.idf(totalDocs, docFreq)
                         tfidfTotal += tfidf
                     }
                 }
