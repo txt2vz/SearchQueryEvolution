@@ -16,7 +16,7 @@ class Effectiveness {
 
         List<Double> f1list = [], precisionList = [], recallList = [], fitnessList = []
 
-        Set <String> categoryNames = []
+        Set<String> categoryNames = []
         int duplicateCategory = 0
         int missingCategories = 0
 
@@ -24,7 +24,7 @@ class Effectiveness {
 
             Tuple3 tuple3 = IndexUtils.getMostFrequentCategoryForQuery(q)
             String mostFrequentCategoryName = tuple3.first
-            if (!categoryNames.add(mostFrequentCategoryName)){
+            if (!categoryNames.add(mostFrequentCategoryName)) {
                 duplicateCategory++
             }
             final int mostFrequentCategoryHitsSize = tuple3.second
@@ -54,15 +54,15 @@ class Effectiveness {
             recallList << recall
         }
 
-        Set <String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet().asImmutable()
+        Set<String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet().asImmutable()
 
-        categoryNames.each{categoryName ->
-            if (!originalCategoryNames.contains(categoryName)){
+        categoryNames.each { categoryName ->
+            if (!originalCategoryNames.contains(categoryName)) {
                 missingCategories++
             }
         }
 
-       final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
+        final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
 
         final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
         final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
@@ -95,7 +95,7 @@ class Effectiveness {
         println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
 
         //for setk case where number of categories may not match labelled classes
-        if (testIndex.numberOfCategories != k ) {
+        if (testIndex.numberOfCategories != k) {
 
             List<Double> pList = []
             List<Double> rList = []

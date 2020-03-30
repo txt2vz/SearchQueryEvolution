@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.codehaus.groovy:groovy-macro:3.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-macro/3.0.0/d42f60678f638288f1e10edbe9f076c52c54ad72/groovy-macro-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.codehaus.groovy/groovy-macro/3.0.0/6ab1877870167c83be036d43213e0a0b6309f2a2/groovy-macro-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

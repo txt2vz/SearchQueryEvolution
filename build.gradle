@@ -12,8 +12,14 @@ dependencies {
     compile group: 'io.jenetics', name: 'jenetics', version: '3.9.0'
     //  compile group: 'io.jenetics', name: 'jenetics', version: '4.0.0'
 
-    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.2'
-    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.2'
+//    compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.2'
+  //  compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.2'
+
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy
+    compile group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+// https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
+    compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '3.0.2'
+
 
     //  compile group: 'org.apache.lucene', name: 'lucene-core', version: '6.6.0'
     // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '6.6.0'
@@ -30,7 +36,11 @@ dependencies {
     // compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.2.0'
    // compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.2.0'
 
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+  //  testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+// https://mvnrepository.com/artifact/org.spockframework/spock-core
+    testCompile group: 'org.spockframework', name: 'spock-core', version: '2.0-M2-groovy-3.0'
+
+
 
     //compile fileTree(dir: 'lib', include: ['*.jar'])
     compile fileTree(dir: 'lib', include: 'ecj-27.jar')
