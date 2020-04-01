@@ -39,5 +39,6 @@ class MostFrequentCategorySpec extends spock.lang.Specification {
         t3.first  == 'crude'
         t3.second == 62
         t3.third == 75
+        t3.third == t3.v3
     }
 }
