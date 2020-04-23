@@ -1,5 +1,6 @@
 package classify
 
+import cluster.QueryTextFile
 import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.IndexUtils
@@ -12,7 +13,6 @@ import org.apache.lucene.document.StringField
 import org.apache.lucene.index.IndexWriter
 import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.Term
-import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.search.*
 import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
@@ -23,12 +23,7 @@ import java.nio.file.Paths
 @CompileStatic
 class UpdateAssignedFieldInIndex {
 
-    static void main(String[] args) {
-        File queryData = new File('results/qFile.txt')
-        updateAssignedField(IndexEnum.CRISIS3, queryData)
-    }
-
-    static void updateAssignedField(IndexEnum trainIndex, File queryFile, boolean onlyDocsInOneCluster=false){
+    static void updateAssignedField(IndexEnum trainIndex, List<Query> queries, boolean onlyDocsInOneCluster = false) {
 
         Indexes.setIndex(trainIndex)
         String indexPath = Indexes.index.pathString
@@ -56,16 +51,7 @@ class UpdateAssignedFieldInIndex {
         indexWriter.forceMerge(1)
         indexWriter.commit()
 
-        Map<Query, String> qMap = [:]
-
-        List<Query> queries = []
-        QueryParser parser = new QueryParser(Indexes.FIELD_CONTENTS, Indexes.analyzer)
-
-        queryFile.eachLine { String line ->
-            Query qn = parser.parse(line)
-            queries << qn
-        }
-
+        //modify queries so that they do not return documents returned by any other query
         if (onlyDocsInOneCluster) {
             List<Query> docInOneClusterQueries = []
             for (int i = 0; i < queries.size(); i++) {
@@ -85,9 +71,9 @@ class UpdateAssignedFieldInIndex {
             queries = docInOneClusterQueries
         }
 
-        queries.each { q ->
+        Map<Query, String> qMap = queries.collectEntries { q ->
             String categoryName = IndexUtils.getMostFrequentCategoryForQuery(q).first
-            qMap.put(q, categoryName)
+            [(q): categoryName]
         }
 
         int counter = 0
@@ -120,5 +106,10 @@ class UpdateAssignedFieldInIndex {
         indexWriter.close()
         Indexes.setIndex(trainIndex)
         IndexUtils.categoryFrequencies(Indexes.indexSearcher)
+    }
+
+    static void main(String[] args) {
+        File queryData = new File('results/qFile.txt')
+        updateAssignedField(IndexEnum.CRISIS3, QueryTextFile.retrieveQueryListFromFile(queryData))
     }
 }

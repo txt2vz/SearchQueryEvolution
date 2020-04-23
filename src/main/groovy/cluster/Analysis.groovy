@@ -27,7 +27,7 @@ class Analysis {
         println "CategoryCountError : $categoryAccuracy"
 
         def categoryErrorTotal = categoryAccuracy.groupBy({ k, v -> k.first }).values().collectEntries { Map m -> [m.keySet()[0].first, m.values().sum()] }
-        double errorPerJob = (double) categoryErrorTotal.values().sum() / ClusterMainECJ.NUMBER_OF_JOBS
+        final double errorPerJob = (double) categoryErrorTotal.values().sum() / ClusterMainECJ.NUMBER_OF_JOBS
 
         println "Category Error $categoryErrorTotal"
         println "Catergory Error Average: $errorPerJob Category Error total: " + categoryErrorTotal.values().sum()

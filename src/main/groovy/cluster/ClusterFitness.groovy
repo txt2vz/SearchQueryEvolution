@@ -108,13 +108,6 @@ public class ClusterFitness extends SimpleFitness {
         return sb.toString()
     }
 
-    void queriesToFile(File qFile){
-        qFile.text = ''
-        queryMap.keySet().each { Query q ->
-            qFile << q.toString(Indexes.FIELD_CONTENTS) + '\n'
-        }
-    }
-
     //sent to stat file in statDump
     public String fitnessToStringForHumans() {
         return "ClusterQuery Fitness: ${this.fitness()}"

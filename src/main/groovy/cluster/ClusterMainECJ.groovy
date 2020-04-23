@@ -13,6 +13,7 @@ import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier
+import org.apache.lucene.search.Query
 
 @CompileStatic
 class ClusterMainECJ extends Evolve {
@@ -46,6 +47,8 @@ class ClusterMainECJ extends Evolve {
 
             QueryType.OR1,
             QueryType.OR1SETK,
+            //   QueryType.AND
+            //     QueryType.MINSHOULD2
 
             //       QueryType.OR,
             //     QueryType.OR_SETK
@@ -109,7 +112,7 @@ class ClusterMainECJ extends Evolve {
 
                             state.run(EvolutionState.C_STARTED_FRESH);
                             int popSize = 0;
-                            ClusterFitness clusterFitness = (ClusterFitness) state.population.subpops.collect { sbp ->
+                            ClusterFitness bestClusterFitness = (ClusterFitness) state.population.subpops.collect { sbp ->
                                 popSize = popSize + sbp.individuals.size()
                                 sbp.individuals.max() { ind ->
                                     ind.fitness.fitness()
@@ -127,8 +130,9 @@ class ClusterMainECJ extends Evolve {
 
                             if (luceneClassify) {
 
-                                clusterFitness.queriesToFile(queryFile)
-                                UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queryFile, onlyDocsInOneCluster)
+                                List<Query> queries = bestClusterFitness.queryMap.keySet().asList().asImmutable()
+
+                                UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queries, onlyDocsInOneCluster)
 
                                 classifyMethodList.each { classifyMethod ->
                                     Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
@@ -138,13 +142,13 @@ class ClusterMainECJ extends Evolve {
                                     timingFile << ",  " + durationKNN.toMilliseconds() + ', ' + overallTime.toMilliseconds() + '\n'
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
 
-                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, clusterFitness.k)
+                                    Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, t3ClassiferResult, classifyMethod, onlyDocsInOneCluster)
+                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, bestClusterFitness, t3ClassiferResult, classifyMethod, onlyDocsInOneCluster)
                                 }
                             } else {
 
-                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, clusterFitness, null, null, onlyDocsInOneCluster)
+                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, bestClusterFitness, null, null, onlyDocsInOneCluster)
                             }
                         }
                     }
