@@ -47,6 +47,7 @@ class ClusterMainECJ extends Evolve {
 
             QueryType.OR1,
             QueryType.OR1SETK,
+            //QueryType.OR_WITH_MINSHOULD2
             //   QueryType.AND
             //     QueryType.MINSHOULD2
 

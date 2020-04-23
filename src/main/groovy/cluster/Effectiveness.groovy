@@ -77,6 +77,10 @@ class Effectiveness {
     static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, final int k) {
         index.Indexes.setIndex(testIndex)
 
+        double f1Lucene
+        double precisionLucene
+        double recallLucene
+
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(
                         Indexes.indexReader,
@@ -85,17 +89,20 @@ class Effectiveness {
                         Indexes.FIELD_CONTENTS,
                         -1)
 
-        double f1Lucene = confusionMatrix.getF1Measure()
-        double precisionLucene = confusionMatrix.getPrecision()
-        double recallLucene = confusionMatrix.getRecall()
+        if (testIndex.numberOfCategories == k) {
 
-        final int numberOfEvaluatedDocs = confusionMatrix.getNumberOfEvaluatedDocs()
+            f1Lucene = confusionMatrix.getF1Measure()
+            precisionLucene = confusionMatrix.getPrecision()
+            recallLucene = confusionMatrix.getRecall()
 
-        println "Lucene classifier f1: $f1Lucene precisionLucene: $precisionLucene recallLucene: $recallLucene numberOfEvaluatedDocs $numberOfEvaluatedDocs"
-        println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
+            final int numberOfEvaluatedDocs = confusionMatrix.getNumberOfEvaluatedDocs()
+
+            println "Lucene classifier f1: $f1Lucene precisionLucene: $precisionLucene recallLucene: $recallLucene numberOfEvaluatedDocs $numberOfEvaluatedDocs"
+            println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
+        }
 
         //for setk case where number of categories may not match labelled classes
-        if (testIndex.numberOfCategories != k) {
+        else {
 
             List<Double> pList = []
             List<Double> rList = []
@@ -114,6 +121,10 @@ class Effectiveness {
             println "plist $pList rlist $rList"
             println "avaeragepk $pList averagrK $rList f1k $f1Lucene"
         }
+
+        assert f1Lucene
+        assert precisionLucene
+        assert recallLucene
 
         return new Tuple3(f1Lucene, precisionLucene, recallLucene)
     }
