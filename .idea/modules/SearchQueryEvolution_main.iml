@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="SearchQueryEvolution:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="ga search query" external.system.module.type="sourceSet" external.system.module.version="0.8" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+  <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../out/production/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/main">
@@ -17,7 +17,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Gradle: io.jenetics:jenetics:3.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.jenetics:jenetics:5.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-json:3.0.3" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:3.0.3" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-classification:7.4.0" level="project" />

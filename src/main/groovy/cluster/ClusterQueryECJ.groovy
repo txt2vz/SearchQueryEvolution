@@ -28,7 +28,7 @@ enum QueryType {
     OR1SETK(true),
 
     MINSHOULD2(false),
-    OR_WITH_MINSHOULD2(false),
+    OR1_WITH_MINSHOULD2(false),
 
     AND(false),
     OR_WITH_AND_SUBQ(false),
@@ -93,7 +93,7 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
                 break;
 
-            case QueryType.OR_WITH_MINSHOULD2:
+            case QueryType.OR1_WITH_MINSHOULD2:
                 bqbArray = qlfc.getOR1wihtMinShould(genome)
                 break;
 

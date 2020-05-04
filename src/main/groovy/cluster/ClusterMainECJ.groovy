@@ -27,14 +27,14 @@ class ClusterMainECJ extends Evolve {
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
-
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
+//
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
-
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
+//
+//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
@@ -45,9 +45,11 @@ class ClusterMainECJ extends Evolve {
 
     List<QueryType> queryTypesList = [
 
-            QueryType.OR1,
-            QueryType.OR1SETK,
-            //QueryType.OR_WITH_MINSHOULD2
+       //     QueryType.OR1,
+       //     QueryType.OR1SETK,
+            QueryType.OR_WITH_AND_SUBQ,
+            QueryType.AND_WITH_OR_SUBQ
+            //QueryType.OR1_WITH_MINSHOULD2
             //   QueryType.AND
             //     QueryType.MINSHOULD2
 
@@ -144,7 +146,6 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
 
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
-
                                     analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, bestClusterFitness, t3ClassiferResult, classifyMethod, onlyDocsInOneCluster)
                                 }
                             } else {

@@ -9,7 +9,8 @@ repositories { jcenter() }
 
 dependencies {
 
-    compile group: 'io.jenetics', name: 'jenetics', version: '3.9.0'
+  //  compile group: 'io.jenetics', name: 'jenetics', version: '3.9.0'
+    compile group: 'io.jenetics', name: 'jenetics', version: '5.2.0'
     //  compile group: 'io.jenetics', name: 'jenetics', version: '4.0.0'
 
     compile group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.3'

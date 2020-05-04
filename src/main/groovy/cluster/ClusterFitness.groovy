@@ -37,8 +37,10 @@ public class ClusterFitness extends SimpleFitness {
         k = bqbList.size()
         baseFitness = 0.0
 
+
         Tuple3<Map<Query, Integer>, Integer, Integer> t3 = getUniqueHits(bqbList)
         queryMap = t3.first.asImmutable()
+
         hitsMatchingOnlyOneQuery = t3.second
         totalHits = t3.third
 

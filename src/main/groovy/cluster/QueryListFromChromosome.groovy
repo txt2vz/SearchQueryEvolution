@@ -77,7 +77,7 @@ class QueryListFromChromosome {
         return new Tuple4(bqbL, k, index, alleles)
     }
 
-    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster = 100, boolean setk = true) {
+    BooleanQuery.Builder[] getORIntersect(int[] intChromosome, final int maxQueryWordsPerCluster = 100, boolean setk = true) {
 
         Tuple4 tuple4 = getOneWordQueryPerCluster(intChromosome, setk)
         BooleanQuery.Builder[] bqbArray = tuple4.first
@@ -137,7 +137,6 @@ class QueryListFromChromosome {
 
         final int index = tuple4.third
         Set<Integer> alleles = tuple4.fourth
-
         BooleanQuery.Builder[] bqbMinShouldArray = new BooleanQuery.Builder[k]
 
         int clusterNumber = 0
