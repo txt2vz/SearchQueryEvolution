@@ -4,14 +4,15 @@ import index.*;
 import io.jenetics.engine.EvolutionStatistics;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import io.jenetics.*;
 import io.jenetics.engine.Engine;
 import io.jenetics.util.Factory;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import index.IndexEnum;
 
@@ -20,62 +21,42 @@ import static io.jenetics.engine.EvolutionResult.toBestPhenotype;
 public class JeneticsMain {
 
     static List<TermQuery> termQueryList;
-    static QueryListFromChromosome qlc;
+    static IndexEnum indexEnum;
+    static IndexReader ir;
+    static int k;
 
-    // private final static List<TermQuery> termQueryArray = iterms.getTFIDFTermQueryList();
+    static double sqf(final Genotype<IntegerGene> gt) {
+
+        int[] a = ((IntegerChromosome) gt.get(0)).toArray();
+
+        List<BooleanQuery.Builder> bqbList = QueryListFromChromosomeJ.getOneWordQueryPerCluster(ir, a, termQueryList, k);
+
+        final double f = ClusterFitnessJ.getUniqueHits(bqbList).getV2();
+        //(Collections.unmodifiableList(Arrays.asList(bqbList))).getV2();
+
+        return f;
+    }
 
     public static void main(String[] args) throws Exception {
 
-        Indexes.setIndex(IndexEnum.NG3);
-        termQueryList = ImportantTermQueries.getTFIDFTermQueryList(Indexes.getIndexReader());
-        qlc = new QueryListFromChromosome(termQueryList);
-        final int numberOfJobs = 2;
-        int job = 1;
+        IndexEnum indexEnum = IndexEnum.CRISIS3;
+        Indexes.setIndex(indexEnum);
+        k = indexEnum.getNumberOfCategories();
+        ir = Indexes.getIndexReader();
+        termQueryList = (Collections.unmodifiableList(ImportantTermQueries.getTFIDFTermQueryList(ir)));
 
-        //  IntStream.range(0, numberOfJobs).forEach(job ->
-        new JeneticsMain(job);
-        //  );
-    }
-
-    private static double sqf(final Genotype<IntegerGene> gt) {
-
-        int[] a = ((IntegerChromosome) gt.get(0)).toArray();
-        double f = JeneticsHelper.getF(qlc, a);
-
-
-       // BooleanQuery.Builder[] bqbArray = qlc.getSimple(((IntegerChromosome) gt.get(0)).toArray());
-        //QueryListFromChromosome
-        // .getOR_List(((IntegerChromosome) gt.getChromosome(0)).toArray(), termQueryArray, Indexes.NUMBER_OF_CLUSTERS, BooleanClause.Occur.SHOULD, 1);
-
-      //  ClusterFitness clusterFitness = new ClusterFitness();
-      //  clusterFitness.setClusterFitness(Collections.unmodifiableList(Arrays.asList(bqbArray)));
-     //   System.out.println (clusterFitness.queryShort());
-
-        // clusterFitness.setClusterFitness( new HashSet<BooleanQuery.Builder>(Arrays.asList(bqbArray)));  //java 9 Set.of(bqbArray)
-
-        return f;// clusterFitness.getFitness();
-    }
-
-
-    public JeneticsMain(int job) {
-
-        IndexEnum indexEnum = IndexEnum.NG3;
-        // static IndexSearcher indexSearcher = indexEnum.getIndexSearcher();
-        IndexReader indexReader = indexEnum.getIndexReader();
-
-        final int popSize = 248;
-        final long maxGen = 41;
+        final int popSize = 512;
+        final long maxGen = 31;
         Analysis finalReport = new Analysis();
         int maxGene = 100;
-        int genomeLength = 18;
+        int genomeLength = 3;
+
         ClusterFitness.setFitnessMethod(FitnessMethod.UNIQUE_HITS_COUNT);
 
         final Factory<Genotype<IntegerGene>> gtf = Genotype.of(
 
-                //   new IntegerChromosome(-1, maxGene, genomeLength));
-                IntegerChromosome.of(0, 100, 6));//,
+                IntegerChromosome.of(0, 100, 18));//,
         //  IntegerChromosome.of(0, 100, IntRange.of(2, 8)));//,
-
 
         final Engine<IntegerGene, Double> engine = Engine.
                 builder(
@@ -98,26 +79,26 @@ public class JeneticsMain {
                 .limit(maxGen)
                 .peek(ind -> {
                     Genotype<IntegerGene> g = ind.bestPhenotype().genotype();
-                    // sqf(g).generationStats(ind.generation());
-                  //  ind.generation();
-                   // ind.bestFitness()
+
                     System.out.println("gen " + ind.generation());
-                    System.out.println("fit " + ind.bestFitness());
+                    //  System.out.println("fit " + ind.bestFitness());
+                    JeneticsHelper.getBest(ir, ((IntegerChromosome) g.get(0)).toArray(), termQueryList, k);
 
                 })
                 .peek(statistics)
                 .collect(toBestPhenotype());
 
-      //  System.out.println("gen rse " + result.generation());
-        System.out.println("Final result job " + job + " " + result);
+        System.out.println("Final result  " + result);
         Genotype<IntegerGene> g = result.genotype();
-        double cfResult = sqf(g);
-        // System.out.println("cluster fit result " + cfResult.queryShort());
-        //  finalReport.reportsOut(job, (int) result.getGeneration(), popSize, subpops, genomeLength, maxGene, cfResult);
+
+        int[] a2 = ((IntegerChromosome) g.get(0)).toArray();
+        List<BooleanQuery.Builder> bqbList = QueryListFromChromosomeJ.getOneWordQueryPerCluster(ir, a2, termQueryList, k);
+
+        System.out.println("Best of run **********************************");
+        // Map<Query, Integer> queryMap = JeneticsHelper.getQueries(ir,bqbList);
+
+        List<Query> queryList = JeneticsHelper.getBest(ir, a2, termQueryList, k, true);
+        JeneticsHelper.classify(indexEnum, queryList, k);
         System.out.println("statistics " + statistics);
-
-        double d = sqf(g);
-
-
     }
 }
