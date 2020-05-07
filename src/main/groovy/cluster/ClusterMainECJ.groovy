@@ -133,12 +133,12 @@ class ClusterMainECJ extends Evolve {
 
                             if (luceneClassify) {
 
-                                List<Query> queries = bestClusterFitness.queryMap.keySet().asList().asImmutable()
+                                Set<Query> queries = bestClusterFitness.queryMap.keySet().asImmutable()
 
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queries, onlyDocsInOneCluster)
 
                                 classifyMethodList.each { classifyMethod ->
-                                    Classifier classifier = ClassifyUnassigned.classifyUnassigned(trainTestIndexes.first, classifyMethod)
+                                    Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(trainTestIndexes.first, classifyMethod)
 
                                     TimeDuration durationKNN = TimeCategory.minus(new Date(), GATime)
                                     TimeDuration overallTime = TimeCategory.minus(new Date(), indexTime)

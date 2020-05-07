@@ -25,11 +25,11 @@ enum LuceneClassifyMethod {
 class ClassifyUnassigned {
 
     static void main(String[] args) {
-        Classifier classifier = classifyUnassigned(IndexEnum.CRISIS3, LuceneClassifyMethod.KNN)
+        Classifier classifier = getClassifierForUnassignedDocuments(IndexEnum.CRISIS3, LuceneClassifyMethod.KNN)
         Effectiveness.classifierEffectiveness(classifier, IndexEnum.CRISIS3TEST, IndexEnum.CRISIS3TEST.numberOfCategories)
     }
 
-    static Classifier classifyUnassigned(IndexEnum trainIndex, LuceneClassifyMethod luceneClassifyMethod) {
+    static Classifier getClassifierForUnassignedDocuments(IndexEnum trainIndex, LuceneClassifyMethod luceneClassifyMethod) {
 
         Indexes.setIndex(trainIndex)
 

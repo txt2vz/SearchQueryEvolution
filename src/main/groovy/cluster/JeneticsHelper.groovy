@@ -3,53 +3,71 @@ package cluster
 import classify.ClassifyUnassigned
 import classify.LuceneClassifyMethod
 import classify.UpdateAssignedFieldInIndex
+import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
-import io.jenetics.IntegerChromosome
 import org.apache.lucene.classification.Classifier
 import org.apache.lucene.index.IndexReader
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 
+
+@CompileStatic
 class JeneticsHelper {
 
-   static Map<Query, Integer> getQueries(IndexReader ir, List <BooleanQuery.Builder> bqbList){
-      def t3 = ClusterFitnessJ.getUniqueHits(bqbList)//   Collections.unmodifiableList(Arrays.asList(bqbList)))
-      def queryMap =  t3.v1
-      return  queryMap
-  }
+    static Tuple3<Set<Query>,Integer, Double> getDataForReporting(IndexReader ir, int[] intChromosome, List<TermQuery> termQueryList, final int k, boolean printQueries = false ){
+        List <BooleanQuery.Builder> bqbList =  QueryListFromChromosomeJ.getOneWordQueryPerCluster(ir, intChromosome,termQueryList, k)   ;
+        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = ClusterFitnessJ.getUniqueHits(bqbList) ;
 
-    static List<Query> getBest(IndexReader ir, int[] intChromosome, List<TermQuery> termQueryList, final int k, boolean getF1 = false){
+        Map<Query, Integer> queryMap =  t3.getV1();
+        final int uniqueHits = t3.getV2();
 
-       List <BooleanQuery.Builder> bqbList =  QueryListFromChromosomeJ.getOneWordQueryPerCluster(ir,intChromosome,termQueryList, k)   ;
-
-        def t3 = ClusterFitnessJ.getUniqueHits(bqbList)//   Collections.unmodifiableList(Arrays.asList(bqbList)))
-        def queryMap =  t3.v1
-        def f = t3.v2;
-
-        StringBuilder sb = new StringBuilder()
-        queryMap.keySet().eachWithIndex { Query q, int index ->
-            sb << "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)} \n"
+        if (printQueries) {
+            JeneticsHelper.printQueries(queryMap);
         }
+        Tuple4<Double, Double, Double, List<Double>> e = Effectiveness.querySetEffectiveness(queryMap.keySet());
+        final f1 = e.v1
 
-        println "fitness: $f"
-        println sb
-
-        if (getF1) {
-            def e = Effectiveness.querySetEffectiveness(queryMap.keySet())
-
-            println "e f1 " + e.v1
-        }
-        return queryMap.keySet().toList()
+        return new Tuple3 (queryMap.keySet(), uniqueHits, f1)
     }
 
-    static void classify (IndexEnum ie, List<Query> queryList, k){
+//    static Set<Query> getQueryList(IndexReader ir, int[] intChromosome, List<TermQuery> termQueryList, final int k, boolean getF1 = false){
+//
+//       List <BooleanQuery.Builder> bqbList =  QueryListFromChromosomeJ.getOneWordQueryPerCluster(ir,intChromosome,termQueryList, k)   ;
+//
+//        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = ClusterFitnessJ.getUniqueHits(bqbList)//   Collections.unmodifiableList(Arrays.asList(bqbList)))
+//        Map<Query, Integer> queryMap =  t3.v1
+//        int uniqueHits = t3.v2;
+//        printQueries(queryMap)
+//
+//
+//        println "fitness: $uniqueHits"
+//
+//
+//        if (getF1) {
+//            Tuple4<Double, Double, Double, List<Double>> e = Effectiveness.querySetEffectiveness(queryMap.keySet())
+//
+//            println "e f1 " + e.v1
+//        }
+//        return queryMap.keySet().asImmutable()
+//    }
 
-        UpdateAssignedFieldInIndex.updateAssignedField(ie,  queryList )
+    static void printQueries(Map<Query, Integer> queryIntegerMap){
+        StringBuilder sb = new StringBuilder()
+        queryIntegerMap.keySet().eachWithIndex { Query q, int index ->
+            sb << "ClusterQuery: $index :  ${queryIntegerMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)} \n"
+        }
+        println sb
+    }
 
-        Classifier classifier = ClassifyUnassigned.classifyUnassigned(ie, LuceneClassifyMethod.KNN)
-        Effectiveness.classifierEffectiveness(classifier, ie, k)
+    static Tuple3<Double, Double, Double>  classify (IndexEnum ie, Set<Query> querySet, final int k){
+
+        UpdateAssignedFieldInIndex.updateAssignedField(ie,  querySet )
+
+        Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(ie, LuceneClassifyMethod.KNN)
+        Tuple3<Double, Double, Double>  eff = Effectiveness.classifierEffectiveness(classifier, ie, k)
+        return  eff
 
     }
 }

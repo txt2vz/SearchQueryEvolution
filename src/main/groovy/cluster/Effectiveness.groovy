@@ -6,6 +6,7 @@ import index.Indexes
 import org.apache.lucene.classification.Classifier
 import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
 import org.apache.lucene.index.Term
+import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TotalHitCountCollector

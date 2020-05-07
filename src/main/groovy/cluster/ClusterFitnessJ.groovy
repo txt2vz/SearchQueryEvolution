@@ -1,11 +1,13 @@
 package cluster
 
+import groovy.transform.CompileStatic
 import index.Indexes
 import org.apache.lucene.search.BooleanClause
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.TotalHitCountCollector
 
+@CompileStatic
 class ClusterFitnessJ {
 
     static Tuple3<Map<Query, Integer>, Integer, Integer> getUniqueHits(List<BooleanQuery.Builder> bqbList) {
