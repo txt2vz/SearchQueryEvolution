@@ -8,7 +8,7 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
-class ClusterFitnessJ {
+class UniqueHits {
 
     static Tuple3<Map<Query, Integer>, Integer, Integer> getUniqueHits(List<BooleanQuery.Builder> bqbList) {
         Map<Query, Integer> qMap = new HashMap<Query, Integer>()
@@ -38,7 +38,7 @@ class ClusterFitnessJ {
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
         Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
-        int totalHitsAllQueries = collector.getTotalHits();
+        final int totalHitsAllQueries = collector.getTotalHits();
 
         return new Tuple3(qMap, totalUniqueHits, totalHitsAllQueries)
     }

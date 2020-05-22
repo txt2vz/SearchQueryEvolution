@@ -18,7 +18,7 @@ pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.size = 512 
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
-pop.subpop.0.species.fitness = cluster.ClusterFitness
+pop.subpop.0.species.fitness = cluster.ECJclusterFitness
 
 pop.subpop.0.species.min-gene = -1
 pop.subpop.0.species.max-gene = 300

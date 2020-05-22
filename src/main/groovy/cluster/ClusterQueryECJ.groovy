@@ -20,7 +20,7 @@ import org.apache.lucene.search.TermQuery
  */
 @CompileStatic
 @TypeChecked
-enum QueryType {
+enum QueryTypeECJ {
 
     OR(false),
     OR_SETK(true),
@@ -45,7 +45,7 @@ enum QueryType {
 
     boolean setk
 
-    QueryType(boolean setk) {
+    QueryTypeECJ(boolean setk) {
         this.setk = setk
     }
 }
@@ -54,7 +54,7 @@ enum QueryType {
 public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
 
     private QueryListFromChromosome qlfc
-    static QueryType queryType
+    static QueryTypeECJ queryType
 
     public void setup(final EvolutionState state, final Parameter base) {
 
@@ -70,77 +70,77 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
         if (ind.evaluated)
             return;
 
-        ClusterFitness fitness = (ClusterFitness) ind.fitness;
+        ECJclusterFitness fitness = (ECJclusterFitness) ind.fitness;
         IntegerVectorIndividual intVectorIndividual = (IntegerVectorIndividual) ind
         BooleanQuery.Builder[] bqbArray
         final int[] genome = intVectorIndividual.genome as int[]
 
         switch (queryType) {
 
-            case QueryType.OR1:
+            case QueryTypeECJ.OR1:
                 bqbArray = qlfc.getOR1QueryList(genome, false)
                 break;
 
-            case QueryType.OR:
+            case QueryTypeECJ.OR:
                 bqbArray = qlfc.getORIntersect(genome, 100, false)
                 break
 
-            case QueryType.OR_SETK:
+            case QueryTypeECJ.OR_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 100, true)
                 break;
 
-            case QueryType.MINSHOULD2:
+            case QueryTypeECJ.MINSHOULD2:
                 bqbArray = qlfc.getSimple(genome, 2, BooleanClause.Occur.SHOULD)
                 break;
 
-            case QueryType.OR1_WITH_MINSHOULD2:
+            case QueryTypeECJ.OR1_WITH_MINSHOULD2:
                 bqbArray = qlfc.getOR1wihtMinShould(genome)
                 break;
 
-            case QueryType.AND_WITH_OR_SUBQ:
+            case QueryTypeECJ.AND_WITH_OR_SUBQ:
                 bqbArray = qlfc.getDNFQueryList(genome, false)
                 break;
 
-            case QueryType.OR_WITH_AND_SUBQ:
+            case QueryTypeECJ.OR_WITH_AND_SUBQ:
                 bqbArray = qlfc.getDNFQueryList(genome, true)
                 break;
 
-            case QueryType.AND:
+            case QueryTypeECJ.AND:
                 bqbArray = qlfc.getSimple(genome, 1, BooleanClause.Occur.MUST)
                 break;
 
-            case QueryType.OR_WITH_NOT:
+            case QueryTypeECJ.OR_WITH_NOT:
                 bqbArray = qlfc.getORwithNOT(genome, false)
                 break;
 
-            case QueryType.SPAN_FIRST:
+            case QueryTypeECJ.SPAN_FIRST:
                 bqbArray = qlfc.getSpanFirstQueryList(genome, false)
                 break;
 
-            case QueryType.OR3_INTERSECT:
+            case QueryTypeECJ.OR3_INTERSECT:
                 bqbArray = qlfc.getORIntersect(genome, 3, false)
                 break;
 
 
 //*****************set k methods *************************************************************
 
-            case QueryType.OR1SETK:
+            case QueryTypeECJ.OR1SETK:
                 bqbArray = qlfc.getOR1QueryList(genome, true)
                 break;
 
-            case QueryType.OR2_INTERSECT_SETK:
+            case QueryTypeECJ.OR2_INTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 2)
                 break;
 
-            case QueryType.OR3_INSTERSECT_SETK:
+            case QueryTypeECJ.OR3_INSTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 3)
                 break;
 
-            case QueryType.OR4_INSTERSECT_SETK:
+            case QueryTypeECJ.OR4_INSTERSECT_SETK:
                 bqbArray = qlfc.getORIntersect(genome, 4)
                 break;
 
-            case QueryType.ORDNFSETK:
+            case QueryTypeECJ.ORDNFSETK:
                 bqbArray = qlfc.getOR1DNF(genome)
                 break;
         }

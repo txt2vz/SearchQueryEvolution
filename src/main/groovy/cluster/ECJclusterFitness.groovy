@@ -9,14 +9,14 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.TotalHitCountCollector
 
 @CompileStatic
-enum FitnessMethod {
+enum FitnessMethodECJ {
     UNIQUE_HITS_COUNT, UNIQUE_HITS_K_PENALTY
 }
 
 @CompileStatic
-public class ClusterFitness extends SimpleFitness {
+public class ECJclusterFitness extends SimpleFitness {
 
-    static FitnessMethod fitnessMethod
+    static FitnessMethodECJ fitnessMethod
     static double kPenalty = 0.04d
 
     Map<Query, Integer> queryMap = [:]

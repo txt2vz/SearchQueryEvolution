@@ -88,11 +88,13 @@ class Indexes {
 
     static final Analyzer analyzer = new StandardAnalyzer()  //new EnglishAnalyzer();  //with stemming  new WhitespaceAnalyzer()
 
-    static void setIndex(IndexEnum ie) {
+    static void setIndex(IndexEnum ie, boolean printDetails = false) {
         index = ie
         indexSearcher = index.getIndexSearcher()
         indexReader = indexSearcher.getIndexReader()
 
-        println "indexEnum $index maxDocs ${indexReader.maxDoc()}"
+        if (printDetails) {
+            println "indexEnum $index maxDocs ${indexReader.maxDoc()}"
+        }
     }
 }

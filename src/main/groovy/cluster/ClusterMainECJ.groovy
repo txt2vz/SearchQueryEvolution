@@ -43,12 +43,12 @@ class ClusterMainECJ extends Evolve {
     //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
 
 
-    List<QueryType> queryTypesList = [
+    List<QueryTypeECJ> queryTypesList = [
 
-       //     QueryType.OR1,
-       //     QueryType.OR1SETK,
-            QueryType.OR_WITH_AND_SUBQ,
-            QueryType.AND_WITH_OR_SUBQ
+            //     QueryType.OR1,
+            //     QueryType.OR1SETK,
+            QueryTypeECJ.OR_WITH_AND_SUBQ,
+            QueryTypeECJ.AND_WITH_OR_SUBQ
             //QueryType.OR1_WITH_MINSHOULD2
             //   QueryType.AND
             //     QueryType.MINSHOULD2
@@ -87,14 +87,14 @@ class ClusterMainECJ extends Evolve {
                 Indexes.setIndex(trainTestIndexes.first)
 
                 kPenalty.each { kPenalty ->
-                    ClusterFitness.kPenalty = kPenalty
+                    ECJclusterFitness.kPenalty = kPenalty
 
                     queryTypesList.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
                         String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
-                        ClusterFitness.fitnessMethod = qt.setk ? FitnessMethod.UNIQUE_HITS_K_PENALTY : FitnessMethod.UNIQUE_HITS_COUNT
+                        ECJclusterFitness.fitnessMethod = qt.setk ? FitnessMethodECJ.UNIQUE_HITS_K_PENALTY : FitnessMethodECJ.UNIQUE_HITS_COUNT
 
                         intersectMethodList.each { IntersectMethod intersectMethod ->
                             final Date indexTime = new Date()
@@ -115,7 +115,7 @@ class ClusterMainECJ extends Evolve {
 
                             state.run(EvolutionState.C_STARTED_FRESH);
                             int popSize = 0;
-                            ClusterFitness bestClusterFitness = (ClusterFitness) state.population.subpops.collect { sbp ->
+                            ECJclusterFitness bestClusterFitness = (ECJclusterFitness) state.population.subpops.collect { sbp ->
                                 popSize = popSize + sbp.individuals.size()
                                 sbp.individuals.max() { ind ->
                                     ind.fitness.fitness()

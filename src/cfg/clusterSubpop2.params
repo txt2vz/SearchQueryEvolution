@@ -11,7 +11,7 @@ pop.subpop.1.size = 256
 pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
-pop.subpop.0.species.fitness = cluster.ClusterFitness
+pop.subpop.0.species.fitness = cluster.ECJclusterFitness
 
 pop.subpop.0.species.crossover-type	= one
 pop.subpop.0.species.crossover-likelihood = 0.7
@@ -30,7 +30,7 @@ pop.subpop.1.duplicate-retries = 5
 
 pop.subpop.1.species = ec.vector.IntegerVectorSpecies
 pop.subpop.1.species.ind = ec.vector.IntegerVectorIndividual
-pop.subpop.1.species.fitness = cluster.ClusterFitness
+pop.subpop.1.species.fitness = cluster.ECJclusterFitness
 
 pop.subpop.1.species.crossover-type	= two
 pop.subpop.1.species.crossover-likelihood	= 0.8

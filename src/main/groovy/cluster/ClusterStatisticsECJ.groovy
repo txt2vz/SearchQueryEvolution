@@ -16,7 +16,7 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
     public void postEvaluationStatistics(EvolutionState state) {
         super.postEvaluationStatistics(state);
 
-        ClusterFitness cf = (ClusterFitness) state.population.subpops.collect { sbp ->
+        ECJclusterFitness cf = (ECJclusterFitness) state.population.subpops.collect { sbp ->
             sbp.individuals.max() { ind ->
                 ind.fitness.fitness()
             }.fitness
@@ -28,7 +28,7 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
         cf.generationStats(state.generation)
     }
 
-    private void generationReport(EvolutionState state, ClusterFitness cfit) {
+    private void generationReport(EvolutionState state, ECJclusterFitness cfit) {
 
         Tuple4 tuple4 = Effectiveness.querySetEffectiveness(cfit.queryMap.keySet())
         final double averageF1 = tuple4.first

@@ -68,7 +68,7 @@ class QueryListFromChromosome {
             final int allele = intChromosome[index]
             assert allele < termQueryList.size() && allele >= 0
 
-            if (alleles.add(allele))   {
+            if (alleles.add(allele)) {
                 bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[allele], BooleanClause.Occur.SHOULD)
                 clusterNumber++
             }
@@ -96,7 +96,8 @@ class QueryListFromChromosome {
             Query tq0 = rootq.clauses().first().getQuery()
             TermQuery tqNew = termQueryList[allele]
 
-            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) >= intersectMethod.intersectRatio) && alleles.add(allele)) {
+            //  if ((QueryTermIntersect.validIntersect(tq0, tqNew) >= intersectMethod.intersectRatio) && alleles.add(allele)) {
+            if ((QueryTermIntersect.validIntersect(tq0, tqNew)) && alleles.add(allele)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
