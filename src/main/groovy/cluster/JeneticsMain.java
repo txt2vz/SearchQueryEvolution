@@ -30,43 +30,43 @@ public class JeneticsMain {
 
     static List<TermQuery> termQueryList;
     static QType qType = //QType.OR1;
-        QType.OR_INTERSECT;
+            QType.OR_INTERSECT;
     static IndexEnum indexEnum;
     static IndexReader ir;
     final static boolean setk = true;
 
     //static int k;
-    static List<IndexEnum> ieList = Arrays.asList(IndexEnum.CRISIS3
-            , IndexEnum.CLASSIC4
+    static List<IndexEnum> ieList = Arrays.asList(
+            IndexEnum.CRISIS3,
+            IndexEnum.CLASSIC4
             , IndexEnum.NG3, IndexEnum.NG5
             , IndexEnum.NG6
             , IndexEnum.R4, IndexEnum.R5, IndexEnum.R6
     );
 
-    static double sqf(final Genotype<IntegerGene> gt) {
+    static double searchQueryFitness(final Genotype<IntegerGene> gt) {
         final int k = getK(gt, indexEnum, setk);
         int[] intArray = ((IntegerChromosome) gt.get(0)).toArray();
 
         List<BooleanQuery.Builder> bqbList = QuerySet.getQueryList(intArray, termQueryList, k, qType);
         final int uniqueHits = UniqueHits.getUniqueHits(bqbList).getV2();
 
-        double f = (setk) ? uniqueHits * (1.0 - (0.04 * k)) : uniqueHits;
-        f = (f > 0) ? f : 0.0d;
-
-        return f;
+        final double f = (setk) ? uniqueHits * (1.0 - (0.04 * k)) : uniqueHits;
+        return (f > 0) ? f : 0.0d;
     }
 
     public static void main(String[] args) throws Exception {
 
         final Date startRun = new Date();
-        final int popSize = 1024;
+        final int popSize = 512;
         final int maxGen = 200;
         final int maxGene = 100;
         final LuceneClassifyMethod classifyMethod = LuceneClassifyMethod.KNN;
         final int setkMaxNumberOfCategories = 9;
-        final int numberOfJobs = 3;
-        final boolean onlyDocsInOneQueryForClassification = true;
+        final int numberOfJobs = 5;
+
         final int maxGenomeLength = 19;
+        final boolean onlyDocsInOneClusterForClassifier = false;
 
         ieList.stream().forEach(ie -> {
             ReportsJenetics reportsJenetics = new ReportsJenetics();
@@ -91,9 +91,10 @@ public class JeneticsMain {
                                         IntegerChromosome.of(0, maxGene, genomeLength));
                 //  IntegerChromosome.of(0, 100, IntRange.of(2, 8)));//,
 
+
                 final Engine<IntegerGene, Double> engine = Engine.
                         builder(
-                                JeneticsMain::sqf,
+                                JeneticsMain::searchQueryFitness,
                                 gtf)
                         .populationSize(popSize)
                         // .survivorsSelector(new
@@ -101,6 +102,7 @@ public class JeneticsMain {
                         // TournamentSelector<>(5))
 
                         .survivorsSelector(new TournamentSelector<>(5))
+                        .survivorsSelector(new EliteSelector<>(2))
                         .offspringSelector(new TournamentSelector<>(5))
                         .alterers(new Mutator<>(0.2), //new MultiPointCrossover<>())
                                 new SinglePointCrossover<>(0.7))
@@ -136,14 +138,15 @@ public class JeneticsMain {
                 Tuple3<Set<Query>, Integer, Double> bestQueryData = QuerySet.querySetInfo(intArrayBestOfRun, termQueryList, k, qType, true, true);
 
                 Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(ie, LuceneClassifyMethod.KNN);
-                UpdateAssignedFieldInIndex.updateAssignedField(ie, bestQueryData.getV1());// queryList )
+
+                UpdateAssignedFieldInIndex.updateAssignedField(ie, bestQueryData.getV1(), onlyDocsInOneClusterForClassifier);// queryList )
                 Tuple3<Double, Double, Double> classifierEffectiveness = Effectiveness.classifierEffectiveness(classifier, ie, k);
                 final double classifierF1 = classifierEffectiveness.getV1();
 
                 System.out.println("Best of run **********************************  classifierF1 " + classifierF1 + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reportsJenetics.reportCSV(jobNumber, ie, bestQueryData.getV3(), classifierF1, bestQueryData.getV2(), qType, classifyMethod, popSize, g.chromosome().length(), maxGene, maxGen, setk, onlyDocsInOneQueryForClassification);
+                reportsJenetics.reportCSV(jobNumber, ie, bestQueryData.getV3(), classifierF1, bestQueryData.getV2(), qType, classifyMethod, popSize, g.chromosome().length(), maxGene, maxGen, setk, onlyDocsInOneClusterForClassifier);
 
             });
             reportsJenetics.reportMaxFitness();
@@ -156,9 +159,7 @@ public class JeneticsMain {
 
     static int getK(Genotype g, IndexEnum indexEnum, final boolean setk) {
 
-        final int k = (setk) ? ((IntegerChromosome) g.get(1)).gene().allele() :
+        return (setk) ? ((IntegerChromosome) g.get(1)).gene().allele() :
                 indexEnum.getNumberOfCategories();
-
-        return k;
     }
 }

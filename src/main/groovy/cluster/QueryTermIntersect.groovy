@@ -27,7 +27,7 @@ enum MinIntersectValue {
 @CompileStatic
 class QueryTermIntersect {
 
-    static boolean validIntersect(Query q0, Query q1){
+    static boolean isValidIntersect(Query q0, Query q1){
         IndexSearcher indexSearcher = Indexes.indexSearcher
 
         TotalHitCountCollector collector = new TotalHitCountCollector();

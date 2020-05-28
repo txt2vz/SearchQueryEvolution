@@ -18,7 +18,7 @@ import org.apache.lucene.search.Query
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 2
+    final static int NUMBER_OF_JOBS = 5
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -27,14 +27,14 @@ class ClusterMainECJ extends Evolve {
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
 //
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
 //
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
@@ -47,13 +47,13 @@ class ClusterMainECJ extends Evolve {
 
             //     QueryType.OR1,
             //     QueryType.OR1SETK,
-            QueryTypeECJ.OR_WITH_AND_SUBQ,
-            QueryTypeECJ.AND_WITH_OR_SUBQ
+           // QueryTypeECJ.OR_WITH_AND_SUBQ,
+           // QueryTypeECJ.AND_WITH_OR_SUBQ
             //QueryType.OR1_WITH_MINSHOULD2
             //   QueryType.AND
             //     QueryType.MINSHOULD2
 
-            //       QueryType.OR,
+            QueryTypeECJ.OR
             //     QueryType.OR_SETK
     ]
 
@@ -92,7 +92,8 @@ class ClusterMainECJ extends Evolve {
                     queryTypesList.each { qt ->
                         println "query type $qt"
                         ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
+                        String parameterFilePath = //'src/cfg/clusterSinglePop.params'
+                                qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
                         ECJclusterFitness.fitnessMethod = qt.setk ? FitnessMethodECJ.UNIQUE_HITS_K_PENALTY : FitnessMethodECJ.UNIQUE_HITS_COUNT
 

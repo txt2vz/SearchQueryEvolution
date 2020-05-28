@@ -9,34 +9,6 @@ import org.apache.lucene.search.*
 @CompileStatic
 class QuerySet {
 
-    static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType qt, boolean printQueries = false, boolean queriesToFile = false) {
-
-        List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, qt)
-        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = UniqueHits.getUniqueHits(bqbList);
-
-        Map<Query, Integer> queryMap = t3.v1
-        final int uniqueHits = t3.v2
-        final int totalHitsAllQueries = t3.v3
-
-        Tuple4<Double, Double, Double, List<Double>> e = Effectiveness.querySetEffectiveness(queryMap.keySet());
-        final f1 = e.v1
-
-        if (printQueries) {
-            println printQuerySet(queryMap);
-        }
-
-        if (queriesToFile) {
-
-            File queryFileOut = new File('results/Queries.txt')
-            queryFileOut << "TotalHits: ${t3.v3} Total Docs:  ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()}"
-            queryFileOut << "hitsMatchingOnly1Query: ${uniqueHits}  TotalHitsAllQueries : $totalHitsAllQueries  f1: $f1  \n"
-            queryFileOut << printQuerySet(queryMap)
-            queryFileOut << "************************************************ \n \n"
-        }
-
-        return new Tuple3(queryMap.keySet(), uniqueHits, f1)
-    }
-
     static List<BooleanQuery.Builder> getQueryList(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType qType) {
 
         switch (qType) {
@@ -72,28 +44,64 @@ class QuerySet {
     private static List<BooleanQuery.Builder> getORIntersect(int[] intChromosome, List<TermQuery> termQueryList, final int k) {
 
         List<BooleanQuery.Builder> bqbL = []
+        Set<Integer> alleles = [] as Set<Integer>
+        int clusterNumber = 0
+        int index = 0
 
-        for (int i = 0; i < intChromosome.size(); i++) {
-            final int clusterNumber = i % k
-            final int allele = intChromosome[i]
-            assert allele < termQueryList.size() && allele >= 0
+        while (clusterNumber < k && index < intChromosome.size()) {
+            final int allele = intChromosome[index]
 
-            if (i < k) {
+            if (alleles.add(allele)) {
                 bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[allele], BooleanClause.Occur.SHOULD)
+                clusterNumber++
+            }
+            index++
+        }
 
-            } else {
-                BooleanQuery rootq = bqbL[clusterNumber].build()
-                Query tq0 = rootq.clauses().first().getQuery()
+        for (int i = index; i < intChromosome.size(); i++) {
 
-                TermQuery tqNew = termQueryList[allele]
+            final int allele = intChromosome[i]
+            clusterNumber = i % k
 
-                if (QueryTermIntersect.validIntersect(tq0, tqNew)) {
-                    bqbL[clusterNumber].add(tqNew, BooleanClause.Occur.SHOULD)
-                }
+            BooleanQuery rootq = bqbL[clusterNumber].build()
+            Query tq0 = rootq.clauses().first().getQuery()
+            TermQuery tqNew = termQueryList[allele]
+
+            if (alleles.add(allele) && (QueryTermIntersect.isValidIntersect(tq0, tqNew))  ) {
+                bqbL[clusterNumber].add(tqNew, BooleanClause.Occur.SHOULD)
             }
         }
+
         assert bqbL.size() == k
         return bqbL.asImmutable()
+    }
+
+    static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType queryType, boolean printQueries = false, boolean queriesToFile = false) {
+
+        List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, queryType)
+        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = UniqueHits.getUniqueHits(bqbList);
+
+        Map<Query, Integer> queryMap = t3.v1
+        final int uniqueHits = t3.v2
+        final int totalHitsAllQueries = t3.v3
+
+        Tuple4<Double, Double, Double, List<Double>> e = Effectiveness.querySetEffectiveness(queryMap.keySet());
+        final f1 = e.v1
+
+        if (printQueries) {
+            println printQuerySet(queryMap);
+        }
+
+        if (queriesToFile) {
+
+            File queryFileOut = new File('results/Queries.txt')
+            queryFileOut << "TotalHits: ${t3.v3} Total Docs:  ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()} \n"
+            queryFileOut << "hitsMatchingOnly1Query: ${uniqueHits}  TotalHitsAllQueries : $totalHitsAllQueries  f1: $f1  \n"
+            queryFileOut << printQuerySet(queryMap)
+            queryFileOut << "************************************************ \n \n"
+        }
+
+        return new Tuple3(queryMap.keySet(), uniqueHits, f1)
     }
 
     static String printQuerySet(Map<Query, Integer> queryIntegerMap) {

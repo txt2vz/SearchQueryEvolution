@@ -97,7 +97,7 @@ class QueryListFromChromosome {
             TermQuery tqNew = termQueryList[allele]
 
             //  if ((QueryTermIntersect.validIntersect(tq0, tqNew) >= intersectMethod.intersectRatio) && alleles.add(allele)) {
-            if ((QueryTermIntersect.validIntersect(tq0, tqNew)) && alleles.add(allele)) {
+            if ((QueryTermIntersect.isValidIntersect(tq0, tqNew)) && alleles.add(allele)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
