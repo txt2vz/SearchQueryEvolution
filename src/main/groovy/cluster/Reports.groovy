@@ -3,7 +3,7 @@ package cluster
 import classify.LuceneClassifyMethod
 import index.IndexEnum
 
-class ReportsJenetics {
+class Reports {
 
      List < Tuple7<IndexEnum,Double,Double, Integer, QType, LuceneClassifyMethod, Boolean>> t7List = []
 
@@ -11,7 +11,7 @@ class ReportsJenetics {
 
         t7List << new Tuple7(ie,queryF1,classifierF1,uniqueHits,qType,lcm, setk)
         Date date = new Date();
-        File fcsv = new File("results/resultsClusterByJobJenetics.csv")
+        File fcsv = new File("results/results.csv")
         if (!fcsv.exists()) {
             fcsv << 'Job, Index, queryF1, classifierF1, uniqueHits, queryType, classifyMethod, setk, onlyDocsInOneQueryForClassification, popSize, genomeSize, maxGene, gen, date \n'
         }

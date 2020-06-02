@@ -13,6 +13,7 @@ import groovy.transform.CompileStatic
 import index.IndexEnum
 import index.Indexes
 import org.apache.lucene.classification.Classifier
+import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 
 @CompileStatic
@@ -22,6 +23,7 @@ class ClusterMainECJ extends Evolve {
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
+    static boolean SETK = false
 
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
@@ -43,18 +45,10 @@ class ClusterMainECJ extends Evolve {
     //       [0.0d, 0.01d, 0.02d, 0.03d, 0.04d, 0.05d, 0.06d, 0.07d, 0.08d, 0.09d, 0.1d]
 
 
-    List<QueryTypeECJ> queryTypesList = [
+    List<QType> queryTypesList = [
 
-            //     QueryType.OR1,
-            //     QueryType.OR1SETK,
-           // QueryTypeECJ.OR_WITH_AND_SUBQ,
-           // QueryTypeECJ.AND_WITH_OR_SUBQ
-            //QueryType.OR1_WITH_MINSHOULD2
-            //   QueryType.AND
-            //     QueryType.MINSHOULD2
-
-            QueryTypeECJ.OR
-            //     QueryType.OR_SETK
+            QType.OR_INTERSECT,
+            QType.OR1
     ]
 
     List<IntersectMethod> intersectMethodList = [
@@ -70,6 +64,7 @@ class ClusterMainECJ extends Evolve {
 
         final Date startRun = new Date()
 
+
         File timingFile = new File("results/timing.csv")
         File queryFile = new File('results/qFile.txt')
         if (!timingFile.exists()) {
@@ -79,62 +74,67 @@ class ClusterMainECJ extends Evolve {
         Analysis analysis = new Analysis()
 
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
+            Reports reports = new Reports();
 
             NUMBER_OF_JOBS.times { job ->
-                EvolutionState state = new EvolutionState()
+                [true, false].each { set_k ->
+                    SETK = set_k
+                    EvolutionState state = new EvolutionState()
 
-                println "Index Enum trainTestIndexes: $trainTestIndexes"
-                Indexes.setIndex(trainTestIndexes.first)
+                    println "Index Enum trainTestIndexes: $trainTestIndexes"
+                    Indexes.setIndex(trainTestIndexes.first)
 
-                kPenalty.each { kPenalty ->
-                    ECJclusterFitness.kPenalty = kPenalty
+                    kPenalty.each { kPenalty ->
+                        ECJclusterFitness.K_PENALTY = kPenalty
 
-                    queryTypesList.each { qt ->
-                        println "query type $qt"
-                        ClusterQueryECJ.queryType = qt
-                        String parameterFilePath = //'src/cfg/clusterSinglePop.params'
-                                qt.setk ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
+                        queryTypesList.each { qt ->
+                            ClusterQueryECJ.QUERY_TYPE = qt
+                            println "Query type $qt"
 
-                        ECJclusterFitness.fitnessMethod = qt.setk ? FitnessMethodECJ.UNIQUE_HITS_K_PENALTY : FitnessMethodECJ.UNIQUE_HITS_COUNT
+                            String parameterFilePath =
+                                    //      'src/cfg/clusterGA.params'
+                                    //'src/cfg/clusterSinglePop.params'
+                                    SETK ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
-                        intersectMethodList.each { IntersectMethod intersectMethod ->
-                            final Date indexTime = new Date()
-                            QueryListFromChromosome.intersectMethod = intersectMethod
+                            intersectMethodList.each { IntersectMethod intersectMethod ->
+                                final Date indexTime = new Date()
+                                QueryListFromChromosome.intersectMethod = intersectMethod
 
-                            ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
+                                ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
 
-                            state = initialize(parameters, job)
-                            if (NUMBER_OF_JOBS >= 1) {
-                                final String jobFilePrefix = "job." + job;
-                                state.output.setFilePrefix(jobFilePrefix);
-                                state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
-                            }
-                            //  state.parameters.set(new Parameter("generations"), "7")
-                            state.output.systemMessage("Job: " + job);
-                            state.job = new Object[1]
-                            state.job[0] = new Integer(job)
+                                state = initialize(parameters, job)
+                                if (NUMBER_OF_JOBS >= 1) {
+                                    final String jobFilePrefix = "job." + job;
+                                    state.output.setFilePrefix(jobFilePrefix);
+                                    state.checkpointPrefix = jobFilePrefix + state.checkpointPrefix;
+                                }
+                                //  state.parameters.set(new Parameter("generations"), "7")
+                                state.output.systemMessage("Job: " + job);
+                                state.job = new Object[1]
+                                state.job[0] = new Integer(job)
 
-                            state.run(EvolutionState.C_STARTED_FRESH);
-                            int popSize = 0;
-                            ECJclusterFitness bestClusterFitness = (ECJclusterFitness) state.population.subpops.collect { sbp ->
-                                popSize = popSize + sbp.individuals.size()
-                                sbp.individuals.max() { ind ->
-                                    ind.fitness.fitness()
-                                }.fitness
-                            }.max { it.fitness() }
+                                state.run(EvolutionState.C_STARTED_FRESH);
+                                int popSize = 0;
+                                ECJclusterFitness bestClusterFitness = (ECJclusterFitness) state.population.subpops.collect { sbp ->
+                                    popSize = popSize + sbp.individuals.size()
+                                    sbp.individuals.max() { ind ->
+                                        ind.fitness.fitness()
+                                    }.fitness
+                                }.max { it.fitness() }
 
-                            final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
-                            final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
-                            final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
-                            println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
+                                final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
+                                final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
+                                final int genomeSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.genome-size"), new Parameter("pop.subpop.0.species.genome-size"))
+                                println "wordListSizePop0: $wordListSizePop0 genomeSizePop0 $genomeSizePop0  subPops $numberOfSubpops"
 
-                            final Date GATime = new Date()
-                            TimeDuration durationGA = TimeCategory.minus(new Date(), indexTime)
-                            timingFile << trainTestIndexes.first.name() + ",  " + qt + ",  " + durationGA.toMilliseconds()
-
-                            if (luceneClassify) {
+                                final Date GATime = new Date()
+                                TimeDuration durationGA = TimeCategory.minus(new Date(), indexTime)
+                                timingFile << trainTestIndexes.first.name() + ",  " + qt + ",  " + durationGA.toMilliseconds()
 
                                 Set<Query> queries = bestClusterFitness.queryMap.keySet().asImmutable()
+                                List<BooleanQuery.Builder> bqbList = bestClusterFitness.bqbList
+
+                                Tuple3<Set<Query>, Integer, Double> t3 = QuerySet.querySetInfo(bqbList, false, true)
 
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queries, onlyDocsInOneCluster)
 
@@ -147,21 +147,20 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
 
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
-                                    analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, bestClusterFitness, t3ClassiferResult, classifyMethod, onlyDocsInOneCluster)
-                                }
-                            } else {
+                                    reports.reportCSV(job as int, trainTestIndexes.v1, t3.v3, t3ClassiferResult.v1 as double, bestClusterFitness.uniqueHits, qt, classifyMethod, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, SETK, true)
 
-                                analysis.reportsOut(job, state.generation as int, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, bestClusterFitness, null, null, onlyDocsInOneCluster)
+                                }
+
                             }
                         }
+                        cleanup(state);
+                        println "--------END JOB $job  -----------------------------------------------"
                     }
-                    cleanup(state);
-                    println "--------END JOB $job  -----------------------------------------------"
                 }
             }
         }
 
-        analysis.jobSummary()
+//        analysis.jobSummary()
 
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)

@@ -6,10 +6,15 @@ import org.apache.lucene.search.*
 
 //see https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_fundamentals.htm
 
+
+enum QType {
+    OR1, OR_INTERSECT
+}
+
 @CompileStatic
 class QuerySet {
 
-    static List<BooleanQuery.Builder> getQueryList(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType qType) {
+    static List<BooleanQuery.Builder> getQueryBuilderList(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType qType) {
 
         switch (qType) {
             case QType.OR1: return getOneWordQueryPerCluster(intChromosome, termQueryList, k)
@@ -67,7 +72,7 @@ class QuerySet {
             Query tq0 = rootq.clauses().first().getQuery()
             TermQuery tqNew = termQueryList[allele]
 
-            if (alleles.add(allele) && (QueryTermIntersect.isValidIntersect(tq0, tqNew))  ) {
+            if (alleles.add(allele) && (QueryTermIntersect.isValidIntersect(tq0, tqNew))) {
                 bqbL[clusterNumber].add(tqNew, BooleanClause.Occur.SHOULD)
             }
         }
@@ -76,9 +81,10 @@ class QuerySet {
         return bqbL.asImmutable()
     }
 
-    static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType queryType, boolean printQueries = false, boolean queriesToFile = false) {
+    // static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType queryType, boolean printQueries = false, boolean queriesToFile = false) {
+    static Tuple3<Set<Query>, Integer, Double> querySetInfo(List<BooleanQuery.Builder> bqbList, boolean printQueries = false, boolean queriesToFile = false) {
 
-        List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, queryType)
+        //List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, queryType)
         Tuple3<Map<Query, Integer>, Integer, Integer> t3 = UniqueHits.getUniqueHits(bqbList);
 
         Map<Query, Integer> queryMap = t3.v1
@@ -107,7 +113,7 @@ class QuerySet {
     static String printQuerySet(Map<Query, Integer> queryIntegerMap) {
         StringBuilder sb = new StringBuilder()
         queryIntegerMap.keySet().eachWithIndex { Query q, int index ->
-            sb << "ClusterQuery: $index :  ${queryIntegerMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)} \n"
+            sb << "ClusterQuery: $index :  ${queryIntegerMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)}  \n"
         }
         return sb.toString()
     }

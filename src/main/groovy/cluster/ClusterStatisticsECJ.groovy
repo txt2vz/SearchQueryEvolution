@@ -31,6 +31,8 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
     private void generationReport(EvolutionState state, ECJclusterFitness cfit) {
 
         Tuple4 tuple4 = Effectiveness.querySetEffectiveness(cfit.queryMap.keySet())
+
+
         final double averageF1 = tuple4.first
         final double averagePrecision = tuple4.second
         final double averageRecall  = tuple4.third
@@ -39,6 +41,6 @@ public class ClusterStatisticsECJ extends SimpleStatistics {
         if (!fcsv.exists()) {
             fcsv << 'generation, averageF1, averagePrecision, averageRecall, baseFitness, indexName, fitnessMethod, intersectMethod, queryType, date \n'
         }
-        fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.index.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectMethod}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
+       // fcsv << "${state.generation}, ${averageF1.round(5)}, ${averagePrecision.round(5)}, ${averageRecall.round(5)}, ${cfit.getFitness().round(5)}, ${Indexes.index.name()}, ${cfit.fitnessMethod}, ${QueryListFromChromosome.intersectMethod}, ${ClusterQueryECJ.queryType}, ${new Date()} \n"
     }
 }

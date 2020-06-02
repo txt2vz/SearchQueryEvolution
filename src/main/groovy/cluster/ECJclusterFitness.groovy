@@ -16,13 +16,13 @@ enum FitnessMethodECJ {
 @CompileStatic
 public class ECJclusterFitness extends SimpleFitness {
 
-    static FitnessMethodECJ fitnessMethod
-    static double kPenalty = 0.04d
+    static FitnessMethodECJ FITNESS_METHOD
+    public static double K_PENALTY = 0.04d
 
     Map<Query, Integer> queryMap = [:]
+    List<BooleanQuery.Builder> bqbList =[]
     double baseFitness = 0.0  //for ECJ
-
-    int hitsMatchingOnlyOneQuery = 0
+    int uniqueHits = 0
     int hitsMatchingTwoOrMoreQueries = 0
     int totalHits = 0
     int missedDocs = 0
@@ -32,70 +32,18 @@ public class ECJclusterFitness extends SimpleFitness {
         return baseFitness;
     }
 
-    void setClusterFitness(List<BooleanQuery.Builder> bqbList) {
+    void setClusterFitness( Tuple3 <Map<Query, Integer>, Integer, Integer> t3 , List<BooleanQuery.Builder> bqbListIn, double f) {
 
-        k = bqbList.size()
-        baseFitness = 0.0
-
-        Tuple3<Map<Query, Integer>, Integer, Integer> t3 = getUniqueHits(bqbList)
-        queryMap = t3.first.asImmutable()
-
-        hitsMatchingOnlyOneQuery = t3.second
-        totalHits = t3.third
-
-        hitsMatchingTwoOrMoreQueries = totalHits - hitsMatchingOnlyOneQuery
-        missedDocs = Indexes.indexReader.numDocs() - totalHits
-
-        switch (fitnessMethod) {
-
-            case fitnessMethod.UNIQUE_HITS_COUNT:
-                baseFitness = hitsMatchingOnlyOneQuery
-                break
-
-            case fitnessMethod.UNIQUE_HITS_K_PENALTY:
-
-                final double f = hitsMatchingOnlyOneQuery * (1.0 - (kPenalty * k))
-                baseFitness = (f > 0) ? f : 0.0d
-                break
-        }
-    }
-
-    private Tuple3<Map<Query, Integer>, Integer, Integer> getUniqueHits(List<BooleanQuery.Builder> bqbList) {
-        Map<Query, Integer> qMap = new HashMap<Query, Integer>()
-        BooleanQuery.Builder totalHitsBQB = new BooleanQuery.Builder()
-
-        int totalUniqueHits = 0
-        for (int i = 0; i < bqbList.size(); i++) {
-            Query q = bqbList[i].build()
-            totalHitsBQB.add(q, BooleanClause.Occur.SHOULD)
-
-            BooleanQuery.Builder bqbOneCategoryOnly = new BooleanQuery.Builder()
-            bqbOneCategoryOnly.add(q, BooleanClause.Occur.SHOULD)
-
-            for (int j = 0; j < bqbList.size(); j++) {
-                if (j != i) {
-                    bqbOneCategoryOnly.add(bqbList[j].build(), BooleanClause.Occur.MUST_NOT)
-                }
-            }
-
-            TotalHitCountCollector collector = new TotalHitCountCollector();
-            Indexes.indexSearcher.search(bqbOneCategoryOnly.build(), collector);
-            final int qUniqueHits = collector.getTotalHits()
-
-            qMap.put(q, qUniqueHits)
-            totalUniqueHits += qUniqueHits
-        }
-
-        TotalHitCountCollector collector = new TotalHitCountCollector();
-        Indexes.indexSearcher.search(totalHitsBQB.build(), collector);
-        int totalHitsAllQueries = collector.getTotalHits();
-
-        return new Tuple3(qMap, totalUniqueHits, totalHitsAllQueries)
+        bqbList = bqbListIn
+        baseFitness = f
+        queryMap= t3.v1
+        uniqueHits = t3.v2
+        totalHits = t3.v3
     }
 
     void generationStats(long generation) {
         println "${queryShort()}"
-        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $hitsMatchingOnlyOneQuery    totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
+        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $uniqueHits    totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
         println ""
     }
 

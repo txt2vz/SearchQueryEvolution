@@ -15,7 +15,7 @@ class ClusterFitnessSpec extends Specification {
         setup:
         Indexes.setIndex(IndexEnum.NG3TEST)
         def cf = new ECJclusterFitness()
-        ECJclusterFitness.fitnessMethod = FitnessMethodECJ.UNIQUE_HITS_COUNT//FitnessMethod.PSEUDOF1
+        ECJclusterFitness.FITNESS_METHOD = FitnessMethodECJ.UNIQUE_HITS_COUNT//FitnessMethod.PSEUDOF1
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[2]
 
         TermQuery spaceQuery = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'space'))

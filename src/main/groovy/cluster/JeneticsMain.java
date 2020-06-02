@@ -24,7 +24,6 @@ import index.IndexEnum;
 
 import static io.jenetics.engine.EvolutionResult.toBestPhenotype;
 
-enum QType {OR1, OR_INTERSECT}
 
 public class JeneticsMain {
 
@@ -38,17 +37,18 @@ public class JeneticsMain {
     //static int k;
     static List<IndexEnum> ieList = Arrays.asList(
             IndexEnum.CRISIS3,
-            IndexEnum.CLASSIC4
-            , IndexEnum.NG3, IndexEnum.NG5
-            , IndexEnum.NG6
-            , IndexEnum.R4, IndexEnum.R5, IndexEnum.R6
+//            IndexEnum.CLASSIC4
+//            , IndexEnum.NG3, IndexEnum.NG5
+//            , IndexEnum.NG6
+//            , IndexEnum.R4, IndexEnum.R5,
+            IndexEnum.R6
     );
 
     static double searchQueryFitness(final Genotype<IntegerGene> gt) {
         final int k = getK(gt, indexEnum, setk);
         int[] intArray = ((IntegerChromosome) gt.get(0)).toArray();
 
-        List<BooleanQuery.Builder> bqbList = QuerySet.getQueryList(intArray, termQueryList, k, qType);
+        List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArray, termQueryList, k, qType);
         final int uniqueHits = UniqueHits.getUniqueHits(bqbList).getV2();
 
         final double f = (setk) ? uniqueHits * (1.0 - (0.04 * k)) : uniqueHits;
@@ -59,17 +59,17 @@ public class JeneticsMain {
 
         final Date startRun = new Date();
         final int popSize = 512;
-        final int maxGen = 200;
+        final int maxGen = 20;
         final int maxGene = 100;
         final LuceneClassifyMethod classifyMethod = LuceneClassifyMethod.KNN;
         final int setkMaxNumberOfCategories = 9;
-        final int numberOfJobs = 5;
+        final int numberOfJobs = 2;
 
         final int maxGenomeLength = 19;
         final boolean onlyDocsInOneClusterForClassifier = false;
 
         ieList.stream().forEach(ie -> {
-            ReportsJenetics reportsJenetics = new ReportsJenetics();
+            Reports reportsJenetics = new Reports();
             List<Phenotype<IntegerGene, Double>> resultList = new ArrayList<Phenotype<IntegerGene, Double>>();
             indexEnum = ie;
 
@@ -120,7 +120,10 @@ public class JeneticsMain {
                                     int[] intArrayBestGen = ((IntegerChromosome) g.get(0)).toArray();
                                     final int k = getK(g, ie, setk);
 
-                                    Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(intArrayBestGen, termQueryList, k, qType, true);
+                                    List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
+
+                                  //  Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(intArrayBestGen, termQueryList, k, qType, true);
+                                    Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(bqbList, true, false );
                                     System.out.println("gen: " + ind.generation() + " bestPhenoFit " + ind.bestPhenotype().fitness() + " fitness: " + ind.bestFitness() + " uniqueHits: " + queryDataGen.getV2() + " querySet F1: " + queryDataGen.getV3());
                                     System.out.println();
 
@@ -135,7 +138,8 @@ public class JeneticsMain {
                 int[] intArrayBestOfRun = ((IntegerChromosome) g.get(0)).toArray();
                 final int k = getK(g, ie, setk);
 
-                Tuple3<Set<Query>, Integer, Double> bestQueryData = QuerySet.querySetInfo(intArrayBestOfRun, termQueryList, k, qType, true, true);
+                List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestOfRun, termQueryList, k, qType);
+                Tuple3<Set<Query>, Integer, Double> bestQueryData = QuerySet.querySetInfo(bqbList, true, true);
 
                 Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(ie, LuceneClassifyMethod.KNN);
 
