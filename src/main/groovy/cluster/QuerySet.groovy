@@ -82,7 +82,7 @@ class QuerySet {
     }
 
     // static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType queryType, boolean printQueries = false, boolean queriesToFile = false) {
-    static Tuple3<Set<Query>, Integer, Double> querySetInfo(List<BooleanQuery.Builder> bqbList, boolean printQueries = false, boolean queriesToFile = false) {
+    static Tuple5<Set<Query>, Integer, Double, Double, Double> querySetInfo(List<BooleanQuery.Builder> bqbList, boolean printQueries = false, boolean queriesToFile = false) {
 
         //List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, queryType)
         Tuple3<Map<Query, Integer>, Integer, Integer> t3 = UniqueHits.getUniqueHits(bqbList);
@@ -91,8 +91,10 @@ class QuerySet {
         final int uniqueHits = t3.v2
         final int totalHitsAllQueries = t3.v3
 
-        Tuple4<Double, Double, Double, List<Double>> e = Effectiveness.querySetEffectiveness(queryMap.keySet());
-        final f1 = e.v1
+        Tuple4<Double, Double, Double, List<Double>> t4QuerySetEffectiveness = Effectiveness.querySetEffectiveness(queryMap.keySet());
+        final double f1 = t4QuerySetEffectiveness.v1
+        final double precision = t4QuerySetEffectiveness.v2
+        final double recall = t4QuerySetEffectiveness.v3
 
         if (printQueries) {
             println printQuerySet(queryMap);
@@ -107,7 +109,7 @@ class QuerySet {
             queryFileOut << "************************************************ \n \n"
         }
 
-        return new Tuple3(queryMap.keySet(), uniqueHits, f1)
+        return new Tuple5(queryMap.keySet(), uniqueHits, f1, precision, recall)
     }
 
     static String printQuerySet(Map<Query, Integer> queryIntegerMap) {

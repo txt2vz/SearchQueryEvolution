@@ -65,14 +65,14 @@ class Effectiveness {
 
         final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
 
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
-        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
-        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
+        final double averageF1ForQuerySet = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
+        final double averageRecallForQuerySet = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
+        final double averagePrecisionForQuerySet = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
 
-        assert averageF1ForJob
-        assert averageF1ForJob > 0
+        assert averageF1ForQuerySet
+        assert averageF1ForQuerySet > 0
 
-        return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob, averagePrecisionForJob, averageRecallForJob, f1list)
+        return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForQuerySet, averagePrecisionForQuerySet, averageRecallForQuerySet, f1list)
     }
 
     static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, final int k) {

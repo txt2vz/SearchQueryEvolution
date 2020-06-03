@@ -4,6 +4,7 @@ import classify.ClassifyUnassigned;
 import classify.LuceneClassifyMethod;
 import classify.UpdateAssignedFieldInIndex;
 import groovy.lang.Tuple3;
+import groovy.lang.Tuple5;
 import groovy.time.TimeCategory;
 import groovy.time.TimeDuration;
 import index.*;
@@ -32,7 +33,8 @@ public class JeneticsMain {
             QType.OR_INTERSECT;
     static IndexEnum indexEnum;
     static IndexReader ir;
-    final static boolean setk = true;
+    final static boolean setk = false;
+    static String gaEngine = "JENETICS.IO";
 
     //static int k;
     static List<IndexEnum> ieList = Arrays.asList(
@@ -59,7 +61,7 @@ public class JeneticsMain {
 
         final Date startRun = new Date();
         final int popSize = 512;
-        final int maxGen = 20;
+        final int maxGen = 120;
         final int maxGene = 100;
         final LuceneClassifyMethod classifyMethod = LuceneClassifyMethod.KNN;
         final int setkMaxNumberOfCategories = 9;
@@ -69,7 +71,7 @@ public class JeneticsMain {
         final boolean onlyDocsInOneClusterForClassifier = false;
 
         ieList.stream().forEach(ie -> {
-            Reports reportsJenetics = new Reports();
+            Reports reports = new Reports();
             List<Phenotype<IntegerGene, Double>> resultList = new ArrayList<Phenotype<IntegerGene, Double>>();
             indexEnum = ie;
 
@@ -123,7 +125,7 @@ public class JeneticsMain {
                                     List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
 
                                   //  Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(intArrayBestGen, termQueryList, k, qType, true);
-                                    Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(bqbList, true, false );
+                                    Tuple5<Set<Query>, Integer, Double, Double, Double>queryDataGen = QuerySet.querySetInfo(bqbList, true, false );
                                     System.out.println("gen: " + ind.generation() + " bestPhenoFit " + ind.bestPhenotype().fitness() + " fitness: " + ind.bestFitness() + " uniqueHits: " + queryDataGen.getV2() + " querySet F1: " + queryDataGen.getV3());
                                     System.out.println();
 
@@ -139,21 +141,22 @@ public class JeneticsMain {
                 final int k = getK(g, ie, setk);
 
                 List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestOfRun, termQueryList, k, qType);
-                Tuple3<Set<Query>, Integer, Double> bestQueryData = QuerySet.querySetInfo(bqbList, true, true);
+                Tuple5<Set<Query>, Integer, Double, Double, Double> t5QuerySetResult = QuerySet.querySetInfo(bqbList, true, true);
 
                 Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(ie, LuceneClassifyMethod.KNN);
 
-                UpdateAssignedFieldInIndex.updateAssignedField(ie, bestQueryData.getV1(), onlyDocsInOneClusterForClassifier);// queryList )
-                Tuple3<Double, Double, Double> classifierEffectiveness = Effectiveness.classifierEffectiveness(classifier, ie, k);
-                final double classifierF1 = classifierEffectiveness.getV1();
+                UpdateAssignedFieldInIndex.updateAssignedField(ie, t5QuerySetResult.getV1(), onlyDocsInOneClusterForClassifier);
 
-                System.out.println("Best of run **********************************  classifierF1 " + classifierF1 + " " + ie.name() + '\n');
+                Tuple3<Double, Double, Double> t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, ie, k);
+               // final double classifierF1 = classifierEffectiveness.getV1();
+
+                System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reportsJenetics.reportCSV(jobNumber, ie, bestQueryData.getV3(), classifierF1, bestQueryData.getV2(), qType, classifyMethod, popSize, g.chromosome().length(), maxGene, maxGen, setk, onlyDocsInOneClusterForClassifier);
+                reports.reportCSV(ie, t5QuerySetResult, t3ClassiferResult, qType, setk,  classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
-            reportsJenetics.reportMaxFitness();
+            reports.reportMaxFitness();
         });
 
         final Date endRun = new Date();
