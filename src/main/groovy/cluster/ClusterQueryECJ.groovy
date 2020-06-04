@@ -122,7 +122,6 @@ public class ClusterQueryECJ extends Problem implements SimpleProblemForm {
                 break;
 
 
-
 //*****************set k methods *************************************************************
 
             case QueryType.OR1SETK:

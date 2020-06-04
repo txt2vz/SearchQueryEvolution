@@ -16,24 +16,31 @@ class Effectiveness {
 
         List<Double> f1list = [], precisionList = [], recallList = [], fitnessList = []
 
+        Set<String> categoryNames = []
+        int duplicateCategory = 0
+        int missingCategories = 0
+
         querySet.each { Query q ->
 
             Tuple3 tuple3 = IndexUtils.getMostFrequentCategoryForQuery(q)
             String mostFrequentCategoryName = tuple3.first
+            if (!categoryNames.add(mostFrequentCategoryName)) {
+                duplicateCategory++
+            }
             final int mostFrequentCategoryHitsSize = tuple3.second
             final int queryHitsSize = tuple3.third
 
             double recall = 0
             double precision = 0
             double f1 = 0
-            int categoryTotal = 0
+
             TermQuery mostFrequentCategoryTermQuery = new TermQuery(new Term(Indexes.FIELD_CATEGORY_NAME,
                     mostFrequentCategoryName))
 
             if (mostFrequentCategoryHitsSize && queryHitsSize && mostFrequentCategoryTermQuery) {
                 TotalHitCountCollector totalHitCollector = new TotalHitCountCollector()
                 Indexes.indexSearcher.search(mostFrequentCategoryTermQuery, totalHitCollector);
-                categoryTotal = totalHitCollector.getTotalHits()
+                int categoryTotal = totalHitCollector.getTotalHits()
 
                 assert categoryTotal
 
@@ -47,10 +54,19 @@ class Effectiveness {
             recallList << recall
         }
 
-        final int maxCategoriesClusters = Math.max(Indexes.index.numberOfCategories, querySet.size())
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / maxCategoriesClusters : 0
-        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / maxCategoriesClusters : 0
-        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / maxCategoriesClusters : 0
+        Set<String> originalCategoryNames = IndexUtils.categoryFrequencies(Indexes.indexSearcher).keySet().asImmutable()
+
+        categoryNames.each { categoryName ->
+            if (!originalCategoryNames.contains(categoryName)) {
+                missingCategories++
+            }
+        }
+
+        final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
+
+        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
+        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
+        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
 
         assert averageF1ForJob
         assert averageF1ForJob > 0
@@ -58,9 +74,12 @@ class Effectiveness {
         return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob, averagePrecisionForJob, averageRecallForJob, f1list)
     }
 
-
-    static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, int k) {
+    static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, final int k) {
         index.Indexes.setIndex(testIndex)
+
+        double f1Lucene
+        double precisionLucene
+        double recallLucene
 
         ConfusionMatrixGenerator.ConfusionMatrix confusionMatrix =
                 ConfusionMatrixGenerator.getConfusionMatrix(
@@ -70,17 +89,20 @@ class Effectiveness {
                         Indexes.FIELD_CONTENTS,
                         -1)
 
-        final double f1Lucene = confusionMatrix.getF1Measure()
-        final double precisionLucene = confusionMatrix.getPrecision()
-        final double recallLucene = confusionMatrix.getRecall()
+        if (testIndex.numberOfCategories == k) {
 
-        double f1return = f1Lucene, preturn = precisionLucene, rreturn = recallLucene
-        final int numberOfEvaluatedDocs = confusionMatrix.getNumberOfEvaluatedDocs()
+            f1Lucene = confusionMatrix.getF1Measure()
+            precisionLucene = confusionMatrix.getPrecision()
+            recallLucene = confusionMatrix.getRecall()
 
-        println "Lucene classifier f1: $f1Lucene precisionLucene: $precisionLucene recallLucene: $recallLucene numberOfEvaluatedDocs $numberOfEvaluatedDocs"
-        println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
+            final int numberOfEvaluatedDocs = confusionMatrix.getNumberOfEvaluatedDocs()
 
-        if (testIndex.numberOfCategories != k ) {
+            println "Lucene classifier f1: $f1Lucene precisionLucene: $precisionLucene recallLucene: $recallLucene numberOfEvaluatedDocs $numberOfEvaluatedDocs"
+            println "linearizedMatrix ${confusionMatrix.getLinearizedMatrix()}"
+        }
+
+        //for setk case where number of categories may not match labelled classes
+        else {
 
             List<Double> pList = []
             List<Double> rList = []
@@ -92,18 +114,18 @@ class Effectiveness {
             }
 
             final int maxCats = Math.max(k, testIndex.numberOfCategories)
-            final double averagePk = pList.sum() / maxCats
-            final double averageRk = rList.sum() / maxCats
-            final double f1k = 2 * ((averagePk * averageRk) / (averagePk + averageRk))
-
-            f1return = f1k
-            preturn = averagePk
-            rreturn = averageRk
+            precisionLucene = pList.sum() / maxCats
+            recallLucene = rList.sum() / maxCats
+            f1Lucene = 2 * ((precisionLucene * recallLucene) / (precisionLucene + recallLucene))
 
             println "plist $pList rlist $rList"
-            println "avaeragepk $averagePk averagrK $averageRk f1k $f1k"
+            println "avaeragepk $pList averagrK $rList f1k $f1Lucene"
         }
 
-        return new Tuple3(f1return, preturn, rreturn)
+        assert f1Lucene
+        assert precisionLucene
+        assert recallLucene
+
+        return new Tuple3(f1Lucene, precisionLucene, recallLucene)
     }
 }

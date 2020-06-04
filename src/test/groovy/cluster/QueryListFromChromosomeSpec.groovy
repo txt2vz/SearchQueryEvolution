@@ -13,8 +13,6 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
     def "QueryListFromChromosome OR 20News3 tfidf"() {
         setup:
         Indexes.setIndex(IndexEnum.NG3TEST)
-     //   Indexes.setIndexFieldsAndTotals()
-      //  ImportantTermsOld impTermQueries = new ImportantTermsOld()
         ImportantTermQueries impTermQueries = new ImportantTermQueries()
         TermQuery[] tfidfList = impTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
         QueryListFromChromosome.intersectMethod = IntersectMethod.RATIO_POINT_5

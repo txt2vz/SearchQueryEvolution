@@ -35,10 +35,6 @@ class ClassifyUnassignedTest extends Specification {
         ScoreDoc[] allHits = allTopDocs.scoreDocs;
         println "unAssignedHits size " + unAssignedHits.size()
 
-        int numberOfClusters = 4
-
-        // Classifier classifier
-
         when:
         Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4, LuceneClassifyMethod.KNN)
         int cnt = 0
@@ -63,11 +59,11 @@ class ClassifyUnassignedTest extends Specification {
         println "cnt $cnt error $error"
         println "cateogoreis $categories"
 
-
-        Effectiveness.classifierEffectiveness(classifier, IndexEnum.CLASSIC4TEST, 4)
+        Tuple3 eff = Effectiveness.classifierEffectiveness(classifier, IndexEnum.CLASSIC4TEST, 4)
 
         then:
-        2 == 2
-    }
 
+        eff.first > 0.5
+
+    }
 }

@@ -48,15 +48,13 @@ public class ClusterFitness extends SimpleFitness {
         switch (fitnessMethod) {
 
             case fitnessMethod.UNIQUE_HITS_COUNT:
-                baseFitness = hitsMatchingOnlyOneQuery// - (hitsMatchingTwoOrMoreQueries *2)
-              //  baseFitness = (baseFitness > 0)? baseFitness : 0
+                baseFitness = hitsMatchingOnlyOneQuery
                 break
 
             case fitnessMethod.UNIQUE_HITS_K_PENALTY:
 
-                double f = hitsMatchingOnlyOneQuery * (1.0 - (kPenalty * k))
+                final double f = hitsMatchingOnlyOneQuery * (1.0 - (kPenalty * k))
                 baseFitness = (f > 0) ? f : 0.0d
-                //      baseFitness = hitsMatchingOnlyOneQuery * Math.pow(0.97d, (double)(k)) //> 0 ? uniqueWithPenalty : 0
                 break
         }
     }
@@ -81,7 +79,7 @@ public class ClusterFitness extends SimpleFitness {
 
             TotalHitCountCollector collector = new TotalHitCountCollector();
             Indexes.indexSearcher.search(bqbOneCategoryOnly.build(), collector);
-            int qUniqueHits = collector.getTotalHits()
+            final int qUniqueHits = collector.getTotalHits()
 
             qMap.put(q, qUniqueHits)
             totalUniqueHits += qUniqueHits
@@ -106,13 +104,6 @@ public class ClusterFitness extends SimpleFitness {
             sb << "ClusterQuery: $index :  ${queryMap.get(q)}  ${q.toString(Indexes.FIELD_CONTENTS)} \n"
         }
         return sb.toString()
-    }
-
-    void queriesToFile(File qFile){
-        qFile.text = ''
-        queryMap.keySet().each { Query q ->
-            qFile << q.toString(Indexes.FIELD_CONTENTS) + '\n'
-        }
     }
 
     //sent to stat file in statDump

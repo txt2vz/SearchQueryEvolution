@@ -18,8 +18,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Gradle: io.jenetics:jenetics:3.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-json:2.5.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:2.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-json:3.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy:3.0.3" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-classification:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-analyzers-common:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queryparser:7.4.0" level="project" />

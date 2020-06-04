@@ -13,6 +13,11 @@ import org.apache.lucene.search.TotalHitCountCollector
 
 class IndexUtils {
 
+    static void main (String[] args){
+        Indexes.setIndex(IndexEnum.NG6TEST)
+        categoryFrequencies(Indexes.indexSearcher)
+    }
+
     static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q) {
         Map<String, Integer> categoryFrequencyMap = [:]
         TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());

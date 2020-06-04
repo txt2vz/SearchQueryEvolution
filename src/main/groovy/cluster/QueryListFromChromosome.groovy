@@ -33,6 +33,7 @@ enum IntersectMethod {
     double intersectRatio
 }
 
+//see https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_fundamentals.htm
 
 @CompileStatic
 class QueryListFromChromosome {
@@ -56,7 +57,7 @@ class QueryListFromChromosome {
     private Tuple4<BooleanQuery.Builder[], Integer, Integer, Set<Integer>> getOneWordQueryPerCluster(int[] intChromosome, boolean setk = true) {
 
         final int k = (setk) ? intChromosome[0] : Indexes.index.numberOfCategories
-        Set<Integer> genes = [] as Set<Integer>
+        Set<Integer> alleles = [] as Set<Integer>
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[k]
 
         //set k at element 0?
@@ -64,16 +65,16 @@ class QueryListFromChromosome {
         int clusterNumber = 0
         while (clusterNumber < k && index < intChromosome.size()) {
 
-            final int gene = intChromosome[index]
-            assert gene < termQueryList.size() && gene >= 0
+            final int allele = intChromosome[index]
+            assert allele < termQueryList.size() && allele >= 0
 
-            if (genes.add(gene))   {
-                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[gene], BooleanClause.Occur.SHOULD)
+            if (alleles.add(allele))   {
+                bqbL[clusterNumber] = new BooleanQuery.Builder().add(termQueryList[allele], BooleanClause.Occur.SHOULD)
                 clusterNumber++
             }
             index++
         }
-        return new Tuple4(bqbL, k, index, genes)
+        return new Tuple4(bqbL, k, index, alleles)
     }
 
     BooleanQuery.Builder[] getORIntersect(int[] intChromosome, int maxQueryWordsPerCluster = 100, boolean setk = true) {
@@ -84,18 +85,18 @@ class QueryListFromChromosome {
         assert k == bqbArray.size()
 
         int index = tuple4.third
-        Set<Integer> genes = tuple4.fourth
+        Set<Integer> alleles = tuple4.fourth
 
         for (int i = index; i < intChromosome.size() && i < k * maxQueryWordsPerCluster; i++) {
 
-            final int gene = intChromosome[i]
+            final int allele = intChromosome[i]
             final int clusterNumber = i % k
 
             BooleanQuery rootq = bqbArray[clusterNumber].build()
             Query tq0 = rootq.clauses().first().getQuery()
-            TermQuery tqNew = termQueryList[gene]
+            TermQuery tqNew = termQueryList[allele]
 
-            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) >= intersectMethod.intersectRatio) && genes.add(gene)) {
+            if ((QueryTermIntersect.getTermIntersectRatioUsingAND(tq0, tqNew) >= intersectMethod.intersectRatio) && alleles.add(allele)) {
                 bqbArray[clusterNumber].add(tqNew, bco)
             }
         }
@@ -115,12 +116,12 @@ class QueryListFromChromosome {
         }
 
         int clusterNumber = 0
-        Set<Integer> genes = [] as Set<Integer>
+        Set<Integer> alleles = [] as Set<Integer>
         for (int i = 0; i < intChromosome.size(); i++) {
-            final int gene = intChromosome[i]
+            final int allele = intChromosome[i]
 
-            if (gene >= 0 && genes.add(gene)) {
-                bqbArray[clusterNumber].add(termQueryList[gene], bco)
+            if (allele >= 0 && alleles.add(allele)) {
+                bqbArray[clusterNumber].add(termQueryList[allele], bco)
                 clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : 0
             }
         }
@@ -135,21 +136,21 @@ class QueryListFromChromosome {
         assert k == bqbArray.size()
 
         final int index = tuple4.third
-        Set<Integer> genes = tuple4.fourth
+        Set<Integer> alleles = tuple4.fourth
 
         BooleanQuery.Builder[] bqbMinShouldArray = new BooleanQuery.Builder[k]
 
         int clusterNumber = 0
 
         for (int i = index; i < intChromosome.size(); i++) {
-            final int gene = intChromosome[i]
-            assert gene >= 0
+            final int allele = intChromosome[i]
+            assert allele >= 0
 
-            if (genes.add(gene)) {
+            if (alleles.add(allele)) {
                 if (bqbMinShouldArray[clusterNumber] == null) {
                     bqbMinShouldArray[clusterNumber] = new BooleanQuery.Builder().setMinimumNumberShouldMatch(2)
                 }
-                bqbMinShouldArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.SHOULD)
+                bqbMinShouldArray[clusterNumber].add(termQueryList[allele], BooleanClause.Occur.SHOULD)
                 clusterNumber = (clusterNumber < k - 1) ? clusterNumber + 1 : 0
             }
         }
@@ -181,17 +182,17 @@ class QueryListFromChromosome {
             boInner = BooleanClause.Occur.SHOULD
         }
 
-        //  intChromosome.eachWithIndex { int gene, int index ->  //slower
+
         for (int index = (setk) ? 1 : 0; index < intChromosome.size(); index++) {
-            int gene = intChromosome[index]
+            final int alleles = intChromosome[index]
             int clusterNumber = index % k
             bqbArray[clusterNumber] = bqbArray[clusterNumber]
 
-            if (gene < termQueryList.size() && gene >= 0) {
+            if (alleles < termQueryList.size() && alleles >= 0) {
                 if (term0 == null) {
-                    term0 = termQueryList[gene]
+                    term0 = termQueryList[alleles]
                 } else {
-                    term1 = termQueryList[gene]
+                    term1 = termQueryList[alleles]
 
                     Set andPair = [term0, term1] as Set
                     if ((term0 != term1) && andPairSet.add(andPair)) {
@@ -222,17 +223,17 @@ class QueryListFromChromosome {
             bqbArray[i] = new BooleanQuery.Builder()
         }
 
-        Set<Integer> genes = [] as Set<Integer>
+        Set<Integer> alleles = [] as Set<Integer>
         int arrayIndex = 0
 
         for (int index = (setk) ? 1 : 0; index < intChromosome.size(); index++) {
-            int gene = intChromosome[index]
+            int allele = intChromosome[index]
             final int clusterNumber = index % k
-            if (gene >= 0) {
+            if (allele >= 0) {
                 if (arrayIndex >= k && arrayIndex < k * 2) {
-                    bqbArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.MUST_NOT)
-                } else if (genes.add(gene)) {
-                    bqbArray[clusterNumber].add(termQueryList[gene], BooleanClause.Occur.SHOULD)
+                    bqbArray[clusterNumber].add(termQueryList[allele], BooleanClause.Occur.MUST_NOT)
+                } else if (alleles.add(allele)) {
+                    bqbArray[clusterNumber].add(termQueryList[allele], BooleanClause.Occur.SHOULD)
                 }
             }
             arrayIndex++
@@ -247,20 +248,20 @@ class QueryListFromChromosome {
         for (int i = 0; i < k; i++) {
             bqbArray[i] = new BooleanQuery.Builder()
         }
-        Set<Integer> genes = [] as Set<Integer>
+        Set<Integer> alleles = [] as Set<Integer>
 
         for (int index = (setk) ? 1 : 0; index < intChromosome.size(); index++) {
-            int gene = intChromosome[index]
+            int allele = intChromosome[index]
             int clusterNumber = index % k
 
-            if (gene >= 0) {
+            if (allele >= 0) {
                 if (term == null) {
-                    if (genes.add(gene)) {
-                        term = termQueryList[gene]
+                    if (alleles.add(allele)) {
+                        term = termQueryList[allele]
                     }
                 } else {
                     int sfValue
-                    switch (gene) {
+                    switch (allele) {
                         case 95: sfValue = 150
                             break
                         case 96: sfValue = 200
@@ -271,7 +272,7 @@ class QueryListFromChromosome {
                             break
                         case 99: sfValue = 400
                             break
-                        default: sfValue = gene
+                        default: sfValue = allele
                             break
                     }
                     SpanFirstQuery sfq = new SpanFirstQuery(new SpanTermQuery(term.term), sfValue)
@@ -292,20 +293,20 @@ class QueryListFromChromosome {
 
         assert k == bqbArray.size()
         int index = tuple4.third
-        Set<Integer> genes = tuple4.fourth
+        Set<Integer> alleles = tuple4.fourth
 
         Set andPairSet = [] as Set
         TermQuery term0, term1
         int queryNumber = 0
 
         for (index; index < intChromosome.size(); index++) {
-            final int gene = intChromosome[index]
-            if (gene < termQueryList.size() && gene >= 0 && !genes.contains(gene)) {
+            final int allele = intChromosome[index]
+            if (allele < termQueryList.size() && allele >= 0 && !alleles.contains(allele)) {
 
                 if (term0 == null) {
-                    term0 = termQueryList[gene]
+                    term0 = termQueryList[allele]
                 } else {
-                    term1 = termQueryList[gene]
+                    term1 = termQueryList[allele]
 
                     Set andPair = [term0, term1] as Set
                     if (term0 != term1 && andPairSet.add(andPair)) {
