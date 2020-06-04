@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="SearchQueryEvolution:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="ga search query" external.system.module.type="sourceSet" external.system.module.version="0.8" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+  <component name="NewModuleRootManager">
     <output-test url="file://$MODULE_DIR$/../../out/test/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/test">
@@ -26,9 +26,6 @@
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-analyzers-common:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queryparser:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-core:7.4.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-grouping:7.4.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queries:7.4.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-sandbox:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-nio:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-macro:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-templates:3.0.0" level="project" />
@@ -37,6 +34,9 @@
     <orderEntry type="library" name="Gradle: org.codehaus.groovy:groovy-xml:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-engine:1.5.2" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-grouping:7.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queries:7.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-sandbox:7.4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-commons:1.5.2" level="project" />
     <orderEntry type="library" name="Gradle: org.apiguardian:apiguardian-api:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.opentest4j:opentest4j:1.2.0" level="project" />
