@@ -18,7 +18,7 @@ class IndexUtils {
         categoryFrequencies(Indexes.indexSearcher)
     }
 
-    static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q) {
+    static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q, boolean printDetails = false) {
         Map<String, Integer> categoryFrequencyMap = [:]
         TopScoreDocCollector collector = TopScoreDocCollector.create(Indexes.indexReader.numDocs());
         Indexes.indexSearcher.search(q, collector);
@@ -43,12 +43,14 @@ class IndexUtils {
              mostFrequentCategoryHits = mostFrequentCategory?.value
         }
 
-        println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory queryHits ${hits.size()} "
+        if (printDetails) {
+            println "CategoryFrequencyMap: $categoryFrequencyMap for query: ${q.toString(Indexes.FIELD_CONTENTS)} mostFrequentCategory: $mostFrequentCategory queryHits ${hits.size()} "
+        }
 
         return new Tuple3<String, Integer, Integer>(mostFrequentCategoryName, mostFrequentCategoryHits, hits.size())
     }
 
-    static Map<String, Integer> categoryFrequencies(IndexSearcher indexSearcher){
+    static Map<String, Integer> categoryFrequencies(IndexSearcher indexSearcher, boolean printDetails = false){
 
         Query qAll = new MatchAllDocsQuery()
         TopDocs topDocs = indexSearcher.search(qAll, Integer.MAX_VALUE)
@@ -70,8 +72,10 @@ class IndexUtils {
             categoryFrequencies.put((category), n + 1)
         }
 
-        println "Index Utils assingedCatFrequency $assignedCategoryFrequencies"
-        println "category freq $categoryFrequencies"
+        if (printDetails) {
+            println "Index Utils assingedCatFrequency $assignedCategoryFrequencies"
+            println "category freq $categoryFrequencies"
+        }
 
         return categoryFrequencies
     }

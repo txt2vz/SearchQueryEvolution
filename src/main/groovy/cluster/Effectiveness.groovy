@@ -6,6 +6,7 @@ import index.Indexes
 import org.apache.lucene.classification.Classifier
 import org.apache.lucene.classification.utils.ConfusionMatrixGenerator
 import org.apache.lucene.index.Term
+import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.search.TotalHitCountCollector
@@ -64,14 +65,14 @@ class Effectiveness {
 
         final int categoriesPlusPenalty = Indexes.index.numberOfCategories + missingCategories + duplicateCategory
 
-        final double averageF1ForJob = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
-        final double averageRecallForJob = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
-        final double averagePrecisionForJob = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
+        final double averageF1ForQuerySet = (f1list) ? (double) f1list.sum() / categoriesPlusPenalty : 0
+        final double averageRecallForQuerySet = (recallList) ? (double) recallList.sum() / categoriesPlusPenalty : 0
+        final double averagePrecisionForQuerySet = (precisionList) ? (double) precisionList.sum() / categoriesPlusPenalty : 0
 
-        assert averageF1ForJob
-        assert averageF1ForJob > 0
+        assert averageF1ForQuerySet
+        assert averageF1ForQuerySet > 0
 
-        return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForJob, averagePrecisionForJob, averageRecallForJob, f1list)
+        return new Tuple4<Double, Double, Double, List<Double>>(averageF1ForQuerySet, averagePrecisionForQuerySet, averageRecallForQuerySet, f1list)
     }
 
     static Tuple3<Double, Double, Double> classifierEffectiveness(Classifier classifier, IndexEnum testIndex, final int k) {
@@ -113,9 +114,8 @@ class Effectiveness {
                 rList << confusionMatrix.getRecall(categoryName)
             }
 
-            final int maxCats = Math.max(k, testIndex.numberOfCategories)
-            precisionLucene = pList.sum() / maxCats
-            recallLucene = rList.sum() / maxCats
+            precisionLucene = pList.average()
+            recallLucene =  rList.average()
             f1Lucene = 2 * ((precisionLucene * recallLucene) / (precisionLucene + recallLucene))
 
             println "plist $pList rlist $rList"

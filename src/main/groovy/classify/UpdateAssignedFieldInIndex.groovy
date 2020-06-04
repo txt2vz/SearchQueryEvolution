@@ -23,7 +23,7 @@ import java.nio.file.Paths
 @CompileStatic
 class UpdateAssignedFieldInIndex {
 
-    static void updateAssignedField(IndexEnum trainIndex, List<Query> queries, boolean onlyDocsInOneCluster = false) {
+    static void updateAssignedField(IndexEnum trainIndex, Set<Query> queries, boolean onlyDocsInOneCluster = false) {
 
         Indexes.setIndex(trainIndex)
         String indexPath = Indexes.index.pathString
@@ -53,7 +53,7 @@ class UpdateAssignedFieldInIndex {
 
         //modify queries so that they do not return documents returned by any other query
         if (onlyDocsInOneCluster) {
-            List<Query> docInOneClusterQueries = []
+            Set <Query> docInOneClusterQueries = []
             for (int i = 0; i < queries.size(); i++) {
                 Query q = queries[i]
 
@@ -110,6 +110,6 @@ class UpdateAssignedFieldInIndex {
 
     static void main(String[] args) {
         File queryData = new File('results/qFile.txt')
-        updateAssignedField(IndexEnum.CRISIS3, QueryTextFile.retrieveQueryListFromFile(queryData))
+       // updateAssignedField(IndexEnum.CRISIS3, QueryTextFile.retrieveQueryListFromFile(queryData))
     }
 }

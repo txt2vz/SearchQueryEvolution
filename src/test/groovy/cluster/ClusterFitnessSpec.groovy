@@ -14,8 +14,8 @@ class ClusterFitnessSpec extends Specification {
     def "check psuedo f1 precision recall "(){
         setup:
         Indexes.setIndex(IndexEnum.NG3TEST)
-        def cf = new ClusterFitness()
-        ClusterFitness.fitnessMethod = FitnessMethod.UNIQUE_HITS_COUNT//FitnessMethod.PSEUDOF1
+        def cf = new ECJclusterFitness()
+        ECJclusterFitness.FITNESS_METHOD = FitnessMethodECJ.UNIQUE_HITS_COUNT//FitnessMethod.PSEUDOF1
         BooleanQuery.Builder[] bqbL = new BooleanQuery.Builder[2]
 
         TermQuery spaceQuery = new TermQuery(new Term(Indexes.FIELD_CONTENTS, 'space'))
@@ -51,7 +51,7 @@ class ClusterFitnessSpec extends Specification {
         Indexes.indexSearcher.search(spaceANDorbit.build(), collector);
         int spaceANDorbitHits = collector.getTotalHits()
 
-        cf = new ClusterFitness()
+        cf = new ECJclusterFitness()
       //  Set<BooleanQuery.Builder> bqbSet0 = bqbL as Set<BooleanQuery.Builder>
         cf.setClusterFitness(Arrays.asList(bqbL).asImmutable())
 

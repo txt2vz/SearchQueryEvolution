@@ -2,7 +2,8 @@ parent.0		= simple.params
 
 evalthreads = 				4
 breedthreads = 				4
-generations =  10
+generations =  210
+
 
 eval.problem = cluster.ClusterQuery
 stat = cluster.ClusterGAStatistics
@@ -18,11 +19,11 @@ pop.subpop.0 = ec.Subpopulation
 pop.subpop.0.size = 512 
 pop.subpop.0.species = ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind = ec.vector.IntegerVectorIndividual
-pop.subpop.0.species.fitness = cluster.ClusterFitness
+pop.subpop.0.species.fitness = cluster.ECJclusterFitness
 
-pop.subpop.0.species.min-gene = -1
-pop.subpop.0.species.max-gene = 300
-pop.subpop.0.species.genome-size = 30
+pop.subpop.0.species.min-gene = 0
+pop.subpop.0.species.max-gene = 100
+pop.subpop.0.species.genome-size = 19
 pop.subpop.0.species.crossover-type	= two
 
 pop.subpop.0.species.crossover-likelihood	= 0.7

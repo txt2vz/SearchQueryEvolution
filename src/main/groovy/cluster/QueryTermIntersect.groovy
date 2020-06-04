@@ -5,9 +5,33 @@ import index.Indexes
 import org.apache.lucene.search.*
 
 @CompileStatic
+enum MinIntersectValue {
+
+    NONE(0.0d),
+    RATIO_POINT_1(0.1d),
+    RATIO_POINT_2(0.2d),
+    RATIO_POINT_3(0.3d),
+    RATIO_POINT_4(0.4d),
+    RATIO_POINT_5(0.5d),
+    RATIO_POINT_6(0.6d),
+    RATIO_POINT_7(0.7d),
+    RATIO_POINT_8(0.8d),
+    RATIO_POINT_9(0.9d)
+
+    MinIntersectValue(double minVal) {
+        intersectRatio = minVal
+    }
+    double intersectRatio
+}
+
+
+
+@CompileStatic
 class QueryTermIntersect {
 
-    static double getTermIntersectRatioUsingAND(Query q0, Query q1){
+    static MinIntersectValue minIntersect
+
+    static boolean isValidIntersect(Query q0, Query q1){
         IndexSearcher indexSearcher = Indexes.indexSearcher
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
@@ -24,6 +48,7 @@ class QueryTermIntersect {
 
         assert q1Count > 0
 
-        return andCount / q1Count
+        return (andCount / q1Count) > minIntersect.intersectRatio
+        //MinIntersectValue.RATIO_POINT_5.intersectRatio
     }
 }

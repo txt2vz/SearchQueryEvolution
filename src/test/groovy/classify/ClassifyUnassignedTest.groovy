@@ -36,7 +36,7 @@ class ClassifyUnassignedTest extends Specification {
         println "unAssignedHits size " + unAssignedHits.size()
 
         when:
-        Classifier classifier = new ClassifyUnassigned().classifyUnassigned(IndexEnum.CLASSIC4, LuceneClassifyMethod.KNN)
+        Classifier classifier = new ClassifyUnassigned().getClassifierForUnassignedDocuments(IndexEnum.CLASSIC4, LuceneClassifyMethod.KNN)
         int cnt = 0
         int error = 0
         Set <String> categories = [] as Set<String>
