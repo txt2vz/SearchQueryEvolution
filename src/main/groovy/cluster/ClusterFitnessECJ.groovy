@@ -23,27 +23,28 @@ public class ECJclusterFitness extends SimpleFitness {
     List<BooleanQuery.Builder> bqbList =[]
     double baseFitness = 0.0  //for ECJ
     int uniqueHits = 0
-    int hitsMatchingTwoOrMoreQueries = 0
+//    int hitsMatchingTwoOrMoreQueries = 0
     int totalHits = 0
-    int missedDocs = 0
+  //  int missedDocs = 0
     int k
 
     double getFitness() {
         return baseFitness;
     }
 
-    void setClusterFitness( Tuple3 <Map<Query, Integer>, Integer, Integer> t3 , List<BooleanQuery.Builder> bqbListIn, double f) {
+    void setClusterFitness( Tuple3 <Map<Query, Integer>, Integer, Integer> t3UniqueHits , List<BooleanQuery.Builder> bqbListIn, double f) {
 
         bqbList = bqbListIn
         baseFitness = f
-        queryMap= t3.v1
-        uniqueHits = t3.v2
-        totalHits = t3.v3
+        queryMap= t3UniqueHits.v1
+        uniqueHits = t3UniqueHits.v2
+        totalHits = t3UniqueHits.v3
+        k = bqbList.size()
     }
 
     void generationStats(long generation) {
         println "${queryShort()}"
-        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $uniqueHits    totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} missedDocs: $missedDocs  hitsMatchingTwoOrMoreQueries: $hitsMatchingTwoOrMoreQueries  "
+        println "baseFitness: ${baseFitness.round(3)} uniqueHits: $uniqueHits  totalHits: $totalHits totalDocs: ${Indexes.indexReader.numDocs()} "
         println ""
     }
 

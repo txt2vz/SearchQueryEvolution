@@ -29,31 +29,31 @@ import static io.jenetics.engine.EvolutionResult.toBestPhenotype;
 public class JeneticsMain {
 
     static List<TermQuery> termQueryList;
-    static QType qType = //QType.OR1;
-            QType.OR_INTERSECT;
+    static QType qType = QType.OR1;
+         //   QType.OR_INTERSECT;
     static IndexEnum indexEnum;
     static IndexReader ir;
-    final static boolean setk = false;
+    final static boolean SETK = false;
     static String gaEngine = "JENETICS.IO";
 
     //static int k;
     static List<IndexEnum> ieList = Arrays.asList(
             IndexEnum.CRISIS3,
-//            IndexEnum.CLASSIC4
-//            , IndexEnum.NG3, IndexEnum.NG5
-//            , IndexEnum.NG6
-//            , IndexEnum.R4, IndexEnum.R5,
+            IndexEnum.CLASSIC4
+            , IndexEnum.NG3, IndexEnum.NG5
+            , IndexEnum.NG6
+            , IndexEnum.R4, IndexEnum.R5,
             IndexEnum.R6
     );
 
     static double searchQueryFitness(final Genotype<IntegerGene> gt) {
-        final int k = getK(gt, indexEnum, setk);
+        final int k = getK(gt, indexEnum, SETK);
         int[] intArray = ((IntegerChromosome) gt.get(0)).toArray();
 
         List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArray, termQueryList, k, qType);
         final int uniqueHits = UniqueHits.getUniqueHits(bqbList).getV2();
 
-        final double f = (setk) ? uniqueHits * (1.0 - (0.04 * k)) : uniqueHits;
+        final double f = (SETK) ? uniqueHits * (1.0 - (0.04 * k)) : uniqueHits;
         return (f > 0) ? f : 0.0d;
     }
 
@@ -65,7 +65,7 @@ public class JeneticsMain {
         final int maxGene = 100;
         final LuceneClassifyMethod classifyMethod = LuceneClassifyMethod.KNN;
         final int setkMaxNumberOfCategories = 9;
-        final int numberOfJobs = 2;
+        final int numberOfJobs = 3;
 
         final int maxGenomeLength = 19;
         final boolean onlyDocsInOneClusterForClassifier = false;
@@ -80,11 +80,11 @@ public class JeneticsMain {
                 Indexes.setIndex(ie, true);
                 termQueryList = (Collections.unmodifiableList(ImportantTermQueries.getTFIDFTermQueryList(ie.getIndexReader())));
 
-                final int maxCats = (setk) ? setkMaxNumberOfCategories : indexEnum.getNumberOfCategories();
+                final int maxCats = (SETK) ? setkMaxNumberOfCategories : indexEnum.getNumberOfCategories();
                 final int genomeLength = (qType == QType.OR1) ? maxCats : maxGenomeLength;
 
                 final Factory<Genotype<IntegerGene>> gtf =
-                        (setk) ?
+                        (SETK) ?
                                 Genotype.of(
                                         IntegerChromosome.of(0, maxGene, genomeLength),
                                         IntegerChromosome.of(2, setkMaxNumberOfCategories)) :  //possible values for k
@@ -120,7 +120,7 @@ public class JeneticsMain {
                                 .peek(ind -> {
                                     Genotype<IntegerGene> g = ind.bestPhenotype().genotype();
                                     int[] intArrayBestGen = ((IntegerChromosome) g.get(0)).toArray();
-                                    final int k = getK(g, ie, setk);
+                                    final int k = getK(g, ie, SETK);
 
                                     List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
 
@@ -138,7 +138,7 @@ public class JeneticsMain {
                 Genotype<IntegerGene> g = result.genotype();
 
                 int[] intArrayBestOfRun = ((IntegerChromosome) g.get(0)).toArray();
-                final int k = getK(g, ie, setk);
+                final int k = getK(g, ie, SETK);
 
                 List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestOfRun, termQueryList, k, qType);
                 Tuple5<Set<Query>, Integer, Double, Double, Double> t5QuerySetResult = QuerySet.querySetInfo(bqbList, true, true);
@@ -153,7 +153,7 @@ public class JeneticsMain {
                 System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reports.reportCSV(ie, t5QuerySetResult, t3ClassiferResult, qType, setk,  classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
+                reports.reportCSV(ie, t5QuerySetResult, t3ClassiferResult, qType, SETK,  classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
             reports.reportMaxFitness();

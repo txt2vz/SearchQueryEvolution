@@ -114,9 +114,8 @@ class Effectiveness {
                 rList << confusionMatrix.getRecall(categoryName)
             }
 
-            final int maxCats = Math.max(k, testIndex.numberOfCategories)
-            precisionLucene = pList.sum() / maxCats
-            recallLucene = rList.sum() / maxCats
+            precisionLucene = pList.average()
+            recallLucene =  rList.average()
             f1Lucene = 2 * ((precisionLucene * recallLucene) / (precisionLucene + recallLucene))
 
             println "plist $pList rlist $rList"
