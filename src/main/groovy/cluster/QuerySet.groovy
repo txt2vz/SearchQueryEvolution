@@ -104,7 +104,7 @@ class QuerySet {
 
             File queryFileOut = new File('results/Queries.txt')
             queryFileOut << "TotalHits: ${t3.v3} Total Docs:  ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()} \n"
-            queryFileOut << "hitsMatchingOnly1Query: ${uniqueHits}  TotalHitsAllQueries : $totalHitsAllQueries  f1: $f1  \n"
+            queryFileOut << "hitsMatchingOnly1Query: ${uniqueHits}  TotalHitsAllQueries : $totalHitsAllQueries  QuerySetf1: $f1  \n"
             queryFileOut << printQuerySet(queryMap)
             queryFileOut << "************************************************ \n \n"
         }

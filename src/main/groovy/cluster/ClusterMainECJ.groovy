@@ -48,7 +48,7 @@ class ClusterMainECJ extends Evolve {
 
     List<QType> queryTypesList = [
 
-           //   QType.OR_INTERSECT,
+            //   QType.OR_INTERSECT,
             QType.OR1
     ]
 
@@ -67,7 +67,7 @@ class ClusterMainECJ extends Evolve {
         Reports reports = new Reports();
 
         File timingFile = new File("results/timing.csv")
-       // File queryFile = new File('results/qFile.txt')
+        // File queryFile = new File('results/qFile.txt')
         if (!timingFile.exists()) {
             timingFile << 'index, queryType, GAtime, KNNtime, overallTime \n'
         }
@@ -75,8 +75,8 @@ class ClusterMainECJ extends Evolve {
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
 
             NUMBER_OF_JOBS.times { job ->
-                //    [true, false].each { set_k ->
-                [false].each { set_k ->
+                [true, false].each { set_k ->
+                    // [false].each { set_k ->
                     SETK = set_k
                     EvolutionState state = new EvolutionState()
 
