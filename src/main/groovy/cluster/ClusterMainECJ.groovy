@@ -29,15 +29,15 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
+            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+           // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
 
-            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+           // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
@@ -75,8 +75,8 @@ class ClusterMainECJ extends Evolve {
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
 
             NUMBER_OF_JOBS.times { job ->
-                [true, false].each { set_k ->
-                    // [false].each { set_k ->
+              //  [true, false].each { set_k ->
+                     [true].each { set_k ->
                     SETK = set_k
                     EvolutionState state = new EvolutionState()
 
@@ -134,7 +134,7 @@ class ClusterMainECJ extends Evolve {
                                 Set<Query> queries = bestClusterFitness.queryMap.keySet().asImmutable()
                                 List<BooleanQuery.Builder> bqbList = bestClusterFitness.bqbList
 
-                                Tuple5<Set<Query>, Integer, Double, Double, Double> t5QuerySetResult = QuerySet.querySetInfo(bqbList, false, true)
+                                Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> t6QuerySetResult = QuerySet.querySetInfo(bqbList)
 
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queries, onlyDocsInOneCluster)
 
@@ -147,7 +147,7 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    reports.reportCSV(trainTestIndexes.v1, t5QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
+                                    reports.reportCSV(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
                                 }
                             }
                         }

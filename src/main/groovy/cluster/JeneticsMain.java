@@ -5,6 +5,7 @@ import classify.LuceneClassifyMethod;
 import classify.UpdateAssignedFieldInIndex;
 import groovy.lang.Tuple3;
 import groovy.lang.Tuple5;
+import groovy.lang.Tuple6;
 import groovy.time.TimeCategory;
 import groovy.time.TimeDuration;
 import index.*;
@@ -125,7 +126,7 @@ public class JeneticsMain {
                                     List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
 
                                   //  Tuple3<Set<Query>, Integer, Double> queryDataGen = QuerySet.querySetInfo(intArrayBestGen, termQueryList, k, qType, true);
-                                    Tuple5<Set<Query>, Integer, Double, Double, Double>queryDataGen = QuerySet.querySetInfo(bqbList, true, false );
+                                    Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double>queryDataGen = QuerySet.querySetInfo(bqbList, true );
                                     System.out.println("gen: " + ind.generation() + " bestPhenoFit " + ind.bestPhenotype().fitness() + " fitness: " + ind.bestFitness() + " uniqueHits: " + queryDataGen.getV2() + " querySet F1: " + queryDataGen.getV3());
                                     System.out.println();
 
@@ -141,11 +142,11 @@ public class JeneticsMain {
                 final int k = getK(g, ie, SETK);
 
                 List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestOfRun, termQueryList, k, qType);
-                Tuple5<Set<Query>, Integer, Double, Double, Double> t5QuerySetResult = QuerySet.querySetInfo(bqbList, true, true);
+                Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> t6QuerySetResult = QuerySet.querySetInfo(bqbList);
 
                 Classifier classifier = ClassifyUnassigned.getClassifierForUnassignedDocuments(ie, LuceneClassifyMethod.KNN);
 
-                UpdateAssignedFieldInIndex.updateAssignedField(ie, t5QuerySetResult.getV1(), onlyDocsInOneClusterForClassifier);
+                UpdateAssignedFieldInIndex.updateAssignedField(ie, t6QuerySetResult.getV1().keySet(), onlyDocsInOneClusterForClassifier);
 
                 Tuple3<Double, Double, Double> t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, ie, k);
                // final double classifierF1 = classifierEffectiveness.getV1();
@@ -153,7 +154,7 @@ public class JeneticsMain {
                 System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reports.reportCSV(ie, t5QuerySetResult, t3ClassiferResult, qType, SETK,  classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
+                reports.reportCSV(ie, t6QuerySetResult, t3ClassiferResult, qType, SETK,  classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
             reports.reportMaxFitness();
