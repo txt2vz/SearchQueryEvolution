@@ -7,12 +7,12 @@ import org.apache.lucene.search.Query
 
 class Reports {
 
-    List<Tuple7<IndexEnum, Double, Double, Integer, QType, LuceneClassifyMethod, Boolean>> t7List = []
+    List<Tuple7<String, Double, Double, Integer, QType, LuceneClassifyMethod, Boolean>> t7List = []
 
-    void reportCSV(IndexEnum ie, Tuple6 <Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int genomeSize, int maxGene, int gen, String gaEngine, int job) {
+    void reports(IndexEnum ie, Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int genomeSize, int maxGene, int gen, String gaEngine, int job) {
 
         Map<Query, Integer> queryMap = qResult.v1
-        final int uniqueHits  = qResult.v2
+        final int uniqueHits = qResult.v2
         final int totalHits = qResult.v3
         final double qF1 = qResult.v4
         final double qP = qResult.v5
@@ -37,7 +37,7 @@ class Reports {
         queryFileOut << QuerySet.printQuerySet(queryMap)
         queryFileOut << "************************************************ \n \n"
 
-        t7List << new Tuple7(ie, qF1, cF1, uniqueHits, qType, lcm, setk)
+        t7List << new Tuple7(ie.name(), qF1, cF1, uniqueHits, qType, lcm, setk)
     }
 
     void reportMaxFitness() {
@@ -47,11 +47,11 @@ class Reports {
             fcsvMax << 'Index, queryF1, classifierF1, uniqueHits, queryType, classifyMethod, setk,  date \n'
         }
 
-        Date date = new Date();
         t7List.toUnique { it.v1 }.each { t ->
             def t7Max = t7List.findAll { t.v1 == it.v1 }.max { q -> q.v4 }
-
-            fcsvMax << "${t7Max.v1.name()}, ${t7Max.v2}, ${t7Max.v3}, ${t7Max.v4},${t7Max.v5},${t7Max.v6},${t7Max.v7}, $date \n"
+            fcsvMax << "${t7Max.v1}, ${t7Max.v2}, ${t7Max.v3}, ${t7Max.v4},${t7Max.v5},${t7Max.v6},${t7Max.v7}, ${new Date()} \n"
         }
+
+        println "Average query f1 " + t7List.average { it.v2 } + " Classifier f1: " + t7List.average { it.v3 }
     }
 }

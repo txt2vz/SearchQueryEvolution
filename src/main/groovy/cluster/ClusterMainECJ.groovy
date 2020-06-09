@@ -19,7 +19,7 @@ import org.apache.lucene.search.Query
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 3
+    final static int NUMBER_OF_JOBS = 2
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -29,15 +29,15 @@ class ClusterMainECJ extends Evolve {
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
-            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
-            //new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
-           // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
 
-           // new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
 
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
@@ -91,8 +91,6 @@ class ClusterMainECJ extends Evolve {
                             println "Query type $qt"
 
                             String parameterFilePath =
-                                    //      'src/cfg/clusterGA.params'
-                                    //'src/cfg/clusterSinglePop.params'
                                     SETK ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
                             intersectRatioList.each { MinIntersectValue minIntersectRatio ->
@@ -147,7 +145,7 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    reports.reportCSV(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
+                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
                                 }
                             }
                         }
