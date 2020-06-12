@@ -19,7 +19,7 @@ import org.apache.lucene.search.Query
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 3
+    final static int NUMBER_OF_JOBS = 2
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -48,7 +48,7 @@ class ClusterMainECJ extends Evolve {
 
     List<QType> queryTypesList = [
 
-           //   QType.OR_INTERSECT,
+            //   QType.OR_INTERSECT,
             QType.OR1
     ]
 
@@ -67,7 +67,7 @@ class ClusterMainECJ extends Evolve {
         Reports reports = new Reports();
 
         File timingFile = new File("results/timing.csv")
-       // File queryFile = new File('results/qFile.txt')
+        // File queryFile = new File('results/qFile.txt')
         if (!timingFile.exists()) {
             timingFile << 'index, queryType, GAtime, KNNtime, overallTime \n'
         }
@@ -75,8 +75,8 @@ class ClusterMainECJ extends Evolve {
         clusteringIndexes.each { Tuple2<IndexEnum, IndexEnum> trainTestIndexes ->
 
             NUMBER_OF_JOBS.times { job ->
-                //    [true, false].each { set_k ->
-                [false].each { set_k ->
+              //  [true, false].each { set_k ->
+                     [true].each { set_k ->
                     SETK = set_k
                     EvolutionState state = new EvolutionState()
 
@@ -91,8 +91,6 @@ class ClusterMainECJ extends Evolve {
                             println "Query type $qt"
 
                             String parameterFilePath =
-                                    //      'src/cfg/clusterGA.params'
-                                    //'src/cfg/clusterSinglePop.params'
                                     SETK ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
 
                             intersectRatioList.each { MinIntersectValue minIntersectRatio ->
@@ -134,7 +132,7 @@ class ClusterMainECJ extends Evolve {
                                 Set<Query> queries = bestClusterFitness.queryMap.keySet().asImmutable()
                                 List<BooleanQuery.Builder> bqbList = bestClusterFitness.bqbList
 
-                                Tuple5<Set<Query>, Integer, Double, Double, Double> t5QuerySetResult = QuerySet.querySetInfo(bqbList, false, true)
+                                Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> t6QuerySetResult = QuerySet.querySetInfo(bqbList)
 
                                 UpdateAssignedFieldInIndex.updateAssignedField(trainTestIndexes.first, queries, onlyDocsInOneCluster)
 
@@ -147,7 +145,7 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    reports.reportCSV(trainTestIndexes.v1, t5QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
+                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qt, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
                                 }
                             }
                         }

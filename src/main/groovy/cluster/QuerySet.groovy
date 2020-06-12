@@ -2,10 +2,12 @@ package cluster
 
 import groovy.transform.CompileStatic
 import index.Indexes
-import org.apache.lucene.search.*
+import org.apache.lucene.search.BooleanClause
+import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Query
+import org.apache.lucene.search.TermQuery
 
 //see https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_fundamentals.htm
-
 
 enum QType {
     OR1, OR_INTERSECT
@@ -81,10 +83,8 @@ class QuerySet {
         return bqbL.asImmutable()
     }
 
-    // static Tuple3<Set<Query>, Integer, Double> querySetInfo(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType queryType, boolean printQueries = false, boolean queriesToFile = false) {
-    static Tuple5<Set<Query>, Integer, Double, Double, Double> querySetInfo(List<BooleanQuery.Builder> bqbList, boolean printQueries = false, boolean queriesToFile = false) {
+    static Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> querySetInfo(List<BooleanQuery.Builder> bqbList, boolean printQueries = false) {
 
-        //List<BooleanQuery.Builder> bqbList = getQueryList(intChromosome, termQueryList, k, queryType)
         Tuple3<Map<Query, Integer>, Integer, Integer> t3 = UniqueHits.getUniqueHits(bqbList);
 
         Map<Query, Integer> queryMap = t3.v1
@@ -100,16 +100,7 @@ class QuerySet {
             println printQuerySet(queryMap);
         }
 
-        if (queriesToFile) {
-
-            File queryFileOut = new File('results/Queries.txt')
-            queryFileOut << "TotalHits: ${t3.v3} Total Docs:  ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()} \n"
-            queryFileOut << "hitsMatchingOnly1Query: ${uniqueHits}  TotalHitsAllQueries : $totalHitsAllQueries  f1: $f1  \n"
-            queryFileOut << printQuerySet(queryMap)
-            queryFileOut << "************************************************ \n \n"
-        }
-
-        return new Tuple5(queryMap.keySet(), uniqueHits, f1, precision, recall)
+        return new Tuple6(queryMap, uniqueHits, totalHitsAllQueries, f1, precision, recall)
     }
 
     static String printQuerySet(Map<Query, Integer> queryIntegerMap) {
