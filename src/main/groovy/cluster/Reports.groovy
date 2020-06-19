@@ -9,7 +9,7 @@ class Reports {
 
     List<Tuple7<String, Double, Double, Integer, QType, LuceneClassifyMethod, Boolean>> t7List = []
 
-    void reports(IndexEnum ie, Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int genomeSize, int maxGene, int gen, String gaEngine, int job) {
+    void reports(IndexEnum ie, Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int numberOfSubpops, int genomeSize, int maxGene, int gen, String gaEngine, int job) {
 
         Map<Query, Integer> queryMap = qResult.v1
         final int uniqueHits = qResult.v2
@@ -27,9 +27,9 @@ class Reports {
 
         File fcsv = new File("results/results.csv")
         if (!fcsv.exists()) {
-            fcsv << 'Index, QueryF1, QueryPrecision, QueryRecall, ClassifierF1,ClassifierPrecision,ClassifierRecall, UniqueHits, QueryType, SetK, ClusterCountError, ClassifyMethod, OnlyDocsInOneClusterForTraining, PopulationSize, GenomeSize, MaxGene, Gen, GA_Engine, Job, date \n'
+            fcsv << 'Index, QueryF1, QueryPrecision, QueryRecall, ClassifierF1,ClassifierPrecision,ClassifierRecall, UniqueHits, QueryType, SetK, ClusterCountError, ClassifyMethod, OnlyDocsInOneClusterForTraining, PopulationSize, NumberOfSubPops, GenomeSize, MaxGene, Gen, GA_Engine, Job, date \n'
         }
-        fcsv << " ${ie.name()}, $qF1, $qP, $qR, $cF1, $cR, $cP, $uniqueHits, $qType, $setk, $categoryCountErrorAbs, $lcm, $onlyDocsInOnecluster, $popSize, $genomeSize, $maxGene, $gen, $gaEngine, $job, ${new Date()} \n"
+        fcsv << " ${ie.name()}, $qF1, $qP, $qR, $cF1, $cR, $cP, $uniqueHits, $qType, $setk, $categoryCountErrorAbs, $lcm, $onlyDocsInOnecluster, $popSize, $numberOfSubpops, $genomeSize, $maxGene, $gen, $gaEngine, $job, ${new Date()} \n"
 
         File queryFileOut = new File('results/Queries.txt')
         queryFileOut << "Total Docs: ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()} \n"

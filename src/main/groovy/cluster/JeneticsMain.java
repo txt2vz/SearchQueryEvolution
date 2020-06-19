@@ -63,11 +63,12 @@ public class JeneticsMain {
 
         final Date startRun = new Date();
         final int popSize = 512;
-        final int maxGen = 20;
+        final int maxGen = 120;
         final int maxGene = 100;
         final LuceneClassifyMethod classifyMethod = LuceneClassifyMethod.KNN;
         final int setkMaxNumberOfCategories = 9;
         final int numberOfJobs = 2;
+        final int numberOfSubPops = 1;
 
         final int maxGenomeLength = 19;
         final boolean onlyDocsInOneClusterForClassifier = false;
@@ -154,7 +155,7 @@ public class JeneticsMain {
                 System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
+                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, numberOfSubPops, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
 
