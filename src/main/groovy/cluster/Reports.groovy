@@ -22,14 +22,15 @@ class Reports {
         final double cP = cResult.v2
         final double cR = cResult.v3
 
-        final int categoryCountError = ie.numberOfCategories - queryMap.size()
+        final int numberOfClusters = queryMap.size();
+        final int categoryCountError = ie.numberOfCategories - numberOfClusters
         final int categoryCountErrorAbs = Math.abs(categoryCountError)
 
         File fcsv = new File("results/results.csv")
         if (!fcsv.exists()) {
-            fcsv << 'Index, QueryF1, QueryPrecision, QueryRecall, ClassifierF1,ClassifierPrecision,ClassifierRecall, UniqueHits, QueryType, SetK, ClusterCountError, ClassifyMethod, OnlyDocsInOneClusterForTraining, PopulationSize, NumberOfSubPops, GenomeSize, MaxGene, Gen, GA_Engine, Job, date \n'
+            fcsv << 'Index, QueryF1, QueryPrecision, QueryRecall, ClassifierF1,ClassifierPrecision,ClassifierRecall, UniqueHits, QueryType, SetK, NumberofCategories, NumberOfClusters, ClusterCountError, ClassifyMethod, OnlyDocsInOneClusterForTraining, PopulationSize, NumberOfSubPops, GenomeSize, MaxGene, Gen, GA_Engine, Job, date \n'
         }
-        fcsv << " ${ie.name()}, $qF1, $qP, $qR, $cF1, $cR, $cP, $uniqueHits, $qType, $setk, $categoryCountErrorAbs, $lcm, $onlyDocsInOnecluster, $popSize, $numberOfSubpops, $genomeSize, $maxGene, $gen, $gaEngine, $job, ${new Date()} \n"
+        fcsv << " ${ie.name()}, $qF1, $qP, $qR, $cF1, $cR, $cP, $uniqueHits, $qType, $setk, $ie.numberOfCategories, $numberOfClusters, $categoryCountErrorAbs, $lcm, $onlyDocsInOnecluster, $popSize, $numberOfSubpops, $genomeSize, $maxGene, $gen, $gaEngine, $job, ${new Date()} \n"
 
         File queryFileOut = new File('results/Queries.txt')
         queryFileOut << "Total Docs: ${Indexes.indexReader.numDocs()} Index: ${Indexes.index} ${new Date()} \n"
