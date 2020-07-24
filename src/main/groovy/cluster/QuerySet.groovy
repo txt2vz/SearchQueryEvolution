@@ -22,7 +22,9 @@ class QuerySet {
             case QType.OR1: return getOneWordQueryPerCluster(intChromosome, termQueryList, k)
                 break
 
-            case QType.OR_INTERSECT: return getORIntersect(intChromosome, termQueryList, k)
+            case QType.OR_INTERSECT:
+                QueryTermIntersect.minIntersect = MinIntersectValue.RATIO_POINT_5
+                return getORIntersect(intChromosome, termQueryList, k)
                 break
         }
     }
