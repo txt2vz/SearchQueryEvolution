@@ -19,7 +19,7 @@ import org.apache.lucene.search.Query
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 2
+    final static int NUMBER_OF_JOBS = 7
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -48,7 +48,7 @@ class ClusterMainECJ extends Evolve {
 
     List<QType> queryTypesList = [
 
-            //   QType.OR_INTERSECT,
+               QType.OR_INTERSECT,
             QType.OR1
     ]
 
