@@ -8,15 +8,9 @@ import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.TotalHitCountCollector
 
-//@CompileStatic
-//enum FitnessMethodECJ {
-//    UNIQUE_HITS_COUNT, UNIQUE_HITS_K_PENALTY
-//}
-
 @CompileStatic
 public class ECJclusterFitness extends SimpleFitness {
 
-   // static FitnessMethodECJ FITNESS_METHOD
     public static double K_PENALTY = 0.04d
 
     Map<Query, Integer> queryMap = [:]
