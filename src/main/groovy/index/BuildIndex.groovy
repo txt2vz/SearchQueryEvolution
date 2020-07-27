@@ -42,7 +42,8 @@ class BuildIndex {
          //       'indexes/R6'
 
        //           'indexes/NG5Test'
-              'indexes/NG6Train'
+         //     'indexes/NG6Train'
+        'indexes/classic45N2'
 
                // 'indexes/NG5Test'
         //         'indexes/NG3'
@@ -52,7 +53,9 @@ class BuildIndex {
         String docsPath =
            //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
              //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+                ///C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+
+        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Classic\Classic4Test/
 
          //       /C:\Users\aceslh\Dataset\20NG6GraphicsHockeyCryptSpaceChristianGuns/
 
@@ -98,7 +101,7 @@ class BuildIndex {
             int dirCount = 0
             it.eachFileRecurse { file ->
 
-                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 300) {
+                if (!file.hidden && file.exists() && file.canRead() && !file.isDirectory() && dirCount < 500) {
                     Document doc = new Document()
 
                     Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
