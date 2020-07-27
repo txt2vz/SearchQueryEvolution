@@ -48,7 +48,9 @@ class QueryTermIntersect {
 
         assert q1Count > 0
 
-        return (andCount / q1Count) > minIntersect.intersectRatio
+        println "minsintss t " + minIntersect.intersectRatio
+
+        return (andCount / q1Count) >= minIntersect.intersectRatio
         //MinIntersectValue.RATIO_POINT_5.intersectRatio
     }
 }

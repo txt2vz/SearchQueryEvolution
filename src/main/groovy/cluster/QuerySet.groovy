@@ -17,13 +17,14 @@ enum QType {
 class QuerySet {
 
     static List<BooleanQuery.Builder> getQueryBuilderList(int[] intChromosome, List<TermQuery> termQueryList, final int k, QType qType) {
+      //  MinIntersectValue mi =
 
         switch (qType) {
             case QType.OR1: return getOneWordQueryPerCluster(intChromosome, termQueryList, k)
                 break
 
             case QType.OR_INTERSECT:
-                QueryTermIntersect.minIntersect = MinIntersectValue.RATIO_POINT_5
+               // QueryTermIntersect.minIntersect = MinIntersectValue.NONE
                 return getORIntersect(intChromosome, termQueryList, k)
                 break
         }

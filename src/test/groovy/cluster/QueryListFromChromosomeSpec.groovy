@@ -10,18 +10,20 @@ import org.apache.lucene.search.TermQuery
 
 class QueryListFromChromosomeSpec extends spock.lang.Specification {
 
+    def "Name"() {
+    }
+
     def "QueryListFromChromosome OR 20News3 tfidf"() {
         setup:
         Indexes.setIndex(IndexEnum.NG3TEST)
-        ImportantTermQueries impTermQueries = new ImportantTermQueries()
-        TermQuery[] tfidfList = impTermQueries.getTFIDFTermQueryList(Indexes.indexReader)
-        QueryListFromChromosome.intersectMethod = IntersectMethod.RATIO_POINT_5
+        List <TermQuery> tfidfList =
+                ImportantTermQueries.getTFIDFTermQueryList(Indexes.indexReader) asImmutable()
+        int[] genome =  new int[] {0, 1, 2}
 
         when:
-        int[] genome = [0, 1, 2] as int[]
-        QueryListFromChromosome qlfc = new QueryListFromChromosome(tfidfList as List)
+        final int k = 3
+        List<BooleanQuery.Builder> bqbL =    QuerySet.getQueryBuilderList(genome, tfidfList, k, QType.OR1)
 
-        List<BooleanQuery.Builder> bqbL = qlfc.getSimple(genome)
         Query q = bqbL[0].build()
         String s = q.toString(Indexes.FIELD_CONTENTS)
         println "s $s"
@@ -39,17 +41,22 @@ class QueryListFromChromosomeSpec extends spock.lang.Specification {
         q.toString(Indexes.FIELD_CONTENTS) == 'nasa'
 
         when:
-        genome = [2, 1, 4, 8, 3, 7] as int[]
-        qlfc = new QueryListFromChromosome(tfidfList as List)
+        genome = [0, 2, 4, 1, 3, 7] as int[]
+        QueryTermIntersect.minIntersect = MinIntersectValue.NONE
+        bqbL =    QuerySet.getQueryBuilderList(genome, tfidfList, k, QType.OR_INTERSECT)
 
-        bqbL = qlfc.getSimple(genome)
         Query q0 = bqbL[0].build()
         Query q1 = bqbL[1].build()
         Query q2 = bqbL[2].build()
 
+
+//        println "qo $q0"
+//        println "q1 $q1"
+//        println "q2 $q2"
+
         then:
-        q0.toString(Indexes.FIELD_CONTENTS) == 'god team'
-        q1.toString(Indexes.FIELD_CONTENTS) == 'space hockey'
+        q0.toString(Indexes.FIELD_CONTENTS) == 'nasa space'
+        q1.toString(Indexes.FIELD_CONTENTS) == 'god hockey'
         q2.toString(Indexes.FIELD_CONTENTS) == 'orbit game'
     }
 }
