@@ -25,13 +25,12 @@ enum MinIntersectValue {
 }
 
 
-
 @CompileStatic
 class QueryTermIntersect {
 
     static MinIntersectValue minIntersect
 
-    static boolean isValidIntersect(Query q0, Query q1){
+    static boolean isValidIntersect(Query q0, Query q1) {
         IndexSearcher indexSearcher = Indexes.indexSearcher
 
         TotalHitCountCollector collector = new TotalHitCountCollector();
@@ -48,9 +47,6 @@ class QueryTermIntersect {
 
         assert q1Count > 0
 
-        println "minsintss t " + minIntersect.intersectRatio
-
         return (andCount / q1Count) >= minIntersect.intersectRatio
-        //MinIntersectValue.RATIO_POINT_5.intersectRatio
     }
 }

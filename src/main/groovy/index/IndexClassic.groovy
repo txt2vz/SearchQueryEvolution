@@ -33,7 +33,7 @@ import java.nio.file.Paths
 
 class IndexClassic {
 	// Create Lucene index in this directory
-	String indexPath = 	'indexes/classic4Train'
+	String indexPath = 	'indexes/classic4New'
 
 			//'indexes/classic3_300'
 	// Index files in this directory
@@ -112,18 +112,26 @@ class IndexClassic {
 	def indexDocs(IndexWriter writer, File f, categoryNumber)
 	throws IOException {
 
-		def doc = new Document()
-		Field pathField = new StringField(Indexes.FIELD_PATH, f.getPath(), Field.Store.YES);
-		doc.add(pathField);
+
 
 		//for classic dataset
 		def catName = f.getName().substring(0,4)
 		def n = catFreq.get((catName)) ?: 0
-		if (n<300  && catName !="cacm"){
+		if (n<500  ){//} && catName !="cacm"){
 			catFreq.put((catName), n + 1)
 
-			Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+			def doc = new Document()
+			Field pathField = new StringField(Indexes.FIELD_PATH, f.getPath(), Field.Store.YES);
+			doc.add(pathField);
+
+
+			//String catName = parent.substring(parent.lastIndexOf(File.separator) + 1, parent.length())
+			Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName.replaceAll(/\W/, '').toLowerCase(), Field.Store.YES);
 			doc.add(catNameField)
+
+		//	Field catNameField = new StringField(Indexes.FIELD_CATEGORY_NAME, catName, Field.Store.YES);
+		//	doc.add(catNameField)
+
 			doc.add(new TextField(Indexes.FIELD_CONTENTS, f.text,  Field.Store.YES)) ;
 
 			Field catNumberField = new StringField(Indexes.FIELD_CATEGORY_NUMBER, String.valueOf(categoryNumber), Field.Store.YES);
@@ -132,8 +140,16 @@ class IndexClassic {
 			String test_train
 			if (n%2==0) test_train = 'test' else test_train = 'train'
 			Field ttField = new StringField(Indexes.FIELD_TEST_TRAIN, test_train, Field.Store.YES)
-
 			doc.add(ttField)
+
+			//non-alpha characters cause a problem when identifying a document for delete.
+			String fileName = f.getName().replaceAll(/\W/, '').toLowerCase() + 'id' + n
+			Field documentIDfield = new StringField(Indexes.FIELD_DOCUMENT_ID, fileName, Field.Store.YES)
+			doc.add(documentIDfield)
+
+			Field assignedClass = new StringField(Indexes.FIELD_ASSIGNED_CLASS, 'unassigned', Field.Store.YES);
+			doc.add(assignedClass)
+
 			writer.addDocument(doc);
 		}
 	}

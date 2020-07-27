@@ -14,8 +14,8 @@ import org.apache.lucene.search.TotalHitCountCollector
 class IndexUtils {
 
     static void main (String[] args){
-        Indexes.setIndex(IndexEnum.NG6TEST)
-        categoryFrequencies(Indexes.indexSearcher)
+        Indexes.setIndex(IndexEnum.NG6)
+        categoryFrequencies(Indexes.indexSearcher , true)
     }
 
     static Tuple3<String, Integer, Integer> getMostFrequentCategoryForQuery(Query q, boolean printDetails = false) {
