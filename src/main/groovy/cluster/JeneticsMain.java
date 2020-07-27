@@ -29,23 +29,23 @@ import static io.jenetics.engine.EvolutionResult.toBestPhenotype;
 public class JeneticsMain {
 
     static List<TermQuery> termQueryList;
-    static QType qType = //QType.OR1;
-       QType.OR_INTERSECT;
+    static QType qType = QType.OR1;
+    //   QType.OR_INTERSECT;
     static IndexEnum indexEnum;
     static IndexReader ir;
-    final static boolean SETK = false;
+    final static boolean SETK = true;
     static String gaEngine = "JENETICS.IO";
 
     //static int k;
     static List<IndexEnum> ieList = Arrays.asList(
 //            IndexEnum.CRISIS3,
-//            IndexEnum.CLASSIC4,
+            IndexEnum.CLASSIC4 //,
 //            IndexEnum.NG3,
 //            IndexEnum.NG5,
 //            IndexEnum.NG6,
 //            IndexEnum.R4,
 //            IndexEnum.R5,
-            IndexEnum.R6
+ //           IndexEnum.R6
     );
 
     static double searchQueryFitness(final Genotype<IntegerGene> gt) {
