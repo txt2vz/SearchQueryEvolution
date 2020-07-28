@@ -33,13 +33,13 @@ pop.subpop.2.species.fitness = cluster.ECJclusterFitness
 pop.subpop.3.species.fitness = cluster.ECJclusterFitness
 
 pop.subpop.0.species.min-gene = 0
-pop.subpop.0.species.max-gene = 100
+pop.subpop.0.species.max-gene = 70
 pop.subpop.1.species.min-gene = 0
-pop.subpop.1.species.max-gene = 100
+pop.subpop.1.species.max-gene = 70
 pop.subpop.2.species.min-gene = 0
-pop.subpop.2.species.max-gene = 100
+pop.subpop.2.species.max-gene = 70
 pop.subpop.3.species.min-gene = 0
-pop.subpop.3.species.max-gene = 100
+pop.subpop.3.species.max-gene = 70
 
 pop.subpop.0.species.num-segments = 2
 pop.subpop.1.species.num-segments = 2

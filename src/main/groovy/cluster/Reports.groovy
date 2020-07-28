@@ -38,14 +38,14 @@ class Reports {
         queryFileOut << QuerySet.printQuerySet(queryMap)
         queryFileOut << "************************************************ \n \n"
 
-        t7List << new Tuple7(ie.name(), qF1, cF1, uniqueHits, qType, lcm, setk)
+        t7List << new Tuple7(ie.name(), qF1, cF1, categoryCountErrorAbs, qType, lcm, setk)
     }
 
     void reportMaxFitness() {
 
         File fcsvMax = new File("results/maxFitnessReport.csv")
         if (!fcsvMax.exists()) {
-            fcsvMax << 'Index, queryF1, classifierF1, uniqueHits, queryType, classifyMethod, setk,  date \n'
+            fcsvMax << 'Index, queryF1, classifierF1, categoryCountError, queryType, classifyMethod, setk,  date \n'
         }
 
         t7List.toUnique { it.v1 }.each { t ->
