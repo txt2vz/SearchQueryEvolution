@@ -19,6 +19,7 @@ import io.jenetics.engine.Engine;
 import io.jenetics.util.Factory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import index.IndexEnum;
@@ -97,7 +98,7 @@ public class JeneticsMain {
                                         IntegerChromosome.of(0, maxGene, genomeLength));
                 //  IntegerChromosome.of(0, 100, IntRange.of(2, 8)));//,
 
-
+AtomicReference<Double> fitJ = new AtomicReference<>((double) 0);
                 final Engine<IntegerGene, Double> engine = Engine.
                         builder(
                                 JeneticsMain::searchQueryFitness,
@@ -128,6 +129,10 @@ public class JeneticsMain {
 
                                     List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
                                     Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> queryDataGen = QuerySet.querySetInfo(bqbList, true);
+
+                                    fitJ.set(ind.bestPhenotype().fitness());
+
+
                                     System.out.println("Gen: " + ind.generation() + " bestPhenoFit " + ind.bestPhenotype().fitness() + " fitness: " + ind.bestFitness() + " uniqueHits: " + queryDataGen.getV2() + " querySet F1: " + queryDataGen.getV4());
                                     System.out.println();
 
@@ -155,7 +160,7 @@ public class JeneticsMain {
                 System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, numberOfSubPops, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
+                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, fitJ.get(), qType,  SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, numberOfSubPops, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
 
