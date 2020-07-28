@@ -7,7 +7,7 @@ import org.apache.lucene.search.Query
 
 class Reports {
 
-    List<Tuple7<String, Double, Double, Integer, QType, LuceneClassifyMethod, Boolean>> t7List = []
+    List<Tuple8<String, Double, Double, Integer, Integer, QType, LuceneClassifyMethod, Boolean>> t8List = []
 
     void reports(IndexEnum ie, Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int numberOfSubpops, int genomeSize, int maxGene, int gen, String gaEngine, int job) {
 
@@ -38,7 +38,7 @@ class Reports {
         queryFileOut << QuerySet.printQuerySet(queryMap)
         queryFileOut << "************************************************ \n \n"
 
-        t7List << new Tuple7(ie.name(), qF1, cF1, uniqueHits, qType, lcm, setk)
+        t8List << new Tuple8(ie.name(), qF1, cF1, uniqueHits, categoryCountErrorAbs, qType, lcm, setk)
     }
 
     void reportMaxFitness() {
@@ -48,11 +48,12 @@ class Reports {
             fcsvMax << 'Index, queryF1, classifierF1, uniqueHits, queryType, classifyMethod, setk,  date \n'
         }
 
-        t7List.toUnique { it.v1 }.each { t ->
-            def t7Max = t7List.findAll { t.v1 == it.v1 }.max { q -> q.v4 }
-            fcsvMax << "${t7Max.v1}, ${t7Max.v2}, ${t7Max.v3}, ${t7Max.v4},${t7Max.v5},${t7Max.v6},${t7Max.v7}, ${new Date()} \n"
+        t8List.toUnique { it.v1 }.each { t ->
+            def t8Max = t8List.findAll { t.v1 == it.v1 }.max { q -> q.v4 }
+            fcsvMax << "${t8Max.v1}, ${t8Max.v2}, ${t8Max.v3}, ${t8Max.v4},${t8Max.v5},${t8Max.v6},${t8Max.v7},,${t8Max.v8} ${new Date()} \n"
         }
 
-        println "Average query f1 " + t7List.average { it.v2 } + " Classifier f1: " + t7List.average { it.v3 }
+        println "Average query f1 " + t8List.average { it.v2 } + " Classifier f1: " + t8List.average { it.v3 }
+        t8List.clear();
     }
 }
