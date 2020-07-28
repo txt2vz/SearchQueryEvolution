@@ -19,7 +19,7 @@ import org.apache.lucene.search.Query
 @CompileStatic
 class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 5
+    final static int NUMBER_OF_JOBS = 3
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -39,7 +39,7 @@ class ClusterMainECJ extends Evolve {
 //
 //           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
 //
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
 
     List<Double> kPenalty = [0.04d]
@@ -119,6 +119,7 @@ class ClusterMainECJ extends Evolve {
                                         ind.fitness.fitness()
                                     }.fitness
                                 }.max { it.fitness() }
+                                final double ecjFitness = bestClusterFitness.fitness;
 
                                 final int numberOfSubpops = state.parameters.getInt(new Parameter("pop.subpops"), new Parameter("pop.subpops"))
                                 final int wordListSizePop0 = state.parameters.getInt(new Parameter("pop.subpop.0.species.max-gene"), new Parameter("pop.subpop.0.species.max-gene"))
@@ -145,7 +146,7 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
+                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, ecjFitness, qType, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
                                 }
                             }
                         }

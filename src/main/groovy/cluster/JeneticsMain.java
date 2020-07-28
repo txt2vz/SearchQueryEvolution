@@ -19,6 +19,7 @@ import io.jenetics.engine.Engine;
 import io.jenetics.util.Factory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import index.IndexEnum;
@@ -116,6 +117,7 @@ public class JeneticsMain {
 
                 final EvolutionStatistics<Double, ?>
                         statistics = EvolutionStatistics.ofNumber();
+                AtomicReference<Double> fitness = new AtomicReference<>((double) 0);
 
                 final Phenotype<IntegerGene, Double> result =
 
@@ -125,6 +127,8 @@ public class JeneticsMain {
                                     Genotype<IntegerGene> g = ind.bestPhenotype().genotype();
                                     int[] intArrayBestGen = ((IntegerChromosome) g.get(0)).toArray();
                                     final int k = getK(g, ie, SETK);
+
+                                    fitness.set(ind.bestPhenotype().fitness());
 
                                     List<BooleanQuery.Builder> bqbList = QuerySet.getQueryBuilderList(intArrayBestGen, termQueryList, k, qType);
                                     Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> queryDataGen = QuerySet.querySetInfo(bqbList, true);
@@ -155,7 +159,7 @@ public class JeneticsMain {
                 System.out.println("Best of run **********************************  classifierF1 " + t3ClassiferResult.getV1() + " " + ie.name() + '\n');
 
                 //System.out.println("statistics " + statistics);
-                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, numberOfSubPops, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
+                reports.reports(ie, t6QuerySetResult, t3ClassiferResult, fitness.get(), qType, SETK, classifyMethod, onlyDocsInOneClusterForClassifier, popSize, numberOfSubPops, g.chromosome().length(), maxGene, maxGen, gaEngine, jobNumber);
 
             });
 
