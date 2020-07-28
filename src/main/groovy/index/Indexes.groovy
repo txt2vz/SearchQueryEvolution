@@ -31,8 +31,6 @@ enum IndexEnum {
 
     CLASSIC4('indexes/classic4Train', 4),
     CLASSIC4TEST('indexes/classic4Test', 4),
-    CLASSIC4New('indexes/classic4New', 4),
-    CLASSIC4N2('indexes/classic45N2', 4),
 
     CRISIS3('indexes/crisis3FireBombFloodTrain', 3),
     CRISIS3TEST('indexes/crisis3FireBombFloodTest', 3),
