@@ -145,7 +145,7 @@ class ClusterMainECJ extends Evolve {
                                     IndexEnum checkEffectifnessIndex = useSameIndexForEffectivenessMeasure ? trainTestIndexes.first : trainTestIndexes.second
                                     Tuple3 t3ClassiferResult = Effectiveness.classifierEffectiveness(classifier, checkEffectifnessIndex, bestClusterFitness.k)
 
-                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, bestClusterFitness.fitness, qType, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
+                                    reports.reports(trainTestIndexes.v1, t6QuerySetResult, t3ClassiferResult, qType, SETK, classifyMethod, onlyDocsInOneCluster, popSize as int, numberOfSubpops, genomeSizePop0, wordListSizePop0, state.generation, gaEngine, job)
                                 }
                             }
                         }
