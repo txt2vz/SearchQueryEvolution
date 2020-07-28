@@ -14,7 +14,7 @@ import org.apache.lucene.search.TotalHitCountCollector
 class IndexUtils {
 
     static void main (String[] args){
-        Indexes.setIndex(IndexEnum.NG6)
+        Indexes.setIndex(IndexEnum.R5)
         categoryFrequencies(Indexes.indexSearcher , true)
     }
 

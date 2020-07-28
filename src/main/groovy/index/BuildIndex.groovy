@@ -38,22 +38,16 @@ class BuildIndex {
                 //    'indexes/R4Test'
               //  'indexes/classic4Test'
              //   'indexes/NG3Train'
-           //     'indexes/NG6'
+                'indexes/NG6Test'
          //       'indexes/R6'
 
-       //           'indexes/NG5Test'
-              'indexes/NG6Train'
-      //  'indexes/classic45N2'
 
-               // 'indexes/NG5Test'
-        //         'indexes/NG3'
-        //  'indexes/classic4b'
-        //       'indexes/science4'
 
         String docsPath =
-           //     /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train100/
+                /C:\Users\lauri\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Test/
+           //     /C:\Users\lauri\OneDrive - Sheffield Hallam University\DataSets\Reuters\R6Train/
              //   /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG5Train/
-                /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
+        //        /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\NewsGroup\NG6Train/
 
     //    /C:\Users\aceslh\OneDrive - Sheffield Hallam University\DataSets\Classic\Classic4Test/
 

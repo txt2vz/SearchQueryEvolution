@@ -12,20 +12,20 @@ stat = cluster.ClusterStatisticsECJ
 
 evalthreads =  auto
 breedthreads = auto
-generations =  120
+generations =  200
 
 pop.default-subpop =0
 breed.elite.0 = 2
 
 #pop.subpops = 4
-pop.subpop.0.species.genome-size = 19
-pop.subpop.0.size = 64
-pop.subpop.1.species.genome-size = 19
-pop.subpop.1.size = 64
-pop.subpop.2.species.genome-size = 19
-pop.subpop.2.size = 64
-pop.subpop.3.species.genome-size = 19
-pop.subpop.3.size = 64
+pop.subpop.0.species.genome-size = 20
+pop.subpop.0.size = 128
+pop.subpop.1.species.genome-size = 20
+pop.subpop.1.size = 128
+pop.subpop.2.species.genome-size = 20
+pop.subpop.2.size = 128
+pop.subpop.3.species.genome-size = 20
+pop.subpop.3.size = 128
 
 pop.subpop.0.species.fitness = cluster.ECJclusterFitness
 pop.subpop.1.species.fitness = cluster.ECJclusterFitness

@@ -29,7 +29,7 @@ enum IndexEnum {
     R6('indexes/R6', 6),
     R6TEST('indexes/R6Test', 6),
 
-    CLASSIC4('indexes/classic4Train', 4),
+    CLASSIC4('indexes/classic4', 4),
     CLASSIC4TEST('indexes/classic4Test', 4),
 
     CRISIS3('indexes/crisis3FireBombFloodTrain', 3),

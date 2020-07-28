@@ -49,11 +49,11 @@ class Reports {
         }
 
         t9List.toUnique { it.v1 }.each { t ->
-            def t9Max = t9List.findAll { t.v1 == it.v1 }.max { q -> q.v4 }
+            def t9Max = t9List.findAll { t.v1 == it.v1 }.max { q -> q.v5 }
             fcsvMax << "${t9Max.v1}, ${t9Max.v2}, ${t9Max.v3}, ${t9Max.v4},${t9Max.v5},${t9Max.v6},${t9Max.v7},${t9Max.v8}, ${t9Max.v9}, ${new Date()} \n"
         }
 
-        println "Average query f1 " + t8List.average { it.v2 } + " Classifier f1: " + t8List.average { it.v3 }
+        println "Average query f1 " + t9List.average { it.v2 } + " Classifier f1: " + t9List.average { it.v3 }
         t9List.clear();
     }
 }
