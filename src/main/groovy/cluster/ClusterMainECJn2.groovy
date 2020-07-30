@@ -24,22 +24,22 @@ class ClusterMainECJn2 extends Evolve {
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
-    static boolean SETK
     final static String gaEngine = "ECJ";
+    static boolean SETK
 
     //indexes suitable for clustering.
     List<Tuple2<IndexEnum, IndexEnum>> clusteringIndexes = [
 
-            //           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
-//
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
-//            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R4, IndexEnum.R4TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R5, IndexEnum.R5TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.R6, IndexEnum.R6TEST),
+
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG3, IndexEnum.NG3TEST),
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG5, IndexEnum.NG5TEST),
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.NG6, IndexEnum.NG6TEST),
-////
-//           new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
-//
+
+            new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CLASSIC4, IndexEnum.CLASSIC4TEST),
+
             new Tuple2<IndexEnum, IndexEnum>(IndexEnum.CRISIS3, IndexEnum.CRISIS3TEST)
     ]
 
@@ -50,7 +50,7 @@ class ClusterMainECJn2 extends Evolve {
     List<QType> queryTypesList = [
 
             QType.OR_INTERSECT,
-            //      QType.OR1
+                  QType.OR1
     ]
 
     List<MinIntersectValue> intersectRatioList = [
@@ -73,8 +73,8 @@ class ClusterMainECJn2 extends Evolve {
             timingFile << 'index, queryType, GAtime, KNNtime, overallTime \n'
         }
 
-
-        [true].each { set_k ->
+        //[true].each { set_k ->
+        [true, false].each { set_k ->
             SETK = set_k
 
             queryTypesList.each { qType ->
@@ -86,7 +86,7 @@ class ClusterMainECJn2 extends Evolve {
                     NUMBER_OF_JOBS.times { job ->
 
                         MAX_FIT_JOBS.times { maxFit ->
-                            //  [true, false].each { set_k ->
+
 
                             EvolutionState state = new EvolutionState()
 
@@ -102,7 +102,6 @@ class ClusterMainECJn2 extends Evolve {
 
                                 intersectRatioList.each { MinIntersectValue minIntersectRatio ->
                                     final Date indexTime = new Date()
-                                    //QueryListFromChromosome.minIntersectRatio = minIntersectRatio
                                     QueryTermIntersect.minIntersect = minIntersectRatio
 
                                     ParameterDatabase parameters = new ParameterDatabase(new File(parameterFilePath));
@@ -165,7 +164,6 @@ class ClusterMainECJn2 extends Evolve {
                 }
             }
         }
-     //   reports.reportMaxFitness()
 
         final Date endRun = new Date()
         TimeDuration duration = TimeCategory.minus(endRun, startRun)

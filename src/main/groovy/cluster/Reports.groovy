@@ -38,7 +38,6 @@ class Reports {
         queryFileOut << QuerySet.printQuerySet(queryMap)
         queryFileOut << "************************************************ \n \n"
 
-      //  t9List << new Tuple9(ie.name(), qF1, cF1, uniqueHits, fitness, categoryCountErrorAbs, qType, lcm, setk)
         t9List << new Tuple9(setk, qType, ie.name(), qF1, cF1, categoryCountErrorAbs, uniqueHits, fitness, lcm)
     }
 
@@ -46,13 +45,11 @@ class Reports {
 
         File fcsvMax = new File("results/maxFitnessReport.csv")
         if (!fcsvMax.exists()) {
-        //    fcsvMax << 'Index, queryF1, classifierF1, uniqueHits, queryType, classifyMethod, setk,  date \n'
             fcsvMax << 'Setk, QueryType, Index, queryF1, ClassifierF1, CategoryCountError, UniqueHits, Fitness, ClassifyMethod, Date \n'
         }
 
         t9List.toUnique { it.v1 }.each { t ->
             def t9Max = t9List.findAll { t.v3 == it.v3 }.max { q -> q.v8 }
-        //    fcsvMax << "${t9Max.v1}, ${t9Max.v2}, ${t9Max.v3}, ${t9Max.v4},${t9Max.v5},${t9Max.v6},${t9Max.v7},${t9Max.v8}, ${t9Max.v9}, ${new Date()} \n"
             fcsvMax << "${t9Max.v1}, ${t9Max.v2}, ${t9Max.v3}, ${t9Max.v4},${t9Max.v5},${t9Max.v6},${t9Max.v7},${t9Max.v8}, ${t9Max.v9}, ${new Date()} \n"
         }
 
