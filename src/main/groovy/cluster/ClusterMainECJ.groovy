@@ -17,10 +17,10 @@ import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 
 @CompileStatic
-class ClusterMainECJn2 extends Evolve {
+class ClusterMainECJ extends Evolve {
 
-    final static int NUMBER_OF_JOBS = 2
-    final static int MAX_FIT_JOBS = 3
+    final static int NUMBER_OF_JOBS = 11
+    final static int MAX_FIT_JOBS = 5
     final static boolean onlyDocsInOneCluster = false
     final static boolean luceneClassify = true
     final static boolean useSameIndexForEffectivenessMeasure = true
@@ -49,7 +49,7 @@ class ClusterMainECJn2 extends Evolve {
 
     List<QType> queryTypesList = [
 
-            QType.OR_INTERSECT,
+     //       QType.OR_INTERSECT,
                   QType.OR1
     ]
 
@@ -62,13 +62,13 @@ class ClusterMainECJn2 extends Evolve {
             //       LuceneClassifyMethod.NB
     ]
 
-    ClusterMainECJn2() {
+    ClusterMainECJ() {
 
         final Date startRun = new Date()
         Reports reports = new Reports();
 
         File timingFile = new File("results/timing.csv")
-        // File queryFile = new File('results/qFile.txt')
+
         if (!timingFile.exists()) {
             timingFile << 'index, queryType, GAtime, KNNtime, overallTime \n'
         }
@@ -87,7 +87,6 @@ class ClusterMainECJn2 extends Evolve {
 
                         MAX_FIT_JOBS.times { maxFit ->
 
-
                             EvolutionState state = new EvolutionState()
 
                             println "Index Enum trainTestIndexes: $trainTestIndexes"
@@ -95,7 +94,6 @@ class ClusterMainECJn2 extends Evolve {
 
                             kPenalty.each { kPenalty ->
                                 ECJclusterFitness.K_PENALTY = kPenalty
-
 
                                 String parameterFilePath =
                                         SETK ? 'src/cfg/clusterGA_K.params' : 'src/cfg/clusterGA.params'
@@ -171,6 +169,6 @@ class ClusterMainECJn2 extends Evolve {
     }
 
     static main(args) {
-        new ClusterMainECJn2()
+        new ClusterMainECJ()
     }
 }

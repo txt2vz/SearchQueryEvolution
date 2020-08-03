@@ -7,7 +7,7 @@ import org.apache.lucene.search.Query
 
 class Reports {
 
-    List<Tuple9<Boolean, QType, String, Double, Double, Integer, Integer, Double, LuceneClassifyMethod>> t9List = []
+    List<Tuple13<Boolean, QType, String, Double, Double, Double, Double, Double, Double, Integer, Integer, Double, LuceneClassifyMethod>> t13List = []
 
     void reports(IndexEnum ie, Tuple6<Map<Query, Integer>, Integer, Integer, Double, Double, Double> qResult, Tuple3 cResult, double fitness, QType qType, boolean setk, LuceneClassifyMethod lcm, boolean onlyDocsInOnecluster, int popSize, int numberOfSubpops, int genomeSize, int maxGene, int gen, String gaEngine, int job, int maxFitJob) {
 
@@ -38,22 +38,22 @@ class Reports {
         queryFileOut << QuerySet.printQuerySet(queryMap)
         queryFileOut << "************************************************ \n \n"
 
-        t9List << new Tuple9(setk, qType, ie.name(), qF1, cF1, categoryCountErrorAbs, uniqueHits, fitness, lcm)
+        t13List << new Tuple13(setk, qType, ie.name(), qF1, qP, qR, cF1, cP, cR, categoryCountErrorAbs, uniqueHits, fitness, lcm)
     }
 
     void reportMaxFitness() {
 
         File fcsvMax = new File("results/maxFitnessReport.csv")
         if (!fcsvMax.exists()) {
-            fcsvMax << 'Setk, QueryType, Index, queryF1, ClassifierF1, CategoryCountError, UniqueHits, Fitness, ClassifyMethod, Date \n'
+            fcsvMax << 'Setk, QueryType, Index, queryF1, queryPrecision, queryRecall, ClassifierF1, ClassifierPrecision, ClasssifierRecall, CategoryCountError, UniqueHits, Fitness, ClassifyMethod, Date \n'
         }
 
-        t9List.toUnique { it.v1 }.each { t ->
-            def t9Max = t9List.findAll { t.v3 == it.v3 }.max { q -> q.v8 }
-            fcsvMax << "${t9Max.v1}, ${t9Max.v2}, ${t9Max.v3}, ${t9Max.v4},${t9Max.v5},${t9Max.v6},${t9Max.v7},${t9Max.v8}, ${t9Max.v9}, ${new Date()} \n"
+        t13List.toUnique { it.v1 }.each { t ->
+            def t13Max = t13List.findAll { t.v3 == it.v3 }.max { q -> q.v12 }
+            fcsvMax << "${t13Max.v1}, ${t13Max.v2}, ${t13Max.v3}, ${t13Max.v4},${t13Max.v5},${t13Max.v6},${t13Max.v7},${t13Max.v8}, ${t13Max.v9},${t13Max.v10},${t13Max.v11}, ${t13Max.v12}, ${t13Max.v13},  ${new Date()} \n"
         }
 
-        println "Average query f1 " + t9List.average { it.v4 } + " Classifier f1: " + t9List.average { it.v5 }
-        t9List.clear();
+        println "Average query f1 " + t13List.average { it.v4 } + " Classifier f1: " + t13List.average { it.v7 }
+        t13List.clear();
     }
 }
