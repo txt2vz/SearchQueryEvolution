@@ -49,7 +49,7 @@ class ClusterMainECJ extends Evolve {
 
     List<QType> queryTypesList = [
 
-     //       QType.OR_INTERSECT,
+            QType.OR_INTERSECT,
                   QType.OR1
     ]
 
@@ -59,7 +59,7 @@ class ClusterMainECJ extends Evolve {
 
     List<LuceneClassifyMethod> classifyMethodList = [
             LuceneClassifyMethod.KNN,
-            //       LuceneClassifyMethod.NB
+        //          LuceneClassifyMethod.NB
     ]
 
     ClusterMainECJ() {
