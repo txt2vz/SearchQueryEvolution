@@ -10,7 +10,17 @@ import org.apache.lucene.search.TermQuery
 //see https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_fundamentals.htm
 
 enum QType {
-    OR1, OR_INTERSECT
+    OR1 ('Single-Word'),
+    OR_INTERSECT ('Multi-Word-OR')
+
+    QType(String desc){
+        queryDescription=desc
+    }
+
+    String queryDescription;
+    String description(){
+        return queryDescription;
+    }
 }
 
 @CompileStatic
